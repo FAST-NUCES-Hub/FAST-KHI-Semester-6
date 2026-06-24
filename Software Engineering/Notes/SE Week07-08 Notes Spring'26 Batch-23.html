@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SE Quiz Prep – Week 7 & 8</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #232640;
+    --accent: #7c6af7;
+    --accent2: #56cfb2;
+    --accent3: #f7a35c;
+    --text: #e8eaf6;
+    --muted: #8b8fa8;
+    --correct: #2ecc71;
+    --wrong: #e74c3c;
+    --warn: #f39c12;
+    --border: #2d3157;
+    --tag-bg: #2d1f6e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  
+  /* NAV */
+  .nav { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; overflow-x: auto; }
+  .nav-btn { padding: 14px 20px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; border-bottom: 3px solid transparent; transition: all .2s; }
+  .nav-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .nav-btn:hover { color: var(--text); background: var(--surface2); }
+
+  /* PAGES */
+  .page { display: none; padding: 24px; max-width: 900px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 40px 20px; }
+  .hero h1 { font-size: 2rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+  .hero p { color: var(--muted); font-size: 15px; }
+  .week-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+  .week-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; cursor: pointer; transition: all .2s; text-align: left; }
+  .week-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .week-card h2 { font-size: 1.1rem; color: var(--accent); margin-bottom: 8px; }
+  .week-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .week-card .topics { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: var(--tag-bg); color: var(--accent); font-size: 11px; padding: 3px 8px; border-radius: 20px; }
+
+  /* SECTION HEADERS */
+  h2.section-title { font-size: 1.4rem; color: var(--accent); margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .subtitle { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+
+  /* CONCEPT CARDS */
+  .concept-grid { display: flex; flex-direction: column; gap: 14px; }
+  .concept-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .concept-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; cursor: pointer; }
+  .concept-header:hover { background: var(--surface2); }
+  .concept-title { font-weight: 700; font-size: 15px; }
+  .concept-tag { font-size: 11px; color: var(--accent2); background: rgba(86,207,178,.1); padding: 3px 8px; border-radius: 10px; }
+  .concept-body { display: none; padding: 0 18px 16px; border-top: 1px solid var(--border); }
+  .concept-body.open { display: block; }
+  .concept-body p { font-size: 14px; line-height: 1.7; color: var(--text); margin-top: 12px; }
+  .concept-body .example { background: var(--surface2); border-left: 3px solid var(--accent3); border-radius: 0 8px 8px 0; padding: 12px 14px; margin-top: 12px; font-size: 13px; line-height: 1.6; }
+  .concept-body .example strong { color: var(--accent3); display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; }
+  .concept-body ul { margin: 10px 0 0 18px; font-size: 14px; line-height: 1.7; }
+  .concept-body li { margin-bottom: 4px; }
+  .concept-body .key-term { background: rgba(124,106,247,.15); border: 1px solid rgba(124,106,247,.3); border-radius: 6px; padding: 10px 14px; margin-top: 10px; font-size: 13px; }
+  .concept-body .key-term b { color: var(--accent); }
+  .chevron { transition: transform .2s; color: var(--muted); font-size: 18px; }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* QUIZ */
+  .quiz-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: gap; gap: 10px; }
+  .quiz-filter { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; font-size: 12px; transition: all .2s; }
+  .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+  .progress-bar-wrap { background: var(--surface); border-radius: 10px; height: 6px; margin-bottom: 20px; }
+  .progress-bar { height: 6px; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 10px; transition: width .3s; }
+  .question-counter { text-align: center; font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  .q-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
+  .q-text { font-size: 16px; font-weight: 600; line-height: 1.5; margin-bottom: 20px; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option { padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface2); cursor: pointer; font-size: 14px; transition: all .15s; }
+  .option:hover:not(.disabled) { border-color: var(--accent); background: rgba(124,106,247,.1); }
+  .option.correct { border-color: var(--correct); background: rgba(46,204,113,.15); }
+  .option.wrong { border-color: var(--wrong); background: rgba(231,76,60,.15); }
+  .option.disabled { cursor: default; }
+  .explanation { margin-top: 16px; padding: 14px; background: var(--surface2); border-radius: 8px; font-size: 13px; line-height: 1.6; border-left: 3px solid var(--accent2); display: none; }
+  .explanation.show { display: block; }
+  .q-nav { display: flex; justify-content: space-between; margin-top: 20px; gap: 10px; }
+  .btn { padding: 10px 22px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 600; transition: all .2s; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { opacity: .85; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--surface); }
+  .score-card { text-align: center; padding: 40px 20px; }
+  .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 6px solid var(--accent); display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 24px; }
+  .score-num { font-size: 2rem; font-weight: 800; color: var(--accent); }
+  .score-label { font-size: 12px; color: var(--muted); }
+
+  /* CHEATSHEET */
+  .cheat-section { margin-bottom: 28px; }
+  .cheat-section h3 { color: var(--accent2); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .cheat-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .cheat-table th { background: var(--surface2); color: var(--muted); padding: 8px 12px; text-align: left; font-weight: 600; }
+  .cheat-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); line-height: 1.5; }
+  .cheat-table tr:hover td { background: var(--surface2); }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .pill-w7 { background: rgba(124,106,247,.2); color: var(--accent); }
+  .pill-w8 { background: rgba(86,207,178,.2); color: var(--accent2); }
+
+  @media (max-width: 600px) {
+    .week-cards { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showPage('home')">🏠 Home</button>
+  <button class="nav-btn" onclick="showPage('week7')">📐 Week 7: Design</button>
+  <button class="nav-btn" onclick="showPage('week8')">🏗️ Week 8: Architecture</button>
+  <button class="nav-btn" onclick="showPage('quiz')">📝 Quiz Practice</button>
+  <button class="nav-btn" onclick="showPage('cheatsheet')">⚡ Cheat Sheet</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+  <div class="hero">
+    <h1>SE Quiz Prep 🚀</h1>
+    <p>Week 7 & 8 — Software Engineering | Complete study guide with concepts, examples & practice questions</p>
+    <div class="week-cards">
+      <div class="week-card" onclick="showPage('week7')">
+        <h2>📐 Week 7 — Software Design</h2>
+        <p>Core design principles, concepts, and how we transform requirements into a working blueprint.</p>
+        <div class="topics">
+          <span class="tag">Abstraction</span><span class="tag">Modularity</span><span class="tag">Coupling</span><span class="tag">Cohesion</span><span class="tag">FURPS</span><span class="tag">Refactoring</span><span class="tag">Design Classes</span>
+        </div>
+      </div>
+      <div class="week-card" onclick="showPage('week8')">
+        <h2>🏗️ Week 8 — Software Architecture</h2>
+        <p>Architectural patterns, views, and styles that govern how large systems are structured.</p>
+        <div class="topics">
+          <span class="tag">MVC</span><span class="tag">Layered</span><span class="tag">Client-Server</span><span class="tag">Repository</span><span class="tag">Pipe & Filter</span><span class="tag">4+1 Views</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WEEK 7 -->
+<div id="week7" class="page">
+  <h2 class="section-title">📐 Week 7: Software Design</h2>
+  <p class="subtitle">Click each concept to expand. Read the examples — they're what stick in quizzes.</p>
+
+  <div class="concept-grid">
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">What is Software Design?</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Foundation</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Software design is the process of <strong>transforming user requirements</strong> (from the SRS document) into a form that can be coded. It produces a <em>design document</em> — a blueprint for the system.</p>
+        <p>Think of it as: <strong>SRS → Design Document → Code</strong></p>
+        <div class="example">
+          <strong>🏛️ Roman Architecture Analogy</strong>
+          Good software, like a good building, should have:<br>
+          • <b>Firmness</b> – No bugs that stop it working<br>
+          • <b>Commodity</b> – Suitable for its intended purpose<br>
+          • <b>Delight</b> – Pleasurable to use
+        </div>
+        <div class="example">
+          <strong>🎯 What design produces</strong>
+          • <b>Data/Class Design</b> – Data structures and relationships<br>
+          • <b>Architectural Design</b> – Big picture (MVC, Cloud, etc.)<br>
+          • <b>Interface Design</b> – How users/systems interact<br>
+          • <b>Component Design</b> – Detailed procedural logic
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">FURPS Quality Attributes</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Must Know</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>FURPS is a checklist of quality targets for any software design:</p>
+        <div class="example">
+          <strong>F – U – R – P – S</strong>
+          <b>F</b>unctionality – Does it have the right features?<br>
+          <b>U</b>sability – Can a person use it easily? (human factors)<br>
+          <b>R</b>eliability – How often does it fail? (MTTF, recovery ability)<br>
+          <b>P</b>erformance – Speed, response time, resource use, throughput<br>
+          <b>S</b>upportability – Extensibility, adaptability, serviceability
+        </div>
+        <div class="example">
+          <strong>📱 Real-world Example (Banking App)</strong>
+          F: Transfer money, view balance<br>
+          U: 3-tap transaction flow<br>
+          R: 99.99% uptime, auto-recovery<br>
+          P: &lt;2 second load time<br>
+          S: Easy to update when new regulations come
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">1. Abstraction (Data & Procedural)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Abstraction = <strong>hiding complex details</strong> to keep things simple. There are two types:</p>
+        <ul>
+          <li><b>Data Abstraction</b> – A collection of data describing an object, hiding internal implementation. E.g., a <code>door</code> object has attributes (weight, type, swing direction) without exposing how they're stored.</li>
+          <li><b>Procedural Abstraction</b> – A sequence of instructions with a limited, specific function. E.g., <code>open()</code> — you call it without knowing the exact algorithm inside.</li>
+        </ul>
+        <div class="example">
+          <strong>🚗 Car Analogy</strong>
+          You use <code>drive()</code> — you press the accelerator. You don't need to know about fuel injection, ignition timing, or engine cycles. That's abstraction.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">2. Architecture (Design Concept)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Architecture = the <strong>complete structure</strong> of a software system — how components are organized, packaged, and interact. It provides conceptual integrity.</p>
+        <ul>
+          <li><b>Structural properties</b> – Defines components (modules, objects) and how they interact</li>
+          <li><b>Extra-functional properties</b> – Addresses performance, reliability, security</li>
+          <li><b>Families of related systems</b> – Reuse of architectural building blocks</li>
+        </ul>
+        <div class="example">
+          <strong>🏢 Building Analogy</strong>
+          Architecture = the floor plan and load-bearing structure of a building. You can decorate differently inside (design), but the walls must stay where the architect put them.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">3. Patterns</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>A pattern = <strong>"a proven solution to a recurring problem within a specific context"</strong>. It conveys the essence of a tried-and-tested design.</p>
+        <div class="key-term">
+          <b>Pattern Template includes:</b> Name, Intent, Motivation, Applicability, Structure, Participants, Collaborations, Consequences, Related patterns
+        </div>
+        <div class="example">
+          <strong>♻️ Real Example</strong>
+          You need to notify multiple parts of your app when data changes. The <b>Observer pattern</b> is a proven solution — subscribe objects to an event and notify them all automatically. You don't reinvent it each time.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">4. Modularity</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Modularity = dividing software into <strong>separate, named, addressable components (modules)</strong> that can be integrated to solve the problem.</p>
+        <p>It is the <em>single attribute</em> that allows a program to be <strong>managed easily</strong>.</p>
+        <div class="example">
+          <strong>⚠️ Monolithic vs Modular</strong>
+          • <b>Monolithic</b>: One huge file with everything — painful to debug, test, or change<br>
+          • <b>Modular</b>: <code>auth.js</code>, <code>payment.js</code>, <code>notification.js</code> — each handles one thing
+        </div>
+        <div class="example">
+          <strong>📊 Cost Curve Key Insight</strong>
+          Too few modules = high integration cost. Too many = high interface complexity. There's an optimal number of modules that minimizes total cost.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">5. Information Hiding</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Modules must be designed so that their internal information (algorithm, data structures, implementation details) is <strong>NOT accessible</strong> to modules that don't need it.</p>
+        <p>Each module has a controlled <strong>interface</strong> — only what's necessary is exposed.</p>
+        <div class="example">
+          <strong>🏦 ATM Example</strong>
+          You interact with the ATM screen (interface). The PIN validation algorithm, database connection string, and encryption logic are all <b>hidden</b> inside. You have no access to them.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">6. Functional Independence: Cohesion & Coupling</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">⭐ High Priority</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Functional independence = modules with <strong>"single-minded" function</strong> and minimal interaction with others.</p>
+        <div class="key-term">
+          <b>Cohesion</b> – How focused a single module is on ONE thing. <span style="color:var(--correct)">HIGH cohesion = GOOD</span><br>
+          <b>Coupling</b> – How much modules depend on each other. <span style="color:var(--correct)">LOW coupling = GOOD</span>
+        </div>
+        <div class="example">
+          <strong>🎯 Easy Way to Remember</strong>
+          <b>High cohesion</b>: Your <code>PaymentModule</code> only handles payments. Not login. Not emails. One job.<br>
+          <b>Low coupling</b>: <code>PaymentModule</code> doesn't reach into <code>UserModule</code>'s internal variables — it calls a public method.
+        </div>
+        <div class="example">
+          <strong>Law of Demeter</strong>
+          A method should <b>only send messages to methods in neighboring classes</b>. Don't reach 3 levels deep: <code>a.getB().getC().doSomething()</code> is high coupling!
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">7. Refinement (Stepwise)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Refinement = a <strong>top-down design approach</strong>. Start with a general description and break it into smaller, more detailed steps until you can code it.</p>
+        <div class="example">
+          <strong>☕ Making Tea Example</strong>
+          Step 1: Make tea<br>
+          ↳ Step 1.1: Boil water<br>
+          &nbsp;&nbsp;&nbsp;↳ Step 1.1.1: Fill kettle with water<br>
+          &nbsp;&nbsp;&nbsp;↳ Step 1.1.2: Turn on kettle<br>
+          &nbsp;&nbsp;&nbsp;↳ Step 1.1.3: Wait until boiling (3 minutes)<br>
+          ↳ Step 1.2: Add tea bag to cup<br>
+          ↳ Step 1.3: Pour water into cup<br>
+          Each step is refined until it's codeable.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">8. Refactoring</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Refactoring = <strong>reorganizing code/design without changing its external behavior or function</strong>. It improves internal structure.</p>
+        <p>Removes: redundancy, unused elements, inefficient algorithms, poor data structures.</p>
+        <div class="example">
+          <strong>🧹 Example</strong>
+          You have 3 functions that all do the same null check. Refactoring: extract it into one <code>checkNull()</code> function. The app behaves identically, but the code is cleaner.
+        </div>
+        <div class="key-term"><b>Key distinction:</b> Refactoring ≠ adding new features. Behavior stays the same. Only the internals change.</div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Design Classes (5 Types)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Must Know</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Five types of design classes exist in software architecture:</p>
+        <ul>
+          <li><b>User Interface Classes</b> – What the user sees and interacts with</li>
+          <li><b>Business Domain Classes</b> – Core business logic and rules</li>
+          <li><b>Process Classes</b> – Implement business processes (workflows)</li>
+          <li><b>Persistent Classes</b> – Data that persists in databases (Java: mapped to DB tables)</li>
+          <li><b>System Classes</b> – Software management/control (e.g., <code>java.lang.System</code>)</li>
+        </ul>
+        <div class="example">
+          <strong>🛒 E-Commerce Example</strong>
+          UI Class: <code>CheckoutPage</code><br>
+          Business Domain: <code>Order</code>, <code>Product</code><br>
+          Process: <code>PaymentProcessor</code><br>
+          Persistent: <code>CustomerRecord</code> (stored in DB)<br>
+          System: <code>SessionManager</code>
+        </div>
+        <div class="key-term">
+          <b>Well-formed Design Class has:</b><br>
+          • <b>Completeness</b> – All expected attributes/methods are there<br>
+          • <b>Primitiveness</b> – One method = one service (no duplicates)<br>
+          • <b>High Cohesion</b> – Focused on one kind of thing<br>
+          • <b>Low Coupling</b> – Minimal collaboration with others
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- WEEK 8 -->
+<div id="week8" class="page">
+  <h2 class="section-title">🏗️ Week 8: Software Architecture</h2>
+  <p class="subtitle">Architecture is the skeleton of the system. Learn each pattern with its when-to-use rule.</p>
+
+  <div class="concept-grid">
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Architecture vs Design — The Difference</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Foundation</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <div class="key-term">
+          <b>Architecture</b> = the skeleton and high-level infrastructure (abstract view)<br>
+          <b>Design</b> = code-level decisions — what each module does, class scope, functions (implementation view)<br><br>
+          <b>A Design is an instance of an Architecture</b>, just like an object is an instance of a class.
+        </div>
+        <div class="example">
+          <strong>🎯 The Classic Example from Slides</strong>
+          Architecture: <b>Client-Server</b><br>
+          Designs from it: A Java EE web app OR a .NET web app — same architecture, different designs.<br><br>
+          You CANNOT mix these terms. Architecture ≠ Design.
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Architecture in Small vs Large</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Concept</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <ul>
+          <li><b>Architecture in the Small</b> – Architecture of an <em>individual program</em>. How a single program is decomposed into components. (This course focuses here.)</li>
+          <li><b>Architecture in the Large</b> – Architecture of complex <em>enterprise systems</em> that include multiple systems, distributed across different computers/companies.</li>
+        </ul>
+        <div class="example">
+          <strong>📱 vs 🌐 Example</strong>
+          <b>Small:</b> How your Todo app is split into components (UI, logic, storage)<br>
+          <b>Large:</b> How Amazon's ecosystem of 1000+ microservices communicate across data centers worldwide
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">The 4+1 Architectural Views (Kruchten)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">⭐ High Priority</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>You can't show everything in one diagram. Kruchten's 4+1 model uses <strong>multiple views</strong> of the same architecture:</p>
+        <ul>
+          <li><b>Logical View</b> – Functional requirements. Key abstractions as classes. Viewer: End User. Uses: Class Diagram, Sequence Diagram.</li>
+          <li><b>Process View</b> – Non-functional requirements. How system runs at runtime (interacting processes). Viewer: Integrator. Focus: performance, availability.</li>
+          <li><b>Development View</b> – Code organization. How system is broken into modules for dev teams. Logical organization of code.</li>
+          <li><b>Physical/Implementation View</b> – Deployment. Which servers, where software is deployed, data centers. Viewer: System Engineer.</li>
+          <li><b>+1 Scenarios (Use Cases)</b> – The glue that ties all views together.</li>
+        </ul>
+        <div class="example">
+          <strong>🏦 Online Banking System Example</strong>
+          Logical: <code>Account</code>, <code>Transaction</code> classes<br>
+          Process: Login process → Session thread → DB query thread<br>
+          Development: <code>auth-service/</code>, <code>payment-service/</code> repos<br>
+          Physical: Web server (AWS EC2) + DB server (RDS) + Load Balancer
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">MVC Pattern (Model-View-Controller)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">⭐ Most Important</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>MVC separates an application into <strong>three components</strong>. Widely used in modern web applications.</p>
+        <div class="key-term">
+          <b>Model</b> – Data related logic. Communicates with controller. May update view.<br>
+          <b>View</b> – What the end user sees. HTML/CSS. Communicates with controller.<br>
+          <b>Controller</b> – Processes requests. Gets data from user. Acts as middleman.
+        </div>
+        <div class="example">
+          <strong>📧 Email App (Gmail-like)</strong>
+          <b>Model:</b> Email data, user info, inbox list stored in DB<br>
+          <b>View:</b> The HTML page you see with email list and read pane<br>
+          <b>Controller:</b> When you click "Delete", controller receives that, tells Model to delete, View refreshes<br><br>
+          Popular frameworks: Django (Python), Laravel (PHP), Rails (Ruby), Spring MVC (Java)
+        </div>
+        <p style="margin-top:10px">MVC is generally used for <strong>single graphical workstation applications</strong>.</p>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Layered Architecture (N-Tier)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Pattern</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Components organized in <strong>horizontal layers</strong>. Each layer is self-independent — interconnected but not dependent. Best when <strong>security is highly concerned</strong>.</p>
+        <div class="key-term">
+          <b>Presentation Layer</b> – User interfaces (web, desktop, mobile)<br>
+          <b>Business Logic Layer</b> – Business rules, validations, processes<br>
+          <b>Data Access Layer</b> – Interacts with database (also called Persistence Layer)<br>
+          <b>Data Store Layer</b> – The actual database
+        </div>
+        <div class="example">
+          <strong>🛒 E-Commerce Example (Customer Info Request)</strong>
+          1. User types "Show John's orders" → <b>Presentation Layer</b> receives<br>
+          2. → passes to <b>Business Logic</b>: validates user has permission<br>
+          3. → <b>Data Access Layer</b>: runs <code>SELECT * FROM orders WHERE user='John'</code><br>
+          4. → <b>Data Store</b>: database returns results<br>
+          5. Results flow back up the chain to be displayed
+        </div>
+        <div class="example">
+          <strong>✅ Advantages</strong>
+          Separation of concerns, maintainable, testable, easy to update layers separately, changes in one layer don't affect others (if properly isolated)
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Repository / Data-Centric Architecture</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Pattern</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Data is stored in a <strong>central shared repository</strong>. All components interact <strong>only through this repository</strong> — not directly with each other.</p>
+        <div class="example">
+          <strong>🔧 IDE / Compiler Example (from slides)</strong>
+          In Eclipse IDE, all tools (code editor, debugger, compiler, refactoring tool) share one central repository: the <b>project files and AST (Abstract Syntax Tree)</b>.<br><br>
+          The editor doesn't talk to the debugger directly. Both read/write to the same repository.
+        </div>
+        <div class="example">
+          <strong>📁 Other Examples</strong>
+          • Version control systems (Git) — central repo<br>
+          • Hospital systems — all departments access central patient record DB<br>
+          • ERP systems — all modules share one data store
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Client-Server Architecture</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Pattern</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>One or more <strong>clients</strong> connected to a <strong>central server</strong> over a network. The server hosts, delivers, and manages resources for clients.</p>
+        <div class="key-term">
+          <b>Client</b> – Takes input, sends requests<br>
+          <b>Server</b> – Receives and processes requests<br>
+          <b>Load Balancer</b> – Distributes incoming traffic across multiple servers
+        </div>
+        <div class="example">
+          <strong>🌐 Request Lifecycle (from slides)</strong>
+          1. Client requests data from server<br>
+          2. Load balancer routes request to appropriate server<br>
+          3. Server processes the request<br>
+          4. Server queries the database<br>
+          5. Database returns data to server<br>
+          6. Server sends data back to client<br>
+          7. Repeat
+        </div>
+        <div class="example">
+          <strong>📧 Examples</strong>
+          Web servers (browser = client, nginx = server), Mail servers (Outlook = client, Exchange = server)
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Pipe and Filter Architecture</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Pattern</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>A series of <strong>components (filters)</strong> connected by <strong>pipes</strong>. Each filter processes its input and produces an output that flows to the next via a pipe.</p>
+        <div class="example">
+          <strong>🔗 How it works</strong>
+          Input → [Filter 1] → pipe → [Filter 2] → pipe → [Filter 3] → Output<br><br>
+          Each filter is independent and only knows about its input/output stream.
+        </div>
+        <div class="example">
+          <strong>💻 Unix / Linux Command Line Example</strong>
+          <code>cat log.txt | grep "ERROR" | sort | uniq | wc -l</code><br><br>
+          <b>cat</b> (read file) → pipe → <b>grep</b> (filter errors) → pipe → <b>sort</b> → pipe → <b>uniq</b> (unique lines) → pipe → <b>wc -l</b> (count)<br><br>
+          Each command is a filter. The pipe <code>|</code> connects them.
+        </div>
+        <div class="example">
+          <strong>🎵 Other Examples</strong>
+          • Video processing pipelines (decode → resize → encode)<br>
+          • ETL data pipelines (Extract → Transform → Load)<br>
+          • Compiler stages (tokenize → parse → optimize → generate code)
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Design Patterns (Creational, Structural, Behavioral)</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Must Know</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <p>Design patterns solve reoccurring code-level problems. Three categories:</p>
+        <div class="example">
+          <strong>🏭 Creational – How objects are created</strong>
+          Abstract Factory, Builder, Factory Method, Prototype, <b>Singleton</b><br>
+          Example: Singleton ensures only ONE instance of a class (like a Logger)
+        </div>
+        <div class="example">
+          <strong>🔌 Structural – How entities relate</strong>
+          Adapter, Bridge, Decorator, Facade, Proxy<br>
+          Example: Adapter converts one interface to another (like a plug adapter)
+        </div>
+        <div class="example">
+          <strong>💬 Behavioral – How objects communicate</strong>
+          Command, Iterator, Mediator, Observer, Interpreter<br>
+          Example: Observer — YouTube notifies all subscribers when a video is uploaded
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-card">
+      <div class="concept-header" onclick="toggle(this)">
+        <span class="concept-title">Architectural Pattern vs Design Pattern</span>
+        <div style="display:flex;gap:8px;align-items:center"><span class="concept-tag">Distinction</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="concept-body">
+        <div class="key-term">
+          <b>Architectural Pattern</b> – High-level, system-wide. Deals with overall structure. (MVC, Layered, Client-Server, Microservices, SOA)<br><br>
+          <b>Design Pattern</b> – Mid-level, code-level. Deals with specific module/class interactions. (Singleton, Observer, Factory)
+        </div>
+        <p style="margin-top:10px">Architectural patterns address: Performance, High availability, Scalability, Security, Maintainability, Testing, Deployment, Technology Stack</p>
+        <div class="example">
+          <strong>📐 Analogy</strong>
+          Architectural pattern = City planning (where to put roads, buildings, parks)<br>
+          Design pattern = Interior design of individual rooms
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="page">
+  <h2 class="section-title">📝 Practice Quiz</h2>
+  <p class="subtitle">Test yourself. Answers are explained after each question.</p>
+
+  <div class="quiz-controls">
+    <div class="quiz-filter">
+      <button class="filter-btn active" onclick="setFilter('all', this)">All Questions</button>
+      <button class="filter-btn" onclick="setFilter('w7', this)">Week 7</button>
+      <button class="filter-btn" onclick="setFilter('w8', this)">Week 8</button>
+    </div>
+    <button class="btn btn-secondary" onclick="restartQuiz()">↺ Restart</button>
+  </div>
+
+  <div id="quiz-area">
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+    <div class="question-counter" id="q-counter">Question 1 of 20</div>
+    <div class="q-card" id="q-card">
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="options"></div>
+      <div class="explanation" id="explanation"></div>
+    </div>
+    <div class="q-nav">
+      <button class="btn btn-secondary" onclick="prevQ()" id="prev-btn">← Previous</button>
+      <button class="btn btn-primary" onclick="nextQ()" id="next-btn">Next →</button>
+    </div>
+  </div>
+
+  <div id="score-area" style="display:none">
+    <div class="score-card">
+      <div class="score-circle">
+        <span class="score-num" id="score-num">0/0</span>
+        <span class="score-label">Score</span>
+      </div>
+      <h3 id="score-msg" style="margin-bottom:12px"></h3>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:24px">Review the concepts above and try again!</p>
+      <button class="btn btn-primary" onclick="restartQuiz()">Try Again</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHEAT SHEET -->
+<div id="cheatsheet" class="page">
+  <h2 class="section-title">⚡ Quick Reference Cheat Sheet</h2>
+  <p class="subtitle">Everything on one page — study this the night before.</p>
+
+  <div class="cheat-section">
+    <h3>Week 7 — Design Concepts</h3>
+    <table class="cheat-table">
+      <tr><th>Concept</th><th>One-line Definition</th><th>Key Example</th></tr>
+      <tr><td><b>Abstraction</b></td><td>Hide complex details, show only what's needed</td><td>Calling <code>open(door)</code> without knowing the algorithm</td></tr>
+      <tr><td><b>Modularity</b></td><td>Split software into separate named components</td><td><code>auth.js</code>, <code>payment.js</code> — each handles one thing</td></tr>
+      <tr><td><b>Information Hiding</b></td><td>Modules hide their internal details via controlled interfaces</td><td>ATM hides PIN algorithm; you only see the screen</td></tr>
+      <tr><td><b>Cohesion</b></td><td>How focused a module is on ONE thing → HIGH = GOOD</td><td>PaymentModule only does payments, nothing else</td></tr>
+      <tr><td><b>Coupling</b></td><td>How dependent modules are on each other → LOW = GOOD</td><td>Don't access internal vars of other modules directly</td></tr>
+      <tr><td><b>Refinement</b></td><td>Top-down: break big problem into smaller sub-steps</td><td>"Make tea" → "Boil water" → "Fill kettle" → ...</td></tr>
+      <tr><td><b>Refactoring</b></td><td>Improve internal code without changing external behavior</td><td>Extract duplicate null-check into one function</td></tr>
+      <tr><td><b>Patterns</b></td><td>Proven solution to a recurring problem in a given context</td><td>Observer pattern for event notifications</td></tr>
+      <tr><td><b>FURPS</b></td><td>Functionality, Usability, Reliability, Performance, Supportability</td><td>Quality checklist for any software system</td></tr>
+    </table>
+  </div>
+
+  <div class="cheat-section">
+    <h3>Week 7 — Design Class Characteristics</h3>
+    <table class="cheat-table">
+      <tr><th>Property</th><th>Meaning</th></tr>
+      <tr><td><b>Complete & Sufficient</b></td><td>Has all expected attributes/methods — no more, no less</td></tr>
+      <tr><td><b>Primitiveness</b></td><td>Each method provides one service only — no duplicates</td></tr>
+      <tr><td><b>High Cohesion</b></td><td>Class focuses on one kind of thing</td></tr>
+      <tr><td><b>Low Coupling</b></td><td>Minimal collaboration; Law of Demeter — only talk to neighbors</td></tr>
+    </table>
+  </div>
+
+  <div class="cheat-section">
+    <h3>Week 8 — Architectural Patterns Comparison</h3>
+    <table class="cheat-table">
+      <tr><th>Pattern</th><th>Core Idea</th><th>Best For</th><th>Example</th></tr>
+      <tr><td><b>MVC</b></td><td>Separate Model, View, Controller</td><td>Web/desktop apps with UI</td><td>Gmail, Django app</td></tr>
+      <tr><td><b>Layered (N-Tier)</b></td><td>Horizontal layers, each independent</td><td>Security-critical apps</td><td>Enterprise web apps</td></tr>
+      <tr><td><b>Repository</b></td><td>All components share one central data store</td><td>Data-intensive tools</td><td>Eclipse IDE, ERP systems</td></tr>
+      <tr><td><b>Client-Server</b></td><td>Clients request; servers respond over network</td><td>Networked applications</td><td>Web browsers, email clients</td></tr>
+      <tr><td><b>Pipe & Filter</b></td><td>Data flows through chained processing filters</td><td>Data transformation pipelines</td><td>Unix pipes, ETL, compilers</td></tr>
+    </table>
+  </div>
+
+  <div class="cheat-section">
+    <h3>Week 8 — 4+1 Architectural Views</h3>
+    <table class="cheat-table">
+      <tr><th>View</th><th>Focus</th><th>Viewer</th><th>Diagrams Used</th></tr>
+      <tr><td><b>Logical</b></td><td>Functional requirements, key abstractions</td><td>End User</td><td>Class, Sequence, Communication</td></tr>
+      <tr><td><b>Process</b></td><td>Runtime behavior, non-functional (performance)</td><td>Integrator</td><td>Activity, state charts</td></tr>
+      <tr><td><b>Development</b></td><td>Code organization for dev teams</td><td>Programmers</td><td>Package, component diagrams</td></tr>
+      <tr><td><b>Physical</b></td><td>Deployment — servers, data centers</td><td>System Engineers</td><td>Deployment diagrams</td></tr>
+      <tr><td><b>+1 Scenarios</b></td><td>Use cases tying all views together</td><td>All stakeholders</td><td>Use case diagrams</td></tr>
+    </table>
+  </div>
+
+  <div class="cheat-section">
+    <h3>Week 8 — Design Patterns by Category</h3>
+    <table class="cheat-table">
+      <tr><th>Category</th><th>Focus</th><th>Examples</th></tr>
+      <tr><td><b>Creational</b></td><td>How objects are instantiated</td><td>Singleton, Factory Method, Builder, Prototype, Abstract Factory</td></tr>
+      <tr><td><b>Structural</b></td><td>How entities are composed/related</td><td>Adapter, Bridge, Decorator, Facade, Proxy</td></tr>
+      <tr><td><b>Behavioral</b></td><td>How objects communicate</td><td>Observer, Command, Iterator, Mediator, Interpreter</td></tr>
+    </table>
+  </div>
+</div>
+
+<script>
+// ─── NAVIGATION ───────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const idx = ['home','week7','week8','quiz','cheatsheet'].indexOf(id);
+  document.querySelectorAll('.nav-btn')[idx].classList.add('active');
+  window.scrollTo(0,0);
+  if(id === 'quiz') initQuiz();
+}
+
+// ─── ACCORDION ────────────────────────────────────────
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+// ─── QUIZ DATA ────────────────────────────────────────
+const allQuestions = [
+  // WEEK 7
+  { week:'w7', q:"What is the primary goal of software design?", options:["Write code as fast as possible","Transform user requirements (SRS) into a blueprint for implementation","Test the application","Deploy the system"], correct:1, exp:"Software design transforms the SRS document into a design document — a blueprint that programmers follow to build the system." },
+  { week:'w7', q:"According to Roman architecture principles, which of these is NOT one of the three properties of good software?", options:["Firmness (no bugs)","Commodity (suitable for purpose)","Complexity (intricate features)","Delight (pleasurable to use)"], correct:2, exp:"The three Roman architecture properties are Firmness, Commodity, and Delight. Complexity is NOT one of them — in fact, good design reduces complexity." },
+  { week:'w7', q:"In FURPS, what does 'R' stand for and how is it evaluated?", options:["Reusability — by code duplication","Reliability — by MTTF, failure frequency, and recovery ability","Readability — by code reviews","Robustness — by stress testing only"], correct:1, exp:"Reliability (R in FURPS) is evaluated by measuring failure frequency, severity, accuracy of output, mean-time-to-failure (MTTF), and ability to recover from failure." },
+  { week:'w7', q:"What is the difference between Data Abstraction and Procedural Abstraction?", options:["There is no difference","Data abstraction describes a data object; procedural abstraction is a sequence of instructions with a specific limited function","Data abstraction is faster","Procedural abstraction is only for databases"], correct:1, exp:"Data abstraction = collection of data describing an object (like a 'door' with attributes). Procedural abstraction = a named sequence of instructions (like 'open()') that hides its implementation." },
+  { week:'w7', q:"Modularity is the single attribute that allows a program to be...", options:["Executed faster","Managed easily","More secure","Less expensive to build initially"], correct:1, exp:"The slides state directly: 'Modularity is the single attribute of a software that permits a program to be managed easily.'" },
+  { week:'w7', q:"What is the relationship between cost and number of modules according to the software cost curve?", options:["More modules always = lower cost","Fewer modules always = lower cost","There is an optimal number of modules that minimizes total cost","Cost is not related to modules"], correct:2, exp:"Too few modules = high integration cost. Too many modules = high interface complexity cost. There is an optimal middle point that minimizes total cost." },
+  { week:'w7', q:"Information Hiding means:", options:["Encrypting user passwords","Module internals (algorithm, data structures) are not accessible to modules that don't need them","Hiding the user interface","Storing data in hidden files"], correct:1, exp:"Information Hiding means modules are designed so their internal information (algorithms, data structures, implementation details) are hidden from other modules, accessible only through a controlled interface." },
+  { week:'w7', q:"Which statement about Cohesion and Coupling is CORRECT?", options:["High coupling and low cohesion is ideal","High cohesion and low coupling is ideal","Both should be high","Both should be low"], correct:1, exp:"High cohesion (module is focused on one thing) + Low coupling (modules are not overly dependent on each other) = functionally independent, well-designed system." },
+  { week:'w7', q:"The Law of Demeter states that:", options:["Methods should access any object they need","A method should only send messages to methods in neighboring classes","All classes must be public","Modules should share all their data"], correct:1, exp:"The Law of Demeter restricts coupling by saying a method should only send messages to methods in neighboring classes — don't reach 3 levels deep through other objects." },
+  { week:'w7', q:"Stepwise Refinement is:", options:["Bottom-up approach to design","Top-down approach of breaking a problem into detailed sub-steps until it can be coded","Refactoring existing code","A testing technique"], correct:1, exp:"Stepwise Refinement is a top-down design approach. You start with a general step, break it into sub-steps, and keep going until each step is at the level of detail where it can be coded." },
+  { week:'w7', q:"Refactoring changes:", options:["The external behavior of the software","Only the internal structure without changing external behavior","Both internal and external behavior","Only the user interface"], correct:1, exp:"Refactoring = reorganizing code to improve internal structure WITHOUT changing its external behavior or function. The app does the same thing, but the code is cleaner." },
+  { week:'w7', q:"Which of the following is NOT a type of design class?", options:["User Interface Classes","Persistent Classes","Compilation Classes","System Classes"], correct:2, exp:"The five types of design classes are: User Interface, Business Domain, Process, Persistent, and System classes. 'Compilation Classes' is not one of them." },
+  { week:'w7', q:"'Primitiveness' as a characteristic of a well-formed design class means:", options:["The class must be very simple","Each method provides only one service for the class, with no duplication","The class must have primitive data types only","The class must be inherited from Object"], correct:1, exp:"Primitiveness means methods are focused on accomplishing ONE service for the class. Once implemented, the class shouldn't provide another way to do the same thing." },
+  // WEEK 8
+  { week:'w8', q:"What is the correct relationship between Architecture and Design?", options:["They are the same thing","Architecture is an instance of Design","Design is an instance of Architecture (like an object is an instance of a class)","Design comes before Architecture"], correct:2, exp:"A Design is an instance of an Architecture, just like an object is an instance of a class. Example: Client-Server (architecture) can produce a Java EE app or a .NET app (two different designs)." },
+  { week:'w8', q:"In Kruchten's 4+1 model, which view focuses on NON-functional requirements and runtime behavior?", options:["Logical View","Process View","Development View","Physical View"], correct:1, exp:"Process View focuses on non-functional requirements and shows how the system is composed of interacting processes at runtime. It's useful for judging performance and availability." },
+  { week:'w8', q:"Which architectural view would a System Engineer primarily use?", options:["Logical View","Process View","Development View","Physical/Implementation View"], correct:3, exp:"Physical/Implementation View is used by System Engineers. It shows how software is deployed — which servers, data centers, and software components are installed where." },
+  { week:'w8', q:"In MVC, which component processes requests and acts as the middleman?", options:["Model","View","Controller","Repository"], correct:2, exp:"The Controller processes requests and gets data from the user. It mediates between the Model (data) and View (display). The View and Model communicate through or alongside the Controller." },
+  { week:'w8', q:"Layered Architecture is the best choice when:", options:["Maximum performance is needed","Security is highly concerned","Real-time processing is required","There are many independent filters"], correct:1, exp:"From the slides: 'Layered architecture is a best choice [when] security is highly concerned.' The separation of layers allows controlled access between tiers." },
+  { week:'w8', q:"In Repository Architecture, how do components interact with each other?", options:["Directly through method calls","Through a message broker","Only through the central shared repository","Via REST APIs"], correct:2, exp:"In Repository Architecture, components DON'T interact directly with each other. They interact ONLY through the central shared repository. The Eclipse IDE is the example from slides." },
+  { week:'w8', q:"Which architectural pattern does Unix pipe commands exemplify? e.g., cat file | grep 'error' | sort", options:["MVC Pattern","Client-Server Pattern","Pipe and Filter Pattern","Repository Pattern"], correct:2, exp:"Unix pipe commands are the classic example of Pipe and Filter architecture. Each command (cat, grep, sort) is a filter; the pipe '|' connects them, passing output from one to the next." },
+  { week:'w8', q:"Observer, Command, and Iterator are examples of which design pattern category?", options:["Creational Patterns","Structural Patterns","Behavioral Patterns","Architectural Patterns"], correct:2, exp:"Observer, Command, Iterator, Mediator are Behavioral Patterns — they identify common communication patterns between objects and realize these patterns." },
+];
+
+let currentFilter = 'all';
+let questions = [];
+let currentQ = 0;
+let answered = [];
+let score = 0;
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  restartQuiz();
+}
+
+function initQuiz() {
+  questions = currentFilter === 'all' ? [...allQuestions] : allQuestions.filter(q => q.week === currentFilter);
+  shuffle(questions);
+  currentQ = 0;
+  answered = new Array(questions.length).fill(null);
+  score = 0;
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('score-area').style.display = 'none';
+  renderQ();
+}
+
+function restartQuiz() { initQuiz(); }
+
+function renderQ() {
+  if (questions.length === 0) return;
+  const q = questions[currentQ];
+  const total = questions.length;
+  document.getElementById('q-counter').textContent = `Question ${currentQ+1} of ${total}`;
+  document.getElementById('progress-bar').style.width = `${((currentQ)/total)*100}%`;
+  document.getElementById('q-text').textContent = q.q;
+  const optDiv = document.getElementById('options');
+  optDiv.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const el = document.createElement('div');
+    el.className = 'option';
+    el.textContent = `${String.fromCharCode(65+i)}. ${opt}`;
+    const a = answered[currentQ];
+    if (a !== null) {
+      el.classList.add('disabled');
+      if (i === q.correct) el.classList.add('correct');
+      else if (i === a) el.classList.add('wrong');
+    } else {
+      el.onclick = () => selectAnswer(i);
+    }
+    optDiv.appendChild(el);
+  });
+  const expDiv = document.getElementById('explanation');
+  if (answered[currentQ] !== null) {
+    expDiv.textContent = '💡 ' + q.exp;
+    expDiv.classList.add('show');
+  } else {
+    expDiv.classList.remove('show');
+  }
+  document.getElementById('prev-btn').style.visibility = currentQ > 0 ? 'visible' : 'hidden';
+  document.getElementById('next-btn').textContent = currentQ === questions.length-1 ? 'Finish' : 'Next →';
+}
+
+function selectAnswer(i) {
+  const q = questions[currentQ];
+  answered[currentQ] = i;
+  if (i === q.correct) score++;
+  renderQ();
+}
+
+function nextQ() {
+  if (currentQ === questions.length-1) { showScore(); return; }
+  currentQ++;
+  renderQ();
+}
+
+function prevQ() {
+  if (currentQ > 0) { currentQ--; renderQ(); }
+}
+
+function showScore() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('score-area').style.display = 'block';
+  const total = questions.length;
+  const pct = Math.round((score/total)*100);
+  document.getElementById('score-num').textContent = `${score}/${total}`;
+  let msg = pct >= 90 ? '🏆 Excellent! You\'re ready!' : pct >= 70 ? '👍 Good job! Review weak spots.' : '📚 Keep studying — you\'ve got this!';
+  document.getElementById('score-msg').textContent = msg;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]] = [arr[j],arr[i]];
+  }
+}
+
+// Init quiz on load
+initQuiz();
+</script>
+</body>
+</html>

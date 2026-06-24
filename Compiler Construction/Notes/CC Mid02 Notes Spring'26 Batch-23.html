@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compiler Construction &ndash; Mid-2 Complete Notes</title>
+<style>
+:root{--bg:#fafafa;--sidebar-bg:#fff;--card-bg:#fff;--accent:#4f46e5;--al:#e0e7ff;--ad:#3730a3;--text:#1e293b;--tm:#64748b;--border:#e2e8f0;--term:#0f172a;--tt:#e2e8f0;--ok:#10b981;--warn:#f59e0b;--shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);--shl:0 4px 14px rgba(0,0,0,.1);--r:10px;--fs:'Segoe UI',system-ui,-apple-system,sans-serif;--fm:'Cascadia Code','Fira Code','Consolas',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:2rem}
+body{font-family:var(--fs);background:var(--bg);color:var(--text);line-height:1.72;font-size:16px}
+.sidebar{position:fixed;top:0;left:0;width:270px;height:100vh;background:var(--sidebar-bg);border-right:1px solid var(--border);overflow-y:auto;padding:1.4rem 1rem;z-index:100;transition:transform .3s}
+.sidebar::-webkit-scrollbar{width:4px}.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.st{font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--tm);margin-bottom:.7rem;font-weight:700}
+.sidebar a{display:block;text-decoration:none;color:var(--text);padding:4px 10px;border-radius:6px;font-size:.82rem;line-height:1.45;transition:background .15s,color .15s;margin-bottom:1px}
+.sidebar a:hover,.sidebar a.active{background:var(--al);color:var(--accent)}
+.sidebar a.sub{padding-left:22px;font-size:.78rem;color:var(--tm)}
+.sbt{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--accent);color:#fff;border:none;border-radius:8px;width:40px;height:40px;font-size:1.3rem;cursor:pointer}
+.main{margin-left:270px;max-width:870px;padding:2.5rem 3rem 6rem}
+.hero{text-align:center;padding:3rem 2rem 2.5rem;background:linear-gradient(135deg,var(--accent),#7c3aed);color:#fff;border-radius:var(--r);margin-bottom:3rem;box-shadow:var(--shl)}
+.hero h1{font-size:2.1rem;font-weight:800;margin-bottom:.4rem}.hero p{opacity:.88;font-size:1.02rem}
+section{margin-bottom:3.2rem}
+section>h2{font-size:1.48rem;font-weight:700;color:var(--ad);border-bottom:3px solid var(--al);padding-bottom:.4rem;margin-bottom:1.2rem}
+h3{font-size:1.12rem;font-weight:600;margin:1.4rem 0 .55rem;color:var(--text)}
+h4{font-size:.97rem;font-weight:600;margin:1.1rem 0 .45rem;color:var(--ad)}
+p{margin-bottom:.8rem}ul,ol{margin:.5rem 0 1rem 1.5rem}li{margin-bottom:.3rem}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem 1.4rem;margin:1rem 0;box-shadow:var(--shadow)}
+.db{border-left:4px solid var(--accent);background:var(--al);padding:1rem 1.2rem;border-radius:0 var(--r) var(--r) 0;margin:1rem 0}
+.db strong{color:var(--ad)}
+.tb{border-left:4px solid var(--ok);background:#ecfdf5;padding:1rem 1.2rem;border-radius:0 var(--r) var(--r) 0;margin:1rem 0}
+.tb::before{content:"💡 Tip: ";font-weight:700;color:#065f46}
+.wb{border-left:4px solid var(--warn);background:#fffbeb;padding:1rem 1.2rem;border-radius:0 var(--r) var(--r) 0;margin:1rem 0}
+.wb::before{content:"⚠ Common Mistake: ";font-weight:700;color:#92400e}
+.fb{background:#faf5ff;border:2px solid #c4b5fd;border-radius:var(--r);padding:1rem 1.2rem;margin:1rem 0;text-align:center;font-size:1.02rem}
+pre{background:var(--term);color:var(--tt);padding:1rem 1.2rem;border-radius:var(--r);overflow-x:auto;font-family:var(--fm);font-size:.86rem;line-height:1.6;margin:.7rem 0 1rem}
+code{font-family:var(--fm);font-size:.9em}
+p code,li code{background:#f1f5f9;padding:2px 6px;border-radius:4px;color:var(--ad)}
+.nt{color:#a78bfa;font-weight:600}.t{color:#34d399}.ar{color:#f472b6}.ep{color:#fbbf24}
+.tw{overflow-x:auto;margin:1rem 0}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{border:1px solid var(--border);padding:7px 11px;text-align:center}
+th{background:var(--accent);color:#fff;font-weight:600}
+tr:nth-child(even){background:#f8fafc}tr:hover{background:var(--al)}
+.sv{text-align:center;margin:1.4rem 0;overflow-x:auto}.sv svg{max-width:100%;height:auto}
+.bg{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.bg .bc{border-radius:var(--r);padding:1rem}
+.bc.bf{background:#fef2f2;border:1px solid #fca5a5}
+.bc.af{background:#ecfdf5;border:1px solid #6ee7b7}
+.bc h4{margin-top:0}
+@media(max-width:900px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0);box-shadow:var(--shl)}.sbt{display:block}.main{margin-left:0;padding:2rem 1.2rem 4rem}.bg{grid-template-columns:1fr}}
+@media print{.sidebar,.sbt{display:none}.main{margin:0;max-width:100%}pre{white-space:pre-wrap}}
+</style>
+</head>
+<body>
+<button class="sbt" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Menu">&#9776;</button>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+<div class="st">Table of Contents</div>
+<a href="#hero">&#127968; Home</a>
+<a href="#s1">1. Syntax Analysis Overview</a>
+<a href="#s2">2. Intro to Parsers</a>
+<a href="#s3">3. Context-Free Grammars</a>
+<a href="#s4">4. Derivations</a>
+<a href="#s4l" class="sub">Leftmost Derivation</a>
+<a href="#s4r" class="sub">Rightmost Derivation</a>
+<a href="#s4t" class="sub">Parse Tree</a>
+<a href="#s5">5. Removing Ambiguity</a>
+<a href="#s5a" class="sub">Associativity</a>
+<a href="#s5p" class="sub">Precedence</a>
+<a href="#s6">6. Eliminating Left Recursion</a>
+<a href="#s6d" class="sub">Direct</a>
+<a href="#s6i" class="sub">Indirect</a>
+<a href="#s7">7. Left Factoring</a>
+<a href="#s8">8. FIRST() &amp; FOLLOW()</a>
+<a href="#s8f" class="sub">FIRST Rules</a>
+<a href="#s8w" class="sub">FOLLOW Rules</a>
+<a href="#s8e" class="sub">Solved Examples</a>
+<a href="#s9">9. Error Handling</a>
+<a href="#s10">10. Top-Down Parsing</a>
+<a href="#s11">11. Recursive Descent</a>
+<a href="#s12">12. LL(1) Parser</a>
+<a href="#s12t" class="sub">Parsing Table</a>
+<a href="#s12e" class="sub">Solved Examples</a>
+<a href="#s13">13. Bottom-Up Parsing</a>
+<a href="#s14">14. Shift-Reduce Parsing</a>
+<a href="#s14c" class="sub">Conflicts</a>
+<a href="#s15">15. LR(0) Parser</a>
+<a href="#s15i" class="sub">Items &amp; Automaton</a>
+<a href="#s15e" class="sub">Solved Example</a>
+<a href="#s16">16. SLR(1) Parser</a>
+<a href="#s16e" class="sub">Solved Example</a>
+<a href="#s17">17. CLR(1) Parser</a>
+<a href="#s17e" class="sub">Solved Example</a>
+<a href="#s18">18. LALR(1) Parser</a>
+<a href="#s18e" class="sub">Solved Example</a>
+<a href="#exam">&#128221; Exam Practice</a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="hero" id="hero">
+<h1>Compiler Construction</h1>
+<p>Mid-2 Comprehensive Notes &mdash; Complete Exam-Ready Handbook</p>
+<p style="opacity:.7;font-size:.86rem;margin-top:.4rem">Based on Weeks 4&ndash;8 Lectures &bull; Prof. Zulfiqar Ali &bull; FAST-NUCES</p>
+</div>
+
+<!-- ====== SECTION 1 ====== -->
+<section id="s1">
+<h2>1. Syntax Analysis &mdash; Complete Overview</h2>
+<div class="db"><strong>Definition:</strong> Syntax Analysis (Parsing) is the second phase of a compiler. It takes the stream of tokens produced by the Lexical Analyzer and determines whether the token string can be generated by the grammar of the source language. It produces a <strong>parse tree</strong> as output.</div>
+
+<h3>Role in the Compiler Pipeline</h3>
+<div class="sv">
+<svg width="720" height="75" viewBox="0 0 720 75">
+<defs><marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="18" width="115" height="40" rx="8" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="57" y="43" text-anchor="middle" font-size="12.5" font-weight="600" fill="#3730a3">Source Code</text>
+<line x1="120" y1="38" x2="153" y2="38" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#a1)"/>
+<rect x="158" y="18" width="128" height="40" rx="8" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="222" y="43" text-anchor="middle" font-size="12.5" font-weight="600" fill="#3730a3">Lexical Analyzer</text>
+<line x1="290" y1="38" x2="323" y2="38" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#a1)"/>
+<rect x="328" y="18" width="128" height="40" rx="8" fill="#4f46e5" stroke="#3730a3" stroke-width="1.5"/>
+<text x="392" y="43" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">Syntax Analyzer</text>
+<line x1="460" y1="38" x2="493" y2="38" stroke="#4f46e5" stroke-width="1.5" marker-end="url(#a1)"/>
+<rect x="498" y="18" width="138" height="40" rx="8" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="567" y="43" text-anchor="middle" font-size="12.5" font-weight="600" fill="#3730a3">Semantic Analyzer</text>
+<text x="222" y="13" text-anchor="middle" font-size="10.5" fill="#64748b">Tokens</text>
+<text x="392" y="13" text-anchor="middle" font-size="10.5" fill="#64748b">Parse Tree</text>
+</svg>
+</div>
+
+<h3>Key Responsibilities</h3>
+<ul>
+<li>Verify that the token stream conforms to the language grammar.</li>
+<li>Construct a <strong>parse tree</strong> (concrete syntax tree) from the tokens.</li>
+<li>Report and recover from <strong>syntax errors</strong>.</li>
+<li>Feed the parse tree to the semantic analysis phase.</li>
+</ul>
+
+<h3>Parser Classification Tree</h3>
+<div class="sv">
+<svg width="700" height="260" viewBox="0 0 700 260">
+<rect x="260" y="5" width="160" height="34" rx="8" fill="#4f46e5"/>
+<text x="340" y="27" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Parser</text>
+<line x1="300" y1="39" x2="170" y2="68" stroke="#94a3b8" stroke-width="1.5"/>
+<line x1="380" y1="39" x2="510" y2="68" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="80" y="68" width="180" height="34" rx="8" fill="#a78bfa"/>
+<text x="170" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Top-Down Parser</text>
+<rect x="420" y="68" width="180" height="34" rx="8" fill="#a78bfa"/>
+<text x="510" y="90" text-anchor="middle" font-size="12" font-weight="600" fill="#fff">Bottom-Up Parser</text>
+<line x1="120" y1="102" x2="80" y2="135" stroke="#94a3b8" stroke-width="1.2"/>
+<line x1="220" y1="102" x2="250" y2="135" stroke="#94a3b8" stroke-width="1.2"/>
+<rect x="5" y="135" width="155" height="32" rx="7" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1"/>
+<text x="82" y="155" text-anchor="middle" font-size="11" font-weight="600" fill="#3730a3">Recursive Descent</text>
+<rect x="175" y="135" width="155" height="32" rx="7" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1"/>
+<text x="252" y="155" text-anchor="middle" font-size="11" font-weight="600" fill="#3730a3">LL(1) / Predictive</text>
+<line x1="460" y1="102" x2="410" y2="135" stroke="#94a3b8" stroke-width="1.2"/>
+<line x1="560" y1="102" x2="590" y2="135" stroke="#94a3b8" stroke-width="1.2"/>
+<rect x="340" y="135" width="145" height="32" rx="7" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1"/>
+<text x="412" y="155" text-anchor="middle" font-size="11" font-weight="600" fill="#3730a3">LR Parser</text>
+<rect x="510" y="135" width="165" height="32" rx="7" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1"/>
+<text x="592" y="155" text-anchor="middle" font-size="11" font-weight="600" fill="#3730a3">Operator Precedence</text>
+<line x1="380" y1="167" x2="310" y2="200" stroke="#94a3b8" stroke-width="1"/>
+<line x1="400" y1="167" x2="400" y2="200" stroke="#94a3b8" stroke-width="1"/>
+<line x1="420" y1="167" x2="490" y2="200" stroke="#94a3b8" stroke-width="1"/>
+<line x1="440" y1="167" x2="580" y2="200" stroke="#94a3b8" stroke-width="1"/>
+<rect x="272" y="200" width="72" height="28" rx="6" fill="#faf5ff" stroke="#c4b5fd"/>
+<text x="308" y="219" text-anchor="middle" font-size="11" font-weight="600" fill="#6d28d9">LR(0)</text>
+<rect x="362" y="200" width="72" height="28" rx="6" fill="#faf5ff" stroke="#c4b5fd"/>
+<text x="398" y="219" text-anchor="middle" font-size="11" font-weight="600" fill="#6d28d9">SLR(1)</text>
+<rect x="452" y="200" width="72" height="28" rx="6" fill="#faf5ff" stroke="#c4b5fd"/>
+<text x="488" y="219" text-anchor="middle" font-size="11" font-weight="600" fill="#6d28d9">CLR(1)</text>
+<rect x="542" y="200" width="78" height="28" rx="6" fill="#faf5ff" stroke="#c4b5fd"/>
+<text x="581" y="219" text-anchor="middle" font-size="11" font-weight="600" fill="#6d28d9">LALR(1)</text>
+</svg>
+</div>
+</section>
+
+<!-- ====== SECTION 2 ====== -->
+<section id="s2">
+<h2>2. Introduction to Syntax Analysis / Parsers</h2>
+<div class="db"><strong>Parsing</strong> is the process of determining how a string of terminals can be generated by a grammar. The parser must be capable of constructing the parse tree in principle, or else the translation cannot be guaranteed correct.</div>
+<h3>Key Concepts</h3>
+<ul>
+<li><strong>Lookahead Symbol:</strong> The current terminal being scanned in the input. Initially, it is the first (leftmost) terminal of the input string.</li>
+<li><strong>Top-Down Parsing:</strong> Root &rarr; Leaves. Corresponds to <strong>leftmost derivation</strong>.</li>
+<li><strong>Bottom-Up Parsing:</strong> Leaves &rarr; Root. Corresponds to <strong>rightmost derivation in reverse</strong>.</li>
+</ul>
+<h3>Time Complexity</h3>
+<p>For any CFG there is a parser that takes at most <strong>O(n&sup3;)</strong> time. For real programming languages, we design grammars parseable in <strong>O(n)</strong> time using LR or LL methods.</p>
+
+<div class="card">
+<h4>Chomsky Hierarchy</h4>
+<div class="tw">
+<table>
+<tr><th>Type</th><th>Grammar</th><th>Language</th><th>Automaton</th></tr>
+<tr><td>Type 0</td><td>Unrestricted</td><td>Recursively Enumerable</td><td>Turing Machine</td></tr>
+<tr><td>Type 1</td><td>Context-Sensitive</td><td>Context-Sensitive</td><td>Linear Bounded Automaton</td></tr>
+<tr style="background:var(--al);font-weight:600"><td>Type 2</td><td>Context-Free (CFG)</td><td>Context-Free</td><td>Pushdown Automata</td></tr>
+<tr><td>Type 3</td><td>Regular</td><td>Regular</td><td>Finite Automata</td></tr>
+</table>
+</div>
+<p style="font-size:.9rem">In compiler construction we use <strong>Type 2 &mdash; Context-Free Grammars</strong> for syntax analysis.</p>
+</div>
+</section>
+
+<!-- ====== SECTION 3 ====== -->
+<section id="s3">
+<h2>3. Context-Free Grammars (CFG)</h2>
+<div class="db"><strong>Formal Definition:</strong> A Context-Free Grammar is a 4-tuple <strong>G = (V, T, P, S)</strong> where:
+<ul style="margin-top:.5rem">
+<li><strong>V</strong> &mdash; Finite set of <em>variables</em> (non-terminals)</li>
+<li><strong>T</strong> &mdash; Finite set of <em>terminals</em> (tokens)</li>
+<li><strong>P</strong> &mdash; Finite set of <em>production rules</em>: A &rarr; &alpha;, where A &isin; V and &alpha; &isin; (V &cup; T)*</li>
+<li><strong>S</strong> &mdash; Start symbol (S &isin; V)</li>
+</ul></div>
+
+<h3>Key Terminology</h3>
+<ul>
+<li><strong>Terminal:</strong> Lexical elements (tokens) &mdash; keywords, operators, identifiers, numbers. Leaf nodes in parse trees.</li>
+<li><strong>Non-Terminal:</strong> Syntactic variables (<code>expr</code>, <code>stmt</code>) &mdash; internal nodes in parse trees.</li>
+<li><strong>Production:</strong> A rule A &rarr; body. Bodies with the same LHS can be grouped with <code>|</code>.</li>
+<li><strong>Start Symbol:</strong> The non-terminal from which all derivations begin.</li>
+</ul>
+
+<h3>Example</h3>
+<pre><span class="nt">G</span> = ({S, A, B}, {a, b}, S, {S &rarr; AB, A &rarr; a, B &rarr; b})
+
+Derivation of &ldquo;ab&rdquo;:
+  <span class="nt">S</span> <span class="ar">&rarr;</span> <span class="nt">A</span><span class="nt">B</span>    (S &rarr; AB)
+    <span class="ar">&rarr;</span> <span class="t">a</span><span class="nt">B</span>    (A &rarr; a)
+    <span class="ar">&rarr;</span> <span class="t">a</span><span class="t">b</span>    (B &rarr; b)</pre>
+
+<h3>Expression Grammar (Key Example)</h3>
+<pre><span class="nt">list</span> <span class="ar">&rarr;</span> <span class="nt">list</span> <span class="t">+</span> <span class="nt">digit</span> | <span class="nt">list</span> <span class="t">-</span> <span class="nt">digit</span> | <span class="nt">digit</span>
+<span class="nt">digit</span> <span class="ar">&rarr;</span> <span class="t">0</span> | <span class="t">1</span> | <span class="t">2</span> | &hellip; | <span class="t">9</span></pre>
+<div class="tb">A CFG is called &ldquo;context-free&rdquo; because the left side of every production is a single non-terminal &mdash; replacement can happen regardless of surrounding context.</div>
+</section>
+
+<!-- ====== SECTION 4 ====== -->
+<section id="s4">
+<h2>4. Derivations</h2>
+<div class="db"><strong>Definition:</strong> A grammar <em>derives</em> strings by beginning with the start symbol and repeatedly replacing a non-terminal by the body of a production. The terminal strings that can be derived form the <strong>language</strong> defined by the grammar.</div>
+
+<h3 id="s4l">4.1 Leftmost Derivation (LMD)</h3>
+<p>At each step, the <strong>leftmost non-terminal</strong> is replaced.</p>
+<div class="card">
+<h4>Example: Derive <code>digit + digit &times; digit</code></h4>
+<pre>Grammar: <span class="nt">list</span> <span class="ar">&rarr;</span> <span class="nt">list</span> + <span class="nt">list</span> | <span class="nt">list</span> &times; <span class="nt">list</span> | <span class="nt">digit</span>
+
+<span class="nt">list</span> <span class="ar">&rArr;</span> <span class="nt">list</span> + <span class="nt">list</span>
+     <span class="ar">&rArr;</span> <span class="t">digit</span> + <span class="nt">list</span>
+     <span class="ar">&rArr;</span> <span class="t">digit</span> + <span class="nt">list</span> &times; <span class="nt">list</span>
+     <span class="ar">&rArr;</span> <span class="t">digit</span> + <span class="t">digit</span> &times; <span class="nt">list</span>
+     <span class="ar">&rArr;</span> <span class="t">digit</span> + <span class="t">digit</span> &times; <span class="t">digit</span> &#10003;</pre>
+</div>
+
+<h3 id="s4r">4.2 Rightmost Derivation (RMD)</h3>
+<p>At each step, the <strong>rightmost non-terminal</strong> is replaced.</p>
+<div class="card">
+<h4>Example: Derive <code>digit + digit &times; digit</code></h4>
+<pre><span class="nt">list</span> <span class="ar">&rArr;</span> <span class="nt">list</span> + <span class="nt">list</span>
+     <span class="ar">&rArr;</span> <span class="nt">list</span> + <span class="nt">list</span> &times; <span class="nt">list</span>
+     <span class="ar">&rArr;</span> <span class="nt">list</span> + <span class="nt">list</span> &times; <span class="t">digit</span>
+     <span class="ar">&rArr;</span> <span class="nt">list</span> + <span class="t">digit</span> &times; <span class="t">digit</span>
+     <span class="ar">&rArr;</span> <span class="t">digit</span> + <span class="t">digit</span> &times; <span class="t">digit</span> &#10003;</pre>
+</div>
+
+<h3 id="s4t">4.3 Parse Tree Derivation</h3>
+<div class="db"><strong>Parse Tree</strong> is a graphical representation for derivation. It follows operator precedence &mdash; the deepest sub-tree is traversed first.</div>
+<h4>Properties of a Parse Tree</h4>
+<ul>
+<li>The <strong>root</strong> is always the start symbol.</li>
+<li><strong>Interior nodes</strong> are non-terminals.</li>
+<li><strong>Leaf nodes</strong> are terminals (reading left-to-right gives the derived string).</li>
+</ul>
+
+<h4>Parse Tree for <code>digit &times; digit + digit</code></h4>
+<div class="sv">
+<svg width="360" height="230" viewBox="0 0 360 230">
+<style>.nd{fill:#4f46e5}.lf{fill:#10b981}.lb{font-size:12px;font-family:'Segoe UI',sans-serif;text-anchor:middle;fill:#fff;font-weight:600}.eg{stroke:#94a3b8;stroke-width:1.4}</style>
+<line x1="180" y1="28" x2="95" y2="72" class="eg"/><line x1="180" y1="28" x2="180" y2="72" class="eg"/><line x1="180" y1="28" x2="265" y2="72" class="eg"/>
+<circle cx="180" cy="22" r="18" class="nd"/><text x="180" y="27" class="lb">list</text>
+<line x1="95" y1="90" x2="40" y2="132" class="eg"/><line x1="95" y1="90" x2="95" y2="132" class="eg"/><line x1="95" y1="90" x2="150" y2="132" class="eg"/>
+<circle cx="95" cy="78" r="18" class="nd"/><text x="95" y="83" class="lb">list</text>
+<circle cx="180" cy="78" r="14" class="lf"/><text x="180" y="83" class="lb">+</text>
+<circle cx="265" cy="78" r="18" class="nd"/><text x="265" y="83" class="lb">digit</text>
+<circle cx="40" cy="142" r="18" class="nd"/><text x="40" y="147" class="lb">list</text>
+<circle cx="95" cy="142" r="14" class="lf"/><text x="95" y="147" class="lb">&times;</text>
+<circle cx="150" cy="142" r="18" class="nd"/><text x="150" y="147" class="lb">digit</text>
+<line x1="40" y1="160" x2="40" y2="192" class="eg"/>
+<circle cx="40" cy="202" r="18" class="nd"/><text x="40" y="207" class="lb">digit</text>
+</svg>
+</div>
+<div class="wb">The parse tree is the same for both LMD and RMD of the same derivation choice &mdash; only the <em>order</em> of steps differs.</div>
+</section>
+
+<!-- ====== SECTION 5 ====== -->
+<section id="s5">
+<h2>5. Removing Ambiguity from Grammar</h2>
+<div class="db"><strong>Ambiguous Grammar:</strong> A grammar that can produce <strong>more than one parse tree</strong> for some string. Since multiple parse trees imply multiple meanings, we need unambiguous grammars for compilers.</div>
+
+<h4>Example of Ambiguity</h4>
+<pre>Grammar: <span class="nt">E</span> <span class="ar">&rarr;</span> <span class="nt">E</span> + <span class="nt">E</span> | <span class="nt">E</span> &times; <span class="nt">E</span> | <span class="t">id</span>
+String: id + id &times; id
+
+Two different parse trees exist:
+  Tree 1: (id + id) &times; id   &mdash; wrong precedence
+  Tree 2: id + (id &times; id)   &mdash; correct precedence</pre>
+
+<h4>Two Parse Trees for <code>9 - 5 + 2</code></h4>
+<div class="sv">
+<svg width="580" height="210" viewBox="0 0 580 210">
+<style>.n2{fill:#6d28d9}.l2{fill:#059669}.tx{font-size:11.5px;font-family:'Segoe UI',sans-serif;text-anchor:middle;fill:#fff;font-weight:600}.eg2{stroke:#94a3b8;stroke-width:1.3}</style>
+<text x="125" y="12" font-size="13" font-weight="700" fill="#3730a3" text-anchor="middle">Tree 1: (9-5)+2 = 6 &#10003;</text>
+<line x1="125" y1="30" x2="65" y2="60" class="eg2"/><line x1="125" y1="30" x2="125" y2="60" class="eg2"/><line x1="125" y1="30" x2="185" y2="60" class="eg2"/>
+<circle cx="125" cy="27" r="16" class="n2"/><text x="125" y="32" class="tx">E</text>
+<circle cx="65" cy="67" r="16" class="n2"/><text x="65" y="72" class="tx">E</text>
+<circle cx="125" cy="67" r="12" class="l2"/><text x="125" y="72" class="tx">+</text>
+<circle cx="185" cy="67" r="16" class="n2"/><text x="185" y="72" class="tx">E</text>
+<line x1="65" y1="83" x2="25" y2="113" class="eg2"/><line x1="65" y1="83" x2="65" y2="113" class="eg2"/><line x1="65" y1="83" x2="105" y2="113" class="eg2"/>
+<circle cx="25" cy="120" r="16" class="n2"/><text x="25" y="125" class="tx">E</text>
+<circle cx="65" cy="120" r="12" class="l2"/><text x="65" y="125" class="tx">-</text>
+<circle cx="105" cy="120" r="16" class="n2"/><text x="105" y="125" class="tx">E</text>
+<line x1="25" y1="136" x2="25" y2="162" class="eg2"/><circle cx="25" cy="172" r="14" class="l2"/><text x="25" y="177" class="tx">9</text>
+<line x1="105" y1="136" x2="105" y2="162" class="eg2"/><circle cx="105" cy="172" r="14" class="l2"/><text x="105" y="177" class="tx">5</text>
+<line x1="185" y1="83" x2="185" y2="162" class="eg2"/><circle cx="185" cy="172" r="14" class="l2"/><text x="185" y="177" class="tx">2</text>
+
+<text x="425" y="12" font-size="13" font-weight="700" fill="#dc2626" text-anchor="middle">Tree 2: 9-(5+2) = 2 &#10007;</text>
+<line x1="425" y1="30" x2="365" y2="60" class="eg2"/><line x1="425" y1="30" x2="425" y2="60" class="eg2"/><line x1="425" y1="30" x2="485" y2="60" class="eg2"/>
+<circle cx="425" cy="27" r="16" class="n2"/><text x="425" y="32" class="tx">E</text>
+<circle cx="365" cy="67" r="16" class="n2"/><text x="365" y="72" class="tx">E</text>
+<circle cx="425" cy="67" r="12" class="l2"/><text x="425" y="72" class="tx">-</text>
+<circle cx="485" cy="67" r="16" class="n2"/><text x="485" y="72" class="tx">E</text>
+<line x1="485" y1="83" x2="445" y2="113" class="eg2"/><line x1="485" y1="83" x2="485" y2="113" class="eg2"/><line x1="485" y1="83" x2="525" y2="113" class="eg2"/>
+<circle cx="445" cy="120" r="16" class="n2"/><text x="445" y="125" class="tx">E</text>
+<circle cx="485" cy="120" r="12" class="l2"/><text x="485" y="125" class="tx">+</text>
+<circle cx="525" cy="120" r="16" class="n2"/><text x="525" y="125" class="tx">E</text>
+<line x1="365" y1="83" x2="365" y2="162" class="eg2"/><circle cx="365" cy="172" r="14" class="l2"/><text x="365" y="177" class="tx">9</text>
+<line x1="445" y1="136" x2="445" y2="162" class="eg2"/><circle cx="445" cy="172" r="14" class="l2"/><text x="445" y="177" class="tx">5</text>
+<line x1="525" y1="136" x2="525" y2="162" class="eg2"/><circle cx="525" cy="172" r="14" class="l2"/><text x="525" y="177" class="tx">2</text>
+</svg>
+</div>
+
+<h3 id="s5a">5.1 Resolving Associativity</h3>
+<p>By convention, <code>9+5+2 = (9+5)+2</code> &mdash; the <code>+</code> operator is <strong>left-associative</strong>.</p>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">&#10060; Before (Ambiguous)</h4><pre style="background:#450a0a">E &rarr; E + E | E - E | digit</pre></div>
+<div class="bc af"><h4 style="color:#065f46">&#9989; After (Left-Associative)</h4><pre style="background:#052e16">E &rarr; E + digit | E - digit | digit</pre></div>
+</div>
+<p><strong>Right-Associative</strong> operators (like <code>=</code> in C) use right recursion:</p>
+<pre><span class="nt">right</span> <span class="ar">&rarr;</span> <span class="t">letter</span> <span class="t">=</span> <span class="nt">right</span> | <span class="t">letter</span>
+a = b = c  is treated as  a = (b = c)</pre>
+
+<h3 id="s5p">5.2 Resolving Precedence</h3>
+<p><code>*</code> has <strong>higher precedence</strong> than <code>+</code> &mdash; it takes its operands before <code>+</code> does.</p>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">&#10060; Before</h4><pre style="background:#450a0a">E &rarr; E + E | E &times; E | id</pre></div>
+<div class="bc af"><h4 style="color:#065f46">&#9989; After (With Precedence)</h4><pre style="background:#052e16">E &rarr; E + T | T
+T &rarr; T &times; F | F
+F &rarr; id</pre></div>
+</div>
+
+<h4>Step-by-Step</h4>
+<ol>
+<li><code>+</code> is left-associative with lower precedence: <code>E &rarr; E + T</code></li>
+<li><code>&times;</code> is left-associative with higher precedence: <code>T &rarr; T &times; F</code></li>
+<li>E can also be just a term: <code>E &rarr; E + T | T</code></li>
+<li>T can also be just a factor: <code>T &rarr; T &times; F | F</code></li>
+<li>Base case: <code>F &rarr; id</code></li>
+</ol>
+<div class="fb"><strong>Rule of Thumb:</strong> Create one non-terminal <em>per precedence level</em>. Lower precedence &rarr; higher in the grammar (closer to start symbol).</div>
+
+<div class="card">
+<h4>Exercises from PPT</h4>
+<pre>Determine whether these are ambiguous:
+1. S &rarr; (S) | SS | &epsilon;           string: ()()()
+2. S &rarr; SbS | a                string: ababa
+3. S &rarr; aB | ab, A &rarr; AB | a, B &rarr; Abb | b   string: ab</pre>
+</div>
+</section>
+
+<!-- ====== SECTION 6 ====== -->
+<section id="s6">
+<h2>6. Eliminating Left Recursion</h2>
+<div class="db"><strong>Left Recursion:</strong> A production where the leftmost symbol of the RHS is the same as the LHS non-terminal. Example: <code>A &rarr; A&alpha;</code>. Top-down parsers <strong>cannot handle</strong> left-recursive grammars &mdash; they enter an <strong>infinite loop</strong>.</div>
+
+<h3>Types</h3>
+<ul>
+<li><strong>Direct:</strong> <code>A &rarr; A&alpha; | &beta;</code></li>
+<li><strong>Indirect:</strong> <code>A &rarr; B&alpha;</code>, <code>B &rarr; A&beta;</code></li>
+</ul>
+
+<h3 id="s6d">6.1 Eliminating Direct Left Recursion</h3>
+<div class="fb">
+<strong>Rule:</strong> If <code>A &rarr; A&alpha;&#8321; | A&alpha;&#8322; | ... | &beta;&#8321; | &beta;&#8322; | ...</code> (where no &beta;<sub>i</sub> starts with A)<br><br>
+Replace with:<br>
+<code>A &rarr; &beta;&#8321;A' | &beta;&#8322;A' | ...</code><br>
+<code>A' &rarr; &alpha;&#8321;A' | &alpha;&#8322;A' | ... | &epsilon;</code>
+</div>
+
+<h4>Algorithm</h4>
+<ol>
+<li>Identify left-recursive productions <code>A &rarr; A&alpha;</code>.</li>
+<li>Identify non-recursive productions <code>A &rarr; &beta;</code> (where &beta; does NOT start with A).</li>
+<li>Create new non-terminal <code>A'</code>.</li>
+<li>Write: <code>A &rarr; &beta;A'</code> for each non-recursive alternative.</li>
+<li>Write: <code>A' &rarr; &alpha;A' | &epsilon;</code> for each recursive alternative.</li>
+</ol>
+
+<div class="card">
+<h4>Example 1</h4>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">Before</h4><pre style="background:#450a0a">S &rarr; Sa | Sb | c | d</pre></div>
+<div class="bc af"><h4 style="color:#065f46">After</h4><pre style="background:#052e16">S  &rarr; cS' | dS'
+S' &rarr; aS' | bS' | &epsilon;</pre></div>
+</div>
+</div>
+
+<div class="card">
+<h4>Example 2</h4>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">Before</h4><pre style="background:#450a0a">A &rarr; ABd | Aa | a
+B &rarr; Be | b</pre></div>
+<div class="bc af"><h4 style="color:#065f46">After</h4><pre style="background:#052e16">A  &rarr; aA'
+A' &rarr; BdA' | aA' | &epsilon;
+B  &rarr; bB'
+B' &rarr; eB' | &epsilon;</pre></div>
+</div>
+</div>
+
+<div class="card">
+<h4>Example 3: Expression Grammar (Very Important)</h4>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">Before</h4><pre style="background:#450a0a">E &rarr; E + T | T
+T &rarr; T &times; F | F
+F &rarr; id</pre></div>
+<div class="bc af"><h4 style="color:#065f46">After</h4><pre style="background:#052e16">E  &rarr; TE'
+E' &rarr; +TE' | &epsilon;
+T  &rarr; FT'
+T' &rarr; &times;FT' | &epsilon;
+F  &rarr; id</pre></div>
+</div>
+</div>
+
+<div class="card">
+<h4>Example 4</h4>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">Before</h4><pre style="background:#450a0a">S &rarr; (L) | a
+L &rarr; L, S | S</pre></div>
+<div class="bc af"><h4 style="color:#065f46">After</h4><pre style="background:#052e16">S  &rarr; (L) | a
+L  &rarr; SL'
+L' &rarr; ,SL' | &epsilon;</pre></div>
+</div>
+</div>
+
+<h3 id="s6i">6.2 Eliminating Indirect Left Recursion</h3>
+<div class="db"><strong>Indirect Left Recursion:</strong> A &rarr; Br, B &rarr; Cd, C &rarr; At &mdash; starting from A we can derive a string beginning with A through a chain.</div>
+<h4>Algorithm</h4>
+<ol>
+<li>Order the non-terminals as A&#8321;, A&#8322;, ..., A<sub>n</sub>.</li>
+<li>For i = 1 to n: for j = 1 to i&minus;1: substitute A<sub>j</sub> productions into A<sub>i</sub>.</li>
+<li>Eliminate direct left recursion from A<sub>i</sub>.</li>
+</ol>
+<div class="card">
+<h4>Example</h4>
+<pre>Given:
+  A&#8321; &rarr; A&#8322;A&#8323;
+  A&#8322; &rarr; A&#8323;A&#8321; | b
+  A&#8323; &rarr; A&#8321;A&#8321; | a
+
+Step 1: Substitute A&#8321; &rarr; A&#8322;A&#8323; into A&#8323;:
+  A&#8323; &rarr; A&#8322;A&#8323;A&#8321; | a
+
+Step 2: Substitute A&#8322; into A&#8323;:
+  A&#8323; &rarr; (A&#8323;A&#8321; | b)A&#8323;A&#8321; | a
+  A&#8323; &rarr; A&#8323;A&#8321;A&#8323;A&#8321; | bA&#8323;A&#8321; | a   &larr; direct left recursion
+
+Step 3: Eliminate direct left recursion:
+  A&#8323; &rarr; bA&#8323;A&#8321;A' | aA'
+  A' &rarr; A&#8321;A&#8323;A&#8321;A' | &epsilon;
+
+Final:
+  A&#8321; &rarr; A&#8322;A&#8323;
+  A&#8322; &rarr; A&#8323;A&#8321; | b
+  A&#8323; &rarr; bA&#8323;A&#8321;A' | aA'
+  A' &rarr; A&#8321;A&#8323;A&#8321;A' | &epsilon;</pre>
+</div>
+
+<div class="card">
+<h4>Example: Another Indirect Recursion</h4>
+<pre>Given:   A &rarr; Ba | Aa | c     B &rarr; Bb | Ab | d
+
+Step 1: Eliminate left recursion from A:
+  A  &rarr; BaA' | cA'
+  A' &rarr; aA' | &epsilon;
+
+Step 2: Substitute A into B &rarr; Ab:
+  B &rarr; Bb | BaA'b | cA'b | d
+
+Step 3: Eliminate left recursion from B:
+  B  &rarr; cA'bB' | dB'
+  B' &rarr; bB' | aA'bB' | &epsilon;</pre>
+</div>
+<div class="wb">Forgetting to add <code>&epsilon;</code> to the new non-terminal A'. The &epsilon; production is essential &mdash; it allows the recursion to terminate!</div>
+</section>
+
+<!-- ====== SECTION 7 ====== -->
+<section id="s7">
+<h2>7. Left Factoring</h2>
+<div class="db"><strong>Left Factoring:</strong> A grammar transformation applied when two or more productions for the same non-terminal share a <strong>common prefix</strong>. Needed for predictive (top-down) parsing.</div>
+<div class="fb">
+<strong>Rule:</strong> If <code>A &rarr; &alpha;&beta;&#8321; | &alpha;&beta;&#8322;</code>, replace with:<br>
+<code>A &rarr; &alpha;A'</code><br>
+<code>A' &rarr; &beta;&#8321; | &beta;&#8322;</code>
+</div>
+
+<div class="card">
+<h4>Example 1: if-then-else</h4>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">Before</h4><pre style="background:#450a0a">stmt &rarr; if expr then stmt else stmt
+     | if expr then stmt</pre></div>
+<div class="bc af"><h4 style="color:#065f46">After</h4><pre style="background:#052e16">stmt  &rarr; if expr then stmt stmt'
+stmt' &rarr; else stmt | &epsilon;</pre></div>
+</div>
+</div>
+
+<div class="card">
+<h4>Example 2</h4>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">Before</h4><pre style="background:#450a0a">A &rarr; aAB | aBc | aAc</pre></div>
+<div class="bc af"><h4 style="color:#065f46">After</h4><pre style="background:#052e16">A  &rarr; aA'
+A' &rarr; AD | Bc
+D  &rarr; B | c</pre></div>
+</div>
+</div>
+
+<div class="card">
+<h4>Example 3</h4>
+<div class="bg">
+<div class="bc bf"><h4 style="color:#dc2626">Before</h4><pre style="background:#450a0a">S &rarr; cAd
+A &rarr; ab | a</pre></div>
+<div class="bc af"><h4 style="color:#065f46">After</h4><pre style="background:#052e16">S  &rarr; cAd
+A  &rarr; aA'
+A' &rarr; b | &epsilon;</pre></div>
+</div>
+</div>
+<div class="tb">Left factoring may need to be applied <strong>multiple times</strong> if common prefixes remain after the first pass.</div>
+</section>
+
+<!-- ====== SECTION 8 ====== -->
+<section id="s8">
+<h2>8. FIRST() and FOLLOW()</h2>
+<h3>Why FIRST()?</h3>
+<p>If the compiler knows the <strong>first terminal</strong> derivable from a production, it can compare it to the current input token and decide which production to use.</p>
+<h3>Why FOLLOW()?</h3>
+<p>When a non-terminal can derive &epsilon;, the parser needs to know what terminal can appear <strong>after</strong> that non-terminal to decide whether to apply the &epsilon;-production.</p>
+
+<h3 id="s8f">8.1 Rules for FIRST()</h3>
+<div class="db"><strong>FIRST(&alpha;)</strong> is the set of terminal symbols that begin strings derived from &alpha;. If &alpha; &rArr;* &epsilon;, then &epsilon; &isin; FIRST(&alpha;).</div>
+<div class="card">
+<ol>
+<li>If X is a <strong>terminal</strong>: FIRST(X) = {X}</li>
+<li>If X &rarr; <strong>&epsilon;</strong>: add &epsilon; to FIRST(X)</li>
+<li>If X &rarr; Y&#8321;Y&#8322;Y&#8323;:
+<ul>
+<li>Add FIRST(Y&#8321;) &minus; {&epsilon;} to FIRST(X)</li>
+<li>If &epsilon; &isin; FIRST(Y&#8321;), add FIRST(Y&#8322;) &minus; {&epsilon;} to FIRST(X)</li>
+<li>If &epsilon; &isin; FIRST(Y&#8321;) AND &epsilon; &isin; FIRST(Y&#8322;), add FIRST(Y&#8323;) &minus; {&epsilon;} to FIRST(X)</li>
+<li>If &epsilon; &isin; FIRST(Y<sub>i</sub>) for all i, add &epsilon; to FIRST(X)</li>
+</ul></li>
+</ol>
+</div>
+
+<h3 id="s8w">8.2 Rules for FOLLOW()</h3>
+<div class="db"><strong>FOLLOW(A)</strong> is the set of terminals that can appear immediately to the right of A. If A can be rightmost, <strong>$</strong> &isin; FOLLOW(A).</div>
+<div class="card">
+<ol>
+<li>Place <strong>$</strong> in FOLLOW(S) for start symbol S.</li>
+<li>If A &rarr; &alpha;B&beta;: add FIRST(&beta;) &minus; {&epsilon;} to FOLLOW(B).</li>
+<li>If A &rarr; &alpha;B, or A &rarr; &alpha;B&beta; where &epsilon; &isin; FIRST(&beta;): add FOLLOW(A) to FOLLOW(B).</li>
+</ol>
+</div>
+<div class="fb">
+<strong>Important Notes:</strong><br>
+&bull; &epsilon; may appear in FIRST() but <strong>NEVER</strong> in FOLLOW().<br>
+&bull; Eliminate left recursion <strong>before</strong> computing FIRST/FOLLOW!<br>
+&bull; FOLLOW(B) is found by looking where B appears on the <strong>RHS</strong> of productions.
+</div>
+
+<h3 id="s8e">8.3 Solved Examples</h3>
+<div class="card">
+<h4>Example 1</h4>
+<pre>S  &rarr; A
+A  &rarr; aBA'
+A' &rarr; dA' | &epsilon;
+B  &rarr; b
+C  &rarr; g</pre>
+<h4>FIRST</h4>
+<div class="tw"><table>
+<tr><th>Non-Terminal</th><th>FIRST</th><th>Reasoning</th></tr>
+<tr><td>S</td><td>{ a }</td><td>FIRST(S) = FIRST(A) = { a }</td></tr>
+<tr><td>A</td><td>{ a }</td><td>A &rarr; aBA': starts with terminal 'a'</td></tr>
+<tr><td>A'</td><td>{ d, &epsilon; }</td><td>A' &rarr; dA' gives 'd'; A' &rarr; &epsilon; gives &epsilon;</td></tr>
+<tr><td>B</td><td>{ b }</td><td>B &rarr; b</td></tr>
+<tr><td>C</td><td>{ g }</td><td>C &rarr; g</td></tr>
+</table></div>
+<h4>FOLLOW</h4>
+<div class="tw"><table>
+<tr><th>Non-Terminal</th><th>FOLLOW</th><th>Reasoning</th></tr>
+<tr><td>S</td><td>{ $ }</td><td>Start symbol &rarr; add $</td></tr>
+<tr><td>A</td><td>{ $ }</td><td>S &rarr; A: FOLLOW(A) &supseteq; FOLLOW(S)</td></tr>
+<tr><td>A'</td><td>{ $ }</td><td>A &rarr; aBA': A' at end &rarr; FOLLOW(A') = FOLLOW(A)</td></tr>
+<tr><td>B</td><td>{ d, $ }</td><td>A &rarr; aBA': {FIRST(A') &minus; {&epsilon;}} &cup; FOLLOW(A) = {d, $}</td></tr>
+<tr><td>C</td><td>N/A</td><td>C not on RHS of any production</td></tr>
+</table></div>
+</div>
+
+<div class="card">
+<h4>Example 2 (Expression Grammar &mdash; Very Important)</h4>
+<pre>E  &rarr; TE'
+E' &rarr; +TE' | &epsilon;
+T  &rarr; FT'
+T' &rarr; &times;FT' | &epsilon;
+F  &rarr; (E) | id</pre>
+<h4>FIRST</h4>
+<div class="tw"><table>
+<tr><th>Non-Terminal</th><th>FIRST</th></tr>
+<tr><td>F</td><td>{ (, id }</td></tr>
+<tr><td>T = FIRST(F)</td><td>{ (, id }</td></tr>
+<tr><td>T'</td><td>{ &times;, &epsilon; }</td></tr>
+<tr><td>E = FIRST(T)</td><td>{ (, id }</td></tr>
+<tr><td>E'</td><td>{ +, &epsilon; }</td></tr>
+</table></div>
+<h4>FOLLOW</h4>
+<div class="tw"><table>
+<tr><th>Non-Terminal</th><th>FOLLOW</th><th>Reasoning</th></tr>
+<tr><td>E</td><td>{ $, ) }</td><td>Start &rarr; $; F &rarr; (E) &rarr; ')' follows E</td></tr>
+<tr><td>E'</td><td>{ $, ) }</td><td>E &rarr; TE': E' at end &rarr; FOLLOW(E)</td></tr>
+<tr><td>T</td><td>{ +, $, ) }</td><td>{FIRST(E') &minus; {&epsilon;}} &cup; FOLLOW(E) &cup; FOLLOW(E')</td></tr>
+<tr><td>T'</td><td>{ +, $, ) }</td><td>T &rarr; FT': T' at end &rarr; FOLLOW(T)</td></tr>
+<tr><td>F</td><td>{ &times;, +, $, ) }</td><td>{FIRST(T') &minus; {&epsilon;}} &cup; FOLLOW(T)</td></tr>
+</table></div>
+</div>
+
+<div class="card">
+<h4>Example 3</h4>
+<pre>S  &rarr; (L) | a
+L  &rarr; SL'
+L' &rarr; ,SL' | &epsilon;</pre>
+<div class="tw"><table>
+<tr><th></th><th>FIRST</th><th>FOLLOW</th></tr>
+<tr><td>S</td><td>{ (, a }</td><td>{ $, &comma;, ) }</td></tr>
+<tr><td>L</td><td>{ (, a }</td><td>{ ) }</td></tr>
+<tr><td>L'</td><td>{ &comma;, &epsilon; }</td><td>{ ) }</td></tr>
+</table></div>
+</div>
+<div class="wb">When computing FOLLOW(B) for A &rarr; &alpha;B&beta; where &epsilon; &isin; FIRST(&beta;): you must add <strong>both</strong> (FIRST(&beta;) &minus; {&epsilon;}) AND FOLLOW(A). Students often forget FOLLOW(A).</div>
+</section>
+
+<!-- ====== SECTION 9 ====== -->
+<section id="s9">
+<h2>9. Error Handling in Syntax Analysis</h2>
+<div class="db"><strong>Error Handling</strong> in predictive parsing involves recovering from syntax errors so the parser can continue finding additional errors.</div>
+<div class="card">
+<h4>1. Panic Mode Recovery</h4>
+<p>The parser <strong>skips input symbols</strong> until a synchronizing token appears.</p>
+<ul>
+<li><strong>Pop non-terminal from stack</strong> if no matching production exists.</li>
+<li><strong>Discard/skip input terminals</strong> until a synchronizing token (e.g., from FOLLOW set, or delimiters like <code>;</code> <code>}</code>) is found.</li>
+</ul>
+</div>
+<div class="card">
+<h4>2. Phrase-Level Recovery</h4>
+<p>Performs <strong>local corrections</strong>: insert missing semicolons, replace comma with semicolon, delete extraneous symbols.</p>
+</div>
+<div class="tb">In LL(1) parsing tables, <strong>blank entries are errors</strong>. When encountered, error recovery triggers.</div>
+</section>
+
+<!-- ====== SECTION 10 ====== -->
+<section id="s10">
+<h2>10. Top-Down Parsing</h2>
+<div class="db"><strong>Top-Down Parsing</strong> builds the parse tree from the <strong>root</strong> (start symbol) down to the <strong>leaves</strong> (terminals). Equivalent to finding a <strong>leftmost derivation</strong>.</div>
+<h3>How It Works</h3>
+<ol>
+<li>Start with root labeled with the start symbol.</li>
+<li>At node N with non-terminal A, select a production for A.</li>
+<li>Create children for the symbols in the production body.</li>
+<li>Find the next leftmost unexpanded non-terminal &amp; repeat.</li>
+<li>Match terminal nodes with input tokens left to right.</li>
+</ol>
+<h3>Comparison</h3>
+<div class="tw"><table>
+<tr><th>Feature</th><th>Recursive Descent</th><th>LL(1) / Predictive</th></tr>
+<tr><td>Backtracking</td><td>May or may not</td><td>No backtracking (table-driven)</td></tr>
+<tr><td>Implementation</td><td>Mutually recursive functions</td><td>Stack + Parsing table</td></tr>
+<tr><td>Grammar</td><td>All kinds</td><td>Only LL(k) grammars</td></tr>
+<tr><td>Decision</td><td>Procedures per non-terminal</td><td>Lookahead + table lookup</td></tr>
+</table></div>
+<div class="tb">Top-down parsing corresponds to <strong>pre-order traversal</strong> of the parse tree.</div>
+</section>
+
+<!-- ====== SECTION 11 ====== -->
+<section id="s11">
+<h2>11. Recursive Descent Parser</h2>
+<div class="db"><strong>Recursive Descent Parser</strong> is a top-down parser where each non-terminal has a corresponding <strong>recursive function</strong>. It processes input left-to-right, constructing the parse tree by matching production rules.</div>
+<ul>
+<li>Simple to implement; suitable for LL(1) grammars.</li>
+<li>Decisions based on a single <strong>lookahead token</strong>.</li>
+<li>May use <strong>backtracking</strong> if grammar is not LL(1).</li>
+</ul>
+
+<h3>Pseudocode (Expression Grammar)</h3>
+<pre>Grammar:
+  E &rarr; TE'    E' &rarr; +TE' | &epsilon;
+  T &rarr; FT'    T' &rarr; &times;FT' | &epsilon;
+  F &rarr; (E) | id | num
+
+<span style="color:#60a5fa">function</span> E():
+    T();  E_prime()
+
+<span style="color:#60a5fa">function</span> E_prime():
+    <span style="color:#fbbf24">if</span> lookahead == '+':
+        match('+');  T();  E_prime()
+    <span style="color:#fbbf24">else</span>:
+        <span style="color:#34d399">// &epsilon; production</span>
+
+<span style="color:#60a5fa">function</span> T():
+    F();  T_prime()
+
+<span style="color:#60a5fa">function</span> T_prime():
+    <span style="color:#fbbf24">if</span> lookahead == '&times;':
+        match('&times;');  F();  T_prime()
+    <span style="color:#fbbf24">else</span>:
+        <span style="color:#34d399">// &epsilon; production</span>
+
+<span style="color:#60a5fa">function</span> F():
+    <span style="color:#fbbf24">if</span> lookahead == '(':
+        match('(');  E();  match(')')
+    <span style="color:#fbbf24">elif</span> lookahead == id or num:
+        match(lookahead)
+    <span style="color:#fbbf24">else</span>: <span style="color:#f87171">error()</span></pre>
+
+<h3>Trace: Parsing &ldquo;4 + 9&rdquo;</h3>
+<pre>Input: 4 + 9 $
+E() &rarr; T() &rarr; F() &rarr; match(4) &#10003;
+      T'() &rarr; lookahead='+', not '&times;' &rarr; &epsilon;
+      E'() &rarr; match('+') &#10003;
+            T() &rarr; F() &rarr; match(9) &#10003;
+                   T'() &rarr; &epsilon;
+            E'() &rarr; lookahead='$' &rarr; &epsilon;
+Result: &#9989; Accepted</pre>
+</section>
+
+<!-- ====== SECTION 12 ====== -->
+<section id="s12">
+<h2>12. LL(1) Parser (Predictive Parser)</h2>
+<div class="db"><strong>LL(1):</strong> <strong>L</strong> = Left-to-right scan, <strong>L</strong> = Leftmost derivation, <strong>1</strong> = one lookahead. Table-driven, non-recursive. Uses a <strong>stack</strong>, <strong>input buffer</strong>, and <strong>parsing table</strong>.</div>
+
+<h3>Essential Conditions</h3>
+<ol>
+<li>Grammar must be <strong>free from left recursion</strong>.</li>
+<li>Grammar must be <strong>unambiguous</strong>.</li>
+<li>Grammar must be <strong>left factored</strong>.</li>
+</ol>
+
+<h3 id="s12t">Parsing Table Construction Algorithm</h3>
+<div class="card">
+<ol>
+<li>Verify conditions (no left recursion, unambiguous, left factored).</li>
+<li>Compute FIRST() and FOLLOW() for all non-terminals.</li>
+<li>For each production A &rarr; &alpha;:
+<ul>
+<li>For each terminal <code>a</code> &isin; FIRST(&alpha;): add <code>A &rarr; &alpha;</code> to M[A, a]</li>
+<li>If &epsilon; &isin; FIRST(&alpha;): for each <code>b</code> &isin; FOLLOW(A), add <code>A &rarr; &alpha;</code> to M[A, b]</li>
+<li>If &epsilon; &isin; FIRST(&alpha;) and $ &isin; FOLLOW(A): add <code>A &rarr; &alpha;</code> to M[A, $]</li>
+</ul></li>
+<li>Undefined entries are <strong>errors</strong>.</li>
+</ol>
+</div>
+
+<h3 id="s12e">Solved Examples</h3>
+<div class="card">
+<h4>Example 1</h4>
+<pre>S' &rarr; S    S &rarr; xYzS | a    Y &rarr; xYz | y</pre>
+<h4>LL(1) Table</h4>
+<div class="tw"><table>
+<tr><th></th><th>x</th><th>a</th><th>y</th><th>z</th><th>$</th></tr>
+<tr><td><strong>S'</strong></td><td>S'&rarr;S</td><td>S'&rarr;S</td><td></td><td></td><td></td></tr>
+<tr><td><strong>S</strong></td><td>S&rarr;xYzS</td><td>S&rarr;a</td><td></td><td></td><td></td></tr>
+<tr><td><strong>Y</strong></td><td>Y&rarr;xYz</td><td></td><td>Y&rarr;y</td><td></td><td></td></tr>
+</table></div>
+<h4>Trace: Parse &ldquo;xxyzza&rdquo;</h4>
+<div class="tw"><table>
+<tr><th>Stack</th><th>Input</th><th>Action</th></tr>
+<tr><td>$ S'</td><td>xxyzza$</td><td>S'&rarr;S, push S</td></tr>
+<tr><td>$ S</td><td>xxyzza$</td><td>S&rarr;xYzS, push SzYx</td></tr>
+<tr><td>$ SzYx</td><td>xxyzza$</td><td>Match x, pop</td></tr>
+<tr><td>$ SzY</td><td>xyzza$</td><td>Y&rarr;xYz, push zYx</td></tr>
+<tr><td>$ SzzYx</td><td>xyzza$</td><td>Match x, pop</td></tr>
+<tr><td>$ SzzY</td><td>yzza$</td><td>Y&rarr;y, push y</td></tr>
+<tr><td>$ Szzy</td><td>yzza$</td><td>Match y, pop</td></tr>
+<tr><td>$ Szz</td><td>zza$</td><td>Match z, pop z, pop z</td></tr>
+<tr><td>$ S</td><td>a$</td><td>S&rarr;a, push a</td></tr>
+<tr><td>$ a</td><td>a$</td><td>Match a, pop</td></tr>
+<tr><td>$</td><td>$</td><td><strong>Accept &#10003;</strong></td></tr>
+</table></div>
+</div>
+
+<div class="card">
+<h4>Example 2</h4>
+<pre>S &rarr; aABb    A &rarr; c | &epsilon;    B &rarr; d | &epsilon;
+FIRST(S)={a}  FIRST(A)={c,&epsilon;}  FIRST(B)={d,&epsilon;}
+FOLLOW(S)={$}  FOLLOW(A)={d,b}  FOLLOW(B)={b}</pre>
+<div class="tw"><table>
+<tr><th></th><th>a</th><th>b</th><th>c</th><th>d</th><th>$</th></tr>
+<tr><td><strong>S</strong></td><td>S&rarr;aABb</td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>A</strong></td><td></td><td>A&rarr;&epsilon;</td><td>A&rarr;c</td><td>A&rarr;&epsilon;</td><td></td></tr>
+<tr><td><strong>B</strong></td><td></td><td>B&rarr;&epsilon;</td><td></td><td>B&rarr;d</td><td></td></tr>
+</table></div>
+</div>
+<div class="wb">If a cell in the LL(1) table has <strong>more than one entry</strong>, the grammar is NOT LL(1).</div>
+</section>
+
+<!-- ====== SECTION 13 ====== -->
+<section id="s13">
+<h2>13. Bottom-Up Parsing</h2>
+<div class="db"><strong>Bottom-Up Parsing</strong> starts with input tokens (leaves) and works upward toward the start symbol (root). It repeatedly finds <strong>handles</strong> (substrings matching RHS of productions) and <strong>reduces</strong> them. This is the <strong>rightmost derivation in reverse</strong>.</div>
+<ul>
+<li><strong>Reduction:</strong> Replacing RHS with LHS non-terminal.</li>
+<li><strong>Handle:</strong> A substring whose reduction represents one step in the reverse of a rightmost derivation.</li>
+<li><strong>Handle Pruning:</strong> Repeatedly finding and reducing handles.</li>
+</ul>
+<div class="tw"><table>
+<tr><th>Feature</th><th>Top-Down</th><th>Bottom-Up</th></tr>
+<tr><td>Direction</td><td>Root &rarr; Leaves</td><td>Leaves &rarr; Root</td></tr>
+<tr><td>Derivation</td><td>Leftmost</td><td>Rightmost (in reverse)</td></tr>
+<tr><td>Operations</td><td>Expand / Predict</td><td>Shift / Reduce</td></tr>
+<tr><td>Power</td><td>LL grammars only</td><td>Wider class (LR)</td></tr>
+<tr><td>Left Recursion</td><td>Cannot handle</td><td>Can handle</td></tr>
+</table></div>
+</section>
+
+<!-- ====== SECTION 14 ====== -->
+<section id="s14">
+<h2>14. Shift-Reduce Parsing</h2>
+<div class="db"><strong>Shift-Reduce Parsing</strong> uses a <strong>stack</strong> and <strong>input buffer</strong>. Two main operations: <strong>Shift</strong> (push next input token onto stack) and <strong>Reduce</strong> (replace stack-top matching a production RHS with its LHS).</div>
+<h3>Four Actions</h3>
+<ol>
+<li><strong>Shift:</strong> Push next input symbol onto stack.</li>
+<li><strong>Reduce:</strong> Pop RHS from stack, push LHS.</li>
+<li><strong>Accept:</strong> Start symbol on stack, input exhausted.</li>
+<li><strong>Error:</strong> No valid action.</li>
+</ol>
+
+<div class="card">
+<h4>Example: Parse <code>id - id &times; id</code></h4>
+<pre>Grammar: E &rarr; E - E | E &times; E | id</pre>
+<div class="tw"><table>
+<tr><th>Stack</th><th>Input</th><th>Action</th></tr>
+<tr><td>$</td><td>id - id &times; id $</td><td>Shift id</td></tr>
+<tr><td>$ id</td><td>- id &times; id $</td><td>Reduce E&rarr;id</td></tr>
+<tr><td>$ E</td><td>- id &times; id $</td><td>Shift -</td></tr>
+<tr><td>$ E -</td><td>id &times; id $</td><td>Shift id</td></tr>
+<tr><td>$ E - id</td><td>&times; id $</td><td>Reduce E&rarr;id</td></tr>
+<tr><td>$ E - E</td><td>&times; id $</td><td>Shift &times;</td></tr>
+<tr><td>$ E - E &times;</td><td>id $</td><td>Shift id</td></tr>
+<tr><td>$ E - E &times; id</td><td>$</td><td>Reduce E&rarr;id</td></tr>
+<tr><td>$ E - E &times; E</td><td>$</td><td>Reduce E&rarr;E&times;E</td></tr>
+<tr><td>$ E - E</td><td>$</td><td>Reduce E&rarr;E-E</td></tr>
+<tr><td>$ E</td><td>$</td><td><strong>Accept &#10003;</strong></td></tr>
+</table></div>
+</div>
+
+<h3 id="s14c">Conflicts</h3>
+<div class="card">
+<h4>1. Shift/Reduce Conflict</h4>
+<p>Parser cannot decide whether to shift or reduce.</p>
+<pre>Grammar: S&rarr;aABe  A&rarr;Abc|b  B&rarr;d
+Stack: $aAb   Input: cde$
+Conflict: Shift 'c' or Reduce b&rarr;A?</pre>
+</div>
+<div class="card">
+<h4>2. Reduce/Reduce Conflict</h4>
+<p>Multiple reductions possible; can&rsquo;t decide which.</p>
+<pre>Grammar: S&rarr;aABe|b  A&rarr;Abc|b  B&rarr;d
+Stack: $ab   Input: bcde$
+Conflict: Reduce b&rarr;S or b&rarr;A?</pre>
+</div>
+<div class="fb"><strong>Resolution:</strong> Perform <strong>Rightmost Derivation</strong> first for the given input, then reverse it to determine the correct shift/reduce sequence.</div>
+
+<div class="card">
+<h4>Resolved Example</h4>
+<pre>Grammar: S&rarr;aABe  A&rarr;Abc|b  B&rarr;d    Input: abbcde</pre>
+<div class="tw"><table>
+<tr><th>Stack</th><th>Input</th><th>Action</th></tr>
+<tr><td>$</td><td>abbcde$</td><td>Shift a</td></tr>
+<tr><td>$ a</td><td>bbcde$</td><td>Shift b</td></tr>
+<tr><td>$ a b</td><td>bcde$</td><td>Reduce A&rarr;b</td></tr>
+<tr><td>$ a A</td><td>bcde$</td><td>Shift b</td></tr>
+<tr><td>$ a A b</td><td>cde$</td><td>Shift c</td></tr>
+<tr><td>$ a A b c</td><td>de$</td><td>Reduce A&rarr;Abc</td></tr>
+<tr><td>$ a A</td><td>de$</td><td>Shift d</td></tr>
+<tr><td>$ a A d</td><td>e$</td><td>Reduce B&rarr;d</td></tr>
+<tr><td>$ a A B</td><td>e$</td><td>Shift e</td></tr>
+<tr><td>$ a A B e</td><td>$</td><td>Reduce S&rarr;aABe</td></tr>
+<tr><td>$ S</td><td>$</td><td><strong>Accept &#10003;</strong></td></tr>
+</table></div>
+</div>
+</section>
+
+<!-- ====== SECTION 15 ====== -->
+<section id="s15">
+<h2>15. LR(0) Parser</h2>
+<div class="db"><strong>LR(0):</strong> <strong>L</strong> = left-to-right scan, <strong>R</strong> = rightmost derivation in reverse, <strong>0</strong> = zero lookahead. Uses <strong>item sets</strong> (states) and a <strong>DFA</strong> for parsing decisions.</div>
+<h3>Why LR Parsers?</h3>
+<ul>
+<li>Handle virtually all programming language constructs.</li>
+<li>Most general non-backtracking shift-reduce method.</li>
+<li>Detect errors as soon as possible. <strong>O(n)</strong> time.</li>
+<li>Can handle <strong>left-recursive</strong> grammars (unlike LL).</li>
+</ul>
+
+<h3 id="s15i">LR(0) Items</h3>
+<div class="db"><strong>LR(0) Item:</strong> A production with a <strong>dot (&bull;)</strong> at some position, indicating parsing progress.<br>
+For A &rarr; XYZ: <code>A &rarr; &bull;XYZ</code>, <code>A &rarr; X&bull;YZ</code>, <code>A &rarr; XY&bull;Z</code>, <code>A &rarr; XYZ&bull;</code><br>
+For A &rarr; &epsilon;: only <code>A &rarr; &bull;</code></div>
+
+<h4>Augmented Grammar</h4>
+<p>Add S' &rarr; S. Acceptance = reducing by S' &rarr; S.</p>
+
+<h4>CLOSURE &amp; GOTO</h4>
+<div class="card">
+<p><strong>CLOSURE(I):</strong> If <code>A &rarr; &alpha;&bull;B&beta;</code> is in I and B is non-terminal, add <code>B &rarr; &bull;&gamma;</code> for every production B &rarr; &gamma;. Repeat until no new items.</p>
+<p><strong>GOTO(I, X):</strong> For each <code>A &rarr; &alpha;&bull;X&beta;</code> in I, create <code>A &rarr; &alpha;X&bull;&beta;</code>. Then compute CLOSURE of the result.</p>
+</div>
+
+<h3 id="s15e">Solved Example</h3>
+<div class="card">
+<h4>Grammar: S &rarr; AA, A &rarr; aA | b</h4>
+<pre>Augmented:
+  S' &rarr; S   (0)
+  S  &rarr; AA  (1)
+  A  &rarr; aA  (2)
+  A  &rarr; b   (3)</pre>
+
+<h4>Item Sets</h4>
+<pre><strong>I&#8320;:</strong> S'&rarr;&bull;S, S&rarr;&bull;AA, A&rarr;&bull;aA, A&rarr;&bull;b
+<strong>I&#8321;:</strong> S'&rarr;S&bull;                        (Accept)
+<strong>I&#8322;:</strong> S&rarr;A&bull;A, A&rarr;&bull;aA, A&rarr;&bull;b
+<strong>I&#8323;:</strong> A&rarr;a&bull;A, A&rarr;&bull;aA, A&rarr;&bull;b
+<strong>I&#8324;:</strong> A&rarr;b&bull;                          (Reduce 3)
+<strong>I&#8325;:</strong> S&rarr;AA&bull;                         (Reduce 1)
+<strong>I&#8326;:</strong> A&rarr;aA&bull;                         (Reduce 2)</pre>
+
+<h4>LR(0) DFA</h4>
+<div class="sv">
+<svg width="680" height="340" viewBox="0 0 680 340">
+<defs><marker id="aL" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#4f46e5"/></marker></defs>
+<style>.sb{fill:#fff;stroke:#4f46e5;stroke-width:2}.sa{fill:#ecfdf5;stroke:#059669;stroke-width:2}.sr{fill:#fef2f2;stroke:#dc2626;stroke-width:2}.sl{font:11px Consolas,monospace;fill:#1e293b}.slb{font:bold 11px Consolas,monospace;fill:#1e293b}.el{font:bold 13px 'Segoe UI',sans-serif;fill:#4f46e5}.ea{stroke:#4f46e5;stroke-width:1.8;fill:none;marker-end:url(#aL)}</style>
+<rect x="8" y="70" width="132" height="88" rx="8" class="sb"/>
+<text x="74" y="87" text-anchor="middle" class="slb">I&#8320;</text>
+<text x="16" y="102" class="sl">S'&rarr; &bull;S</text>
+<text x="16" y="116" class="sl">S &rarr; &bull;AA</text>
+<text x="16" y="130" class="sl">A &rarr; &bull;aA</text>
+<text x="16" y="144" class="sl">A &rarr; &bull;b</text>
+
+<rect x="210" y="10" width="105" height="38" rx="8" class="sa"/>
+<text x="262" y="28" text-anchor="middle" class="slb">I&#8321;</text>
+<text x="218" y="40" class="sl">S'&rarr; S&bull;</text>
+<path d="M140,95 Q175,50 208,30" class="ea"/><text x="160" y="50" class="el">S</text>
+
+<rect x="210" y="70" width="132" height="76" rx="8" class="sb"/>
+<text x="276" y="87" text-anchor="middle" class="slb">I&#8322;</text>
+<text x="218" y="102" class="sl">S &rarr; A&bull;A</text>
+<text x="218" y="116" class="sl">A &rarr; &bull;aA</text>
+<text x="218" y="130" class="sl">A &rarr; &bull;b</text>
+<line x1="140" y1="114" x2="208" y2="108" class="ea"/><text x="170" y="105" class="el">A</text>
+
+<rect x="210" y="200" width="132" height="76" rx="8" class="sb"/>
+<text x="276" y="217" text-anchor="middle" class="slb">I&#8323;</text>
+<text x="218" y="232" class="sl">A &rarr; a&bull;A</text>
+<text x="218" y="246" class="sl">A &rarr; &bull;aA</text>
+<text x="218" y="260" class="sl">A &rarr; &bull;b</text>
+<path d="M90,158 Q90,230 208,240" class="ea"/><text x="100" y="220" class="el">a</text>
+
+<rect x="8" y="280" width="105" height="38" rx="8" class="sr"/>
+<text x="60" y="298" text-anchor="middle" class="slb">I&#8324;</text>
+<text x="16" y="310" class="sl">A &rarr; b&bull;</text>
+<path d="M45,158 Q25,230 50,278" class="ea"/><text x="18" y="222" class="el">b</text>
+
+<rect x="420" y="70" width="105" height="38" rx="8" class="sr"/>
+<text x="472" y="88" text-anchor="middle" class="slb">I&#8325;</text>
+<text x="428" y="100" class="sl">S &rarr; AA&bull;</text>
+<line x1="342" y1="95" x2="418" y2="88" class="ea"/><text x="375" y="85" class="el">A</text>
+
+<rect x="420" y="210" width="105" height="38" rx="8" class="sr"/>
+<text x="472" y="228" text-anchor="middle" class="slb">I&#8326;</text>
+<text x="428" y="240" class="sl">A &rarr; aA&bull;</text>
+<line x1="342" y1="230" x2="418" y2="230" class="ea"/><text x="375" y="223" class="el">A</text>
+
+<path d="M296,146 Q296,178 290,198" class="ea"/><text x="305" y="177" class="el">a</text>
+<path d="M210,142 Q140,270 115,280" class="ea"/><text x="138" y="245" class="el">b</text>
+<path d="M270,276 Q270,310 300,310 Q330,310 330,276" class="ea"/><text x="300" y="328" text-anchor="middle" class="el">a</text>
+<path d="M210,260 Q145,295 115,295" class="ea"/><text x="145" y="292" class="el">b</text>
+
+<rect x="550" y="10" width="14" height="14" rx="3" class="sa"/><text x="570" y="21" font-size="10.5" fill="#1e293b">Accept</text>
+<rect x="550" y="30" width="14" height="14" rx="3" class="sr"/><text x="570" y="41" font-size="10.5" fill="#1e293b">Reduce</text>
+</svg>
+</div>
+
+<h4>LR(0) Parsing Table</h4>
+<div class="tw"><table>
+<tr><th rowspan="2">State</th><th colspan="3">Action</th><th colspan="2">GOTO</th></tr>
+<tr><th>a</th><th>b</th><th>$</th><th>S</th><th>A</th></tr>
+<tr><td><strong>0</strong></td><td>S3</td><td>S4</td><td></td><td>1</td><td>2</td></tr>
+<tr><td><strong>1</strong></td><td></td><td></td><td>Acc</td><td></td><td></td></tr>
+<tr><td><strong>2</strong></td><td>S3</td><td>S4</td><td></td><td></td><td>5</td></tr>
+<tr><td><strong>3</strong></td><td>S3</td><td>S4</td><td></td><td></td><td>6</td></tr>
+<tr><td><strong>4</strong></td><td>R3</td><td>R3</td><td>R3</td><td></td><td></td></tr>
+<tr><td><strong>5</strong></td><td>R1</td><td>R1</td><td>R1</td><td></td><td></td></tr>
+<tr><td><strong>6</strong></td><td>R2</td><td>R2</td><td>R2</td><td></td><td></td></tr>
+</table></div>
+<p style="font-size:.84rem;color:var(--tm)">S<em>n</em> = Shift to state <em>n</em>; R<em>n</em> = Reduce by production <em>n</em>. LR(0) places reduces in ALL terminal columns.</p>
+</div>
+<div class="wb">In LR(0), reduce entries go in ALL terminal columns. This easily causes conflicts. SLR(1) improves this by using FOLLOW sets.</div>
+</section>
+
+<!-- ====== SECTION 16 ====== -->
+<section id="s16">
+<h2>16. SLR(1) Parser</h2>
+<div class="db"><strong>SLR(1) &mdash; Simple LR(1):</strong> Same item sets as LR(0), but reduces are placed <strong>only in FOLLOW(LHS)</strong> columns, not all terminal columns.</div>
+<h3>Steps</h3>
+<ol>
+<li>Write CFG, check ambiguity.</li>
+<li>Add augmented production S'&rarr;S.</li>
+<li>Create canonical LR(0) items (same as LR(0)).</li>
+<li>Draw DFA (same as LR(0)).</li>
+<li>Build table: shifts same as LR(0); for reduce item <code>A&rarr;&alpha;&bull;</code>, place reduce only in columns &isin; FOLLOW(A).</li>
+</ol>
+
+<h3 id="s16e">Solved Example</h3>
+<div class="card">
+<h4>Grammar</h4>
+<pre>S'&rarr;E (0)   E&rarr;E+T (1)   E&rarr;T (2)
+T&rarr;T*F (3)   T&rarr;F (4)     F&rarr;id (5)</pre>
+<h4>FIRST &amp; FOLLOW</h4>
+<pre>FIRST(E) = FIRST(T) = FIRST(F) = { id }
+FOLLOW(E) = { +, $ }
+FOLLOW(T) = { *, +, $ }
+FOLLOW(F) = { *, +, $ }</pre>
+<h4>Item Sets</h4>
+<pre>I&#8320;: S'&rarr;&bull;E, E&rarr;&bull;E+T, E&rarr;&bull;T, T&rarr;&bull;T*F, T&rarr;&bull;F, F&rarr;&bull;id
+I&#8321;: S'&rarr;E&bull;, E&rarr;E&bull;+T
+I&#8322;: E&rarr;T&bull;, T&rarr;T&bull;*F
+I&#8323;: T&rarr;F&bull;
+I&#8324;: F&rarr;id&bull;
+I&#8325;: E&rarr;E+&bull;T, T&rarr;&bull;T*F, T&rarr;&bull;F, F&rarr;&bull;id
+I&#8326;: T&rarr;T*&bull;F, F&rarr;&bull;id
+I&#8327;: E&rarr;E+T&bull;, T&rarr;T&bull;*F
+I&#8328;: T&rarr;T*F&bull;</pre>
+<h4>SLR(1) Parsing Table</h4>
+<div class="tw"><table>
+<tr><th rowspan="2">State</th><th colspan="4">Action</th><th colspan="3">GOTO</th></tr>
+<tr><th>id</th><th>+</th><th>*</th><th>$</th><th>E</th><th>T</th><th>F</th></tr>
+<tr><td><strong>0</strong></td><td>S4</td><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td><strong>1</strong></td><td></td><td>S5</td><td></td><td>Acc</td><td></td><td></td><td></td></tr>
+<tr><td><strong>2</strong></td><td></td><td>R2</td><td>S6</td><td>R2</td><td></td><td></td><td></td></tr>
+<tr><td><strong>3</strong></td><td></td><td>R4</td><td>R4</td><td>R4</td><td></td><td></td><td></td></tr>
+<tr><td><strong>4</strong></td><td></td><td>R5</td><td>R5</td><td>R5</td><td></td><td></td><td></td></tr>
+<tr><td><strong>5</strong></td><td>S4</td><td></td><td></td><td></td><td></td><td>7</td><td>3</td></tr>
+<tr><td><strong>6</strong></td><td>S4</td><td></td><td></td><td></td><td></td><td></td><td>8</td></tr>
+<tr><td><strong>7</strong></td><td></td><td>R1</td><td>S6</td><td>R1</td><td></td><td></td><td></td></tr>
+<tr><td><strong>8</strong></td><td></td><td>R3</td><td>R3</td><td>R3</td><td></td><td></td><td></td></tr>
+</table></div>
+<p style="font-size:.84rem;color:var(--tm)">R1=E&rarr;E+T, R2=E&rarr;T, R3=T&rarr;T*F, R4=T&rarr;F, R5=F&rarr;id. Reduces are ONLY in FOLLOW columns.</p>
+</div>
+<div class="fb"><strong>Key Difference:</strong> LR(0) &rarr; reduce in ALL terminals. SLR(1) &rarr; reduce only in FOLLOW(LHS). This significantly reduces conflicts.</div>
+</section>
+
+<!-- ====== SECTION 17 ====== -->
+<section id="s17">
+<h2>17. CLR(1) &mdash; Canonical LR Parser</h2>
+<div class="db"><strong>CLR(1)</strong> is the most powerful LR parser. Each item has the form <code>[A &rarr; &alpha;&bull;&beta;, a]</code> where <code>a</code> is a <strong>lookahead</strong>. Reduces are placed only in the <strong>exact lookahead</strong> column.</div>
+<h3>LR(1) Items = LR(0) Items + Lookahead</h3>
+
+<h3>Lookahead Rules</h3>
+<div class="card">
+<h4>Case 1: A &rarr; &alpha;&bull;BC, a</h4>
+<p>Lookahead for B&rsquo;s items = FIRST(C). If C can derive &epsilon;, also include a.</p>
+<h4>Case 2: A &rarr; &alpha;&bull;B, a</h4>
+<p>Nothing after B &rarr; lookahead propagated: B &rarr; &bull;D, a</p>
+<h4>Case 3: A &rarr; a | b (alternatives)</h4>
+<p>Same production family &rarr; same lookahead.</p>
+</div>
+
+<h3 id="s17e">Solved Example</h3>
+<div class="card">
+<h4>Grammar: S &rarr; AA, A &rarr; aA | b</h4>
+<h4>LR(1) Item Sets</h4>
+<pre><strong>I&#8320;:</strong> [S'&rarr;&bull;S,$] [S&rarr;&bull;AA,$] [A&rarr;&bull;aA,a/b] [A&rarr;&bull;b,a/b]
+<strong>I&#8321;:</strong> [S'&rarr;S&bull;,$]
+<strong>I&#8322;:</strong> [S&rarr;A&bull;A,$] [A&rarr;&bull;aA,$] [A&rarr;&bull;b,$]
+<strong>I&#8323;:</strong> [A&rarr;a&bull;A,a/b] [A&rarr;&bull;aA,a/b] [A&rarr;&bull;b,a/b]
+<strong>I&#8324;:</strong> [A&rarr;b&bull;,a/b]
+<strong>I&#8325;:</strong> [S&rarr;AA&bull;,$]
+<strong>I&#8326;:</strong> [A&rarr;a&bull;A,$] [A&rarr;&bull;aA,$] [A&rarr;&bull;b,$]
+<strong>I&#8327;:</strong> [A&rarr;b&bull;,$]
+<strong>I&#8328;:</strong> [A&rarr;aA&bull;,a/b]
+<strong>I&#8329;:</strong> [A&rarr;aA&bull;,$]</pre>
+<p>I&#8323; and I&#8326; have same core but different lookaheads. Similarly I&#8324;/I&#8327; and I&#8328;/I&#8329;.</p>
+
+<h4>CLR(1) Parsing Table</h4>
+<div class="tw"><table>
+<tr><th rowspan="2">State</th><th colspan="3">Action</th><th colspan="2">GOTO</th></tr>
+<tr><th>a</th><th>b</th><th>$</th><th>S</th><th>A</th></tr>
+<tr><td><strong>0</strong></td><td>S3</td><td>S4</td><td></td><td>1</td><td>2</td></tr>
+<tr><td><strong>1</strong></td><td></td><td></td><td>Acc</td><td></td><td></td></tr>
+<tr><td><strong>2</strong></td><td>S6</td><td>S7</td><td></td><td></td><td>5</td></tr>
+<tr><td><strong>3</strong></td><td>S3</td><td>S4</td><td></td><td></td><td>8</td></tr>
+<tr><td><strong>4</strong></td><td>R3</td><td>R3</td><td></td><td></td><td></td></tr>
+<tr><td><strong>5</strong></td><td></td><td></td><td>R1</td><td></td><td></td></tr>
+<tr><td><strong>6</strong></td><td>S6</td><td>S7</td><td></td><td></td><td>9</td></tr>
+<tr><td><strong>7</strong></td><td></td><td></td><td>R3</td><td></td><td></td></tr>
+<tr><td><strong>8</strong></td><td>R2</td><td>R2</td><td></td><td></td><td></td></tr>
+<tr><td><strong>9</strong></td><td></td><td></td><td>R2</td><td></td><td></td></tr>
+</table></div>
+<p style="font-size:.84rem;color:var(--tm)">R1=S&rarr;AA, R2=A&rarr;aA, R3=A&rarr;b. Reduces placed ONLY in exact lookahead column.</p>
+</div>
+<div class="fb"><strong>Power Hierarchy:</strong> LR(0) &lt; SLR(1) &lt; LALR(1) &lt; CLR(1)<br>CLR(1) is most powerful but has the <strong>largest tables</strong>.</div>
+</section>
+
+<!-- ====== SECTION 18 ====== -->
+<section id="s18">
+<h2>18. LALR(1) &mdash; Look-Ahead LR Parser</h2>
+<div class="db"><strong>LALR(1)</strong> combines power close to CLR(1) with <strong>much smaller tables</strong> (same size as SLR). It <strong>merges CLR states with the same LR(0) core</strong> but different lookaheads.</div>
+<h3>Construction</h3>
+<ol>
+<li>Build full CLR(1) item sets.</li>
+<li><strong>Merge states</strong> with same LR(0) core, taking <strong>union</strong> of lookaheads.</li>
+<li>Update table with merged state numbers.</li>
+</ol>
+
+<h3 id="s18e">Solved Example</h3>
+<div class="card">
+<h4>Grammar: S &rarr; AA, A &rarr; aA | b</h4>
+<pre>Mergeable states from CLR:
+  I&#8323;[A&rarr;a&bull;A, a/b] + I&#8326;[A&rarr;a&bull;A, $] &rarr; I&#8323;&#8326;
+  I&#8324;[A&rarr;b&bull;, a/b] + I&#8327;[A&rarr;b&bull;, $] &rarr; I&#8324;&#8327;
+  I&#8328;[A&rarr;aA&bull;, a/b] + I&#8329;[A&rarr;aA&bull;, $] &rarr; I&#8328;&#8329;
+
+Merged lookaheads:
+  I&#8323;&#8326;: [A&rarr;a&bull;A, a/b/$]
+  I&#8324;&#8327;: [A&rarr;b&bull;, a/b/$]
+  I&#8328;&#8329;: [A&rarr;aA&bull;, a/b/$]</pre>
+<h4>LALR(1) Parsing Table</h4>
+<div class="tw"><table>
+<tr><th rowspan="2">State</th><th colspan="3">Action</th><th colspan="2">GOTO</th></tr>
+<tr><th>a</th><th>b</th><th>$</th><th>S</th><th>A</th></tr>
+<tr><td><strong>0</strong></td><td>S36</td><td>S47</td><td></td><td>1</td><td>2</td></tr>
+<tr><td><strong>1</strong></td><td></td><td></td><td>Acc</td><td></td><td></td></tr>
+<tr><td><strong>2</strong></td><td>S36</td><td>S47</td><td></td><td></td><td>5</td></tr>
+<tr><td><strong>36</strong></td><td>S36</td><td>S47</td><td></td><td></td><td>89</td></tr>
+<tr><td><strong>47</strong></td><td>R3</td><td>R3</td><td>R3</td><td></td><td></td></tr>
+<tr><td><strong>5</strong></td><td></td><td></td><td>R1</td><td></td><td></td></tr>
+<tr><td><strong>89</strong></td><td>R2</td><td>R2</td><td>R2</td><td></td><td></td></tr>
+</table></div>
+<p style="font-size:.84rem;color:var(--tm)">R1=S&rarr;AA, R2=A&rarr;aA, R3=A&rarr;b. 7 states vs CLR's 10 &mdash; smaller table, same power for this grammar.</p>
+</div>
+
+<h3>Comparison of All LR Variants</h3>
+<div class="tw"><table>
+<tr><th>Feature</th><th>LR(0)</th><th>SLR(1)</th><th>CLR(1)</th><th>LALR(1)</th></tr>
+<tr><td>Lookahead</td><td>None</td><td>FOLLOW sets</td><td>Per-item</td><td>Merged</td></tr>
+<tr><td>Table Size</td><td>Small</td><td>Small</td><td>Very Large</td><td>Small (=SLR)</td></tr>
+<tr><td>Power</td><td>Weakest</td><td>Moderate</td><td>Most Powerful</td><td>Near CLR</td></tr>
+<tr><td>Reduce In</td><td>All terminals</td><td>FOLLOW(A)</td><td>Exact lookahead</td><td>Merged lookahead</td></tr>
+<tr><td>In Practice</td><td>Rare</td><td>Academic</td><td>Rare (large)</td><td><strong>Most Common</strong></td></tr>
+</table></div>
+<div class="wb">When merging CLR states to form LALR, if the merge introduces a <strong>reduce/reduce conflict</strong>, the grammar is NOT LALR(1) (but may be CLR(1)).</div>
+
+<div class="card">
+<h4>Grammar that is NOT SLR but is CLR/LALR</h4>
+<pre>S &rarr; L = R | R
+L &rarr; * R | id
+R &rarr; L</pre>
+<p>SLR conflict: state with <code>R&rarr;L&bull;</code> has FOLLOW(R) containing <code>=</code>, causing shift/reduce conflict with <code>S&rarr;L&bull;=R</code>. CLR resolves this with precise lookaheads.</p>
+</div>
+</section>
+
+<!-- ====== EXAM PRACTICE ====== -->
+<section id="exam">
+<h2>&#128221; Exam Practice Questions</h2>
+
+<div class="card">
+<h3>A. Conceptual Questions</h3>
+<ol>
+<li>Define Context-Free Grammar. What are its four components?</li>
+<li>Difference between leftmost and rightmost derivation? Same parse tree?</li>
+<li>Why can&rsquo;t top-down parsers handle left-recursive grammars?</li>
+<li>Purpose of FIRST and FOLLOW functions?</li>
+<li>Why can &epsilon; appear in FIRST but never in FOLLOW?</li>
+<li>Compare Recursive Descent vs LL(1). List 3+ differences.</li>
+<li>Explain shift/reduce and reduce/reduce conflicts with examples.</li>
+<li>Difference between LR(0), SLR(1), CLR(1), and LALR(1)?</li>
+<li>Why is LALR(1) preferred over CLR(1) in practice?</li>
+<li>Explain panic mode and phrase-level error recovery.</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>B. Ambiguity Problems</h3>
+<ol>
+<li>Show <code>S &rarr; (S) | SS | &epsilon;</code> is ambiguous using &ldquo;()()()&rdquo;.</li>
+<li>Show <code>S &rarr; SbS | a</code> is ambiguous using &ldquo;ababa&rdquo;.</li>
+<li>Check if <code>S&rarr;aB|ab, A&rarr;AB|a, B&rarr;Abb|b</code> is ambiguous for &ldquo;ab&rdquo;.</li>
+<li>Given <code>E &rarr; E+E | E&times;E | id</code>, build unambiguous grammar enforcing &times; &gt; + precedence, both left-associative.</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>C. Grammar Transformation Problems</h3>
+<ol>
+<li>Eliminate left recursion:
+<pre>E &rarr; E+T | E-T | T
+T &rarr; T*F | T/F | F
+F &rarr; (E) | id | id(ArgList)</pre></li>
+<li>Eliminate left recursion:
+<pre>A &rarr; Ba | Aa | c
+B &rarr; Bb | Ab | d</pre></li>
+<li>Left-factor: <code>&lt;Stmt&gt; &rarr; id = &lt;Expr&gt;; | id(&lt;ArgList&gt;); | id[&lt;Expr&gt;] = &lt;Expr&gt;;</code></li>
+<li>Left-factor: <code>&lt;Cmd&gt; &rarr; while &lt;Expr&gt; do &lt;Cmd&gt; | while &lt;Expr&gt; do &lt;Cmd&gt; end | while &lt;Expr&gt; do &lt;Cmd&gt; else &lt;Cmd&gt;</code></li>
+<li>Eliminate left recursion, left-factor, then compute FIRST/FOLLOW:
+<pre>&lt;Decl&gt; &rarr; &lt;Type&gt; id ; | &lt;Type&gt; id = &lt;Expr&gt; ;
+&lt;Type&gt; &rarr; int | float | id
+&lt;Expr&gt; &rarr; &lt;Expr&gt; + &lt;Term&gt; | &lt;Term&gt;
+&lt;Term&gt; &rarr; id | num | (&lt;Expr&gt;)</pre></li>
+</ol>
+</div>
+
+<div class="card">
+<h3>D. FIRST() and FOLLOW() Problems</h3>
+<ol>
+<li>Compute FIRST/FOLLOW: <code>E&rarr;TE', E'&rarr;+TE'|&epsilon;, T&rarr;FT', T'&rarr;&times;FT'|&epsilon;, F&rarr;(E)|id</code></li>
+<li>Compute FIRST/FOLLOW: <code>S&rarr;(L)|a, L&rarr;SL', L'&rarr;,SL'|&epsilon;</code></li>
+<li>Compute FIRST/FOLLOW: <code>S&rarr;A, A&rarr;aBA', A'&rarr;dA'|&epsilon;, B&rarr;b, C&rarr;g</code></li>
+</ol>
+</div>
+
+<div class="card">
+<h3>E. LL(1) Parsing Table Problems</h3>
+<ol>
+<li>Build LL(1) table for expression grammar, trace <code>id+id&times;id</code>.</li>
+<li>Build LL(1) table for <code>S&rarr;aABb, A&rarr;c|&epsilon;, B&rarr;d|&epsilon;</code>, trace <code>acdb</code> and <code>ab</code>.</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>F. Shift-Reduce Parsing</h3>
+<ol>
+<li>Parse <code>id-id&times;id</code> with <code>E&rarr;E-E|E&times;E|id</code>. Full trace.</li>
+<li>Parse <code>abbcde</code> with <code>S&rarr;aABe, A&rarr;Abc|b, B&rarr;d</code>. Full trace.</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>G. LR Parsing Problems</h3>
+<ol>
+<li>For <code>S&rarr;AA, A&rarr;aA|b</code>: build augmented grammar, all LR(0) items, DFA, LR(0) table, SLR(1) table.</li>
+<li>For <code>E&rarr;E+T|T, T&rarr;T*F|F, F&rarr;id</code>: build all LR(0) items, SLR(1) table.</li>
+<li>For <code>S&rarr;AA, A&rarr;aA|b</code>: build CLR(1) items, CLR table, then merge to LALR table.</li>
+<li>Show <code>S&rarr;L=R|R, L&rarr;*R|id, R&rarr;L</code> is NOT SLR(1). Explain the conflict.</li>
+<li>Show <code>S&rarr;Aa|bAc|dc|bda, A&rarr;d</code> is NOT LR(0).</li>
+</ol>
+</div>
+
+<div class="card">
+<h3>H. Trace-Based Questions</h3>
+<ol>
+<li>Using SLR(1) table for <code>E&rarr;E+T|T, T&rarr;T*F|F, F&rarr;id</code>, trace parsing of <code>id+id*id$</code>.</li>
+<li>Using LALR(1) table for <code>S&rarr;AA, A&rarr;aA|b</code>, trace parsing of <code>aabb$</code>.</li>
+<li>Write recursive descent pseudocode for <code>S&rarr;(L)|a, L&rarr;SL', L'&rarr;,SL'|&epsilon;</code>. Trace <code>(a,(a,a))</code>.</li>
+</ol>
+</div>
+</section>
+
+</div>
+
+<script>
+const ss=document.querySelectorAll('section[id],div[id]');
+const nl=document.querySelectorAll('.sidebar a');
+const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){nl.forEach(l=>l.classList.remove('active'));const a=document.querySelector('.sidebar a[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-20% 0px -70% 0px'});
+ss.forEach(s=>ob.observe(s));
+nl.forEach(l=>l.addEventListener('click',()=>{if(window.innerWidth<=900)document.querySelector('.sidebar').classList.remove('open')}));
+</script>
+</body>
+</html>

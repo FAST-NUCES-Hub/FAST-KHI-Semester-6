@@ -1,0 +1,2411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CC - Final Exam Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --bg:#0a0a0f; --surface:#111118; --surface2:#1a1a24; --border:#2a2a3a;
+  --accent:#7c6af7; --accent2:#3ecfcf; --text:#e8e8f0; --text-muted:#8888a8;
+  --success:#4ade80; --warning:#f59e0b; --code-bg:#0d0d18;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { margin:0; background:var(--bg); color:var(--text); font-family:Inter, "DM Sans", system-ui, sans-serif; line-height:1.65; }
+a { color:inherit; }
+.sidebar { position:fixed; inset:0 auto 0 0; width:260px; background:linear-gradient(180deg,#111118,#0d0d14); border-right:1px solid var(--border); display:flex; flex-direction:column; z-index:10; }
+.brand { padding:22px 20px 16px; border-bottom:1px solid var(--border); font-family:"Space Grotesk", sans-serif; font-weight:700; font-size:1.05rem; letter-spacing:0; }
+.progress-shell { height:3px; background:#222234; }
+.progress-bar { height:3px; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+.nav { overflow:auto; padding:14px 10px 24px; }
+.nav a { display:block; padding:10px 12px; margin:3px 0; border-radius:7px; color:var(--text-muted); text-decoration:none; font-size:.9rem; border:1px solid transparent; }
+.nav a.active { color:var(--text); background:#191926; border-color:#32324a; box-shadow:inset 3px 0 0 var(--accent); }
+.topbar { position:sticky; top:0; z-index:5; backdrop-filter:blur(14px); background:rgba(10,10,15,.82); border-bottom:1px solid var(--border); min-height:52px; display:flex; align-items:center; padding:0 28px; color:var(--text-muted); }
+.current-title { color:var(--text); font-family:"Space Grotesk", sans-serif; font-weight:700; }
+main { margin-left:260px; max-width:980px; padding:0 34px 80px; }
+section { scroll-margin-top:70px; padding:34px 0 52px; border-bottom:1px solid rgba(42,42,58,.68); }
+h1,h2,h3,h4 { font-family:"Space Grotesk", "Outfit", sans-serif; letter-spacing:0; line-height:1.16; }
+h1 { font-size:clamp(2rem, 5vw, 3.4rem); margin:0 0 12px; }
+h2 { font-size:clamp(1.8rem, 4vw, 2.7rem); margin:0 0 24px; padding-left:18px; border-left:5px solid var(--accent); }
+h3 { margin:28px 0 12px; font-size:1.25rem; }
+h4 { margin:20px 0 8px; color:#f1f1ff; }
+p { margin:10px 0 14px; color:#d9d9e8; }
+ul,ol { padding-left:22px; }
+li { margin:6px 0; }
+.source-tag { display:inline-block; margin:0 0 16px; padding:5px 9px; border:1px solid var(--border); color:var(--text-muted); border-radius:6px; background:#10101a; font-size:.82rem; }
+.def-card, .exam-callout, .note-card { background:var(--surface); border:1px solid var(--border); border-left:4px solid var(--accent2); border-radius:8px; padding:16px 18px; margin:16px 0; }
+.def-card strong { display:block; color:#f7f7ff; margin-bottom:4px; }
+.exam-callout { border-left-color:var(--warning); background:#14131a; }
+.exam-callout h3 { margin:0 0 8px; }
+.grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.table-scroll { overflow:auto; margin:16px 0; border:1px solid var(--border); border-radius:8px; }
+table { width:100%; border-collapse:collapse; min-width:620px; background:var(--surface); }
+th,td { padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+thead th { position:sticky; top:0; background:#202033; color:#f4f4ff; text-align:left; z-index:1; }
+tbody tr:nth-child(even) { background:#161622; }
+.inline-code { display:inline-block; padding:.08rem .34rem; border-radius:5px; background:var(--code-bg); border:1px solid #24243a; font-family:"JetBrains Mono", "Fira Code", monospace; font-size:.92em; }
+.inline-code.grammar { color:#b8f7ff; }
+.inline-code.tac { color:#c7f9d4; }
+.inline-code.asm { color:#ffd88a; }
+.code-wrap { margin:16px 0; border:1px solid var(--border); background:var(--code-bg); border-radius:8px; overflow:hidden; }
+.code-title { padding:8px 12px; background:#151526; border-bottom:1px solid var(--border); color:var(--text-muted); font-size:.85rem; }
+pre { margin:0; padding:14px 16px; overflow:auto; }
+code { font-family:"JetBrains Mono", "Fira Code", monospace; font-size:.88rem; }
+.kw { color:#7c6af7; font-weight:700; }
+.str { color:#4ade80; }
+.num { color:#f59e0b; }
+.op { color:#3ecfcf; }
+.comment { color:#8888a8; }
+.svg-panel { max-width:760px; margin:20px auto; padding:12px; border:1px solid #30304a; border-radius:8px; background:#0d0d18; box-shadow:0 0 24px rgba(62,207,207,.08); }
+.svg-panel.wide { max-width:900px; }
+svg { width:100%; height:auto; display:block; }
+.svg-box,.svg-codebox { fill:#151526; stroke:#3a3a55; stroke-width:1.5; }
+.svg-label,.svg-title,.item-head { fill:#f4f4ff; font-family:"Space Grotesk", sans-serif; font-weight:700; }
+.svg-title { font-size:19px; }
+.svg-label { font-size:14px; }
+.svg-note,.tiny,.edge-label,.item-text,.code-svg { fill:#c7c7df; font-family:"JetBrains Mono", monospace; font-size:12px; }
+.tiny { font-size:10px; }
+.item-text { font-size:11px; }
+.svg-arrow,.svg-soft-arrow { fill:none; stroke:#3ecfcf; stroke-width:2; marker-end:url(#arrow); }
+.svg-soft-arrow { stroke:#7c6af7; marker-end:none; opacity:.65; }
+#arrow2 path,#arrow3 path,#arrow4 path,#arrow5 path,#arrow6 path,.svg-marker { fill:#3ecfcf; }
+.automaton circle,.tree circle,.dag circle { fill:#111118; stroke:#7c6af7; stroke-width:2; }
+.automaton text,.tree text,.dag text { fill:#e8e8f0; font-family:"JetBrains Mono", monospace; text-anchor:middle; }
+.tree-edge { stroke:#8888a8; stroke-width:2; fill:none; }
+.op-node { fill:#3ecfcf !important; font-size:24px; font-weight:700; }
+.dag rect { fill:#151526; stroke:#3ecfcf; stroke-width:2; }
+.question-card { border:1px solid var(--border); border-radius:8px; background:var(--surface); margin:12px 0; overflow:hidden; }
+.question-card summary { list-style:none; cursor:pointer; display:grid; grid-template-columns:auto auto 1fr auto; gap:10px; align-items:center; padding:13px 14px; }
+.question-card summary::-webkit-details-marker { display:none; }
+.q-num { width:34px; height:28px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; background:#202033; color:#fff; font-weight:700; font-family:"JetBrains Mono", monospace; }
+.q-topic { color:var(--accent2); font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+.q-text { color:#f2f2fb; min-width:0; }
+.toggle { white-space:nowrap; background:var(--accent); color:white; padding:6px 10px; border-radius:6px; font-size:.82rem; }
+.hide, details[open] .show { display:none; }
+details[open] .hide { display:inline; }
+.solution { padding:0 16px 16px 16px; border-top:1px solid var(--border); background:#10101a; }
+.backtop { position:fixed; right:18px; bottom:18px; border:1px solid var(--border); background:#191926; color:var(--text); border-radius:8px; padding:10px 12px; text-decoration:none; opacity:.86; }
+@media (max-width: 860px) {
+  .sidebar { position:static; width:auto; max-height:280px; }
+  main { margin-left:0; padding:0 18px 70px; }
+  .topbar { top:0; }
+  .grid-2 { grid-template-columns:1fr; }
+  .question-card summary { grid-template-columns:auto 1fr; }
+  .q-topic,.toggle { grid-column:2; }
+}
+</style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">CC &mdash; Final Exam Guide</div>
+    <div class="progress-shell"><div class="progress-bar"></div></div>
+    <nav class="nav" aria-label="Study guide sections"><a href="#preprocessors">Language Pre-Processors</a><a href="#compiler-structure">Compiler Structure</a><a href="#lexical-analysis">Lexical Analysis</a><a href="#top-down">Syntax: Top-Down</a><a href="#bottom-up">Syntax: Bottom-Up</a><a href="#semantic-analysis">Semantic Analysis</a><a href="#intermediate-code">Intermediate Code</a><a href="#optimization">Code Optimization</a><a href="#target-code">Target Code</a><a href="#practice">Practice Questions</a><a href="#pastpaper-2025" style="border-top:1px solid var(--border);margin-top:8px;padding-top:12px;color:var(--accent)">&#128220; 2025 Past Paper</a></nav>
+  </aside>
+  <main>
+    <div class="topbar">Current section:&nbsp;<span class="current-title">Language Pre-Processors</span></div>
+    <section id="source-note" data-title="Source Discipline">
+      <h1>Compiler Construction Master Study Guide</h1>
+      <p class="source-tag">Built from the uploaded lecture decks, semantic worksheet, practice DOCX, and exam-style PDF in this folder.</p>
+      <p>This single-file guide follows the requested syllabus order. Slide-derived notes are marked with source tags, diagrams are inline SVG, and practice solutions are placed at the end as collapsible cards.</p>
+    </section>
+    <section id="preprocessors" data-title="1. Language Pre-Processors"><h2>1. Language Pre-Processors</h2>
+<p class="source-tag">Source slides: Week 1 slides 8-17; Week 3 slides 3-4</p>
+<p>Language processing prepares a program to run on a computer. The uploaded slides define language processors as systems that verify language rules and convert source programs into executable or lower-level forms.</p>
+<div class="def-card"><strong>Preprocessor</strong><p>A preprocessor produces input for the compiler. In the slides, its highlighted jobs are macro processing and file inclusion, especially header-file inclusion before compilation.</p></div>
+<div class="table-scroll "><table><thead><tr><th>Processor</th><th>Input</th><th>Main job</th><th>Exam focus</th></tr></thead><tbody><tr><td>Preprocessor</td><td>Source text with macros/includes</td><td>Expands macros and includes files</td><td>Produces compiler input</td></tr><tr><td>Compiler</td><td>High-level language program</td><td>Translates to equivalent target/machine-level program and reports errors</td><td>Whole program translation</td></tr><tr><td>Assembler</td><td>Assembly language</td><td>Converts mnemonic instructions into object/machine code</td><td>Mnemonic to machine language</td></tr><tr><td>Linker/Loader</td><td>Object programs and libraries</td><td>Loads into memory, relocates addresses, prepares execution</td><td>Memory placement and relocation</td></tr><tr><td>Interpreter</td><td>Single instruction or statement</td><td>Executes while translating, no separate object code</td><td>Easier debugging but slower</td></tr><tr><td>Hybrid compiler</td><td>Source program</td><td>Compiles to intermediate code and interprets it</td><td>Java-style model</td></tr></tbody></table></div>
+<p>Compiler construction tools named in the slides include scanner generators, parser generators, syntax-directed translation engines, code-generator generators, data-flow analysis engines, integrated compiler toolkits, JFLAP, regex libraries, Flex/Bison, JFlex, ANTLR, LLVM, and JavaCC.</p>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>A preprocessor runs before the compiler and can expand macros or include files.</li><li>A compiler translates the entire source program and produces intermediate/object/target code.</li><li>An interpreter consumes one instruction at a time and reports errors instruction by instruction.</li><li>Assemblers, linkers, and loaders are separate language-processing stages after compilation.</li><li>Hybrid systems compile to intermediate code that can be interpreted.</li></ul></aside>
+</section><section id="compiler-structure" data-title="2. Compiler Structure"><h2>2. Compiler Structure</h2>
+<p class="source-tag">Source slides: Week 1 slides 18-36; Week 2 slide 12</p>
+
+<div class="svg-panel">
+<svg viewBox="0 0 1160 230" role="img" aria-label="Compiler phases pipeline">
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="580" y="36" text-anchor="middle" class="svg-title">Compiler Structure: Analysis to Synthesis</text>
+  <rect x="25" y="82" width="112" height="62" rx="8" class="svg-box"/><text x="81.0" y="118" text-anchor="middle" class="svg-label">Source</text><rect x="155" y="82" width="130" height="62" rx="8" class="svg-box"/><text x="220.0" y="118" text-anchor="middle" class="svg-label">Preprocessor</text><rect x="310" y="82" width="112" height="62" rx="8" class="svg-box"/><text x="366.0" y="118" text-anchor="middle" class="svg-label">Lexical</text><rect x="450" y="82" width="112" height="62" rx="8" class="svg-box"/><text x="506.0" y="118" text-anchor="middle" class="svg-label">Syntax</text><rect x="585" y="82" width="112" height="62" rx="8" class="svg-box"/><text x="641.0" y="118" text-anchor="middle" class="svg-label">Semantic</text><rect x="730" y="82" width="112" height="62" rx="8" class="svg-box"/><text x="786.0" y="118" text-anchor="middle" class="svg-label">IR / TAC</text><rect x="865" y="82" width="112" height="62" rx="8" class="svg-box"/><text x="921.0" y="118" text-anchor="middle" class="svg-label">Optimizer</text><rect x="1010" y="82" width="112" height="62" rx="8" class="svg-box"/><text x="1066.0" y="118" text-anchor="middle" class="svg-label">Target Code</text>
+  <path d="M145 113 L143 113" class="svg-arrow"/><path d="M293 113 L298 113" class="svg-arrow"/><path d="M430 113 L438 113" class="svg-arrow"/><path d="M570 113 L573 113" class="svg-arrow"/><path d="M705 113 L718 113" class="svg-arrow"/><path d="M850 113 L853 113" class="svg-arrow"/><path d="M985 113 L998 113" class="svg-arrow"/>
+  <path d="M330 168 C455 210 650 210 780 168" class="svg-soft-arrow"/>
+  <text x="555" y="207" text-anchor="middle" class="svg-note">Symbol table and error handling support the phases</text>
+</svg>
+</div>
+<p>The compiler is organized as phases. The analysis/front-end phases read the source program, discover structure and meaning, and produce an intermediate representation. The synthesis/back-end phases optimize and translate the intermediate representation into target code.</p>
+<div class="table-scroll "><table><thead><tr><th>Phase</th><th>Input</th><th>Output</th><th>What to remember</th></tr></thead><tbody><tr><td>Lexical analysis</td><td>Characters</td><td>Tokens</td><td>Groups characters into lexemes; creates identifier entries in the symbol table</td></tr><tr><td>Syntax analysis</td><td>Tokens</td><td>Parse tree or syntax tree</td><td>Checks grammatical structure</td></tr><tr><td>Semantic analysis</td><td>Syntax tree plus symbol table</td><td>Type/scope-checked tree</td><td>Checks meaning, type consistency, declarations, function calls</td></tr><tr><td>Intermediate code generation</td><td>Checked tree</td><td>IR / TAC</td><td>Produces a machine-like representation easy to translate</td></tr><tr><td>Optimization</td><td>IR or target code</td><td>Improved IR/target code</td><td>Optional pass that preserves meaning while improving performance</td></tr><tr><td>Code generation</td><td>Optimized IR</td><td>Assembly/machine code</td><td>Selects registers/memory and emits target instructions</td></tr></tbody></table></div>
+<h3>Running Example Through Phases</h3>
+<p>The slides use <code class="inline-code tac">position = initial + rate * 60</code> to show phase behavior. Lexical analysis turns names and operators into tokens. Syntax analysis builds a tree where multiplication happens before addition. Semantic analysis can coerce integer <code class="inline-code tac">60</code> to floating point when combined with floating-point <code class="inline-code tac">rate</code>. Code generation later maps temporaries and variables to registers or memory.</p>
+<div class="code-wrap tac"><div class="code-title">Slide example token stream</div><pre><code>Tokens:
+(id, <span class="num">1</span>) (=) (id, <span class="num">2</span>) (+) (id, <span class="num">3</span>) (*) (<span class="num">60</span>)
+
+Tree meaning:
+position = initial + (rate * <span class="num">60</span>)</code></pre></div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>The symbol table is shared across phases; lexical analysis creates identifier entries, later phases add type/scope/address details.</li><li>Front end: lexical, syntax, semantic analysis, and intermediate code generation.</li><li>Back end: optimization and target/machine code generation.</li><li>Syntax trees expose operator precedence and operand structure.</li><li>Code generation must assign registers carefully because registers are limited.</li></ul></aside>
+</section><section id="lexical-analysis" data-title="3. Lexical Analysis"><h2>3. Lexical Analysis</h2>
+<p class="source-tag">Source slides: Week 1 slides 22-28; Week 2 slides 3-38; Week 3 slides 3-22</p>
+<p>Lexical analysis, also called scanning, is the first compiler phase. It reads input characters, groups them into lexemes, produces a token stream for the parser, interacts with the symbol table, strips whitespace/comments, and reports lexical errors with line information.</p>
+<div class="table-scroll "><table><thead><tr><th>Term</th><th>Definition from slides</th><th>Example</th></tr></thead><tbody><tr><td>Lexeme</td><td>Actual substring in code</td><td>"int", "x", "10"</td></tr><tr><td>Pattern</td><td>Rule defining valid lexemes</td><td>[a-z]+ for identifiers</td></tr><tr><td>Token</td><td>Categorized lexeme</td><td>(ID, "x") or (INT, 10)</td></tr></tbody></table></div>
+<h3>Input Buffering</h3>
+<p>Lexemes often require lookahead: identifiers end only when a non-alphanumeric character appears, and operators such as <code class="inline-code grammar">&lt;</code> may be part of <code class="inline-code grammar">&lt;=</code>. The two-buffer scheme uses two disk-block-sized buffers, an EOF marker, <code class="inline-code tac">lexemeBegin</code> at the start of the current lexeme, and <code class="inline-code tac">forward</code> to scan ahead.</p>
+<h3>Regular Expressions and Token Patterns</h3>
+<div class="code-wrap grammar"><div class="code-title">Regular expression practice</div><pre><code>Identifier exercise from slides:
+[a-z][a-z0-9_]*
+
+Decimal point number:
+[<span class="num">0</span>-<span class="num">9</span>]+\.[<span class="num">0</span>-<span class="num">9</span>]+
+
+Keywords:
+<span class="kw">if</span> | <span class="kw">for</span> | <span class="kw">while</span></code></pre></div>
+<div class="def-card"><strong>DFA</strong><p>A deterministic finite automaton has exactly one action for a state/input combination. The slides stress that this lack of ambiguity makes a DFA easy to implement.</p></div>
+<div class="def-card"><strong>NFA</strong><p>A nondeterministic finite automaton can have ambiguity, such as multiple transitions on the same symbol. The slides use [a-z]*ing for lowercase words ending in ing.</p></div>
+<h3>NFA to DFA: Subset Construction</h3>
+<ol>
+  <li>Start with the set containing the NFA start state; if epsilon moves exist, take the epsilon-closure.</li>
+  <li>For each DFA state, compute where each input symbol can move from any NFA state inside that set.</li>
+  <li>The resulting set of NFA states becomes a DFA state.</li>
+  <li>Repeat until no new subsets appear.</li>
+  <li>Any DFA state containing an NFA accepting state is accepting.</li>
+</ol>
+
+<div class="svg-panel">
+<svg viewBox="0 0 980 360" role="img" aria-label="NFA to DFA subset construction for lowercase words ending in ing">
+  <defs><marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="245" y="34" class="svg-title" text-anchor="middle">NFA for [a-z]*ing</text>
+  <text x="735" y="34" class="svg-title" text-anchor="middle">DFA Subsets</text>
+  <g class="automaton">
+    <circle cx="90" cy="165" r="28"/><text x="90" y="170">q0</text>
+    <circle cx="205" cy="165" r="28"/><text x="205" y="170">q1</text>
+    <circle cx="320" cy="165" r="28"/><text x="320" y="170">q2</text>
+    <circle cx="435" cy="165" r="28"/><circle cx="435" cy="165" r="22"/><text x="435" y="170">q3</text>
+    <path d="M30 165 L60 165" class="svg-arrow"/>
+    <path d="M118 165 L176 165" class="svg-arrow"/><text x="147" y="150">i</text>
+    <path d="M233 165 L291 165" class="svg-arrow"/><text x="262" y="150">n</text>
+    <path d="M348 165 L406 165" class="svg-arrow"/><text x="377" y="150">g</text>
+    <path d="M72 139 C45 85 133 85 108 139" class="svg-arrow"/><text x="91" y="78">[a-z]</text>
+  </g>
+  <g class="automaton">
+    <circle cx="590" cy="115" r="34"/><text x="590" y="112">A</text><text x="590" y="130" class="tiny">{q0}</text>
+    <circle cx="725" cy="115" r="34"/><text x="725" y="112">B</text><text x="725" y="130" class="tiny">{q0,q1}</text>
+    <circle cx="725" cy="245" r="34"/><text x="725" y="242">C</text><text x="725" y="260" class="tiny">{q0,q2}</text>
+    <circle cx="865" cy="245" r="34"/><circle cx="865" cy="245" r="27"/><text x="865" y="242">D</text><text x="865" y="260" class="tiny">{q0,q3}</text>
+    <path d="M625 115 L690 115" class="svg-arrow"/><text x="657" y="101">i</text>
+    <path d="M725 149 L725 210" class="svg-arrow"/><text x="739" y="181">n</text>
+    <path d="M760 245 L830 245" class="svg-arrow"/><text x="795" y="230">g</text>
+    <path d="M697 94 C650 45 785 45 753 94" class="svg-arrow"/><text x="725" y="50">i</text>
+    <path d="M555 122 C505 138 505 91 555 106" class="svg-arrow"/><text x="514" y="91">other</text>
+    <path d="M702 270 C625 318 596 190 695 141" class="svg-arrow"/><text x="625" y="286">other</text>
+    <path d="M842 270 C760 330 602 211 694 141" class="svg-arrow"/><text x="774" y="320">other</text>
+    <path d="M748 218 C810 170 875 176 880 211" class="svg-arrow"/><text x="814" y="170">i</text>
+    <path d="M842 219 C792 154 744 147 742 147" class="svg-arrow"/><text x="804" y="151">i</text>
+  </g>
+</svg>
+</div>
+
+<div class="svg-panel">
+<svg viewBox="0 0 720 300" role="img" aria-label="Complete DFA for lowercase words ending in ing">
+  <defs><marker id="arrow3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="360" y="32" text-anchor="middle" class="svg-title">Complete DFA: lowercase strings ending with "ing"</text>
+  <g class="automaton">
+    <circle cx="100" cy="145" r="35"/><text x="100" y="150">A</text>
+    <circle cx="260" cy="145" r="35"/><text x="260" y="150">B</text>
+    <circle cx="420" cy="145" r="35"/><text x="420" y="150">C</text>
+    <circle cx="580" cy="145" r="35"/><circle cx="580" cy="145" r="28"/><text x="580" y="150">D</text>
+    <path d="M35 145 L62 145" class="svg-arrow"/>
+    <path d="M135 145 L222 145" class="svg-arrow"/><text x="178" y="128">i</text>
+    <path d="M295 145 L382 145" class="svg-arrow"/><text x="338" y="128">n</text>
+    <path d="M455 145 L542 145" class="svg-arrow"/><text x="498" y="128">g</text>
+    <path d="M78 116 C38 55 166 55 122 116" class="svg-arrow"/><text x="100" y="55">not i</text>
+    <path d="M250 108 C200 43 319 43 270 108" class="svg-arrow"/><text x="260" y="55">i</text>
+    <path d="M245 177 C202 250 121 250 106 181" class="svg-arrow"/><text x="165" y="254">not i,n</text>
+    <path d="M405 177 C350 250 162 245 115 180" class="svg-arrow"/><text x="273" y="251">not i,g</text>
+    <path d="M435 177 C475 235 256 234 271 181" class="svg-arrow"/><text x="352" y="235">i</text>
+    <path d="M565 177 C513 260 171 260 116 178" class="svg-arrow"/><text x="365" y="276">not i</text>
+    <path d="M590 110 C548 44 295 44 276 112" class="svg-arrow"/><text x="430" y="53">i</text>
+  </g>
+</svg>
+</div>
+<div class="table-scroll "><table><thead><tr><th>DFA state</th><th>NFA subset</th><th>on i</th><th>on n</th><th>on g</th><th>on other lowercase</th></tr></thead><tbody><tr><td>A</td><td>{q0}</td><td>B</td><td>A</td><td>A</td><td>A</td></tr><tr><td>B</td><td>{q0,q1}</td><td>B</td><td>C</td><td>A</td><td>A</td></tr><tr><td>C</td><td>{q0,q2}</td><td>B</td><td>A</td><td>D</td><td>A</td></tr><tr><td>D</td><td>{q0,q3}</td><td>B</td><td>A</td><td>A</td><td>A</td></tr></tbody></table></div>
+<h3>Lexical Errors and Recovery</h3>
+<p>The slides list too-long identifiers, too-long numeric constants, ill-formed numeric constants, and illegal characters. Recovery techniques include panic mode until a delimiter, transposing adjacent characters, inserting a missing character, deleting an extra character, or replacing one character with another.</p>
+<div class="code-wrap tac"><div class="code-title">Lexical recovery examples</div><pre><code><span class="kw">int</span> 4FAST<span class="comment">;        // panic mode may skip to semicolon</span>
+itn num<span class="comment">;          // transpose to <span class="kw">int</span></span>
+it num<span class="comment">;           // insert n</span>
+intt num<span class="comment">;         // delete extra t</span>
+itt num<span class="comment">;          // replace t with n</span></code></pre></div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>Token = token name plus optional attribute value pointing to the symbol table.</li><li>Whitespace and comments are usually discarded by lexical analysis.</li><li>FIRST boundary decisions in lexing often need lookahead.</li><li>NFAs can be converted to DFAs by subset construction.</li><li>A lexical analyzer may not catch misspelled keywords if the spelling is still a valid identifier.</li></ul></aside>
+</section><section id="top-down" data-title="4. Syntax Analysis: Top-Down"><h2>4. Syntax Analysis: Top-Down</h2>
+<p class="source-tag">Source slides: Week 4 slides 2-98; Week 5 slides 2-44; Week 6 slides 2-40</p>
+<p>Syntax analysis, or parsing, determines how a token string can be generated by a grammar. The slides define a context-free grammar by terminals, nonterminals, productions, and a start symbol. A parse tree has the start symbol at the root, terminals at leaves, and nonterminals as interior nodes.</p>
+<div class="def-card"><strong>Ambiguous grammar</strong><p>A grammar is ambiguous if one terminal string can have more than one parse tree. The slides use arithmetic expressions such as 9-5+2 and 9+5*2 to motivate associativity and precedence rules.</p></div>
+<h3>Left Recursion and Left Factoring</h3>
+<div class="code-wrap grammar"><div class="code-title">Top-down grammar preparation</div><pre><code>Direct left recursion:
+A -&gt<span class="comment">; A alpha | beta</span>
+
+After elimination:
+A  -&gt<span class="comment">; beta A'</span>
+A' -&gt<span class="comment">; alpha A' | epsilon</span>
+
+Example from slides:
+E  -&gt<span class="comment">; E + T | T</span>
+T  -&gt<span class="comment">; T x F | F</span>
+F  -&gt<span class="comment">; id</span>
+
+Eliminated:
+E  -&gt<span class="comment">; T E'</span>
+E' -&gt<span class="comment">; + T E' | epsilon</span>
+T  -&gt<span class="comment">; F T'</span>
+T' -&gt<span class="comment">; x F T' | epsilon</span>
+F  -&gt<span class="comment">; id</span></code></pre></div>
+<p>Left factoring is used when multiple alternatives share a prefix. For <code class="inline-code grammar">A -&gt; alpha beta1 | alpha beta2</code>, rewrite as <code class="inline-code grammar">A -&gt; alpha A'</code> and <code class="inline-code grammar">A' -&gt; beta1 | beta2</code>.</p>
+<h3>FIRST and FOLLOW</h3>
+<div class="table-scroll "><table><thead><tr><th>Set</th><th>Meaning</th><th>Rules to remember</th></tr></thead><tbody><tr><td>FIRST(alpha)</td><td>Terminals that can begin strings derived from alpha</td><td>If X -&gt; epsilon, epsilon is in FIRST(X); if X -&gt; a, a is in FIRST(X); scan symbols left to right until a non-nullable symbol</td></tr><tr><td>FOLLOW(A)</td><td>Terminals that can appear immediately after nonterminal A</td><td>Put $ in FOLLOW(start); if A -&gt; alpha B beta, add FIRST(beta)-epsilon to FOLLOW(B); if beta can be epsilon, add FOLLOW(A)</td></tr></tbody></table></div>
+<div class="code-wrap grammar"><div class="code-title">Worked FIRST/FOLLOW example from slides</div><pre><code>Grammar:
+E  -&gt<span class="comment">; T E'</span>
+E' -&gt<span class="comment">; + T E' | epsilon</span>
+T  -&gt<span class="comment">; F T'</span>
+T' -&gt<span class="comment">; x F T' | epsilon</span>
+F  -&gt<span class="comment">; ( E ) | id</span>
+
+FIRST:
+FIRST(E)=FIRST(T)=FIRST(F)={ (, id }
+FIRST(E')={ +, epsilon }
+FIRST(T')={ x, epsilon }
+
+FOLLOW:
+FOLLOW(E)={ $, ) }
+FOLLOW(E')={ $, ) }
+FOLLOW(T)={ +, $, ) }
+FOLLOW(T')={ +, $, ) }
+FOLLOW(F)={ x, +, $, ) }</code></pre></div>
+<h3>Recursive Descent</h3>
+<p>A recursive descent parser is a top-down parser built from mutually recursive functions, one function per nonterminal. It is suitable for LL(1) grammars where a single lookahead token selects the production.</p>
+<div class="code-wrap grammar"><div class="code-title">Recursive descent skeleton</div><pre><code>parseE():
+  parseT()
+  parseEPrime()
+
+parseEPrime():
+  <span class="kw">if</span> lookahead == '+':
+    match('+')<span class="comment">; parseT(); parseEPrime()</span>
+  <span class="kw">else</span>:
+    use epsilon
+
+parseF():
+  <span class="kw">if</span> lookahead == '(':
+    match('(')<span class="comment">; parseE(); match(')')</span>
+  <span class="kw">else</span> <span class="kw">if</span> lookahead in {id, num}:
+    match(lookahead)
+  <span class="kw">else</span>:
+    error</code></pre></div>
+<h3>LL(1) Parsing Table Construction</h3>
+<ol>
+  <li>Check that the grammar has no left recursion, is unambiguous, and is left factored.</li>
+  <li>Compute FIRST and FOLLOW for all nonterminals.</li>
+  <li>For each production A -> alpha, put it in table[A,a] for every a in FIRST(alpha).</li>
+  <li>If epsilon is in FIRST(alpha), put A -> alpha in table[A,b] for every b in FOLLOW(A).</li>
+  <li>Parse with stack, input buffer, and table entries.</li>
+</ol>
+<div class="code-wrap grammar"><div class="code-title">LL(1) example</div><pre><code>Grammar from Week <span class="num">6</span>:
+S' -&gt<span class="comment">; S</span>
+S  -&gt<span class="comment">; x Y z S | a</span>
+Y  -&gt<span class="comment">; x Y z | y</span>
+
+FIRST(S')={x,a}<span class="comment">; FIRST(S)={x,a}; FIRST(Y)={x,y}</span>
+FOLLOW(S')={$}<span class="comment">; FOLLOW(S)={$}; FOLLOW(Y)={z}</span></code></pre></div>
+<div class="table-scroll "><table><thead><tr><th>Nonterminal</th><th>x</th><th>a</th><th>y</th><th>z</th><th>$</th></tr></thead><tbody><tr><td>S'</td><td>S' -&gt; S</td><td>S' -&gt; S</td><td></td><td></td><td></td></tr><tr><td>S</td><td>S -&gt; xYzS</td><td>S -&gt; a</td><td></td><td></td><td></td></tr><tr><td>Y</td><td>Y -&gt; xYz</td><td></td><td>Y -&gt; y</td><td></td><td></td></tr></tbody></table></div>
+<div class="code-wrap grammar"><div class="code-title">LL(1) parse trace for xxyzza</div><pre><code>Stack      Input     Action
+$S'        xxyzza$   expand S' -&gt<span class="comment">; S</span>
+$S         xxyzza$   expand S -&gt<span class="comment">; xYzS</span>
+$SzYx      xxyzza$   match x
+$SzY       xyzza$    expand Y -&gt<span class="comment">; xYz</span>
+$SzzYx     xyzza$    match x
+$SzzY      yzza$     expand Y -&gt<span class="comment">; y</span>
+$Szzy      yzza$     match y
+$Szz       zza$      match z, match z
+$S         a$        expand S -&gt<span class="comment">; a</span>
+$a         a$        match a<span class="comment">; <span class="kw">accept</span></span></code></pre></div>
+
+<div class="svg-panel">
+<svg viewBox="0 0 720 420" role="img" aria-label="LL(1) parse tree for xxyzza">
+  <defs><marker id="arrow4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="360" y="32" text-anchor="middle" class="svg-title">LL(1) Parse Tree for x x y z z a</text>
+  <g class="tree">
+    <circle cx="360" cy="70" r="24"/><text x="360" y="75">S'</text>
+    <circle cx="360" cy="130" r="24"/><text x="360" y="135">S</text>
+    <circle cx="140" cy="205" r="20"/><text x="140" y="210">x</text>
+    <circle cx="270" cy="205" r="22"/><text x="270" y="210">Y</text>
+    <circle cx="430" cy="205" r="20"/><text x="430" y="210">z</text>
+    <circle cx="560" cy="205" r="22"/><text x="560" y="210">S</text>
+    <circle cx="210" cy="290" r="20"/><text x="210" y="295">x</text>
+    <circle cx="300" cy="290" r="22"/><text x="300" y="295">Y</text>
+    <circle cx="390" cy="290" r="20"/><text x="390" y="295">z</text>
+    <circle cx="300" cy="360" r="20"/><text x="300" y="365">y</text>
+    <circle cx="560" cy="290" r="20"/><text x="560" y="295">a</text>
+    <path d="M360 94 L360 106" class="tree-edge"/>
+    <path d="M346 149 L157 190" class="tree-edge"/><path d="M351 151 L283 187" class="tree-edge"/>
+    <path d="M370 151 L417 188" class="tree-edge"/><path d="M376 148 L544 190" class="tree-edge"/>
+    <path d="M260 225 L222 274" class="tree-edge"/><path d="M272 227 L297 268" class="tree-edge"/><path d="M282 225 L379 277" class="tree-edge"/>
+    <path d="M300 312 L300 340" class="tree-edge"/><path d="M560 227 L560 270" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>Top-down parsing constructs the parse tree from root to leaves.</li><li>LL(1) means left-to-right scan, leftmost derivation, one lookahead token.</li><li>Remove left recursion before predictive parsing.</li><li>Use FIRST to choose productions; use FOLLOW when a production can derive epsilon.</li><li>Panic-mode predictive recovery pops nonterminals or discards input until synchronizing tokens.</li></ul></aside>
+</section><section id="bottom-up" data-title="5. Syntax Analysis: Bottom-Up"><h2>5. Syntax Analysis: Bottom-Up</h2>
+<p class="source-tag">Source slides: Week 4 slides 89-96; Week 7 slides 2-58</p>
+<p>Bottom-up parsers start with the input tokens and repeatedly reduce right-hand sides of productions to their left-hand sides. This is the reverse of a rightmost derivation.</p>
+<div class="def-card"><strong>Handle</strong><p>A handle is the substring matching a production body that should be reduced next in a bottom-up parse. Correct handle choice is crucial because the parser is reconstructing the rightmost derivation in reverse.</p></div>
+<h3>Shift-Reduce Parser Actions</h3>
+<div class="table-scroll "><table><thead><tr><th>Action</th><th>Meaning</th></tr></thead><tbody><tr><td>Shift</td><td>Move the next input token onto the stack.</td></tr><tr><td>Reduce</td><td>Replace a handle on top of the stack by the production head.</td></tr><tr><td>Accept</td><td>The start symbol has been recognized and input is consumed.</td></tr><tr><td>Error</td><td>No valid shift or reduce action exists.</td></tr></tbody></table></div>
+<div class="code-wrap grammar"><div class="code-title">Shift-reduce trace</div><pre><code>Grammar from Week <span class="num">7</span>:
+E -&gt<span class="comment">; E - E | E x E | id</span>
+
+Input: id - id x id
+
+$ id             <span class="kw">reduce</span> E -&gt<span class="comment">; id</span>
+$ E - id         <span class="kw">reduce</span> E -&gt<span class="comment">; id</span>
+$ E - E x id     <span class="kw">reduce</span> E -&gt<span class="comment">; id</span>
+$ E - E x E      <span class="kw">reduce</span> E -&gt<span class="comment">; E x E</span>
+$ E - E          <span class="kw">reduce</span> E -&gt<span class="comment">; E - E</span>
+$ E              <span class="kw">accept</span></code></pre></div>
+<h3>LR(k), Items, CLOSURE, and GOTO</h3>
+<p>In the slides, <code class="inline-code grammar">LR(k)</code> means left-to-right scan, rightmost derivation in reverse, and <code class="inline-code grammar">k</code> lookahead symbols. LR parsers maintain states made of items. An LR(0) item is a production with a dot marking parsing progress.</p>
+<div class="code-wrap grammar"><div class="code-title">Core LR operations</div><pre><code>CLOSURE(I):
+  If A -&gt<span class="comment">; alpha . B beta is in I and B is a nonterminal,</span>
+  <span class="kw">add</span> B -&gt<span class="comment">; . gamma <span class="kw">for</span> every production B -&gt; gamma.</span>
+  Repeat until no new items appear.
+
+GOTO(I, X):
+  Move the dot over symbol X in every item where X follows the dot,
+  <span class="kw">then</span> take CLOSURE of the resulting set.</code></pre></div>
+
+<div class="svg-panel wide">
+<svg viewBox="0 0 830 410" role="img" aria-label="LR zero automaton item sets">
+  <defs><marker id="arrow5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="415" y="30" text-anchor="middle" class="svg-title">LR(0) Automaton for S -> AA, A -> aA | b</text>
+  <rect x="90" y="90" width="190" height="106" rx="8" class="svg-box"/><text x="102" y="112" class="item-head">I0</text><text x="102" y="134" class="item-text">S' -> .S</text><text x="102" y="152" class="item-text">S -> .AA</text><text x="102" y="170" class="item-text">A -> .aA</text><text x="102" y="188" class="item-text">A -> .b</text><rect x="355" y="35" width="190" height="52" rx="8" class="svg-box"/><text x="367" y="57" class="item-head">I1</text><text x="367" y="79" class="item-text">S' -> S.</text><rect x="355" y="145" width="190" height="88" rx="8" class="svg-box"/><text x="367" y="167" class="item-head">I2</text><text x="367" y="189" class="item-text">S -> A.A</text><text x="367" y="207" class="item-text">A -> .aA</text><text x="367" y="225" class="item-text">A -> .b</text><rect x="355" y="260" width="190" height="88" rx="8" class="svg-box"/><text x="367" y="282" class="item-head">I3</text><text x="367" y="304" class="item-text">A -> a.A</text><text x="367" y="322" class="item-text">A -> .aA</text><text x="367" y="340" class="item-text">A -> .b</text><rect x="610" y="90" width="190" height="52" rx="8" class="svg-box"/><text x="622" y="112" class="item-head">I4</text><text x="622" y="134" class="item-text">A -> b.</text><rect x="610" y="195" width="190" height="52" rx="8" class="svg-box"/><text x="622" y="217" class="item-head">I5</text><text x="622" y="239" class="item-text">S -> AA.</text><rect x="610" y="300" width="190" height="52" rx="8" class="svg-box"/><text x="622" y="322" class="item-head">I6</text><text x="622" y="344" class="item-text">A -> aA.</text>
+  <path d="M280 125 L355 70" class="svg-arrow"/><text x="317.5" y="91.5" class="edge-label">S</text><path d="M280 135 L355 180" class="svg-arrow"/><text x="317.5" y="151.5" class="edge-label">A</text><path d="M280 150 L355 295" class="svg-arrow"/><text x="317.5" y="216.5" class="edge-label">a</text><path d="M280 115 L610 125" class="svg-arrow"/><text x="445.0" y="114.0" class="edge-label">b</text><path d="M545 185 L610 225" class="svg-arrow"/><text x="577.5" y="199.0" class="edge-label">A</text><path d="M545 200 L610 125" class="svg-arrow"/><text x="577.5" y="156.5" class="edge-label">b</text><path d="M545 215 L355 295" class="svg-arrow"/><text x="450.0" y="249.0" class="edge-label">a</text><path d="M545 305 L610 335" class="svg-arrow"/><text x="577.5" y="314.0" class="edge-label">A</text><path d="M545 320 L610 125" class="svg-arrow"/><text x="577.5" y="216.5" class="edge-label">b</text><path d="M450 350 L450 344" class="svg-arrow"/><text x="450.0" y="341.0" class="edge-label">a</text>
+</svg>
+</div>
+<div class="table-scroll "><table><thead><tr><th>State</th><th>a</th><th>b</th><th>$</th><th>GOTO S</th><th>GOTO A</th></tr></thead><tbody><tr><td>0</td><td>s3</td><td>s4</td><td></td><td>1</td><td>2</td></tr><tr><td>1</td><td></td><td></td><td>accept</td><td></td><td></td></tr><tr><td>2</td><td>s3</td><td>s4</td><td></td><td></td><td>5</td></tr><tr><td>3</td><td>s3</td><td>s4</td><td></td><td></td><td>6</td></tr><tr><td>4</td><td>r3: A -&gt; b</td><td>r3</td><td>r3</td><td></td><td></td></tr><tr><td>5</td><td>r1: S -&gt; AA</td><td>r1</td><td>r1</td><td></td><td></td></tr><tr><td>6</td><td>r2: A -&gt; aA</td><td>r2</td><td>r2</td><td></td><td></td></tr></tbody></table></div>
+<h3>SLR(1), CLR(1), and LALR(1)</h3>
+<div class="table-scroll "><table><thead><tr><th>Parser</th><th>Item basis</th><th>Reduce entries</th><th>Power/table size</th></tr></thead><tbody><tr><td>LR(0)</td><td>LR(0) items</td><td>All terminals for completed items</td><td>Smallest, weakest</td></tr><tr><td>SLR(1)</td><td>LR(0) item sets</td><td>Only FOLLOW(A) for A -&gt; alpha .</td><td>Stronger than LR(0), simple table</td></tr><tr><td>CLR(1) / canonical LR(1)</td><td>LR(1) items A -&gt; alpha . beta, lookahead</td><td>Only the item's exact lookahead</td><td>Most precise, largest table</td></tr><tr><td>LALR(1)</td><td>CLR(1) states merged by identical LR(0) cores</td><td>Merged lookahead sets</td><td>Near CLR power, much smaller tables</td></tr></tbody></table></div>
+<div class="code-wrap grammar"><div class="code-title">SLR reduce rule</div><pre><code>SLR expression grammar from Week <span class="num">7</span>:
+S' -&gt<span class="comment">; E</span>
+E  -&gt<span class="comment">; E + T | T</span>
+T  -&gt<span class="comment">; T * F | F</span>
+F  -&gt<span class="comment">; id</span>
+
+FOLLOW(E)={ +, $ }
+FOLLOW(T)={ *, +, $ }
+FOLLOW(F)={ *, +, $ }
+
+SLR rule:
+If a state has A -&gt<span class="comment">; alpha .,</span>
+write <span class="kw">reduce</span> A -&gt<span class="comment">; alpha only under FOLLOW(A).</span></code></pre></div>
+<h3>Conflicts</h3>
+<p>A shift/reduce conflict occurs when the table offers both shifting the lookahead and reducing a handle. A reduce/reduce conflict occurs when two reductions are possible. The slides recommend using the rightmost derivation to understand the correct handle; grammar design, precedence, associativity, or parser-generator declarations can resolve practical conflicts.</p>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>Bottom-up parsing constructs the parse tree from leaves to root.</li><li>LR states are sets of items; the dot records how much of a production has been seen.</li><li>SLR uses LR(0) item sets but places reductions only on FOLLOW sets.</li><li>CLR(1) uses lookahead inside each item, making it more precise than SLR.</li><li>LALR merges CLR states with the same LR(0) core, which can introduce conflicts not present in CLR.</li></ul></aside>
+</section><section id="semantic-analysis" data-title="6. Semantic Analysis"><h2>6. Semantic Analysis</h2>
+<p class="source-tag">Source slides: Week 1 slides 32-33; Week 9 slides 2-73; Semantics worksheet</p>
+<p>Semantic analysis checks the meaning and logical consistency of a program after lexical and syntax analysis. The slides list type checking, scope resolution, correct function/method calls, declaration checks, and type coercion/casting as core functions.</p>
+<div class="table-scroll "><table><thead><tr><th>Error class</th><th>Meaning</th><th>Example</th></tr></thead><tbody><tr><td>Syntax error</td><td>Violates grammar/structure</td><td>Missing semicolon or malformed if statement</td></tr><tr><td>Semantic error</td><td>Syntactically valid but meaning is wrong</td><td>Adding int and string in a strongly typed language</td></tr></tbody></table></div>
+<h3>SDD and SDT</h3>
+<div class="def-card"><strong>Syntax-Directed Definition (SDD)</strong><p>A context-free grammar enhanced with attributes and semantic rules. It describes what semantic values must be computed.</p></div>
+<div class="def-card"><strong>Syntax-Directed Translation (SDT)</strong><p>A context-free grammar with semantic actions embedded in production bodies. It describes how and when computations happen.</p></div>
+<div class="table-scroll "><table><thead><tr><th>Attribute type</th><th>How value flows</th><th>Typical use</th></tr></thead><tbody><tr><td>Synthesized</td><td>From children upward to parent</td><td>Expression value, type, generated code, syntax-tree node</td></tr><tr><td>Inherited</td><td>From parent or left siblings down/across</td><td>Declaration type, environment/symbol table, scope</td></tr></tbody></table></div>
+
+<div class="svg-panel">
+<svg viewBox="0 0 720 460" role="img" aria-label="Annotated parse tree showing type attributes">
+  <text x="360" y="32" text-anchor="middle" class="svg-title">Annotated Parse Tree: (5 + 3.2) * 4</text>
+  <g class="tree">
+    <circle cx="360" cy="80" r="38"/><text x="360" y="76">E</text><text x="360" y="95" class="tiny">type=real</text>
+    <circle cx="360" cy="165" r="38"/><text x="360" y="161">T</text><text x="360" y="180" class="tiny">real</text>
+    <circle cx="230" cy="255" r="38"/><text x="230" y="251">T</text><text x="230" y="270" class="tiny">real</text>
+    <circle cx="490" cy="255" r="34"/><text x="490" y="251">F</text><text x="490" y="270" class="tiny">int</text>
+    <circle cx="160" cy="345" r="34"/><text x="160" y="341">F</text><text x="160" y="360" class="tiny">int:5</text>
+    <circle cx="300" cy="345" r="38"/><text x="300" y="341">F</text><text x="300" y="360" class="tiny">real:3.2</text>
+    <circle cx="490" cy="345" r="34"/><text x="490" y="341">num</text><text x="490" y="360" class="tiny">4</text>
+    <text x="360" y="253" class="op-node">*</text><text x="230" y="327" class="op-node">+</text>
+    <path d="M360 118 L360 127" class="tree-edge"/>
+    <path d="M342 198 L255 230" class="tree-edge"/><path d="M378 198 L465 230" class="tree-edge"/>
+    <path d="M212 287 L176 318" class="tree-edge"/><path d="M248 287 L282 318" class="tree-edge"/>
+    <path d="M490 289 L490 311" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+<div class="code-wrap tac"><div class="code-title">Annotated attributes and generated code</div><pre><code>Expression: (<span class="num">5</span> + <span class="num">3.2</span>) * <span class="num">4</span>
+
+F -&gt<span class="comment">; num       F.type = integer, F.code = <span class="num">5</span></span>
+F -&gt<span class="comment">; real      F.type = real,    F.code = <span class="num">3.2</span></span>
+E -&gt<span class="comment">; E1 + T    E.type = max(integer, real) = real</span>
+T -&gt<span class="comment">; T1 * F    T.type = max(real, integer) = real</span>
+
+TAC-style code:
+t1 = <span class="num">5</span> + <span class="num">3.2</span>
+t2 = t1 * <span class="num">4</span></code></pre></div>
+<h3>S-Attributed and L-Attributed</h3>
+<div class="table-scroll "><table><thead><tr><th>Class</th><th>Allowed attributes</th><th>Evaluation order</th><th>Parser fit</th></tr></thead><tbody><tr><td>S-attributed</td><td>Only synthesized attributes</td><td>Postorder / bottom-up</td><td>LR parsing</td></tr><tr><td>L-attributed</td><td>Synthesized plus restricted inherited attributes</td><td>Left-to-right traversal</td><td>LL / recursive descent parsing</td></tr></tbody></table></div>
+<p>For L-attributed definitions, an inherited attribute for a child may depend on inherited attributes of the head and attributes of symbols to its left. It cannot depend on right siblings.</p>
+<h3>Syntax Tree Construction</h3>
+<div class="code-wrap grammar"><div class="code-title">S-attributed syntax tree SDD</div><pre><code>E -&gt<span class="comment">; E1 + T  { E.node = Node('+', E1.node, T.node) }</span>
+E -&gt<span class="comment">; T       { E.node = T.node }</span>
+T -&gt<span class="comment">; T1 * F  { T.node = Node('*', T1.node, F.node) }</span>
+T -&gt<span class="comment">; F       { T.node = F.node }</span>
+F -&gt<span class="comment">; id      { F.node = Leaf(id.lexeme) }</span>
+F -&gt<span class="comment">; num     { F.node = Leaf(num.value) }</span>
+
+For a + b * c:
+mkLeaf(a), mkLeaf(b), mkLeaf(c)
+mkNode('*', b, c)
+mkNode('+', a, *)</code></pre></div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>Semantic analysis uses the syntax tree and symbol table.</li><li>Type checking and declaration-before-use are semantic checks.</li><li>Synthesized attributes flow bottom-up; inherited attributes flow from parent/left siblings.</li><li>Every S-attributed definition is also L-attributed, but not every L-attributed definition is S-attributed.</li><li>Postfix SDTs place actions at the ends of productions and execute during reductions.</li></ul></aside>
+</section><section id="intermediate-code" data-title="7. Intermediate Code Generation"><h2>7. Intermediate Code Generation</h2>
+<p class="source-tag">Source slides: Week 1 slide 34; Week 10 slides 3-44</p>
+<p>The front end translates the source program into intermediate code; the back end uses that intermediate code to generate target code. The slides emphasize that intermediate code avoids writing a completely new compiler for every target machine and makes optimization easier.</p>
+<div class="table-scroll "><table><thead><tr><th>IR type</th><th>Examples</th><th>Notes from slides</th></tr></thead><tbody><tr><td>High-level IR</td><td>Abstract syntax tree</td><td>Close to source language, easy to generate</td></tr><tr><td>Low-level IR</td><td>Three-address code, register transfer language</td><td>Close to target machine, useful for machine-dependent optimization</td></tr><tr><td>Graphical IR</td><td>AST, DAG, CFG</td><td>Shows structure, sharing, and control flow</td></tr><tr><td>Linear IR</td><td>Postfix stack code, TAC/quadruples</td><td>Instruction sequence representation</td></tr></tbody></table></div>
+<h3>DAG Construction</h3>
+<p>A directed acyclic graph is like a syntax tree but shares common subexpressions. Leaves are operands; interior nodes are operators. A new node is created only when no node with the same value/operator and operands already exists.</p>
+
+<div class="svg-panel">
+<svg viewBox="0 0 720 430" role="img" aria-label="DAG for m equals a plus b times c minus a plus b divided by d">
+  <text x="360" y="32" text-anchor="middle" class="svg-title">DAG: m = (a + b) * c - (a + b) / d</text>
+  <g class="dag">
+    <circle cx="360" cy="85" r="32"/><text x="360" y="91">-</text><text x="405" y="90" class="tiny">m</text>
+    <circle cx="230" cy="175" r="32"/><text x="230" y="181">*</text>
+    <circle cx="490" cy="175" r="32"/><text x="490" y="181">/</text>
+    <circle cx="360" cy="275" r="32"/><text x="360" y="281">+</text><text x="403" y="280" class="tiny">t1</text>
+    <rect x="88" y="330" width="58" height="42" rx="6"/><text x="117" y="357">a</text>
+    <rect x="190" y="330" width="58" height="42" rx="6"/><text x="219" y="357">b</text>
+    <rect x="486" y="330" width="58" height="42" rx="6"/><text x="515" y="357">c</text>
+    <rect x="588" y="330" width="58" height="42" rx="6"/><text x="617" y="357">d</text>
+    <path d="M340 110 L253 154" class="tree-edge"/><path d="M380 110 L468 154" class="tree-edge"/>
+    <path d="M245 201 L340 254" class="tree-edge"/><path d="M475 201 L380 254" class="tree-edge"/>
+    <path d="M224 205 L512 330" class="tree-edge"/><path d="M505 203 L614 330" class="tree-edge"/>
+    <path d="M342 302 L134 330" class="tree-edge"/><path d="M350 306 L232 330" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+<div class="code-wrap tac"><div class="code-title">TAC from DAG</div><pre><code>m = (a + b) * c - (a + b) / d
+
+t1 = a + b        <span class="comment">// common subexpression</span>
+t2 = t1 * c
+t3 = t1 / d
+m  = t2 - t3</code></pre></div>
+<h3>Three-Address Code Forms</h3>
+<div class="table-scroll "><table><thead><tr><th>Form</th><th>Example</th></tr></thead><tbody><tr><td>Assignment</td><td>x = y op z; x = op y</td></tr><tr><td>Copy statement</td><td>x = y</td></tr><tr><td>Conditional jump</td><td>if x relop y goto L1</td></tr><tr><td>Unconditional jump</td><td>goto L1</td></tr><tr><td>Procedure call</td><td>param x; call p; return y</td></tr></tbody></table></div>
+<div class="code-wrap tac"><div class="code-title">Three-address code example</div><pre><code>a = b + c + d
+
+t1 = b + c
+t2 = t1 + d
+a  = t2</code></pre></div>
+<div class="table-scroll "><table><thead><tr><th>Representation</th><th>Fields</th><th>Example idea</th></tr></thead><tbody><tr><td>Quadruple</td><td>op, arg1, arg2, result</td><td>Temporaries appear explicitly in result</td></tr><tr><td>Triple</td><td>op, arg1, arg2</td><td>Result is referred to by instruction position</td></tr><tr><td>Indirect triple</td><td>Pointer list to triples</td><td>Easier to rearrange code with less space</td></tr></tbody></table></div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>TAC right-hand sides contain at most two operands and one operator.</li><li>Quadruples store the result field explicitly; triples refer to previous positions.</li><li>DAGs expose common subexpressions by sharing nodes.</li><li>ASTs preserve expression structure; DAGs compact repeated computations.</li><li>Intermediate code should be easy to produce and easy to translate.</li></ul></aside>
+</section><section id="optimization" data-title="8. Code Optimization"><h2>8. Code Optimization</h2>
+<p class="source-tag">Source slides: Week 15 slides 3-17; Week 10 slides 14-27; practice question file</p>
+<p>Optimization improves intermediate or target code while preserving program meaning. The slides classify optimization as machine independent when it improves intermediate code without target-specific registers or memory, and machine dependent when it transforms target code according to architecture.</p>
+<div class="table-scroll "><table><thead><tr><th>Technique</th><th>What it does</th><th>Slide/practice example</th></tr></thead><tbody><tr><td>Constant propagation</td><td>Replace a variable by a known constant</td><td>radius = 5.0 used in area calculation</td></tr><tr><td>Constant folding</td><td>Evaluate constant expression at compile time</td><td>2 * 3 becomes 6</td></tr><tr><td>Copy propagation</td><td>Replace copies with original names</td><td>After x = y, use y until changed</td></tr><tr><td>Common subexpression elimination</td><td>Reuse identical expression with no intervening operand changes</td><td>a + b computed once</td></tr><tr><td>Dead/unreachable code elimination</td><td>Remove never-executed or unused-result statements</td><td>if (i == 1) block removed when i = 0</td></tr><tr><td>Function inlining</td><td>Replace call by function body</td><td>square(x) becomes x * x</td></tr><tr><td>Function cloning</td><td>Create specialized versions for calling parameters</td><td>Overload/specialization style</td></tr><tr><td>Strength reduction</td><td>Replace costly operation with cheaper one</td><td>B = A x 2 becomes B = A + A</td></tr><tr><td>Loop code motion</td><td>Move loop-invariant computations outside loops</td><td>n * 4 moved before loop</td></tr></tbody></table></div>
+
+<div class="svg-panel">
+<svg viewBox="0 0 780 330" role="img" aria-label="Peephole optimization before and after">
+  <defs><marker id="arrow6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="390" y="34" text-anchor="middle" class="svg-title">Peephole Optimization: Before / After</text>
+  <rect x="42" y="62" width="270" height="210" rx="8" class="svg-codebox"/><text x="177" y="84" text-anchor="middle" class="item-head">Before</text><text x="70" y="100" class="code-svg">t1 = 2 * 3</text><text x="70" y="128" class="code-svg">t2 = a + t1</text><text x="70" y="156" class="code-svg">t3 = 2 * 3</text><text x="70" y="184" class="code-svg">t4 = b - t3</text><text x="70" y="212" class="code-svg">t5 = t2 + t4</text><text x="70" y="240" class="code-svg">t6 = t5 * 1</text>
+  <rect x="415" y="62" width="270" height="210" rx="8" class="svg-codebox"/><text x="550" y="84" text-anchor="middle" class="item-head">After</text><text x="440" y="100" class="code-svg">t1 = 6</text><text x="440" y="128" class="code-svg">t2 = a + 6</text><text x="440" y="156" class="code-svg">t4 = b - 6</text><text x="440" y="184" class="code-svg">t6 = a + b</text>
+  <path d="M325 165 L398 165" class="svg-arrow"/><text x="360" y="145" text-anchor="middle" class="edge-label">fold, reuse, simplify</text>
+</svg>
+</div>
+<div class="code-wrap tac"><div class="code-title">Constant folding, CSE, algebraic simplification</div><pre><code>Before:
+t1 = <span class="num">2</span> * <span class="num">3</span>
+t2 = a + t1
+t3 = <span class="num">2</span> * <span class="num">3</span>
+t4 = b - t3
+t5 = t2 + t4
+t6 = t5 * <span class="num">1</span>
+
+After:
+t1 = <span class="num">6</span>
+t2 = a + <span class="num">6</span>
+t4 = b - <span class="num">6</span>
+t6 = a + b</code></pre></div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>Machine-independent optimization works on intermediate code; machine-dependent optimization works after target code generation.</li><li>DAGs support common subexpression elimination and local optimization.</li><li>Constant folding is compile-time evaluation of constants.</li><li>Dead code can be unreachable or can compute values never used.</li><li>Loop-invariant code motion reduces repeated work inside loops.</li></ul></aside>
+</section><section id="target-code" data-title="9. Target / Machine Code Generation"><h2>9. Target / Machine Code Generation</h2>
+<p class="source-tag">Source slides: Week 1 slide 35; Week 15 slides 18-23; practice question file</p>
+<p>Target code generation is the final compiler phase. Its input is optimized intermediate representation and its output is target code, often assembly or machine-readable code. Each optimized-code line may map to one or more assembly instructions.</p>
+<div class="def-card"><strong>Register allocation</strong><p>The process of assigning program variables and temporaries to registers. The slides emphasize that registers are fast but limited, so allocation must minimize memory traffic and swaps.</p></div>
+<div class="code-wrap asm"><div class="code-title">TAC to assembly pattern</div><pre><code>TAC:
+t1 = x * <span class="num">5</span>
+y  = t1 + <span class="num">3</span>
+z  = t1 * <span class="num">2</span>
+
+Assembly-style target code:
+<span class="kw">mov</span> eax, [x]
+<span class="kw">imul</span> eax, <span class="num">5</span>
+<span class="kw">mov</span> [t1], eax
+<span class="kw">add</span> eax, <span class="num">3</span>
+<span class="kw">mov</span> [y], eax
+<span class="kw">mov</span> eax, [t1]
+<span class="kw">imul</span> eax, <span class="num">2</span>
+<span class="kw">mov</span> [z], eax</code></pre></div>
+<div class="table-scroll "><table><thead><tr><th>Code generator task</th><th>Exam meaning</th></tr></thead><tbody><tr><td>Instruction selection</td><td>Choose target instructions for each TAC operation</td></tr><tr><td>Register allocation</td><td>Map many temporaries to few registers</td></tr><tr><td>Addressing selection</td><td>Use suitable memory/register addressing forms</td></tr><tr><td>Instruction scheduling</td><td>Order instructions while preserving semantics</td></tr><tr><td>Target-specific optimization</td><td>Use hardware details after target code exists</td></tr></tbody></table></div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Exam Points</h3><ul><li>TAC temporaries are unlimited; real registers are limited.</li><li>Poor register allocation can destroy earlier optimization benefits.</li><li>RISC targets usually require explicit load/store instructions.</li><li>CISC targets may allow more complex memory operands.</li><li>Target code generation is a 1:N mapping from IR instructions to assembly/machine instructions.</li></ul></aside>
+</section><section id="practice" data-title="Practice Questions &amp; Solutions"><h2>Practice Questions &amp; Solutions</h2>
+<p class="source-tag">Practice sources included: CC FInal Exam Practice Questions (1).docx, Semantics practice worksheets.docx, and the exam-style Compiler Construction_final_v1.pdf found in the upload folder.</p>
+<p>Solutions are collapsed by default. Each card states the source question first, then gives the worked answer.</p>
+
+<details class="question-card">
+  <summary>
+    <span class="q-num">1</span>
+    <span class="q-topic">Parsing Fundamentals</span>
+    <span class="q-text">Q1: What is the fundamental difference between top-down and bottom-up parsing in terms of parse tree construction?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>Top-down parsing starts at the start symbol and constructs the parse tree from root to leaves, usually following a leftmost derivation. Bottom-up parsing starts with the input tokens and reduces handles until the start symbol remains, reconstructing a rightmost derivation in reverse.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">2</span>
+    <span class="q-topic">Parsing Fundamentals</span>
+    <span class="q-text">Q2: Define handle. In bottom-up parsing, why is identifying the correct handle crucial?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>A handle is the substring on top of the stack that matches the body of the production that must be reduced next. If the parser reduces the wrong handle, it no longer follows the reverse rightmost derivation and can reach a wrong tree or a conflict.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">3</span>
+    <span class="q-topic">Shift-Reduce Parsing</span>
+    <span class="q-text">Q3: List and briefly explain the four possible actions in a shift-reduce parser.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution"><div class="table-scroll "><table><thead><tr><th>Action</th><th>Explanation</th></tr></thead><tbody><tr><td>Shift</td><td>Push next input symbol onto the stack.</td></tr><tr><td>Reduce</td><td>Replace a handle by a production head.</td></tr><tr><td>Accept</td><td>Input is consumed and the stack has the start symbol.</td></tr><tr><td>Error</td><td>No valid table action exists.</td></tr></tbody></table></div></div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">4</span>
+    <span class="q-topic">Shift-Reduce Parsing</span>
+    <span class="q-text">Q4: What is a shift-reduce conflict? Give a small grammar example that causes it.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>A shift/reduce conflict occurs when the parser can either shift the lookahead or reduce the stack handle.</p>
+<div class="code-wrap grammar"><pre><code>S -&gt<span class="comment">; a A B e</span>
+A -&gt<span class="comment">; A b c | b</span>
+B -&gt<span class="comment">; d</span>
+
+At stack $ a b with lookahead b, the parser may <span class="kw">reduce</span> b -&gt<span class="comment">; A or <span class="kw">shift</span> b.</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">5</span>
+    <span class="q-topic">Shift-Reduce Parsing</span>
+    <span class="q-text">Q5: What is a reduce-reduce conflict? Provide an example.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>A reduce/reduce conflict occurs when the same stack content can be reduced by more than one production.</p>
+<div class="code-wrap grammar"><pre><code>S -&gt<span class="comment">; b | a A B e</span>
+A -&gt<span class="comment">; b</span>
+B -&gt<span class="comment">; d</span>
+
+At stack $ b, both S -&gt<span class="comment">; b and A -&gt; b may be possible in a poorly designed table.</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">6</span>
+    <span class="q-topic">LR Parsing</span>
+    <span class="q-text">Q6: What does LR(k) stand for? Explain the meaning of each component (L, R, k).</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p><strong>L</strong> means scanning input left to right. <strong>R</strong> means producing a rightmost derivation in reverse. <strong>k</strong> is the number of lookahead symbols used to decide shift/reduce actions.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">7</span>
+    <span class="q-topic">LR Parsing</span>
+    <span class="q-text">Q7: Why is LR(1) more powerful than SLR(1)?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>SLR(1) uses FOLLOW(A) for every completed item A -> alpha., so it may reduce on lookaheads that are too broad. LR(1) stores a specific lookahead inside each item, so reductions occur only in the contexts where they are valid.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">8</span>
+    <span class="q-topic">LR Parsing</span>
+    <span class="q-text">Q8: What is the canonical collection of LR(1) items? How does it differ from LR(0) items?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>The canonical LR(1) collection is the full set of LR(1) item states built by CLOSURE and GOTO. An LR(0) item has only a dotted production; an LR(1) item has a dotted production plus a lookahead terminal, written A -> alpha . beta, a.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">9</span>
+    <span class="q-topic">LALR vs LR</span>
+    <span class="q-text">Q9: How does an LALR(1) parser differ from an LR(1) parser in terms of parse table size and power?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>Canonical LR(1) keeps all distinct LR(1) states, so its table is larger and most precise. LALR(1) merges LR(1) states with identical LR(0) cores, giving much smaller tables with slightly less power.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">10</span>
+    <span class="q-topic">LALR vs LR</span>
+    <span class="q-text">Q10: Can an LALR(1) parser have conflicts where LR(1) does not? If yes, why?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>Yes. When LALR merges states with the same core, their lookahead sets are unioned. A lookahead that was safe in one CLR state may become attached to an item in another state, creating a shift/reduce or reduce/reduce conflict.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">11</span>
+    <span class="q-topic">Practical Parsing</span>
+    <span class="q-text">Q11: Why is LALR(1) more commonly used in practice than LR(1) for programming languages?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>LALR(1) tables are much smaller while handling most programming-language grammars. This makes parser generators practical in memory and table size while retaining most LR(1) parsing power.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">12</span>
+    <span class="q-topic">Practical Parsing</span>
+    <span class="q-text">Q12: In bottom-up parsing, how are syntax errors detected? Compare with top-down error detection.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>A bottom-up parser detects an error when the ACTION table has no valid entry for the current state/lookahead. A top-down parser detects an error when the stack nonterminal and lookahead have no predictive-table production, or when a terminal on the stack does not match the input.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">13</span>
+    <span class="q-topic">Viable Prefixes</span>
+    <span class="q-text">Q13: Define viable prefix. Why is the LR parsing algorithm guaranteed to never shift an invalid symbol onto the stack?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>A viable prefix is a prefix of a right-sentential form that does not extend beyond the right end of a handle. LR automaton states recognize viable prefixes; if no transition/action exists, the parser reports an error instead of shifting.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">14</span>
+    <span class="q-topic">Viable Prefixes</span>
+    <span class="q-text">Q14: What is the significance of the LR(0) automaton in constructing SLR(1) tables?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>The LR(0) automaton supplies the parser states and shift/goto transitions. SLR(1) then adds reductions to those states only under FOLLOW sets of the production heads.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">15</span>
+    <span class="q-topic">Ambiguity and Conflicts</span>
+    <span class="q-text">Q15: Can an ambiguous grammar be used in LR parsing? If so, how are conflicts resolved?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>An ambiguous grammar usually creates LR conflicts. Parser generators can sometimes still use it if precedence, associativity, or explicit conflict-resolution declarations select the intended action, but an unambiguous grammar is safer for exams.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">16</span>
+    <span class="q-topic">Ambiguity and Conflicts</span>
+    <span class="q-text">Q16: Explain how operator precedence and associativity can be used to resolve shift-reduce conflicts in LR parsing.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>If the lookahead operator has higher precedence than the operator in the handle, shift. If the handle operator has higher precedence, reduce. If precedences are equal, left associativity chooses reduce and right associativity chooses shift.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">17</span>
+    <span class="q-topic">LALR Practice</span>
+    <span class="q-text">Construct LALR(1) items. Show ACTION[state,int] and ACTION[state,id]. Parse: int a, b; float c;.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>The source prompt omits the grammar, so the solution uses the declaration grammar implied by the semantic/declaration worksheet:</p>
+<div class="code-wrap grammar"><pre><code>P' -&gt<span class="comment">; P</span>
+P  -&gt<span class="comment">; D P | epsilon</span>
+D  -&gt<span class="comment">; T L ;</span>
+T  -&gt<span class="comment">; <span class="kw">int</span> | <span class="kw">float</span></span>
+L  -&gt<span class="comment">; L , id | id</span></code></pre></div>
+<div class="table-scroll "><table><thead><tr><th>State</th><th>Core items</th><th>ACTION int</th><th>ACTION id</th></tr></thead><tbody><tr><td>J0</td><td>P'-&gt;.P; P-&gt;.DP; P-&gt;.; D-&gt;.TL; T-&gt;.int; T-&gt;.float</td><td>s5</td><td></td></tr><tr><td>J1</td><td>P-&gt;D.P; P-&gt;.DP; P-&gt;.; D-&gt;.TL; T-&gt;.int; T-&gt;.float</td><td>s5</td><td></td></tr><tr><td>J2</td><td>P'-&gt;P.</td><td></td><td></td></tr><tr><td>J3</td><td>D-&gt;T.L; L-&gt;.L,id; L-&gt;.id</td><td></td><td>s8</td></tr><tr><td>J4</td><td>T-&gt;float.</td><td></td><td>r5</td></tr><tr><td>J5</td><td>T-&gt;int.</td><td></td><td>r4</td></tr><tr><td>J6</td><td>P-&gt;DP.</td><td></td><td></td></tr><tr><td>J7</td><td>D-&gt;TL.; L-&gt;L.,id</td><td></td><td></td></tr><tr><td>J8</td><td>L-&gt;id.</td><td></td><td></td></tr><tr><td>J9</td><td>L-&gt;L,.id</td><td></td><td>s11</td></tr><tr><td>J10</td><td>D-&gt;TL;.</td><td>r3</td><td></td></tr><tr><td>J11</td><td>L-&gt;L,id.</td><td></td><td></td></tr></tbody></table></div>
+<div class="code-wrap grammar"><div class="code-title">Parse trace</div><pre><code>Input: <span class="kw">int</span> id , id <span class="comment">; <span class="kw">float</span> id ; $</span>
+
+<span class="num">0</span> <span class="kw">int</span> -&gt<span class="comment">; s5</span>
+<span class="kw">reduce</span> T -&gt<span class="comment">; <span class="kw">int</span>; <span class="kw">goto</span>(<span class="num">0</span>,T)=<span class="num">3</span></span>
+<span class="num">3</span> id -&gt<span class="comment">; s8; <span class="kw">reduce</span> L -&gt; id; <span class="kw">goto</span>(<span class="num">3</span>,L)=<span class="num">7</span></span>
+<span class="num">7</span> , -&gt<span class="comment">; s9; <span class="num">9</span> id -&gt; s11; <span class="kw">reduce</span> L -&gt; L , id; <span class="kw">goto</span>(<span class="num">3</span>,L)=<span class="num">7</span></span>
+<span class="num">7</span> <span class="comment">; -&gt; s10; <span class="kw">reduce</span> D -&gt; T L ; ; <span class="kw">goto</span>(<span class="num">0</span>,D)=<span class="num">1</span></span>
+<span class="num">1</span> <span class="kw">float</span> -&gt<span class="comment">; s4; <span class="kw">reduce</span> T -&gt; <span class="kw">float</span>; <span class="kw">goto</span>(<span class="num">1</span>,T)=<span class="num">3</span></span>
+<span class="num">3</span> id -&gt<span class="comment">; s8; <span class="kw">reduce</span> L -&gt; id; <span class="kw">goto</span>(<span class="num">3</span>,L)=<span class="num">7</span></span>
+<span class="num">7</span> <span class="comment">; -&gt; s10; <span class="kw">reduce</span> D -&gt; T L ; ; <span class="kw">goto</span>(<span class="num">1</span>,D)=<span class="num">1</span></span>
+<span class="num">1</span> $ -&gt<span class="comment">; <span class="kw">reduce</span> P -&gt; epsilon; <span class="kw">reduce</span> P -&gt; D P; <span class="kw">reduce</span> P -&gt; D P; <span class="kw">accept</span></span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">18</span>
+    <span class="q-topic">LALR Practice</span>
+    <span class="q-text">Build the LALR(1) parsing states. Show the shift/reduce resolution for the dangling else. Trace parsing for: if ( id < num ) if ( id > num ) stmt else stmt.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><div class="code-title">Dangling-else grammar</div><pre><code>S -&gt<span class="comment">; <span class="kw">if</span> ( C ) S</span>
+S -&gt<span class="comment">; <span class="kw">if</span> ( C ) S <span class="kw">else</span> S</span>
+S -&gt<span class="comment">; stmt</span>
+C -&gt<span class="comment">; id &lt; num | id &gt; num</span></code></pre></div>
+<p>The conflict state has the core <code class="inline-code grammar">S -&gt; if ( C ) S .</code> and <code class="inline-code grammar">S -&gt; if ( C ) S . else S</code>. On lookahead <code class="inline-code grammar">else</code>, the standard resolution is <strong>shift</strong>, attaching else to the nearest unmatched if.</p>
+<div class="code-wrap grammar"><div class="code-title">Dangling else trace</div><pre><code>Input shape:
+<span class="kw">if</span> (C1) <span class="kw">if</span> (C2) stmt <span class="kw">else</span> stmt
+
+Trace:
+<span class="kw">shift</span> outer <span class="kw">if</span> (C1)
+<span class="kw">shift</span> inner <span class="kw">if</span> (C2)
+<span class="kw">reduce</span> stmt -&gt<span class="comment">; S</span>
+lookahead <span class="kw">else</span> in conflict state: <span class="kw">shift</span> <span class="kw">else</span>
+<span class="kw">shift</span> final stmt<span class="comment">; <span class="kw">reduce</span> stmt -&gt; S</span>
+<span class="kw">reduce</span> inner <span class="kw">if</span> (C2) S <span class="kw">else</span> S -&gt<span class="comment">; S</span>
+<span class="kw">reduce</span> outer <span class="kw">if</span> (C1) S -&gt<span class="comment">; S</span>
+<span class="kw">accept</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">19</span>
+    <span class="q-topic">Semantic Errors</span>
+    <span class="q-text">Identify the Semantic, Lexical and Semantic errors in the given code snippets, and write corrected versions in table format.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="table-scroll "><table><thead><tr><th>Snippet</th><th>Error class</th><th>Problem</th><th>Correction</th></tr></thead><tbody><tr><td>int 123var = 10;</td><td>Lexical</td><td>Identifier starts with digits</td><td>int var123 = 10;</td></tr><tr><td>int b == 20;</td><td>Syntax</td><td>== is comparison, not declaration assignment</td><td>int b = 20;</td></tr><tr><td>int c = "hello";</td><td>Semantic</td><td>String assigned to int</td><td>int c = 30; or char/string c</td></tr><tr><td>printf(... 123var + b + c)</td><td>Lexical/Semantic</td><td>Uses invalid identifier and possibly wrong type</td><td>printf("%d", var123 + b + c);</td></tr><tr><td>int* p = &amp;f; where f is float</td><td>Semantic</td><td>float* assigned to int*</td><td>float* p = &amp;f;</td></tr><tr><td>if x &gt; 10 {</td><td>Syntax/Semantic</td><td>Missing parentheses; x undeclared</td><td>if (f &gt; 10) { ... } or declare x</td></tr><tr><td>arr[5] with int arr[3]</td><td>Semantic</td><td>Array index out of bounds</td><td>arr[2] = 100;</td></tr></tbody></table></div>
+<div class="code-wrap tac"><div class="code-title">Corrected code</div><pre><code><span class="comment">#include &lt;stdio.h&gt;</span>
+<span class="kw">int</span> main() {
+  <span class="kw">int</span> var123 = <span class="num">10</span><span class="comment">;</span>
+  <span class="kw">int</span> b = <span class="num">20</span><span class="comment">;</span>
+  <span class="kw">int</span> c = <span class="num">30</span><span class="comment">;</span>
+  printf("%d", var123 + b + c)<span class="comment">;</span>
+  <span class="kw">return</span> <span class="num">0</span><span class="comment">;</span>
+}
+
+<span class="comment">#include &lt;iostream&gt;</span>
+using namespace std<span class="comment">;</span>
+<span class="kw">int</span> main() {
+  <span class="kw">float</span> f = <span class="num">5.5</span><span class="comment">;</span>
+  <span class="kw">float</span>* p = &amp<span class="comment">;f;</span>
+  <span class="kw">if</span> (f &gt<span class="comment">; <span class="num">10</span>) {</span>
+    cout &lt<span class="comment">;&lt; "Large";</span>
+  }
+  <span class="kw">int</span> arr[<span class="num">3</span>]<span class="comment">;</span>
+  arr[<span class="num">2</span>] = <span class="num">100</span><span class="comment">;</span>
+  <span class="kw">return</span> <span class="num">0</span><span class="comment">;</span>
+}</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">20</span>
+    <span class="q-topic">Semantic Attributes</span>
+    <span class="q-text">For the given grammar, list S and L attributes, draw the annotated parse tree and dependency graph for (5 + 3.2) * 4.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>Attributes <code class="inline-code grammar">E.type, E.code, T.type, T.code, F.type, F.code</code> are synthesized because they are computed from children. Lexical values <code class="inline-code grammar">num.val</code> and <code class="inline-code grammar">real.val</code> are token attributes. No inherited attributes are needed for this expression grammar, so it is S-attributed and therefore L-attributed.</p>
+<div class="code-wrap grammar"><pre><code><span class="num">5</span>       : integer, code=<span class="num">5</span>
+<span class="num">3.2</span>     : real,    code=<span class="num">3.2</span>
+<span class="num">5</span>+<span class="num">3.2</span>   : max(integer, real)=real, code=t1 = <span class="num">5</span> + <span class="num">3.2</span>
+<span class="num">4</span>       : integer, code=<span class="num">4</span>
+(...)*<span class="num">4</span> : max(real, integer)=real, code=t2 = t1 * <span class="num">4</span>
+
+Dependency order:
+<span class="num">5</span>.type -&gt<span class="comment">; inner E.type</span>
+<span class="num">3.2</span>.type -&gt<span class="comment">; inner E.type</span>
+inner E.type -&gt<span class="comment">; outer T.type</span>
+<span class="num">4</span>.type -&gt<span class="comment">; outer T.type</span></code></pre></div>
+
+<div class="svg-panel">
+<svg viewBox="0 0 720 460" role="img" aria-label="Annotated parse tree showing type attributes">
+  <text x="360" y="32" text-anchor="middle" class="svg-title">Annotated Parse Tree: (5 + 3.2) * 4</text>
+  <g class="tree">
+    <circle cx="360" cy="80" r="38"/><text x="360" y="76">E</text><text x="360" y="95" class="tiny">type=real</text>
+    <circle cx="360" cy="165" r="38"/><text x="360" y="161">T</text><text x="360" y="180" class="tiny">real</text>
+    <circle cx="230" cy="255" r="38"/><text x="230" y="251">T</text><text x="230" y="270" class="tiny">real</text>
+    <circle cx="490" cy="255" r="34"/><text x="490" y="251">F</text><text x="490" y="270" class="tiny">int</text>
+    <circle cx="160" cy="345" r="34"/><text x="160" y="341">F</text><text x="160" y="360" class="tiny">int:5</text>
+    <circle cx="300" cy="345" r="38"/><text x="300" y="341">F</text><text x="300" y="360" class="tiny">real:3.2</text>
+    <circle cx="490" cy="345" r="34"/><text x="490" y="341">num</text><text x="490" y="360" class="tiny">4</text>
+    <text x="360" y="253" class="op-node">*</text><text x="230" y="327" class="op-node">+</text>
+    <path d="M360 118 L360 127" class="tree-edge"/>
+    <path d="M342 198 L255 230" class="tree-edge"/><path d="M378 198 L465 230" class="tree-edge"/>
+    <path d="M212 287 L176 318" class="tree-edge"/><path d="M248 287 L282 318" class="tree-edge"/>
+    <path d="M490 289 L490 311" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">21</span>
+    <span class="q-topic">Semantic Attributes</span>
+    <span class="q-text">Show the annotated parse tree for: float x = 3.14, y = x + 2.5;</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>The inherited attribute is <code class="inline-code grammar">L.in_type</code>, passed from <code class="inline-code grammar">T.type</code>. The synthesized attributes are <code class="inline-code grammar">E.type</code> and the environments <code class="inline-code grammar">L.env/D.env</code>.</p>
+<div class="code-wrap grammar"><pre><code>T -&gt<span class="comment">; <span class="kw">float</span>             T.type = real</span>
+L.in_type = real
+
+x = <span class="num">3.14</span>:
+  addtype(x, real)
+  E.type = real
+  checktype(real, real) passes
+  env1 = { x: real }
+
+y = x + <span class="num">2.5</span>:
+  L1.in_type = real
+  lookup(x, env1) = real
+  <span class="num">2.5</span>.type = real
+  E.type = max(real, real) = real
+  checktype(real, real) passes
+  env2 = { x: real, y: real }</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">22</span>
+    <span class="q-topic">TAC / DAG / Assembly</span>
+    <span class="q-text">Convert the expressions m, n, p, q into 3-address code, DAG, and assembly code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap tac"><div class="code-title">Three-address code</div><pre><code>m = (a + b) * c - (a + b) / d
+t1 = a + b
+t2 = t1 * c
+t3 = t1 / d
+m  = t2 - t3
+
+n = x*y + z*y + x*w + z*w
+<span class="comment">// optimized by factoring</span>
+t1 = x + z
+t2 = y + w
+n  = t1 * t2
+
+p = a*b + b*c + c*a
+t1 = a * b
+t2 = b * c
+t3 = c * a
+t4 = t1 + t2
+p  = t4 + t3
+
+q = (a+b+c)*(a+b+c) - a*a - b*b - c*c
+t1 = a + b
+t2 = t1 + c
+t3 = t2 * t2
+t4 = a * a
+t5 = t3 - t4
+t6 = b * b
+t7 = t5 - t6
+t8 = c * c
+q  = t7 - t8</code></pre></div>
+
+<div class="svg-panel">
+<svg viewBox="0 0 720 430" role="img" aria-label="DAG for m equals a plus b times c minus a plus b divided by d">
+  <text x="360" y="32" text-anchor="middle" class="svg-title">DAG: m = (a + b) * c - (a + b) / d</text>
+  <g class="dag">
+    <circle cx="360" cy="85" r="32"/><text x="360" y="91">-</text><text x="405" y="90" class="tiny">m</text>
+    <circle cx="230" cy="175" r="32"/><text x="230" y="181">*</text>
+    <circle cx="490" cy="175" r="32"/><text x="490" y="181">/</text>
+    <circle cx="360" cy="275" r="32"/><text x="360" y="281">+</text><text x="403" y="280" class="tiny">t1</text>
+    <rect x="88" y="330" width="58" height="42" rx="6"/><text x="117" y="357">a</text>
+    <rect x="190" y="330" width="58" height="42" rx="6"/><text x="219" y="357">b</text>
+    <rect x="486" y="330" width="58" height="42" rx="6"/><text x="515" y="357">c</text>
+    <rect x="588" y="330" width="58" height="42" rx="6"/><text x="617" y="357">d</text>
+    <path d="M340 110 L253 154" class="tree-edge"/><path d="M380 110 L468 154" class="tree-edge"/>
+    <path d="M245 201 L340 254" class="tree-edge"/><path d="M475 201 L380 254" class="tree-edge"/>
+    <path d="M224 205 L512 330" class="tree-edge"/><path d="M505 203 L614 330" class="tree-edge"/>
+    <path d="M342 302 L134 330" class="tree-edge"/><path d="M350 306 L232 330" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+<div class="code-wrap asm"><div class="code-title">Assembly pattern</div><pre><code><span class="comment">; m</span>
+LOAD R1, a
+ADD  R1, b
+MOV  R2, R1
+MUL  R2, c
+DIV  R1, d
+SUB  R2, R1
+STORE m, R2
+
+<span class="comment">; n optimized as (x+z)(y+w)</span>
+LOAD R1, x
+ADD  R1, z
+LOAD R2, y
+ADD  R2, w
+MUL  R1, R2
+STORE n, R1</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">23</span>
+    <span class="q-topic">Optimization</span>
+    <span class="q-text">Optimize the six code snippets and identify the optimization technique.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="table-scroll "><table><thead><tr><th>Snippet</th><th>Technique</th><th>Optimized result</th></tr></thead><tbody><tr><td>1</td><td>Loop-invariant code motion + strength reduction</td><td>Move t1=n*4 before L1; maintain offset=i*4 by adding 4 each iteration.</td></tr><tr><td>2</td><td>Loop strength reduction</td><td>Move row=i*n outside inner loop; inside use t1=row+j.</td></tr><tr><td>3</td><td>Constant folding, CSE, algebraic simplification</td><td>t6 = a + b</td></tr><tr><td>4</td><td>Function inlining</td><td>Replace call square(a) by t1 = a * a.</td></tr><tr><td>5</td><td>Redundant load/store elimination</td><td>After store, reuse known value instead of loading R1 again.</td></tr><tr><td>6</td><td>Copy propagation + strength reduction</td><td>Use x directly; z = x * 2 or z = x + x.</td></tr></tbody></table></div>
+<div class="code-wrap tac"><pre><code>Snippet <span class="num">1</span> optimized:
+t1 = n * <span class="num">4</span>
+i = <span class="num">0</span>
+offset = <span class="num">0</span>
+L1: <span class="kw">if</span> i &gt<span class="comment">;= n <span class="kw">goto</span> L2</span>
+t3 = arr[offset]
+t4 = t3 * t1
+result = result + t4
+i = i + <span class="num">1</span>
+offset = offset + <span class="num">4</span>
+<span class="kw">goto</span> L1
+
+Snippet <span class="num">3</span> optimized:
+t6 = a + b</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">24</span>
+    <span class="q-topic">Assembly</span>
+    <span class="q-text">Following are the 3-address codes given; convert them into assembly language.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap tac"><div class="code-title">Input TAC</div><pre><code>t1 = x * <span class="num">5</span>
+y = t1 + <span class="num">3</span>
+z = t1 * <span class="num">2</span>
+
+<span class="kw">if</span> a == <span class="num">0</span> <span class="kw">goto</span> L2
+<span class="kw">if</span> b == <span class="num">0</span> <span class="kw">goto</span> L2
+result = <span class="num">1</span>
+<span class="kw">goto</span> L3
+L2: result = <span class="num">0</span>
+L3: ...</code></pre></div>
+<div class="code-wrap asm"><div class="code-title">Assembly solution</div><pre><code><span class="kw">mov</span> eax, [x]
+<span class="kw">imul</span> eax, <span class="num">5</span>
+<span class="kw">mov</span> [t1], eax
+<span class="kw">mov</span> ebx, eax
+<span class="kw">add</span> ebx, <span class="num">3</span>
+<span class="kw">mov</span> [y], ebx
+<span class="kw">mov</span> ebx, [t1]
+<span class="kw">imul</span> ebx, <span class="num">2</span>
+<span class="kw">mov</span> [z], ebx
+
+<span class="kw">cmp</span> dword [a], <span class="num">0</span>
+je L2
+<span class="kw">cmp</span> dword [b], <span class="num">0</span>
+je L2
+<span class="kw">mov</span> dword [result], <span class="num">1</span>
+<span class="kw">jmp</span> L3
+L2:
+<span class="kw">mov</span> dword [result], <span class="num">0</span>
+L3:</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">25</span>
+    <span class="q-topic">Code to TAC</span>
+    <span class="q-text">Convert the radius/area C code into three-address code and assembly code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap tac"><div class="code-title">Three-address code</div><pre><code>pi = <span class="num">3</span>
+i = <span class="num">0</span>
+L1: <span class="kw">if</span> i &gt<span class="comment">;= <span class="num">4</span> <span class="kw">goto</span> L2</span>
+t1 = i + <span class="num">2</span>
+radius = t1
+t2 = pi * radius
+t3 = t2 * radius
+area = t3
+<span class="kw">param</span> "Area: %d\n"
+<span class="kw">param</span> area
+<span class="kw">call</span> printf, <span class="num">2</span>
+i = i + <span class="num">1</span>
+<span class="kw">goto</span> L1
+L2: <span class="kw">return</span> <span class="num">0</span></code></pre></div>
+<div class="code-wrap asm"><div class="code-title">Assembly solution</div><pre><code>main:
+<span class="kw">mov</span> dword [pi], <span class="num">3</span>
+<span class="kw">mov</span> dword [i], <span class="num">0</span>
+loop_start:
+<span class="kw">cmp</span> dword [i], <span class="num">4</span>
+jge loop_end
+<span class="kw">mov</span> eax, [i]
+<span class="kw">add</span> eax, <span class="num">2</span>
+<span class="kw">mov</span> [radius], eax
+<span class="kw">mov</span> eax, [pi]
+<span class="kw">imul</span> eax, [radius]
+<span class="kw">imul</span> eax, [radius]
+<span class="kw">mov</span> [area], eax
+<span class="kw">push</span> dword [area]
+<span class="kw">push</span> format_string
+<span class="kw">call</span> printf
+<span class="kw">add</span> esp, <span class="num">8</span>
+<span class="kw">inc</span> dword [i]
+<span class="kw">jmp</span> loop_start
+loop_end:
+<span class="kw">mov</span> eax, <span class="num">0</span>
+<span class="kw">ret</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">26</span>
+    <span class="q-topic">Semantic Worksheet</span>
+    <span class="q-text">Semantic Analysis occurs after which phase and before which phase? What is the primary input? What data structure is built and used?</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>Answer: <strong>B</strong>, after Syntax Analysis and before Code Generation. The primary input is the Abstract Syntax Tree or syntax tree, together with symbol-table information. The main data structure is the symbol table.</p>
+<p>Three primary tasks are type checking, scope resolution, and declaration/function-call checking.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">27</span>
+    <span class="q-topic">Symbol Table</span>
+    <span class="q-text">Fill the symbol table for the main function scope and explain what happens to for-loop variable i.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution"><div class="table-scroll "><table><thead><tr><th>Name</th><th>Type</th><th>Scope</th></tr></thead><tbody><tr><td>radius</td><td>float</td><td>main function block</td></tr><tr><td>area</td><td>float</td><td>main function block</td></tr><tr><td>count</td><td>int</td><td>main function block</td></tr><tr><td>i</td><td>int</td><td>for-loop block only</td></tr></tbody></table></div><p>When the semantic analyzer leaves the for-loop block, the entry for <code>i</code> is removed from the active scope or marked out of scope. It is no longer visible after the loop.</p></div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">28</span>
+    <span class="q-topic">Type Checking</span>
+    <span class="q-text">Identify the semantic error and type of error for the worksheet snippets.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution"><div class="table-scroll "><table><thead><tr><th>Snippet</th><th>Error</th><th>Type</th></tr></thead><tbody><tr><td>int x = "hello";</td><td>String literal assigned to integer</td><td>Type mismatch</td></tr><tr><td>{ int y = 10; } y = y + 5;</td><td>y used outside its block</td><td>Scope violation</td></tr><tr><td>result = 5 + true;</td><td>Arithmetic applied to int and boolean</td><td>Type mismatch</td></tr><tr><td>int foo() { }</td><td>Function declared int but returns no value</td><td>Return-type error</td></tr></tbody></table></div></div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">29</span>
+    <span class="q-topic">SDD / SDT</span>
+    <span class="q-text">Match SDD, SDT, Synthesized Attribute, and Inherited Attribute with their definitions.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution"><div class="table-scroll "><table><thead><tr><th>Term</th><th>Correct definition</th></tr></thead><tbody><tr><td>Syntax-Directed Definition (SDD)</td><td>B. A context-free grammar with attributes and semantic rules</td></tr><tr><td>Syntax-Directed Translation (SDT)</td><td>C. Program fragments embedded within grammar productions</td></tr><tr><td>Synthesized Attribute</td><td>D. Attribute whose value depends only on children nodes</td></tr><tr><td>Inherited Attribute</td><td>A. Attribute whose value depends on parent or sibling nodes</td></tr></tbody></table></div></div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">30</span>
+    <span class="q-topic">SDD / SDT</span>
+    <span class="q-text">Answer: S-attributed vs L-attributed; why inherited attributes are hard in LR; advantage of SDD/SDT.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>S-attributed definitions use only synthesized attributes. L-attributed definitions may use inherited attributes, but only from the parent or left siblings, so they can be evaluated left to right.</p>
+<p>Inherited attributes do not naturally fit plain LR reductions because LR computes attributes at reduction time after the right-hand side is recognized. Inherited values may be needed before a child is parsed, so marker nonterminals, stack fields, or grammar rewriting may be required.</p>
+<p>SDD/SDT integrates semantic computation with grammar structure, making type checking, tree construction, and intermediate-code generation systematic.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">31</span>
+    <span class="q-topic">S-Attributed Evaluation</span>
+    <span class="q-text">For expression 3 * (2 + 4), show parse tree attributes and computation order.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code>digit <span class="num">3</span> -&gt<span class="comment">; F.val=<span class="num">3</span> -&gt; T.val=<span class="num">3</span></span>
+digit <span class="num">2</span> -&gt<span class="comment">; F.val=<span class="num">2</span> -&gt; T.val=<span class="num">2</span> -&gt; E.val=<span class="num">2</span></span>
+digit <span class="num">4</span> -&gt<span class="comment">; F.val=<span class="num">4</span> -&gt; T.val=<span class="num">4</span></span>
+E -&gt<span class="comment">; E + T gives <span class="num">2</span> + <span class="num">4</span> = <span class="num">6</span></span>
+F -&gt<span class="comment">; (E) gives F.val = <span class="num">6</span></span>
+T -&gt<span class="comment">; T * F gives <span class="num">3</span> * <span class="num">6</span> = <span class="num">18</span></span>
+E -&gt<span class="comment">; T gives E.val = <span class="num">18</span></span>
+
+Final value: <span class="num">18</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">32</span>
+    <span class="q-topic">S-Attributed Evaluation</span>
+    <span class="q-text">Compute the value for expression: (8 - 2) / 3 * 2.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code><span class="num">8</span> - <span class="num">2</span> = <span class="num">6</span>
+(<span class="num">8</span> - <span class="num">2</span>) / <span class="num">3</span> = <span class="num">2</span>
+<span class="num">2</span> * <span class="num">2</span> = <span class="num">4</span>
+
+Final Value: <span class="num">4</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">33</span>
+    <span class="q-topic">L-Attributed Declarations</span>
+    <span class="q-text">For float x, y, z and int a, b, c, d, show inherited type flow.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code><span class="kw">float</span> x, y, z:
+T.type = <span class="kw">float</span>
+L.inh = <span class="kw">float</span>
+addType(x,<span class="kw">float</span>)
+pass L.inh to remaining list
+addType(y,<span class="kw">float</span>)
+addType(z,<span class="kw">float</span>)
+
+<span class="kw">int</span> a, b, c, d:
+T.type = integer
+L.inh = integer
+addType(a,<span class="kw">int</span>)
+addType(b,<span class="kw">int</span>)
+addType(c,<span class="kw">int</span>)
+addType(d,<span class="kw">int</span>)</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">34</span>
+    <span class="q-topic">Attributes</span>
+    <span class="q-text">Classify each attribute and mark rules legal for synthesized/inherited.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution"><div class="table-scroll "><table><thead><tr><th>Item</th><th>Classification / legality</th></tr></thead><tbody><tr><td>E.val</td><td>Synthesized: expression value is computed upward</td></tr><tr><td>decl.type</td><td>Synthesized when produced by T -&gt; int/float</td></tr><tr><td>var.env</td><td>Inherited when symbol-table environment is passed downward</td></tr><tr><td>L.inh</td><td>Inherited: carries declaration type into an identifier list</td></tr><tr><td>S.code</td><td>Synthesized: generated code is accumulated upward</td></tr><tr><td>A.val = B.val + C.val</td><td>Synthesized rule</td></tr><tr><td>B.inh = A.inh + 1</td><td>Inherited rule</td></tr><tr><td>S.code = generate(code)</td><td>Synthesized rule</td></tr></tbody></table></div></div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">35</span>
+    <span class="q-topic">S-Attributed SDD</span>
+    <span class="q-text">For input 3 + 4 * 5, annotate .val attributes, say if S-attributed, and write LR SDT actions.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code><span class="num">4</span> * <span class="num">5</span> = <span class="num">20</span>
+<span class="num">3</span> + <span class="num">20</span> = <span class="num">23</span>
+
+Attribute values:
+F(<span class="num">3</span>).val=<span class="num">3</span>, T(<span class="num">3</span>).val=<span class="num">3</span>
+F(<span class="num">4</span>).val=<span class="num">4</span>, T(<span class="num">4</span>).val=<span class="num">4</span>
+F(<span class="num">5</span>).val=<span class="num">5</span>
+T -&gt<span class="comment">; T * F gives T.val=<span class="num">20</span></span>
+E -&gt<span class="comment">; E + T gives E.val=<span class="num">23</span></span>
+
+This SDD is S-attributed because every .val is synthesized.
+
+Postfix LR SDT:
+E -&gt<span class="comment">; E1 + T { E.val = E1.val + T.val }</span>
+E -&gt<span class="comment">; T      { E.val = T.val }</span>
+T -&gt<span class="comment">; T1 * F { T.val = T1.val * F.val }</span>
+T -&gt<span class="comment">; F      { T.val = F.val }</span>
+F -&gt<span class="comment">; num    { F.val = num.lexval }</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">36</span>
+    <span class="q-topic">L-Attributed SDD</span>
+    <span class="q-text">For int a, b: annotated parse tree, L-attributed check, and recursive-descent SDT.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p>The grammar is L-attributed because <code class="inline-code grammar">L.inh</code> is passed from <code class="inline-code grammar">T.type</code> to the list and then left-to-right through list nodes.</p>
+<div class="code-wrap grammar"><pre><code>D -&gt<span class="comment">; T L</span>
+T -&gt<span class="comment">; <span class="kw">int</span> { T.type = <span class="kw">int</span> }</span>
+{ L.inh = T.type }
+L -&gt<span class="comment">; L1 , id</span>
+     { L1.inh = L.inh }
+     { id.type = L.inh }
+L -&gt<span class="comment">; id</span>
+     { id.type = L.inh }
+
+For <span class="kw">int</span> a,b:
+T.type=<span class="kw">int</span>
+L.inh=<span class="kw">int</span>
+a.type=<span class="kw">int</span>
+b.type=<span class="kw">int</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">37</span>
+    <span class="q-topic">Parser Stack SDT</span>
+    <span class="q-text">Simulate stack for input 2 * 3 + 4.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code><span class="kw">shift</span> num(<span class="num">2</span>)             stack: num(<span class="num">2</span>)
+<span class="kw">reduce</span> F -&gt<span class="comment">; num          stack: F(<span class="num">2</span>)</span>
+<span class="kw">reduce</span> T -&gt<span class="comment">; F            stack: T(<span class="num">2</span>)</span>
+<span class="kw">shift</span> *
+<span class="kw">shift</span> num(<span class="num">3</span>)             stack: T(<span class="num">2</span>) * num(<span class="num">3</span>)
+<span class="kw">reduce</span> F -&gt<span class="comment">; num          stack: T(<span class="num">2</span>) * F(<span class="num">3</span>)</span>
+<span class="kw">reduce</span> T -&gt<span class="comment">; T * F        stack: T(<span class="num">6</span>)</span>
+<span class="kw">reduce</span> E -&gt<span class="comment">; T            stack: E(<span class="num">6</span>)</span>
+<span class="kw">shift</span> +
+<span class="kw">shift</span> num(<span class="num">4</span>)             stack: E(<span class="num">6</span>) + num(<span class="num">4</span>)
+<span class="kw">reduce</span> F -&gt<span class="comment">; num -&gt; T     stack: E(<span class="num">6</span>) + T(<span class="num">4</span>)</span>
+<span class="kw">reduce</span> E -&gt<span class="comment">; E + T        stack: E(<span class="num">10</span>)</span>
+Final value: <span class="num">10</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">38</span>
+    <span class="q-topic">Syntax Trees</span>
+    <span class="q-text">Draw AST for a + b * c, show mkNode/mkLeaf sequence, and modify SDD to compute type.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code>mkLeaf(id,a)
+mkLeaf(id,b)
+mkLeaf(id,c)
+t1 = mkNode('*', b, c)
+t2 = mkNode('+', a, t1)
+
+AST:
+      +
+     / \
+    a   *
+       / \
+      b   c
+
+Type extension:
+E.type = resultType(E1.type, T.type)
+T.type = resultType(T1.type, F.type)
+F.type = lookup(id.entry).type or num.type</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">39</span>
+    <span class="q-topic">S vs L</span>
+    <span class="q-text">For each SDD, state S-attributed, L-attributed, or neither.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution"><div class="table-scroll "><table><thead><tr><th>SDD</th><th>Classification</th></tr></thead><tbody><tr><td>A: A.val = B.val + C.val; B.inh = A.inh</td><td>L-attributed, not S-attributed</td></tr><tr><td>B: S.val = A.val; A.val = B.val + C.val</td><td>S-attributed, therefore L-attributed</td></tr><tr><td>C: L.inh = T.type; T.type = int</td><td>L-attributed, not S-attributed</td></tr><tr><td>D: E.val = E1.val + T.val; E.inh = 0 not used in children</td><td>L-attributed but not purely S-attributed if E.inh is part of the definition</td></tr></tbody></table></div></div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">40</span>
+    <span class="q-topic">Explicit Stack SDT</span>
+    <span class="q-text">Convert SDD to SDT with explicit stack: S -> A B C; A.val=1; B.val=A.val+1; C.val=B.val+1; S.val=C.val.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code>Input: a b c
+
+<span class="kw">reduce</span> A -&gt<span class="comment">; a       <span class="kw">push</span> A.val=<span class="num">1</span></span>
+<span class="kw">reduce</span> B -&gt<span class="comment">; b       read A.val from stack, B.val=<span class="num">2</span></span>
+<span class="kw">reduce</span> C -&gt<span class="comment">; c       read B.val from stack, C.val=<span class="num">3</span></span>
+<span class="kw">reduce</span> S -&gt<span class="comment">; A B C   S.val=<span class="num">3</span></span>
+
+Single left-to-right evaluation is possible <span class="kw">if</span> A.val is stored before B is processed.
+
+L-attributed rewrite:
+S -&gt<span class="comment">; A { B.inh = A.val } B { C.inh = B.val } C { S.val = C.val }</span>
+A -&gt<span class="comment">; a { A.val = <span class="num">1</span> }</span>
+B -&gt<span class="comment">; b { B.val = B.inh + <span class="num">1</span> }</span>
+C -&gt<span class="comment">; c { C.val = C.inh + <span class="num">1</span> }</span></code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">41</span>
+    <span class="q-topic">Tiny Language SDD</span>
+    <span class="q-text">Write SDD rules to check assignment id matches declared type, add inherited D.env, and mark attributes.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><pre><code>P -&gt<span class="comment">; D S</span>
+     { S.env = D.env }
+
+D -&gt<span class="comment">; T id ; D1</span>
+     { addtype(id.entry, T.type)<span class="comment">;</span>
+       D1.env_in = update(D.env_in, id.entry, T.type)<span class="comment">;</span>
+       D.env = D1.env<span class="comment">; }</span>
+D -&gt<span class="comment">; epsilon</span>
+     { D.env = D.env_in<span class="comment">; }</span>
+
+S -&gt<span class="comment">; id = E ; S1</span>
+     { id.type = lookup(id.entry, S.env)<span class="comment">;</span>
+       checktype(id.type, E.type)<span class="comment">;</span>
+       S1.env = S.env<span class="comment">; }</span>
+S -&gt<span class="comment">; epsilon</span>
+
+E.type, T.type, S.code are synthesized.
+D.env, S.env are inherited environments.</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">42</span>
+    <span class="q-topic">Final PDF Q1</span>
+    <span class="q-text">Find all CLR(1) items and construct CLR(1) parsing table for S' -> S; S -> id = E; E -> E + T | T; T -> id. Identify mergeable states.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><div class="code-title">CLR(1) item sets</div><pre><code>Productions:
+<span class="num">0</span> S' -&gt<span class="comment">; S</span>
+<span class="num">1</span> S  -&gt<span class="comment">; id = E</span>
+<span class="num">2</span> E  -&gt<span class="comment">; E + T</span>
+<span class="num">3</span> E  -&gt<span class="comment">; T</span>
+<span class="num">4</span> T  -&gt<span class="comment">; id</span>
+
+I0:
+S' -&gt<span class="comment">; . S, $</span>
+S  -&gt<span class="comment">; . id = E, $</span>
+
+I1: S' -&gt<span class="comment">; S ., $</span>
+I2: S -&gt<span class="comment">; id . = E, $</span>
+
+I3:
+S -&gt<span class="comment">; id = . E, $</span>
+E -&gt<span class="comment">; . E + T, $/+</span>
+E -&gt<span class="comment">; . T, $/+</span>
+T -&gt<span class="comment">; . id, $/+</span>
+
+I4:
+S -&gt<span class="comment">; id = E ., $</span>
+E -&gt<span class="comment">; E . + T, $/+</span>
+
+I5: E -&gt<span class="comment">; T ., $/+</span>
+I6: T -&gt<span class="comment">; id ., $/+</span>
+
+I7:
+E -&gt<span class="comment">; E + . T, $/+</span>
+T -&gt<span class="comment">; . id, $/+</span>
+
+I8: E -&gt<span class="comment">; E + T ., $/+</span></code></pre></div>
+<div class="table-scroll "><table><thead><tr><th>State</th><th>id</th><th>=</th><th>+</th><th>$</th><th>GOTO S</th><th>GOTO E</th><th>GOTO T</th></tr></thead><tbody><tr><td>0</td><td>s2</td><td></td><td></td><td></td><td>1</td><td></td><td></td></tr><tr><td>1</td><td></td><td></td><td></td><td>acc</td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td>s3</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>3</td><td>s6</td><td></td><td></td><td></td><td></td><td>4</td><td>5</td></tr><tr><td>4</td><td></td><td></td><td>s7</td><td>r1</td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td></td><td>r3</td><td>r3</td><td></td><td></td><td></td></tr><tr><td>6</td><td></td><td></td><td>r4</td><td>r4</td><td></td><td></td><td></td></tr><tr><td>7</td><td>s6</td><td></td><td></td><td></td><td></td><td></td><td>8</td></tr><tr><td>8</td><td></td><td></td><td>r2</td><td>r2</td><td></td><td></td><td></td></tr></tbody></table></div>
+<p>No states have identical LR(0) cores in this construction, so there are no CLR states to merge for LALR.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">43</span>
+    <span class="q-topic">Final PDF Q1b</span>
+    <span class="q-text">For each language rule, name the compiler construction phase in which the rule is checked.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution"><div class="table-scroll "><table><thead><tr><th>Rule</th><th>Phase</th></tr></thead><tbody><tr><td>Function call has the correct number of arguments</td><td>Semantic analysis</td></tr><tr><td>Digits may appear in identifiers but not as first character</td><td>Lexical analysis</td></tr><tr><td>Every variable must be declared before use</td><td>Semantic analysis</td></tr><tr><td>Assignments such as a = 42; must end with semicolon</td><td>Syntax analysis</td></tr><tr><td>Array indices are integers within valid bounds</td><td>Semantic analysis, with bounds sometimes requiring runtime support</td></tr></tbody></table></div></div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">44</span>
+    <span class="q-topic">Final PDF Q2</span>
+    <span class="q-text">Convert result and q expressions into TAC and DAG; answer TAC forms and temporary-variable role.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap tac"><pre><code>result = (a*b) + (c-d) * (a*b) / (e+f)
+t1 = a * b
+t2 = c - d
+t3 = t2 * t1
+t4 = e + f
+t5 = t3 / t4
+result = t1 + t5
+
+q = (a+b+c)*(a+b+c) - a*a - b*b - c*c
+t1 = a + b
+t2 = t1 + c
+t3 = t2 * t2
+t4 = a * a
+t5 = t3 - t4
+t6 = b * b
+t7 = t5 - t6
+t8 = c * c
+q = t7 - t8</code></pre></div>
+<p>Common TAC forms: assignment, copy, conditional jump, unconditional jump, parameter passing, call, and return. Temporaries hold intermediate results so each instruction has at most one operator and two source operands.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">45</span>
+    <span class="q-topic">Final PDF Q3</span>
+    <span class="q-text">Identify synthesized/inherited attributes and compute annotated values for ( text sub ( text sub text ) ) text.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<p><code class="inline-code grammar">B.ps</code> is inherited. <code class="inline-code grammar">B.ht</code> and <code class="inline-code grammar">B.dp</code> are synthesized.</p>
+<div class="code-wrap grammar"><pre><code>Root B0 -&gt<span class="comment">; B1 B2, with B0.ps = <span class="num">10</span></span>
+B1.ps = <span class="num">10</span>, B2.ps = <span class="num">10</span>
+B1 -&gt<span class="comment">; (B3), so B3.ps = <span class="num">10</span></span>
+B3 -&gt<span class="comment">; B4 sub B5</span>
+  B4.ps = <span class="num">10</span>
+  B5.ps = <span class="num">0.7</span> * <span class="num">10</span> = <span class="num">7</span>
+B5 -&gt<span class="comment">; (B6), so B6.ps = <span class="num">7</span></span>
+B6 -&gt<span class="comment">; B7 sub B8</span>
+  B7.ps = <span class="num">7</span>
+  B8.ps = <span class="num">0.7</span> * <span class="num">7</span> = <span class="num">4.9</span>
+
+Let h(p)=getHt(p,text), d(p)=getDp(p,text).
+B7: ht=h(<span class="num">7</span>),   dp=d(<span class="num">7</span>)
+B8: ht=h(<span class="num">4.9</span>), dp=d(<span class="num">4.9</span>)
+B6.ht = max(h(<span class="num">7</span>), h(<span class="num">4.9</span>) - <span class="num">1.75</span>)
+B6.dp = max(d(<span class="num">7</span>), d(<span class="num">4.9</span>) + <span class="num">1.75</span>)
+B3.ht = max(h(<span class="num">10</span>), B6.ht - <span class="num">2.5</span>)
+B3.dp = max(d(<span class="num">10</span>), B6.dp + <span class="num">2.5</span>)
+B2: ht=h(<span class="num">10</span>), dp=d(<span class="num">10</span>)
+B0.ht = max(B3.ht, B2.ht)
+B0.dp = max(B3.dp, B2.dp)</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">46</span>
+    <span class="q-topic">Final PDF Q3b</span>
+    <span class="q-text">Identify all semantic errors in the pointer/array/division code and write corrected code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="table-scroll "><table><thead><tr><th>Line idea</th><th>Semantic error</th><th>Correction</th></tr></thead><tbody><tr><td>cout &lt;&lt; *p before p initialized</td><td>Dereferencing uninitialized pointer</td><td>Initialize p to a valid int object before dereference</td></tr><tr><td>arr[5] for int arr[3]</td><td>Array bounds error</td><td>Use arr[0]..arr[2]</td></tr><tr><td>int z = x / y with y = 0</td><td>Division by zero</td><td>Check y != 0 or use nonzero divisor</td></tr><tr><td>int* q = (int*) &amp;c; *q = 10 where c is const</td><td>Casts away const and writes const object</td><td>Do not modify const; use non-const variable</td></tr></tbody></table></div>
+<div class="code-wrap tac"><pre><code><span class="kw">int</span> main() {
+  <span class="kw">int</span> value = <span class="num">0</span><span class="comment">;</span>
+  <span class="kw">int</span>* p = &amp<span class="comment">;value;</span>
+  cout &lt<span class="comment">;&lt; *p;</span>
+  <span class="kw">int</span> arr[<span class="num">3</span>] = {<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>}<span class="comment">;</span>
+  arr[<span class="num">2</span>] = <span class="num">10</span><span class="comment">;</span>
+  <span class="kw">int</span> x = <span class="num">10</span>, y = <span class="num">1</span><span class="comment">;</span>
+  <span class="kw">int</span> z = x / y<span class="comment">;</span>
+  const <span class="kw">int</span> c = <span class="num">5</span><span class="comment">;</span>
+  cout &lt<span class="comment">;&lt; c;</span>
+  <span class="kw">return</span> <span class="num">0</span><span class="comment">;</span>
+}</code></pre></div>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">47</span>
+    <span class="q-topic">Final PDF Q4</span>
+    <span class="q-text">Identify machine-independent optimizations in the TAC and rewrite optimized code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="table-scroll "><table><thead><tr><th>Line(s)</th><th>Optimization</th></tr></thead><tbody><tr><td>1 and 2</td><td>Common subexpression elimination: a+b computed twice</td></tr><tr><td>3</td><td>Algebraic simplification: t1 * 1 = t1</td></tr><tr><td>4</td><td>Algebraic simplification: 0 + t2 = t2</td></tr><tr><td>5</td><td>Copy propagation: t5 = t3</td></tr><tr><td>6 and 7</td><td>Common subexpression after propagation: both t1*c</td></tr><tr><td>8</td><td>Algebraic simplification: t6 - t7 = 0</td></tr><tr><td>9</td><td>Algebraic simplification: d * 0 = 0</td></tr><tr><td>10-11</td><td>Constant/copy propagation: t9 + e = e; f = e</td></tr></tbody></table></div>
+<div class="code-wrap tac"><div class="code-title">Optimized code retaining final useful assignments</div><pre><code>t1 = a + b
+t6 = t1 * c
+f  = e
+g  = t1 + b</code></pre></div>
+<p>Machine-independent optimization works on IR and is portable; machine-dependent optimization uses target registers, memory, and instruction details. A DAG shares common subexpressions, while an AST is a tree and duplicates repeated subexpressions.</p>
+</div>
+</details>
+<details class="question-card">
+  <summary>
+    <span class="q-num">48</span>
+    <span class="q-topic">Final PDF Q5</span>
+    <span class="q-text">Write the regular expression, CFG, and SDT for NewC++ function calls such as 3foo[5;7] and 1bar[9].</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="code-wrap grammar"><div class="code-title">Regular expression</div><pre><code>Function-name token:
+[A-Za-z0-9_][A-Za-z0-9_]*
+
+Call regex shape:
+[A-Za-z0-9_][A-Za-z0-9_]*\[[A-Za-z0-9_]+(<span class="comment">;[A-Za-z0-9_]+)?\]</span></code></pre></div>
+<div class="code-wrap grammar"><div class="code-title">CFG</div><pre><code>Call -&gt<span class="comment">; fname [ Arg Opt ]</span>
+Opt  -&gt<span class="comment">; ; Arg | epsilon</span>
+Arg  -&gt<span class="comment">; id | num</span></code></pre></div>
+<div class="code-wrap grammar"><div class="code-title">Syntax-directed translation</div><pre><code>Call -&gt<span class="comment">; fname [ Arg Opt ]</span>
+        { emitCall(fname.lexeme, Arg.val, Opt.val) }
+Opt -&gt<span class="comment">; ; Arg</span>
+        { Opt.val = Arg.val }
+Opt -&gt<span class="comment">; epsilon</span>
+        { Opt.val = <span class="num">0</span> }
+Arg -&gt<span class="comment">; id</span>
+        { Arg.val = id.entry }
+Arg -&gt<span class="comment">; num</span>
+        { Arg.val = num.val }</code></pre></div>
+</div>
+</details>
+</section>
+<section id="pastpaper-2025" data-title="Fall 2025 Past Paper — Solved">
+<h2>Fall 2025 Final Exam — Solved</h2>
+<p class="source-tag">Source: Compiler Construction (CS-4031) &mdash; FAST-NUCES Karachi &mdash; Fall 2025 &mdash; Total Marks: 100 &mdash; Duration: 3 hrs</p>
+<p>Complete solutions with SVG diagrams, step-by-step derivations, and verified answers for every question from the 2025 final exam paper.</p>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q1(a): CLR(1) Items & Parsing Table                                -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q1a</span>
+    <span class="q-topic">CLR(1) Parsing</span>
+    <span class="q-text">Find all CLR(1) items and construct CLR(1) parsing table for S'→S, S→id=E, E→E+T|T, T→id. Identify all mergeable states.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>Productions (Numbered)</h3>
+<div class="code-wrap grammar"><div class="code-title">Grammar</div><pre><code><span class="num">0</span>. S' → S
+<span class="num">1</span>. S  → id = E
+<span class="num">2</span>. E  → E + T
+<span class="num">3</span>. E  → T
+<span class="num">4</span>. T  → id</code></pre></div>
+
+<h3>CLR(1) Item Sets</h3>
+<div class="code-wrap grammar"><div class="code-title">Canonical LR(1) item sets</div><pre><code><span class="kw">I0:</span>
+  S' → <span class="op">.</span> S       , $
+  S  → <span class="op">.</span> id = E  , $
+
+<span class="kw">I1:</span>  GOTO(I0, S)
+  S' → S <span class="op">.</span>       , $
+
+<span class="kw">I2:</span>  GOTO(I0, id)
+  S  → id <span class="op">.</span> = E  , $
+
+<span class="kw">I3:</span>  GOTO(I2, =)
+  S  → id = <span class="op">.</span> E  , $
+  E  → <span class="op">.</span> E + T   , $/+
+  E  → <span class="op">.</span> T       , $/+
+  T  → <span class="op">.</span> id      , $/+
+
+<span class="kw">I4:</span>  GOTO(I3, E)
+  S  → id = E <span class="op">.</span>  , $
+  E  → E <span class="op">.</span> + T   , $/+
+
+<span class="kw">I5:</span>  GOTO(I3, T)
+  E  → T <span class="op">.</span>       , $/+
+
+<span class="kw">I6:</span>  GOTO(I3, id)
+  T  → id <span class="op">.</span>      , $/+
+
+<span class="kw">I7:</span>  GOTO(I4, +)
+  E  → E + <span class="op">.</span> T   , $/+
+  T  → <span class="op">.</span> id      , $/+
+
+<span class="kw">I8:</span>  GOTO(I7, T)
+  E  → E + T <span class="op">.</span>  , $/+
+
+<span class="kw">I9:</span>  GOTO(I7, id)
+  T  → id <span class="op">.</span>      , $/+
+
+<span class="comment">Note: I6 and I9 have identical core AND identical lookaheads {$, +},</span>
+<span class="comment">so I9 is the same state as I6 — GOTO(I7, id) = I6.</span></code></pre></div>
+
+<div class="svg-panel wide">
+<svg viewBox="0 0 920 520" role="img" aria-label="CLR(1) automaton for assignment grammar">
+  <defs><marker id="pp-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="460" y="30" text-anchor="middle" class="svg-title">CLR(1) Automaton</text>
+  <!-- I0 -->
+  <rect x="20" y="60" width="200" height="76" rx="8" class="svg-box"/>
+  <text x="32" y="82" class="item-head">I0</text>
+  <text x="32" y="100" class="item-text">S'→ .S , $</text>
+  <text x="32" y="116" class="item-text">S → .id=E , $</text>
+  <!-- I1 -->
+  <rect x="20" y="180" width="200" height="52" rx="8" class="svg-box"/>
+  <text x="32" y="202" class="item-head">I1</text>
+  <text x="32" y="220" class="item-text">S'→ S. , $</text>
+  <!-- I2 -->
+  <rect x="280" y="60" width="200" height="52" rx="8" class="svg-box"/>
+  <text x="292" y="82" class="item-head">I2</text>
+  <text x="292" y="100" class="item-text">S → id.=E , $</text>
+  <!-- I3 -->
+  <rect x="540" y="50" width="200" height="100" rx="8" class="svg-box"/>
+  <text x="552" y="72" class="item-head">I3</text>
+  <text x="552" y="90" class="item-text">S → id=.E , $</text>
+  <text x="552" y="106" class="item-text">E → .E+T , $/+</text>
+  <text x="552" y="122" class="item-text">E → .T , $/+</text>
+  <text x="552" y="138" class="item-text">T → .id , $/+</text>
+  <!-- I4 -->
+  <rect x="540" y="200" width="200" height="70" rx="8" class="svg-box"/>
+  <text x="552" y="222" class="item-head">I4</text>
+  <text x="552" y="240" class="item-text">S → id=E. , $</text>
+  <text x="552" y="256" class="item-text">E → E.+T , $/+</text>
+  <!-- I5 -->
+  <rect x="280" y="200" width="200" height="52" rx="8" class="svg-box"/>
+  <text x="292" y="222" class="item-head">I5</text>
+  <text x="292" y="240" class="item-text">E → T. , $/+</text>
+  <!-- I6 -->
+  <rect x="280" y="300" width="200" height="52" rx="8" class="svg-box"/>
+  <text x="292" y="322" class="item-head">I6</text>
+  <text x="292" y="340" class="item-text">T → id. , $/+</text>
+  <!-- I7 -->
+  <rect x="540" y="320" width="200" height="70" rx="8" class="svg-box"/>
+  <text x="552" y="342" class="item-head">I7</text>
+  <text x="552" y="360" class="item-text">E → E+.T , $/+</text>
+  <text x="552" y="376" class="item-text">T → .id , $/+</text>
+  <!-- I8 -->
+  <rect x="540" y="440" width="200" height="52" rx="8" class="svg-box"/>
+  <text x="552" y="462" class="item-head">I8</text>
+  <text x="552" y="480" class="item-text">E → E+T. , $/+</text>
+  <!-- Edges -->
+  <path d="M120 136 L120 180" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="130" y="162" class="edge-label">S</text>
+  <path d="M220 90 L280 86" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="248" y="78" class="edge-label">id</text>
+  <path d="M480 86 L540 90" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="508" y="78" class="edge-label">=</text>
+  <path d="M640 150 L640 200" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="650" y="178" class="edge-label">E</text>
+  <path d="M580 150 L420 200" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="490" y="168" class="edge-label">T</text>
+  <path d="M570 150 L380 300" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="460" y="230" class="edge-label">id</text>
+  <path d="M660 270 L660 320" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="670" y="298" class="edge-label">+</text>
+  <path d="M640 390 L640 440" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="650" y="418" class="edge-label">T</text>
+  <path d="M580 390 L420 330" class="svg-arrow" marker-end="url(#pp-arrow)"/><text x="490" y="350" class="edge-label">id</text>
+</svg>
+</div>
+
+<h3>CLR(1) Parsing Table</h3>
+<div class="table-scroll"><table>
+<thead><tr><th>State</th><th>id</th><th>=</th><th>+</th><th>$</th><th>GOTO S</th><th>GOTO E</th><th>GOTO T</th></tr></thead>
+<tbody>
+<tr><td><strong>0</strong></td><td>s2</td><td></td><td></td><td></td><td>1</td><td></td><td></td></tr>
+<tr><td><strong>1</strong></td><td></td><td></td><td></td><td>acc</td><td></td><td></td><td></td></tr>
+<tr><td><strong>2</strong></td><td></td><td>s3</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>3</strong></td><td>s6</td><td></td><td></td><td></td><td></td><td>4</td><td>5</td></tr>
+<tr><td><strong>4</strong></td><td></td><td></td><td>s7</td><td>r1</td><td></td><td></td><td></td></tr>
+<tr><td><strong>5</strong></td><td></td><td></td><td>r3</td><td>r3</td><td></td><td></td><td></td></tr>
+<tr><td><strong>6</strong></td><td></td><td></td><td>r4</td><td>r4</td><td></td><td></td><td></td></tr>
+<tr><td><strong>7</strong></td><td>s6</td><td></td><td></td><td></td><td></td><td></td><td>8</td></tr>
+<tr><td><strong>8</strong></td><td></td><td></td><td>r2</td><td>r2</td><td></td><td></td><td></td></tr>
+</tbody>
+</table></div>
+<p class="source-tag">r1 = S→id=E &nbsp;|&nbsp; r2 = E→E+T &nbsp;|&nbsp; r3 = E→T &nbsp;|&nbsp; r4 = T→id</p>
+
+<h3>Mergeable States (for LALR)</h3>
+<p>To form an LALR(1) parser, we check for states with identical LR(0) cores but different lookaheads. In this grammar, I6 (from I3→id) and the state from I7→id share <strong>identical cores</strong> <code class="inline-code grammar">T → id.</code> <strong>and identical lookaheads</strong> {$, +}, so they are already the same state. <strong>No distinct states need merging</strong> — the CLR(1) and LALR(1) tables are identical for this grammar. No conflicts arise.</p>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q1(b): Compiler Phases                                             -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q1b</span>
+    <span class="q-topic">Compiler Phases</span>
+    <span class="q-text">For each programming language rule, name the compiler construction phase in which that rule is checked.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<div class="table-scroll"><table>
+<thead><tr><th>#</th><th>Rule</th><th>Phase</th><th>Explanation</th></tr></thead>
+<tbody>
+<tr><td>i</td><td>A function call has the correct number of arguments</td><td><strong>Semantic Analysis</strong></td><td>The semantic analyzer matches the call's argument count against the function's declaration in the symbol table.</td></tr>
+<tr><td>ii</td><td>Digits [0-9] may appear in identifiers but not as the first character (e.g., a123 is valid, 2big is not)</td><td><strong>Lexical Analysis</strong></td><td>The scanner uses a pattern like <code class="inline-code grammar">[a-zA-Z_][a-zA-Z0-9_]*</code> which rejects digit-first identifiers.</td></tr>
+<tr><td>iii</td><td>Every variable must be declared before it is used</td><td><strong>Semantic Analysis</strong></td><td>The semantic analyzer checks each identifier against the symbol table for a prior declaration entry.</td></tr>
+<tr><td>iv</td><td>Assignments such as a = 42; must end with a semicolon</td><td><strong>Syntax Analysis</strong></td><td>The grammar rule for assignment statements requires a semicolon terminal at the end; the parser enforces this structure.</td></tr>
+<tr><td>v</td><td>Array indices are integers within valid bounds</td><td><strong>Semantic Analysis</strong> (type = integer) + <strong>Runtime</strong> (bounds checking)</td><td>The semantic analyzer checks that the index expression has integer type. Bounds validity often requires runtime checking since array sizes and index values may be dynamic.</td></tr>
+</tbody>
+</table></div>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q2(a): TAC and DAG                                                 -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q2a</span>
+    <span class="q-topic">TAC &amp; DAG</span>
+    <span class="q-text">Convert the following expressions into Three Address Code and Directed Acyclic Graph: (i) result = (a*b) + (c-d)*(a*b)/(e+f) &nbsp; (ii) q = (a+b+c)*(a+b+c) - a*a - b*b - c*c</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>Expression (i): result = (a*b) + (c-d)*(a*b)/(e+f)</h3>
+<div class="code-wrap tac"><div class="code-title">Three-Address Code</div><pre><code>t1 = a * b          <span class="comment">// common subexpression (a*b)</span>
+t2 = c - d
+t3 = t2 * t1        <span class="comment">// (c-d) * (a*b)</span>
+t4 = e + f
+t5 = t3 / t4        <span class="comment">// (c-d)*(a*b) / (e+f)</span>
+result = t1 + t5    <span class="comment">// (a*b) + ...</span></code></pre></div>
+
+<div class="svg-panel wide">
+<svg viewBox="0 0 820 480" role="img" aria-label="DAG for result expression">
+  <defs><marker id="pp-a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" class="svg-marker"/></marker></defs>
+  <text x="410" y="30" text-anchor="middle" class="svg-title">DAG: result = (a*b) + (c-d)*(a*b)/(e+f)</text>
+  <g class="dag">
+    <!-- result: + node -->
+    <circle cx="410" cy="80" r="30"/><text x="410" y="86">+</text><text x="450" y="78" class="tiny">result</text>
+    <!-- left child: t1 = a*b -->
+    <circle cx="230" cy="180" r="30"/><text x="230" y="186">*</text><text x="270" y="176" class="tiny">t1</text>
+    <!-- right child: t5 = / -->
+    <circle cx="590" cy="180" r="30"/><text x="590" y="186">/</text><text x="626" y="176" class="tiny">t5</text>
+    <!-- t3 = (c-d)*(a*b) -->
+    <circle cx="480" cy="280" r="30"/><text x="480" y="286">*</text><text x="518" y="276" class="tiny">t3</text>
+    <!-- t4 = e+f -->
+    <circle cx="700" cy="280" r="30"/><text x="700" y="286">+</text><text x="738" y="276" class="tiny">t4</text>
+    <!-- t2 = c-d -->
+    <circle cx="380" cy="370" r="30"/><text x="380" y="376">-</text><text x="418" y="366" class="tiny">t2</text>
+    <!-- Leaf nodes -->
+    <rect x="130" y="280" width="50" height="36" rx="6"/><text x="155" y="304">a</text>
+    <rect x="280" y="280" width="50" height="36" rx="6"/><text x="305" y="304">b</text>
+    <rect x="310" y="430" width="50" height="36" rx="6"/><text x="335" y="454">c</text>
+    <rect x="420" y="430" width="50" height="36" rx="6"/><text x="445" y="454">d</text>
+    <rect x="640" y="370" width="50" height="36" rx="6"/><text x="665" y="394">e</text>
+    <rect x="730" y="370" width="50" height="36" rx="6"/><text x="755" y="394">f</text>
+    <!-- Edges -->
+    <path d="M390 105 L253 158" class="tree-edge"/>
+    <path d="M430 105 L568 158" class="tree-edge"/>
+    <path d="M570 205 L502 258" class="tree-edge"/>
+    <path d="M610 205 L680 258" class="tree-edge"/>
+    <path d="M460 305 L400 348" class="tree-edge"/>
+    <path d="M500 305 L245 205" class="tree-edge"/><!-- t3 right child is t1 (shared) -->
+    <path d="M215 205 L168 280" class="tree-edge"/>
+    <path d="M245 205 L298 280" class="tree-edge"/>
+    <path d="M365 395 L348 430" class="tree-edge"/>
+    <path d="M395 395 L438 430" class="tree-edge"/>
+    <path d="M685 305 L668 370" class="tree-edge"/>
+    <path d="M715 305 L748 370" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+<p class="source-tag">Note: The node <code class="inline-code tac">t1 = a*b</code> is shared — (a*b) appears twice in the expression but is computed only once in the DAG.</p>
+
+<h3>Expression (ii): q = (a+b+c)*(a+b+c) - a*a - b*b - c*c</h3>
+<div class="code-wrap tac"><div class="code-title">Three-Address Code</div><pre><code>t1 = a + b
+t2 = t1 + c          <span class="comment">// t2 = a+b+c (common subexpression)</span>
+t3 = t2 * t2         <span class="comment">// (a+b+c)² — shared node</span>
+t4 = a * a
+t5 = t3 - t4
+t6 = b * b
+t7 = t5 - t6
+t8 = c * c
+q  = t7 - t8</code></pre></div>
+
+<div class="svg-panel wide">
+<svg viewBox="0 0 820 500" role="img" aria-label="DAG for q expression">
+  <text x="410" y="30" text-anchor="middle" class="svg-title">DAG: q = (a+b+c)² - a² - b² - c²</text>
+  <g class="dag">
+    <!-- q: - node (outermost) -->
+    <circle cx="410" cy="80" r="28"/><text x="410" y="86">-</text><text x="446" y="78" class="tiny">q</text>
+    <!-- t7: - -->
+    <circle cx="300" cy="160" r="28"/><text x="300" y="166">-</text><text x="336" y="156" class="tiny">t7</text>
+    <!-- c*c -->
+    <circle cx="550" cy="160" r="28"/><text x="550" y="166">*</text><text x="586" y="156" class="tiny">t8</text>
+    <!-- t5: - -->
+    <circle cx="200" cy="240" r="28"/><text x="200" y="246">-</text><text x="236" y="236" class="tiny">t5</text>
+    <!-- b*b -->
+    <circle cx="420" cy="240" r="28"/><text x="420" y="246">*</text><text x="456" y="236" class="tiny">t6</text>
+    <!-- t3: * -->
+    <circle cx="110" cy="320" r="28"/><text x="110" y="326">*</text><text x="146" y="316" class="tiny">t3</text>
+    <!-- a*a -->
+    <circle cx="300" cy="320" r="28"/><text x="300" y="326">*</text><text x="336" y="316" class="tiny">t4</text>
+    <!-- t2: + -->
+    <circle cx="110" cy="400" r="28"/><text x="110" y="406">+</text><text x="146" y="396" class="tiny">t2</text>
+    <!-- t1: + -->
+    <circle cx="60" cy="460" r="24"/><text x="60" y="466">+</text><text x="88" y="460" class="tiny">t1</text>
+    <!-- Leaf nodes -->
+    <rect x="15" y="420" width="40" height="30" rx="4"/><text x="35" y="440" style="font-size:11px">a</text>
+    <rect x="65" y="420" width="40" height="30" rx="4"/><text x="85" y="440" style="font-size:11px">b</text>
+    <rect x="140" y="440" width="40" height="30" rx="4"/><text x="160" y="460" style="font-size:11px">c</text>
+    <!-- Edges -->
+    <path d="M392 103 L318 140" class="tree-edge"/>
+    <path d="M428 103 L533 140" class="tree-edge"/>
+    <path d="M282 183 L218 218" class="tree-edge"/>
+    <path d="M318 183 L403 218" class="tree-edge"/>
+    <path d="M182 263 L128 298" class="tree-edge"/>
+    <path d="M218 263 L283 298" class="tree-edge"/>
+    <path d="M110 348 L110 372" class="tree-edge"/><!-- t3 both children are t2 (shared) -->
+    <path d="M95 378 L72 420" class="tree-edge"/>
+    <path d="M125 428 L148 440" class="tree-edge"/>
+    <!-- shared a,b,c edges -->
+    <path d="M283 340 L48 440" class="tree-edge"/><!-- a*a left = a -->
+    <path d="M317 340 L48 440" class="tree-edge"/><!-- a*a right = a (shared) -->
+    <path d="M403 260 L95 440" class="tree-edge"/><!-- b*b left = b -->
+    <path d="M437 260 L95 440" class="tree-edge"/><!-- b*b right = b (shared) -->
+    <path d="M533 180 L165 450" class="tree-edge"/><!-- c*c left = c -->
+    <path d="M567 180 L165 450" class="tree-edge"/><!-- c*c right = c (shared) -->
+  </g>
+</svg>
+</div>
+<p class="source-tag">Note: <code class="inline-code tac">t2 = a+b+c</code> is computed once and shared as both children of <code class="inline-code tac">t3 = t2 * t2</code>. Variables a, b, c appear as shared leaf nodes.</p>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q2(b): TAC Forms & Temporaries                                     -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q2b</span>
+    <span class="q-topic">TAC Theory</span>
+    <span class="q-text">(i) List the common forms of 3-Address Code. (ii) Discuss the role of temporary variables in 3-Address Code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>(i) Common Forms of Three-Address Code</h3>
+<div class="table-scroll"><table>
+<thead><tr><th>Form</th><th>Pattern</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Assignment (binary op)</td><td><code class="inline-code tac">x = y op z</code></td><td><code class="inline-code tac">t1 = a + b</code></td></tr>
+<tr><td>Assignment (unary op)</td><td><code class="inline-code tac">x = op y</code></td><td><code class="inline-code tac">t2 = -c</code></td></tr>
+<tr><td>Copy statement</td><td><code class="inline-code tac">x = y</code></td><td><code class="inline-code tac">a = t1</code></td></tr>
+<tr><td>Conditional jump</td><td><code class="inline-code tac">if x relop y goto L</code></td><td><code class="inline-code tac">if a &lt; b goto L1</code></td></tr>
+<tr><td>Unconditional jump</td><td><code class="inline-code tac">goto L</code></td><td><code class="inline-code tac">goto L2</code></td></tr>
+<tr><td>Procedure call / return</td><td><code class="inline-code tac">param x; call p, n; return y</code></td><td><code class="inline-code tac">param a; call foo, 1</code></td></tr>
+<tr><td>Indexed assignment</td><td><code class="inline-code tac">x = y[i]</code> or <code class="inline-code tac">x[i] = y</code></td><td><code class="inline-code tac">t3 = arr[i]</code></td></tr>
+<tr><td>Pointer assignment</td><td><code class="inline-code tac">x = &amp;y; x = *y; *x = y</code></td><td><code class="inline-code tac">t4 = *p</code></td></tr>
+</tbody>
+</table></div>
+
+<h3>(ii) Role of Temporary Variables</h3>
+<div class="def-card"><p>Temporary variables (t1, t2, t3, ...) serve as <strong>intermediate result holders</strong> that ensure each TAC instruction has at most <strong>one operator</strong> and at most <strong>two source operands</strong>. They:</p>
+<ul>
+<li><strong>Decompose complex expressions</strong> — A multi-operator expression like <code class="inline-code tac">a + b * c</code> is broken into <code class="inline-code tac">t1 = b * c</code> and <code class="inline-code tac">t2 = a + t1</code>, preserving precedence.</li>
+<li><strong>Enable optimization</strong> — Common subexpression elimination, copy propagation, and dead code removal all work on temporaries.</li>
+<li><strong>Simplify code generation</strong> — Each temporary maps naturally to a register or memory location during target code generation.</li>
+<li><strong>Make data flow explicit</strong> — Dependencies between computations become visible through def-use chains of temporaries.</li>
+</ul></div>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q3(a): SDD Attributes and Annotated Parse Tree                     -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q3a</span>
+    <span class="q-topic">SDD / Annotated Parse Tree</span>
+    <span class="q-text">For the given typesetting grammar with B.ps, B.ht, B.dp: (i) Identify synthesized vs inherited attributes. (ii) Draw annotated parse tree for ( text sub ( text sub text ) ) text. (iii) Compute ps, ht, dp for every B node.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>(i) Attribute Classification</h3>
+<div class="table-scroll"><table>
+<thead><tr><th>Attribute</th><th>Type</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td><code class="inline-code grammar">B.ps</code> (point size)</td><td><strong>Inherited</strong></td><td>Passed <em>downward</em> from parent to children. The root gets B.ps=10 from <code class="inline-code grammar">S → B</code>, and each production passes ps down to child B nodes.</td></tr>
+<tr><td><code class="inline-code grammar">B.ht</code> (height)</td><td><strong>Synthesized</strong></td><td>Computed <em>upward</em> from children — leaf <code class="inline-code grammar">B → text</code> computes via getHt, and internal nodes combine children's ht values.</td></tr>
+<tr><td><code class="inline-code grammar">B.dp</code> (depth)</td><td><strong>Synthesized</strong></td><td>Computed <em>upward</em> from children — leaf computes via getDp, internal nodes combine children's dp values.</td></tr>
+</tbody>
+</table></div>
+
+<h3>(ii) Annotated Parse Tree</h3>
+<p>Input string: <code class="inline-code grammar">( text sub ( text sub text ) ) text</code></p>
+<p>Derivation: S → B<sub>0</sub> → B<sub>1</sub> B<sub>2</sub> → ( B<sub>3</sub> ) B<sub>2</sub> → ( B<sub>4</sub> sub B<sub>5</sub> ) B<sub>2</sub> → ... → ( text sub ( text sub text ) ) text</p>
+
+<div class="svg-panel wide">
+<svg viewBox="0 0 900 620" role="img" aria-label="Annotated parse tree for typesetting grammar">
+  <text x="450" y="28" text-anchor="middle" class="svg-title">Annotated Parse Tree: ( text sub ( text sub text ) ) text</text>
+  <g class="tree">
+    <!-- S node -->
+    <circle cx="450" cy="65" r="22"/><text x="450" y="70">S</text>
+    <!-- B0 -->
+    <circle cx="450" cy="120" r="26"/><text x="450" y="116">B₀</text><text x="450" y="134" class="tiny">ps=10</text>
+    <!-- B1 (left) -->
+    <circle cx="280" cy="200" r="26"/><text x="280" y="196">B₁</text><text x="280" y="214" class="tiny">ps=10</text>
+    <!-- B2 (right) = text -->
+    <circle cx="620" cy="200" r="26"/><text x="620" y="196">B₂</text><text x="620" y="214" class="tiny">ps=10</text>
+    <text x="620" y="250" text-anchor="middle" class="tiny" fill="#4ade80">text</text>
+    <text x="620" y="264" text-anchor="middle" class="tiny">ht=getHt(10,text)</text>
+    <text x="620" y="278" text-anchor="middle" class="tiny">dp=getDp(10,text)</text>
+    <!-- ( and ) around B3 -->
+    <text x="175" y="290" text-anchor="middle" class="svg-note">(</text>
+    <text x="385" y="290" text-anchor="middle" class="svg-note">)</text>
+    <!-- B3 -->
+    <circle cx="280" cy="290" r="26"/><text x="280" y="286">B₃</text><text x="280" y="304" class="tiny">ps=10</text>
+    <!-- B4 (left of sub) = text -->
+    <circle cx="180" cy="370" r="26"/><text x="180" y="366">B₄</text><text x="180" y="384" class="tiny">ps=10</text>
+    <text x="180" y="412" text-anchor="middle" class="tiny" fill="#4ade80">text</text>
+    <text x="180" y="426" text-anchor="middle" class="tiny">ht=getHt(10,text)</text>
+    <text x="180" y="440" text-anchor="middle" class="tiny">dp=getDp(10,text)</text>
+    <!-- sub keyword -->
+    <text x="280" y="370" text-anchor="middle" class="svg-note" fill="#f59e0b">sub</text>
+    <!-- B5 -->
+    <circle cx="380" cy="370" r="26"/><text x="380" y="366">B₅</text><text x="380" y="384" class="tiny">ps=7</text>
+    <!-- ( and ) around B6 -->
+    <text x="320" y="450" text-anchor="middle" class="svg-note">(</text>
+    <text x="440" y="450" text-anchor="middle" class="svg-note">)</text>
+    <!-- B6 -->
+    <circle cx="380" cy="450" r="26"/><text x="380" y="446">B₆</text><text x="380" y="464" class="tiny">ps=7</text>
+    <!-- B7 (left of sub) = text -->
+    <circle cx="310" cy="530" r="24"/><text x="310" y="526">B₇</text><text x="310" y="544" class="tiny">ps=7</text>
+    <text x="310" y="570" text-anchor="middle" class="tiny" fill="#4ade80">text</text>
+    <text x="310" y="584" text-anchor="middle" class="tiny">ht=getHt(7,text)</text>
+    <!-- sub keyword -->
+    <text x="380" y="530" text-anchor="middle" class="svg-note" fill="#f59e0b">sub</text>
+    <!-- B8 = text -->
+    <circle cx="450" cy="530" r="24"/><text x="450" y="526">B₈</text><text x="450" y="544" class="tiny">ps=4.9</text>
+    <text x="450" y="570" text-anchor="middle" class="tiny" fill="#4ade80">text</text>
+    <text x="450" y="584" text-anchor="middle" class="tiny">ht=getHt(4.9,text)</text>
+    <!-- Tree edges -->
+    <path d="M450 87 L450 94" class="tree-edge"/>
+    <path d="M435 140 L300 180" class="tree-edge"/>
+    <path d="M465 140 L602 180" class="tree-edge"/>
+    <path d="M280 226 L280 264" class="tree-edge"/>
+    <path d="M262 312 L198 350" class="tree-edge"/>
+    <path d="M298 312 L365 350" class="tree-edge"/>
+    <path d="M380 396 L380 424" class="tree-edge"/>
+    <path d="M365 472 L325 510" class="tree-edge"/>
+    <path d="M395 472 L435 510" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+
+<h3>(iii) Computed Values for Every B Node</h3>
+<p>Let <code class="inline-code grammar">h(p) = getHt(p, text)</code> and <code class="inline-code grammar">d(p) = getDp(p, text)</code> for brevity.</p>
+<div class="code-wrap grammar"><div class="code-title">Step-by-step computation (bottom-up for ht/dp, top-down for ps)</div><pre><code><span class="comment">── Inherited attribute ps (top-down) ──</span>
+S → B₀:     B₀.ps = <span class="num">10</span>
+B₀ → B₁ B₂: B₁.ps = <span class="num">10</span>,  B₂.ps = <span class="num">10</span>
+B₁ → (B₃):  B₃.ps = <span class="num">10</span>
+B₃ → B₄ sub B₅:
+             B₄.ps = <span class="num">10</span>
+             B₅.ps = 0.7 × <span class="num">10</span> = <span class="num">7</span>
+B₅ → (B₆):  B₆.ps = <span class="num">7</span>
+B₆ → B₇ sub B₈:
+             B₇.ps = <span class="num">7</span>
+             B₈.ps = 0.7 × <span class="num">7</span> = <span class="num">4.9</span>
+
+<span class="comment">── Synthesized attributes ht, dp (bottom-up from leaves) ──</span>
+B₈ → text:  B₈.ht = h(<span class="num">4.9</span>),  B₈.dp = d(<span class="num">4.9</span>)
+B₇ → text:  B₇.ht = h(<span class="num">7</span>),    B₇.dp = d(<span class="num">7</span>)
+
+B₆ → B₇ sub B₈:  <span class="comment">(Production 3, with B.ps = 7)</span>
+  B₆.ht = max(B₇.ht, B₈.ht − 0.25 × <span class="num">7</span>)
+        = max(h(<span class="num">7</span>), h(<span class="num">4.9</span>) − <span class="num">1.75</span>)
+  B₆.dp = max(B₇.dp, B₈.dp + 0.25 × <span class="num">7</span>)
+        = max(d(<span class="num">7</span>), d(<span class="num">4.9</span>) + <span class="num">1.75</span>)
+
+B₅ → (B₆):  B₅.ht = B₆.ht,  B₅.dp = B₆.dp
+
+B₄ → text:  B₄.ht = h(<span class="num">10</span>),  B₄.dp = d(<span class="num">10</span>)
+
+B₃ → B₄ sub B₅:  <span class="comment">(Production 3, with B.ps = 10)</span>
+  B₃.ht = max(B₄.ht, B₅.ht − 0.25 × <span class="num">10</span>)
+        = max(h(<span class="num">10</span>), B₆.ht − <span class="num">2.5</span>)
+  B₃.dp = max(B₄.dp, B₅.dp + 0.25 × <span class="num">10</span>)
+        = max(d(<span class="num">10</span>), B₆.dp + <span class="num">2.5</span>)
+
+B₁ → (B₃):  B₁.ht = B₃.ht,  B₁.dp = B₃.dp
+
+B₂ → text:  B₂.ht = h(<span class="num">10</span>),  B₂.dp = d(<span class="num">10</span>)
+
+B₀ → B₁ B₂:  <span class="comment">(Production 2)</span>
+  B₀.ht = max(B₁.ht, B₂.ht) = max(B₃.ht, h(<span class="num">10</span>))
+  B₀.dp = max(B₁.dp, B₂.dp) = max(B₃.dp, d(<span class="num">10</span>))</code></pre></div>
+
+<div class="table-scroll"><table>
+<thead><tr><th>Node</th><th>ps</th><th>ht</th><th>dp</th></tr></thead>
+<tbody>
+<tr><td>B₈</td><td>4.9</td><td>h(4.9)</td><td>d(4.9)</td></tr>
+<tr><td>B₇</td><td>7</td><td>h(7)</td><td>d(7)</td></tr>
+<tr><td>B₆</td><td>7</td><td>max(h(7), h(4.9)−1.75)</td><td>max(d(7), d(4.9)+1.75)</td></tr>
+<tr><td>B₅</td><td>7</td><td>=B₆.ht</td><td>=B₆.dp</td></tr>
+<tr><td>B₄</td><td>10</td><td>h(10)</td><td>d(10)</td></tr>
+<tr><td>B₃</td><td>10</td><td>max(h(10), B₆.ht−2.5)</td><td>max(d(10), B₆.dp+2.5)</td></tr>
+<tr><td>B₁</td><td>10</td><td>=B₃.ht</td><td>=B₃.dp</td></tr>
+<tr><td>B₂</td><td>10</td><td>h(10)</td><td>d(10)</td></tr>
+<tr><td><strong>B₀ (root)</strong></td><td><strong>10</strong></td><td><strong>max(B₃.ht, h(10))</strong></td><td><strong>max(B₃.dp, d(10))</strong></td></tr>
+</tbody>
+</table></div>
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Key Insight</h3><p>The <code class="inline-code grammar">sub</code> production shrinks B₂.ps to 70% of the parent's ps, and the subscript's depth contribution shifts by 0.25 × parent.ps. This creates a cascading size reduction for nested subscripts: 10 → 7 → 4.9.</p></aside>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q3(b): Semantic Errors                                             -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q3b</span>
+    <span class="q-topic">Semantic Errors</span>
+    <span class="q-text">Identify all semantic errors in the pointer/array/division code snippet and write the corrected code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>Original Code with Errors</h3>
+<div class="code-wrap tac"><div class="code-title">Given code</div><pre><code><span class="num">1</span>.  <span class="kw">int</span> main() {
+<span class="num">2</span>.    <span class="kw">int</span>* p;
+<span class="num">3</span>.    cout &lt;&lt; *p;              <span class="comment">// ERROR 1</span>
+<span class="num">4</span>.    <span class="kw">int</span> arr[<span class="num">3</span>] = {<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>};
+<span class="num">5</span>.    arr[<span class="num">5</span>] = <span class="num">10</span>;             <span class="comment">// ERROR 2</span>
+<span class="num">6</span>.    <span class="kw">int</span> x = <span class="num">10</span>, y = <span class="num">0</span>;
+<span class="num">7</span>.    <span class="kw">int</span> z = x / y;           <span class="comment">// ERROR 3</span>
+<span class="num">8</span>.    const <span class="kw">int</span> c = <span class="num">5</span>;
+<span class="num">9</span>.    <span class="kw">int</span>* q = (<span class="kw">int</span>*) &amp;c;     <span class="comment">// ERROR 4a</span>
+<span class="num">10</span>.   *q = <span class="num">10</span>;                 <span class="comment">// ERROR 4b</span>
+<span class="num">11</span>.   <span class="kw">return</span> <span class="num">0</span>;
+<span class="num">12</span>. }</code></pre></div>
+
+<h3>Identified Semantic Errors</h3>
+<div class="table-scroll"><table>
+<thead><tr><th>Line</th><th>Error</th><th>Type</th><th>Explanation</th></tr></thead>
+<tbody>
+<tr><td>2-3</td><td>Dereferencing uninitialized pointer <code class="inline-code tac">*p</code></td><td>Uninitialized use</td><td><code class="inline-code tac">p</code> is declared but never assigned a valid address. Dereferencing it produces undefined behavior — the pointer could point to any random memory location.</td></tr>
+<tr><td>5</td><td>Array index out of bounds: <code class="inline-code tac">arr[5]</code></td><td>Bounds violation</td><td>Array <code class="inline-code tac">arr</code> has size 3, so valid indices are 0, 1, 2. Index 5 accesses memory beyond the array.</td></tr>
+<tr><td>7</td><td>Division by zero: <code class="inline-code tac">x / y</code> where <code class="inline-code tac">y = 0</code></td><td>Division by zero</td><td>Dividing by zero is mathematically undefined and causes a runtime exception.</td></tr>
+<tr><td>9-10</td><td>Casting away <code class="inline-code tac">const</code> and modifying a const variable</td><td>Const violation</td><td><code class="inline-code tac">(int*)&amp;c</code> casts away the const qualifier. Writing <code class="inline-code tac">*q = 10</code> then modifies a const object, which is undefined behavior in C++.</td></tr>
+</tbody>
+</table></div>
+
+<h3>Corrected Code</h3>
+<div class="code-wrap tac"><div class="code-title">Corrected version</div><pre><code><span class="kw">int</span> main() {
+  <span class="kw">int</span> value = <span class="num">42</span>;               <span class="comment">// provide a valid target</span>
+  <span class="kw">int</span>* p = &amp;value;               <span class="comment">// initialize pointer</span>
+  cout &lt;&lt; *p;                    <span class="comment">// now safe to dereference</span>
+
+  <span class="kw">int</span> arr[<span class="num">3</span>] = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>};
+  arr[<span class="num">2</span>] = <span class="num">10</span>;                   <span class="comment">// valid index (0..2)</span>
+
+  <span class="kw">int</span> x = <span class="num">10</span>, y = <span class="num">2</span>;             <span class="comment">// non-zero divisor</span>
+  <span class="kw">int</span> z = x / y;                 <span class="comment">// z = 5, safe</span>
+
+  const <span class="kw">int</span> c = <span class="num">5</span>;
+  cout &lt;&lt; c;                     <span class="comment">// read only, no modification</span>
+
+  <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre></div>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q4(a): Code Optimization                                           -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q4a</span>
+    <span class="q-topic">Code Optimization</span>
+    <span class="q-text">Identify all machine-independent optimizations in the given TAC, name each technique with line number, and rewrite the optimized code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>Given Three-Address Code</h3>
+<div class="code-wrap tac"><div class="code-title">Original TAC</div><pre><code><span class="num">1</span>.  t1  = a + b
+<span class="num">2</span>.  t2  = a + b
+<span class="num">3</span>.  t3  = t1 * <span class="num">1</span>
+<span class="num">4</span>.  t4  = <span class="num">0</span> + t2
+<span class="num">5</span>.  t5  = t3
+<span class="num">6</span>.  t6  = t4 * c
+<span class="num">7</span>.  t7  = t5 * c
+<span class="num">8</span>.  t8  = t6 - t7
+<span class="num">9</span>.  t9  = d * <span class="num">0</span>
+<span class="num">10</span>. t10 = t9 + e
+<span class="num">11</span>. f   = t10
+<span class="num">12</span>. g   = t1 + b</code></pre></div>
+
+<h3>Optimization Analysis (Line by Line)</h3>
+<div class="table-scroll"><table>
+<thead><tr><th>Line(s)</th><th>Optimization Technique</th><th>Explanation</th></tr></thead>
+<tbody>
+<tr><td><strong>1, 2</strong></td><td><strong>Common Subexpression Elimination (CSE)</strong></td><td><code class="inline-code tac">a + b</code> is computed identically in both lines. Eliminate line 2 and replace all uses of <code class="inline-code tac">t2</code> with <code class="inline-code tac">t1</code>.</td></tr>
+<tr><td><strong>3</strong></td><td><strong>Algebraic Simplification</strong> (identity: x × 1 = x)</td><td><code class="inline-code tac">t3 = t1 * 1</code> simplifies to <code class="inline-code tac">t3 = t1</code>.</td></tr>
+<tr><td><strong>4</strong></td><td><strong>Algebraic Simplification</strong> (identity: 0 + x = x)</td><td><code class="inline-code tac">t4 = 0 + t2</code> simplifies to <code class="inline-code tac">t4 = t2</code>. After CSE: <code class="inline-code tac">t4 = t1</code>.</td></tr>
+<tr><td><strong>5</strong></td><td><strong>Copy Propagation</strong></td><td><code class="inline-code tac">t5 = t3</code>. Since t3 = t1 (from line 3), t5 = t1. Replace t5 with t1 everywhere.</td></tr>
+<tr><td><strong>6, 7</strong></td><td><strong>Common Subexpression Elimination</strong></td><td>After propagation: t6 = t1 * c and t7 = t1 * c — they are identical. Keep one, eliminate the other.</td></tr>
+<tr><td><strong>8</strong></td><td><strong>Algebraic Simplification</strong> (x − x = 0)</td><td>Since t6 = t7, <code class="inline-code tac">t8 = t6 - t7 = 0</code>. Eliminate t8 or replace with 0.</td></tr>
+<tr><td><strong>9</strong></td><td><strong>Algebraic Simplification</strong> (x × 0 = 0)</td><td><code class="inline-code tac">t9 = d * 0 = 0</code>.</td></tr>
+<tr><td><strong>10</strong></td><td><strong>Constant Propagation / Algebraic Simplification</strong></td><td><code class="inline-code tac">t10 = t9 + e = 0 + e = e</code>.</td></tr>
+<tr><td><strong>11</strong></td><td><strong>Copy Propagation</strong></td><td><code class="inline-code tac">f = t10 = e</code>. Simplify to <code class="inline-code tac">f = e</code>.</td></tr>
+</tbody>
+</table></div>
+
+<h3>Optimized Code</h3>
+<div class="code-wrap tac"><div class="code-title">After all optimizations</div><pre><code>t1 = a + b
+t6 = t1 * c         <span class="comment">// single computation of (a+b)*c</span>
+f  = e              <span class="comment">// d*0 + e simplified to e</span>
+g  = t1 + b         <span class="comment">// preserved as-is</span></code></pre></div>
+<p class="source-tag">Lines reduced from 12 to 4 — t8 became 0 (dead), t9 became 0, t10 became e, and all copies were propagated.</p>
+
+<div class="svg-panel">
+<svg viewBox="0 0 780 330" role="img" aria-label="Optimization before and after">
+  <text x="390" y="34" text-anchor="middle" class="svg-title">Optimization: 12 Lines → 4 Lines</text>
+  <rect x="42" y="62" width="280" height="240" rx="8" class="svg-codebox"/>
+  <text x="182" y="84" text-anchor="middle" class="item-head">Before (12 lines)</text>
+  <text x="60" y="104" class="code-svg">t1  = a + b</text>
+  <text x="60" y="120" class="code-svg" fill="#f59e0b">t2  = a + b  ← CSE</text>
+  <text x="60" y="136" class="code-svg" fill="#f59e0b">t3  = t1 * 1 ← x*1=x</text>
+  <text x="60" y="152" class="code-svg" fill="#f59e0b">t4  = 0 + t2 ← 0+x=x</text>
+  <text x="60" y="168" class="code-svg" fill="#f59e0b">t5  = t3     ← copy</text>
+  <text x="60" y="184" class="code-svg">t6  = t4 * c</text>
+  <text x="60" y="200" class="code-svg" fill="#f59e0b">t7  = t5 * c ← CSE</text>
+  <text x="60" y="216" class="code-svg" fill="#f59e0b">t8  = t6-t7  ← x-x=0</text>
+  <text x="60" y="232" class="code-svg" fill="#f59e0b">t9  = d * 0  ← x*0=0</text>
+  <text x="60" y="248" class="code-svg" fill="#f59e0b">t10 = t9 + e ← 0+x=x</text>
+  <text x="60" y="264" class="code-svg" fill="#f59e0b">f   = t10    ← copy</text>
+  <text x="60" y="280" class="code-svg">g   = t1 + b</text>
+  <rect x="430" y="62" width="280" height="130" rx="8" class="svg-codebox"/>
+  <text x="570" y="84" text-anchor="middle" class="item-head">After (4 lines)</text>
+  <text x="448" y="110" class="code-svg" fill="#4ade80">t1 = a + b</text>
+  <text x="448" y="134" class="code-svg" fill="#4ade80">t6 = t1 * c</text>
+  <text x="448" y="158" class="code-svg" fill="#4ade80">f  = e</text>
+  <text x="448" y="182" class="code-svg" fill="#4ade80">g  = t1 + b</text>
+  <path d="M334 165 L418 145" class="svg-arrow" marker-end="url(#pp-arrow)"/>
+</svg>
+</div>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q4(b): Theory                                                      -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q4b</span>
+    <span class="q-topic">Optimization Theory</span>
+    <span class="q-text">(i) Machine-dependent vs machine-independent code optimization. (ii) Directed acyclic graph vs abstract syntax tree.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>(i) Machine-Dependent vs Machine-Independent Optimization</h3>
+<div class="table-scroll"><table>
+<thead><tr><th>Aspect</th><th>Machine-Independent</th><th>Machine-Dependent</th></tr></thead>
+<tbody>
+<tr><td>Works on</td><td>Intermediate representation (TAC, IR)</td><td>Target / assembly code</td></tr>
+<tr><td>Knowledge needed</td><td>Only the source program semantics</td><td>Target architecture (registers, instruction set, cache, pipeline)</td></tr>
+<tr><td>Portability</td><td>Portable across all target machines</td><td>Specific to the target architecture</td></tr>
+<tr><td>Techniques</td><td>CSE, constant folding/propagation, dead code elimination, loop optimization, copy propagation</td><td>Register allocation, instruction scheduling, peephole optimization, instruction selection</td></tr>
+<tr><td>Phase</td><td>After IR generation, before code generation</td><td>During or after target code generation</td></tr>
+</tbody>
+</table></div>
+
+<h3>(ii) DAG vs AST</h3>
+<div class="table-scroll"><table>
+<thead><tr><th>Aspect</th><th>Abstract Syntax Tree (AST)</th><th>Directed Acyclic Graph (DAG)</th></tr></thead>
+<tbody>
+<tr><td>Structure</td><td>Pure tree — every subexpression is a separate subtree</td><td>DAG — common subexpressions are shared nodes</td></tr>
+<tr><td>Redundancy</td><td>Duplicates repeated subexpressions (e.g., <code class="inline-code tac">a+b</code> appears twice)</td><td>Shares identical subexpressions (e.g., <code class="inline-code tac">a+b</code> appears once with two parents)</td></tr>
+<tr><td>Space</td><td>Can be larger due to duplication</td><td>Compact — eliminates redundant nodes</td></tr>
+<tr><td>Optimization</td><td>Does not directly expose common subexpressions</td><td>Built-in CSE by construction — optimizer can immediately see sharing</td></tr>
+<tr><td>Usage</td><td>Parse tree representation, semantic analysis input</td><td>Intermediate code generation, local optimization</td></tr>
+</tbody>
+</table></div>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q5(a): C Code → TAC → Assembly                                     -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q5a</span>
+    <span class="q-topic">C to TAC &amp; Assembly</span>
+    <span class="q-text">Convert the given C code (loop with radius/area calculation) into its corresponding three-address code and assembly code.</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>Given C Code</h3>
+<div class="code-wrap tac"><div class="code-title">Source C program</div><pre><code>#include &lt;stdio.h&gt;
+<span class="kw">int</span> main() {
+  <span class="kw">int</span> radius, i;
+  <span class="kw">int</span> pi = <span class="num">3</span>;
+  <span class="kw">for</span>(i = <span class="num">0</span>; i &lt; <span class="num">4</span>; i++) {
+    radius = i + <span class="num">2</span>;
+    <span class="kw">int</span> area = pi * radius * radius;
+    printf("Area: %d\n", area);
+  }
+  <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre></div>
+
+<h3>Three-Address Code</h3>
+<div class="code-wrap tac"><div class="code-title">TAC translation</div><pre><code>      pi = <span class="num">3</span>
+      i  = <span class="num">0</span>
+L1:   <span class="kw">if</span> i >= <span class="num">4</span> <span class="kw">goto</span> L2
+      t1 = i + <span class="num">2</span>
+      radius = t1
+      t2 = pi * radius
+      t3 = t2 * radius
+      area = t3
+      <span class="kw">param</span> "Area: %d\n"
+      <span class="kw">param</span> area
+      <span class="kw">call</span> printf, <span class="num">2</span>
+      i = i + <span class="num">1</span>
+      <span class="kw">goto</span> L1
+L2:   <span class="kw">return</span> <span class="num">0</span></code></pre></div>
+
+<h3>Assembly Code (x86-style)</h3>
+<div class="code-wrap asm"><div class="code-title">Assembly translation</div><pre><code>section .data
+  fmt:  db "Area: %d", <span class="num">10</span>, <span class="num">0</span>     <span class="comment">; format string with newline</span>
+
+section .bss
+  pi:     resd <span class="num">1</span>
+  i:      resd <span class="num">1</span>
+  radius: resd <span class="num">1</span>
+  area:   resd <span class="num">1</span>
+
+section .text
+main:
+  <span class="kw">mov</span> dword [pi], <span class="num">3</span>
+  <span class="kw">mov</span> dword [i], <span class="num">0</span>
+
+L1:
+  <span class="kw">cmp</span> dword [i], <span class="num">4</span>
+  jge L2
+
+  <span class="kw">mov</span> eax, [i]
+  <span class="kw">add</span> eax, <span class="num">2</span>
+  <span class="kw">mov</span> [radius], eax
+
+  <span class="kw">mov</span> eax, [pi]             <span class="comment">; eax = pi = 3</span>
+  <span class="kw">imul</span> eax, [radius]        <span class="comment">; eax = pi * radius</span>
+  <span class="kw">imul</span> eax, [radius]        <span class="comment">; eax = pi * radius * radius</span>
+  <span class="kw">mov</span> [area], eax
+
+  <span class="kw">push</span> dword [area]         <span class="comment">; push area argument</span>
+  <span class="kw">push</span> fmt                  <span class="comment">; push format string</span>
+  <span class="kw">call</span> printf
+  <span class="kw">add</span> esp, <span class="num">8</span>               <span class="comment">; clean 2 args from stack</span>
+
+  <span class="kw">inc</span> dword [i]             <span class="comment">; i++</span>
+  <span class="kw">jmp</span> L1
+
+L2:
+  <span class="kw">mov</span> eax, <span class="num">0</span>               <span class="comment">; return 0</span>
+  <span class="kw">ret</span></code></pre></div>
+
+<div class="table-scroll"><table>
+<thead><tr><th>Iteration (i)</th><th>radius = i+2</th><th>area = 3 × radius²</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>2</td><td>3 × 4 = 12</td></tr>
+<tr><td>1</td><td>3</td><td>3 × 9 = 27</td></tr>
+<tr><td>2</td><td>4</td><td>3 × 16 = 48</td></tr>
+<tr><td>3</td><td>5</td><td>3 × 25 = 75</td></tr>
+</tbody>
+</table></div>
+  </div>
+</details>
+
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<!-- Q5(b): NewC++ Language                                             -->
+<!-- ════════════════════════════════════════════════════════════════════ -->
+<details class="question-card" open>
+  <summary>
+    <span class="q-num">Q5b</span>
+    <span class="q-topic">Regex / CFG / SDT</span>
+    <span class="q-text">In NewC++ language, function names may start with a digit. Args in brackets [ ], separated by semicolon ;. Second arg is optional (defaults to 0). Write regex, CFG, and SDT. Examples: 3foo[5;7], 1bar[9].</span>
+    <span class="toggle"><span class="show">Show Solution</span><span class="hide">Hide Solution</span></span>
+  </summary>
+  <div class="solution">
+<h3>Language Rules</h3>
+<div class="def-card"><ul>
+<li>Function names may <strong>start with a digit</strong> — so the identifier pattern is broader than standard C.</li>
+<li>Arguments are enclosed in <strong>square brackets [ ]</strong> (not parentheses).</li>
+<li>Arguments are separated by <strong>semicolons ;</strong>.</li>
+<li>The <strong>second argument is optional</strong> and defaults to <code class="inline-code tac">0</code> if not provided.</li>
+</ul></div>
+
+<h3>Regular Expression</h3>
+<div class="code-wrap grammar"><div class="code-title">Token-level patterns</div><pre><code><span class="comment">// Function name (may start with digit)</span>
+fname:  [A-Za-z0-9_][A-Za-z0-9_]*
+
+<span class="comment">// Argument (identifier or number)</span>
+arg:    [A-Za-z0-9_]+
+
+<span class="comment">// Complete function call regex</span>
+call:   [A-Za-z0-9_][A-Za-z0-9_]* \[ [A-Za-z0-9_]+ ( ; [A-Za-z0-9_]+ )? \]</code></pre></div>
+
+<h3>Context-Free Grammar</h3>
+<div class="code-wrap grammar"><div class="code-title">CFG productions</div><pre><code>Call → fname [ Arg OptArg ]
+OptArg → ; Arg
+OptArg → ε
+Arg  → id
+Arg  → num</code></pre></div>
+
+<h3>Syntax-Directed Translation (SDT)</h3>
+<div class="code-wrap grammar"><div class="code-title">SDT with semantic actions</div><pre><code>Call → fname [ Arg OptArg ]
+       { Call.code = emitCall(fname.lexeme, Arg.val, OptArg.val) }
+
+OptArg → ; Arg
+       { OptArg.val = Arg.val }
+
+OptArg → ε
+       { OptArg.val = <span class="num">0</span> }     <span class="comment">// default value when 2nd arg missing</span>
+
+Arg → id
+       { Arg.val = id.entry }
+
+Arg → num
+       { Arg.val = num.val }</code></pre></div>
+
+<h3>Translation Examples</h3>
+<div class="code-wrap tac"><div class="code-title">Translating the examples</div><pre><code><span class="comment">// 3foo[5;7]</span>
+fname = "3foo"
+Arg.val = <span class="num">5</span>
+OptArg → ; Arg, so OptArg.val = <span class="num">7</span>
+→ emitCall("3foo", <span class="num">5</span>, <span class="num">7</span>)
+
+<span class="comment">// 1bar[9]</span>
+fname = "1bar"
+Arg.val = <span class="num">9</span>
+OptArg → ε, so OptArg.val = <span class="num">0</span>  <span class="comment">(default)</span>
+→ emitCall("1bar", <span class="num">9</span>, <span class="num">0</span>)</code></pre></div>
+
+<div class="svg-panel">
+<svg viewBox="0 0 720 340" role="img" aria-label="Parse tree for 3foo[5;7]">
+  <text x="360" y="28" text-anchor="middle" class="svg-title">Parse Tree: 3foo[5;7]</text>
+  <g class="tree">
+    <circle cx="360" cy="70" r="26"/><text x="360" y="75">Call</text>
+    <!-- Children of Call -->
+    <circle cx="120" cy="150" r="22"/><text x="120" y="155" style="font-size:11px">3foo</text>
+    <circle cx="230" cy="150" r="18"/><text x="230" y="155" style="font-size:13px">[</text>
+    <circle cx="330" cy="150" r="22"/><text x="330" y="155" style="font-size:11px">Arg</text>
+    <circle cx="460" cy="150" r="26"/><text x="460" y="149" style="font-size:10px">OptArg</text>
+    <circle cx="590" cy="150" r="18"/><text x="590" y="155" style="font-size:13px">]</text>
+    <!-- Arg → num(5) -->
+    <circle cx="330" cy="240" r="20"/><text x="330" y="245">5</text>
+    <!-- OptArg → ; Arg -->
+    <circle cx="420" cy="240" r="18"/><text x="420" y="245">;</text>
+    <circle cx="500" cy="240" r="22"/><text x="500" y="245" style="font-size:11px">Arg</text>
+    <circle cx="500" cy="310" r="20"/><text x="500" y="315">7</text>
+    <!-- Edges -->
+    <path d="M340 92 L140 132" class="tree-edge"/>
+    <path d="M348 92 L238 134" class="tree-edge"/>
+    <path d="M354 94 L336 130" class="tree-edge"/>
+    <path d="M372 92 L448 130" class="tree-edge"/>
+    <path d="M378 90 L580 134" class="tree-edge"/>
+    <path d="M330 172 L330 220" class="tree-edge"/>
+    <path d="M446 172 L426 224" class="tree-edge"/>
+    <path d="M472 172 L494 220" class="tree-edge"/>
+    <path d="M500 262 L500 290" class="tree-edge"/>
+  </g>
+</svg>
+</div>
+  </div>
+</details>
+
+<aside class="exam-callout"><h3><span aria-hidden="true">&#9889;</span> Paper Summary</h3>
+<ul>
+<li><strong>Q1 (20 marks):</strong> CLR(1) items, parsing table construction, compiler phase identification.</li>
+<li><strong>Q2 (20 marks):</strong> TAC &amp; DAG conversion for complex expressions, theory of TAC forms and temporaries.</li>
+<li><strong>Q3 (20 marks):</strong> SDD attribute classification, annotated parse tree with computed values, semantic error detection.</li>
+<li><strong>Q4 (20 marks):</strong> Machine-independent optimization identification and application, DAG vs AST theory.</li>
+<li><strong>Q5 (20 marks):</strong> C code to TAC/Assembly translation, custom language regex/CFG/SDT design.</li>
+</ul></aside>
+</section>
+  </main>
+  <a class="backtop" href="#source-note" aria-label="Back to top">Top</a>
+  <script>
+const links = [...document.querySelectorAll('.nav a')];
+const sections = [...document.querySelectorAll('main section')];
+const current = document.querySelector('.current-title');
+const progress = document.querySelector('.progress-bar');
+const byId = Object.fromEntries(links.map(a => [a.getAttribute('href').slice(1), a]));
+const observer = new IntersectionObserver(entries => {
+  const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+  if (!visible) return;
+  links.forEach(a => a.classList.remove('active'));
+  const id = visible.target.id;
+  byId[id]?.classList.add('active');
+  current.textContent = visible.target.dataset.title || visible.target.querySelector('h2')?.textContent || '';
+}, { rootMargin: '-15% 0px -70% 0px', threshold: [0, .2, .5, .8] });
+sections.forEach(s => observer.observe(s));
+function updateProgress(){
+  const doc = document.documentElement;
+  const max = doc.scrollHeight - doc.clientHeight;
+  progress.style.width = max <= 0 ? '0%' : `${Math.min(100, (doc.scrollTop / max) * 100)}%`;
+}
+document.addEventListener('scroll', updateProgress, { passive:true });
+updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical &amp; Business Writing — Mid-2 Notes</title>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.72;color:#1e293b;background:#f8fafc}
+
+/* ===== LAYOUT ===== */
+.page-wrapper{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{position:sticky;top:0;height:100vh;width:280px;min-width:280px;background:#ffffff;border-right:1px solid #e2e8f0;overflow-y:auto;padding:28px 20px;z-index:100}
+.sidebar h2{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:#94a3b8;margin-bottom:14px;font-weight:700}
+.sidebar ul{list-style:none}
+.sidebar li{margin-bottom:2px}
+.sidebar a{display:block;padding:7px 12px;border-radius:6px;color:#475569;text-decoration:none;font-size:.88rem;transition:background .15s,color .15s}
+.sidebar a:hover,.sidebar a:focus{background:#f1f5f9;color:#0f172a}
+.sidebar a.sub{padding-left:28px;font-size:.82rem;color:#64748b}
+.sidebar .brand{font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:24px;display:block;letter-spacing:-.01em}
+
+/* Main content */
+.main{flex:1;max-width:860px;margin:0 auto;padding:48px 40px 100px}
+
+/* ===== TYPOGRAPHY ===== */
+h1{font-size:2.1rem;font-weight:800;color:#0f172a;margin-bottom:6px;letter-spacing:-.02em}
+.subtitle{font-size:1.05rem;color:#64748b;margin-bottom:42px}
+h2{font-size:1.55rem;font-weight:700;color:#0f172a;margin-top:56px;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #e2e8f0}
+h3{font-size:1.2rem;font-weight:600;color:#1e293b;margin-top:32px;margin-bottom:12px}
+h4{font-size:1.02rem;font-weight:600;color:#334155;margin-top:22px;margin-bottom:8px}
+p{margin-bottom:14px;color:#334155}
+strong{color:#0f172a}
+ul,ol{margin:0 0 16px 22px;color:#334155}
+li{margin-bottom:6px}
+li::marker{color:#94a3b8}
+
+/* ===== CARDS ===== */
+.card{background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:28px 30px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+
+/* ===== CALLOUT BOXES ===== */
+.callout{border-radius:10px;padding:18px 22px;margin:18px 0 22px;font-size:.92rem;line-height:1.65}
+.callout-title{font-weight:700;margin-bottom:6px;font-size:.88rem;text-transform:uppercase;letter-spacing:.04em}
+.tip{background:#f0fdf4;border-left:4px solid #22c55e}
+.tip .callout-title{color:#16a34a}
+.warning{background:#fffbeb;border-left:4px solid #f59e0b}
+.warning .callout-title{color:#d97706}
+.key{background:#eff6ff;border-left:4px solid #3b82f6}
+.key .callout-title{color:#2563eb}
+.info{background:#f5f3ff;border-left:4px solid #8b5cf6}
+.info .callout-title{color:#7c3aed}
+
+/* ===== EXAMPLE BLOCKS ===== */
+.example-block{border-radius:10px;padding:20px 24px;margin:16px 0 22px;font-size:.93rem;line-height:1.65}
+.example-good{background:#f0fdf4;border:1px solid #bbf7d0}
+.example-bad{background:#fef2f2;border:1px solid #fecaca}
+.example-neutral{background:#f8fafc;border:1px solid #e2e8f0}
+.example-label{font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.example-good .example-label{color:#16a34a}
+.example-bad .example-label{color:#dc2626}
+.example-neutral .example-label{color:#64748b}
+
+/* ===== TABLES ===== */
+table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:.92rem}
+th{background:#f1f5f9;color:#0f172a;font-weight:600;text-align:left;padding:12px 16px;border-bottom:2px solid #e2e8f0}
+td{padding:11px 16px;border-bottom:1px solid #f1f5f9;color:#334155}
+tr:hover td{background:#f8fafc}
+
+/* ===== PRE / CODE ===== */
+pre{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px 24px;margin:14px 0 22px;font-family:'Cascadia Code','Consolas',monospace;font-size:.86rem;line-height:1.7;overflow-x:auto;white-space:pre-wrap;color:#334155}
+
+/* ===== HIGHLIGHT ===== */
+mark{background:#fef08a;padding:1px 5px;border-radius:3px}
+
+/* ===== SAMPLE RESUME/COVER LETTER ===== */
+.resume-sample{font-family:'Segoe UI',sans-serif;background:#fff;border:1px solid #d1d5db;border-radius:10px;padding:36px 40px;margin:20px 0 28px;max-width:640px;line-height:1.6}
+.resume-sample h3{text-align:center;margin:0 0 2px;font-size:1.35rem;color:#0f172a}
+.resume-sample .contact{text-align:center;font-size:.85rem;color:#64748b;margin-bottom:18px}
+.resume-sample .section-title{font-weight:700;font-size:.9rem;text-transform:uppercase;letter-spacing:.06em;color:#1e293b;border-bottom:1.5px solid #1e293b;padding-bottom:4px;margin:18px 0 8px}
+.resume-sample ul{margin-left:18px;font-size:.9rem}
+.resume-sample li{margin-bottom:4px}
+.resume-sample p{font-size:.9rem;margin-bottom:4px}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:960px){
+  .sidebar{display:none}
+  .main{padding:28px 18px 60px}
+}
+.mobile-menu-btn{display:none;position:fixed;bottom:20px;right:20px;z-index:200;width:50px;height:50px;border-radius:50%;border:none;background:#1e293b;color:#fff;font-size:1.4rem;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+@media(max-width:960px){
+  .mobile-menu-btn{display:flex;align-items:center;justify-content:center}
+}
+
+/* Dos/Donts table */
+.dos-donts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0 24px}
+.dos-donts>div{border-radius:10px;padding:18px 20px;font-size:.92rem}
+.dos-col{background:#f0fdf4;border:1px solid #bbf7d0}
+.donts-col{background:#fef2f2;border:1px solid #fecaca}
+.dos-col h4{color:#16a34a;margin-top:0}
+.donts-col h4{color:#dc2626;margin-top:0}
+
+/* Section numbering badge */
+.section-num{display:inline-block;background:#1e293b;color:#fff;font-size:.78rem;font-weight:700;border-radius:6px;padding:3px 10px;margin-right:8px;vertical-align:middle}
+
+/* Step list */
+.step-list{counter-reset:steps}
+.step-list li{counter-increment:steps;list-style:none;position:relative;padding-left:36px;margin-bottom:14px}
+.step-list li::before{content:counter(steps);position:absolute;left:0;top:1px;width:24px;height:24px;background:#3b82f6;color:#fff;border-radius:50%;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="page-wrapper">
+<nav class="sidebar" id="sidebar">
+  <span class="brand">TBW Mid-2 Notes</span>
+  <h2>Contents</h2>
+  <ul>
+    <li><a href="#instructional-writing"><span class="section-num">1</span> Instructional Writing</a></li>
+    <li><a href="#iw-definition" class="sub">Definition &amp; Purpose</a></li>
+    <li><a href="#iw-components" class="sub">Key Components</a></li>
+    <li><a href="#iw-guide" class="sub">Step-by-step Guide</a></li>
+    <li><a href="#iw-examples" class="sub">Examples</a></li>
+    <li><a href="#iw-dosdont" class="sub">Do's &amp; Don'ts</a></li>
+
+    <li><a href="#resume-cover"><span class="section-num">2</span> Resume &amp; Cover Letter</a></li>
+    <li><a href="#rc-resume" class="sub">Resume Structure</a></li>
+    <li><a href="#rc-sample-resume" class="sub">Sample Resume</a></li>
+    <li><a href="#rc-cover" class="sub">Cover Letter Format</a></li>
+    <li><a href="#rc-sample-cover" class="sub">Sample Cover Letter</a></li>
+    <li><a href="#rc-dosdont" class="sub">Do's &amp; Don'ts</a></li>
+
+    <li><a href="#read-research"><span class="section-num">3</span> How to Read a Research Paper</a></li>
+    <li><a href="#rr-sections" class="sub">Sections of a Paper</a></li>
+    <li><a href="#rr-method" class="sub">Step-by-step Method</a></li>
+    <li><a href="#rr-practical" class="sub">Practical Example</a></li>
+
+    <li><a href="#intro-writing"><span class="section-num">4</span> Introduction Writing</a></li>
+    <li><a href="#iw2-motivation" class="sub">Motivation</a></li>
+    <li><a href="#iw2-problem" class="sub">Problem Statement</a></li>
+    <li><a href="#iw2-purpose" class="sub">Purpose Statement</a></li>
+    <li><a href="#iw2-comparison" class="sub">Comparison Table</a></li>
+
+    <li><a href="#exam-practice"><span class="section-num">5</span> Exam Practice Questions</a></li>
+  </ul>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main">
+
+<!-- ==================== TITLE ==================== -->
+<header>
+  <h1>Technical &amp; Business Writing</h1>
+  <p class="subtitle">Mid-Semester 2 — Comprehensive Study Notes</p>
+</header>
+
+<!-- ============================================================
+     SECTION 1 — INSTRUCTIONAL WRITING
+     ============================================================ -->
+<section id="instructional-writing">
+  <h2><span class="section-num">1</span> Instructional Writing</h2>
+
+  <!-- Definition -->
+  <article id="iw-definition" class="card">
+    <h3>Definition</h3>
+    <p><strong>Instructional writing</strong> is a form of technical communication that provides step-by-step directions to help a reader complete a specific task. Its primary aim is clarity: the reader should be able to follow the instructions and achieve the desired outcome without confusion or ambiguity.</p>
+
+    <h3>Purpose</h3>
+    <ul>
+      <li>Guide users through processes, procedures, or tasks in a logical sequence.</li>
+      <li>Reduce errors, safety hazards, and the need for additional support.</li>
+      <li>Serve as a permanent, reusable reference (manuals, SOPs, how-to guides).</li>
+      <li>Ensure consistency when multiple people perform the same task.</li>
+    </ul>
+
+    <div class="callout key">
+      <div class="callout-title">Key Principle</div>
+      Instructional writing is <strong>reader-centred</strong>. Every decision — word choice, step order, visual aids — should be made with the target audience in mind.
+    </div>
+  </article>
+
+  <!-- Key Components -->
+  <article id="iw-components" class="card">
+    <h3>Key Components of Instructional Writing</h3>
+    <ol>
+      <li><strong>Title:</strong> A concise, descriptive heading that tells the reader exactly what the instructions will help them accomplish (e.g., "How to Set Up a Wireless Router").</li>
+      <li><strong>Introduction / Overview:</strong> A brief statement of purpose, the intended audience, and any prerequisites (materials, tools, prior knowledge).</li>
+      <li><strong>Materials / Requirements List:</strong> Everything the reader needs before beginning, presented in a bulleted list.</li>
+      <li><strong>Sequential Steps:</strong> Numbered, action-oriented sentences, each beginning with a command verb (e.g., "Click," "Insert," "Attach").</li>
+      <li><strong>Warnings / Cautions / Notes:</strong> Safety alerts or important information placed <em>before</em> the step they relate to, visually distinct from regular text.</li>
+      <li><strong>Visuals:</strong> Diagrams, screenshots, or illustrations that supplement written steps.</li>
+      <li><strong>Expected Outcome / Conclusion:</strong> A brief description of what the reader should see or have achieved upon completion.</li>
+      <li><strong>Troubleshooting (optional):</strong> Common problems and their solutions.</li>
+    </ol>
+  </article>
+
+  <!-- Step-by-step Guide -->
+  <article id="iw-guide" class="card">
+    <h3>Step-by-step Guide: How to Write Effective Instructions</h3>
+    <ol class="step-list">
+      <li><strong>Identify your audience.</strong> Determine their knowledge level (beginner, intermediate, expert). This controls vocabulary, detail level, and the inclusion of background information.</li>
+      <li><strong>Define the task scope.</strong> Clearly decide where the process starts and ends. Avoid scope creep — one set of instructions per task.</li>
+      <li><strong>Gather information.</strong> Perform the task yourself, interview subject-matter experts, or consult existing documentation.</li>
+      <li><strong>List all materials and prerequisites.</strong> Place these before the first step so the reader can prepare everything in advance.</li>
+      <li><strong>Write steps in chronological order.</strong> Each step should describe exactly one action. Use imperative mood ("Press the button," not "You should press the button").</li>
+      <li><strong>Add warnings before the relevant step.</strong> Never bury safety information inside or after a step — the reader may act before reading ahead.</li>
+      <li><strong>Use consistent formatting.</strong> Number each step. Use bold for UI elements or key objects. Use bullet lists for sub-steps.</li>
+      <li><strong>Include visuals where helpful.</strong> A labelled diagram or screenshot can replace paragraphs of description.</li>
+      <li><strong>State the expected result.</strong> End with what the reader should observe ("The LED will turn solid green").</li>
+      <li><strong>Test your instructions.</strong> Have someone from the target audience follow your instructions. Revise based on their feedback.</li>
+    </ol>
+  </article>
+
+  <!-- Examples -->
+  <article id="iw-examples" class="card">
+    <h3>Examples</h3>
+
+    <h4>Example 1 — How to Create a Strong Password</h4>
+    <div class="example-block example-good">
+      <div class="example-label">Good Example</div>
+      <pre>
+HOW TO CREATE A STRONG PASSWORD
+
+Purpose: This guide helps you create a secure password
+that protects your online accounts from unauthorized access.
+
+Requirements:
+• Access to the account or service where you want to set a password.
+• A password manager application (recommended).
+
+Steps:
+1. Open the account settings or registration page of the website.
+2. Navigate to the "Password" or "Security" section.
+3. Choose a password that is at least 12 characters long.
+4. Include at least:
+   – One uppercase letter (A–Z)
+   – One lowercase letter (a–z)
+   – One number (0–9)
+   – One special character (!, @, #, $, etc.)
+5. Avoid using personal information such as your name,
+   birthday, or common words like "password" or "123456."
+6. Type the password into the "New Password" field.
+7. Re-type it in the "Confirm Password" field.
+8. Click "Save" or "Update Password."
+
+⚠ WARNING: Never share your password with anyone or
+write it on a sticky note attached to your monitor.
+
+Expected Result:
+Your password is now updated. You will use this new
+password the next time you log in.</pre>
+    </div>
+
+    <h4>Example 2 — How to Send a Professional Email</h4>
+    <div class="example-block example-good">
+      <div class="example-label">Good Example</div>
+      <pre>
+HOW TO SEND A PROFESSIONAL EMAIL
+
+Purpose: This guide walks you through composing and
+sending a clear, professional email.
+
+Requirements:
+• An active email account (e.g., Gmail, Outlook).
+• The recipient's email address.
+
+Steps:
+1. Open your email application and click "Compose"
+   or "New Email."
+2. In the "To" field, enter the recipient's email address.
+   Double-check for typos.
+3. Write a concise, specific subject line.
+   – Good: "Meeting Rescheduled to March 15"
+   – Bad: "Hi" or "(no subject)"
+4. Start with a professional greeting:
+   – "Dear Professor Khan," (formal)
+   – "Hi Sarah," (semi-formal, if appropriate)
+5. State the purpose of your email in the first sentence.
+6. Provide necessary details in the body. Use short
+   paragraphs and bullet points for readability.
+7. End with a polite closing:
+   – "Best regards," / "Sincerely," / "Thank you,"
+8. Add your full name and any relevant contact
+   information below the closing.
+9. Proofread the entire email for spelling, grammar,
+   and tone.
+10. Click "Send."
+
+Expected Result:
+The recipient receives a clear, courteous, and
+professional email.</pre>
+    </div>
+
+    <h4>Contrast: Bad Instructional Writing</h4>
+    <div class="example-block example-bad">
+      <div class="example-label">Bad Example</div>
+      <pre>
+SENDING AN EMAIL
+
+So basically you just open your email and type stuff in.
+Make sure you put the address in the right spot and write
+something in the subject. Then just write your message and
+hit send. It's pretty easy honestly.</pre>
+    </div>
+    <p><strong>Why is it bad?</strong> No numbered steps, vague language ("type stuff"), no audience awareness, missing prerequisites, no expected result, and an unprofessional tone.</p>
+  </article>
+
+  <!-- Do's & Don'ts -->
+  <article id="iw-dosdont" class="card">
+    <h3>Do's &amp; Don'ts</h3>
+    <div class="dos-donts">
+      <div class="dos-col">
+        <h4>Do</h4>
+        <ul>
+          <li>Use numbered steps for sequential tasks.</li>
+          <li>Begin each step with an action verb.</li>
+          <li>Keep one action per step.</li>
+          <li>Place warnings <em>before</em> the step.</li>
+          <li>Write for your specific audience.</li>
+          <li>Test instructions with real users.</li>
+          <li>Use visuals to complement text.</li>
+        </ul>
+      </div>
+      <div class="donts-col">
+        <h4>Don't</h4>
+        <ul>
+          <li>Use jargon without defining it (for beginners).</li>
+          <li>Combine multiple actions in one step.</li>
+          <li>Assume the reader "just knows" things.</li>
+          <li>Use passive voice ("The button should be clicked").</li>
+          <li>Skip the materials/prerequisites list.</li>
+          <li>Write in paragraph form instead of steps.</li>
+          <li>Place warnings after the dangerous step.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Common Exam Mistakes</div>
+      <ul>
+        <li>Students write instructions in paragraph form instead of numbered steps.</li>
+        <li>Steps lack command verbs — e.g., "The file" instead of "Open the file."</li>
+        <li>Missing title, audience statement, or expected outcome.</li>
+        <li>Warnings placed <em>after</em> the step where the hazard occurs.</li>
+      </ul>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Exam Tips</div>
+      <ul>
+        <li>Always include a <strong>title</strong>, <strong>introduction</strong>, <strong>materials</strong>, <strong>numbered steps</strong>, and an <strong>expected result</strong> — examiners look for structure.</li>
+        <li>Use the imperative mood consistently. It immediately signals instructional writing.</li>
+        <li>If asked to critique bad instructions, identify: vague language, missing steps, no audience awareness, and poor formatting.</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<!-- ============================================================
+     SECTION 2 — RESUME AND COVER LETTER
+     ============================================================ -->
+<section id="resume-cover">
+  <h2><span class="section-num">2</span> Resume &amp; Cover Letter</h2>
+
+  <!-- Resume -->
+  <article id="rc-resume" class="card">
+    <h3>Resume — Definition &amp; Purpose</h3>
+    <p>A <strong>resume</strong> (also <em>curriculum vitae</em> in some regions) is a concise, structured document that summarizes your education, skills, experience, and achievements. Its purpose is to persuade a potential employer to invite you for an interview.</p>
+
+    <div class="callout key">
+      <div class="callout-title">Key Fact</div>
+      Recruiters spend an average of <strong>6–7 seconds</strong> on an initial resume scan. Clarity, formatting, and relevance are critical.
+    </div>
+
+    <h3>Resume Structure (Sections)</h3>
+    <table>
+      <thead>
+        <tr><th>Section</th><th>Content</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Header / Contact Information</strong></td><td>Full name, phone number, professional email, LinkedIn URL (optional), city &amp; country.</td></tr>
+        <tr><td><strong>Objective / Summary</strong></td><td>2–3 sentences stating your career goal and key qualifications. Tailor to each job.</td></tr>
+        <tr><td><strong>Education</strong></td><td>Degree(s), institution name, graduation date, GPA (if strong), honours/awards.</td></tr>
+        <tr><td><strong>Work Experience</strong></td><td>Job title, company, dates; bullet-point achievements (not just duties). Use action verbs and quantify results.</td></tr>
+        <tr><td><strong>Skills</strong></td><td>Technical skills, software, languages, certifications relevant to the position.</td></tr>
+        <tr><td><strong>Projects (optional)</strong></td><td>Academic or personal projects demonstrating practical abilities.</td></tr>
+        <tr><td><strong>Extracurricular / Volunteer (optional)</strong></td><td>Leadership roles, community service, relevant activities.</td></tr>
+        <tr><td><strong>References</strong></td><td>"Available upon request" or list 2–3 professional references with contact details.</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Formatting Best Practices</h4>
+    <ul>
+      <li>Keep it to <strong>one page</strong> (for students and early-career professionals).</li>
+      <li>Use a clean, professional font (e.g., Calibri, Garamond, Arial) at 10–12 pt.</li>
+      <li>Maintain consistent margins (0.5"–1").</li>
+      <li>Use <strong>reverse chronological order</strong> (most recent first) for education and experience.</li>
+      <li>Use bullet points, not paragraphs, under each role.</li>
+      <li>Start bullets with <strong>action verbs</strong>: Developed, Managed, Designed, Increased, Led.</li>
+      <li><strong>Quantify achievements</strong>: "Increased sales by 20%" rather than "Helped with sales."</li>
+      <li>No photos, fancy graphics, or coloured backgrounds (unless design field).</li>
+    </ul>
+  </article>
+
+  <!-- Sample Resume -->
+  <article id="rc-sample-resume" class="card">
+    <h3>Sample Resume</h3>
+    <div class="resume-sample">
+      <h3>AYESHA KHAN</h3>
+      <div class="contact">
+        +92-321-1234567 &nbsp;|&nbsp; ayesha.khan@email.com &nbsp;|&nbsp; linkedin.com/in/ayeshakhan &nbsp;|&nbsp; Islamabad, Pakistan
+      </div>
+
+      <div class="section-title">Objective</div>
+      <p>Detail-oriented Computer Science graduate seeking a Software Engineering internship where I can apply my skills in Python, web development, and data analysis to contribute to innovative projects.</p>
+
+      <div class="section-title">Education</div>
+      <p><strong>BS Computer Science</strong> — FAST-NUCES, Islamabad<br>
+      Expected Graduation: June 2026 &nbsp;|&nbsp; CGPA: 3.62 / 4.00</p>
+      <ul>
+        <li>Dean's List — Fall 2024, Spring 2025</li>
+        <li>Relevant Coursework: Data Structures, Database Systems, Software Engineering, Technical Writing</li>
+      </ul>
+
+      <div class="section-title">Experience</div>
+      <p><strong>Web Development Intern</strong> — TechNova Solutions, Islamabad<br>
+      June 2025 – August 2025</p>
+      <ul>
+        <li>Developed 5 responsive landing pages using HTML, CSS, and JavaScript, increasing client engagement by 18%.</li>
+        <li>Collaborated with a 4-person team using Agile methodology and Git version control.</li>
+        <li>Wrote unit tests that improved code coverage from 62% to 89%.</li>
+      </ul>
+
+      <div class="section-title">Projects</div>
+      <p><strong>Student Portal Web App</strong> (Academic Project)</p>
+      <ul>
+        <li>Built a full-stack portal using React and Node.js, allowing 500+ students to access grades and schedules.</li>
+        <li>Implemented JWT-based authentication and RESTful APIs.</li>
+      </ul>
+
+      <div class="section-title">Skills</div>
+      <ul>
+        <li><strong>Languages:</strong> Python, JavaScript, C++, SQL</li>
+        <li><strong>Frameworks:</strong> React, Node.js, Django</li>
+        <li><strong>Tools:</strong> Git, VS Code, Figma, Jira</li>
+        <li><strong>Soft Skills:</strong> Technical Writing, Team Collaboration, Problem Solving</li>
+      </ul>
+
+      <div class="section-title">References</div>
+      <p>Available upon request.</p>
+    </div>
+  </article>
+
+  <!-- Cover Letter -->
+  <article id="rc-cover" class="card">
+    <h3>Cover Letter — Definition &amp; Purpose</h3>
+    <p>A <strong>cover letter</strong> is a one-page document that accompanies your resume. It introduces you to the employer, explains why you are interested in the position, and highlights the most relevant qualifications that make you a strong candidate.</p>
+
+    <h3>Cover Letter Structure</h3>
+    <table>
+      <thead>
+        <tr><th>Part</th><th>Content</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Header</strong></td><td>Your contact information, date, employer's contact information.</td></tr>
+        <tr><td><strong>Salutation</strong></td><td>"Dear Mr./Ms. [Last Name]," or "Dear Hiring Manager," if the name is unknown.</td></tr>
+        <tr><td><strong>Opening Paragraph</strong></td><td>State the position you are applying for, where you found it, and a compelling hook (why you are excited about this role).</td></tr>
+        <tr><td><strong>Body Paragraph(s)</strong></td><td>Connect your skills and experiences to the job requirements. Use specific examples. Explain what you can contribute.</td></tr>
+        <tr><td><strong>Closing Paragraph</strong></td><td>Restate your enthusiasm, mention enclosed resume, request an interview, and provide contact details.</td></tr>
+        <tr><td><strong>Sign-off</strong></td><td>"Sincerely," / "Best regards," followed by your full name.</td></tr>
+      </tbody>
+    </table>
+  </article>
+
+  <!-- Sample Cover Letter -->
+  <article id="rc-sample-cover" class="card">
+    <h3>Sample Cover Letter</h3>
+    <div class="resume-sample">
+      <p style="text-align:right;font-size:.88rem;color:#64748b;">
+        Ayesha Khan<br>
+        Islamabad, Pakistan<br>
+        ayesha.khan@email.com<br>
+        +92-321-1234567<br><br>
+        April 13, 2026
+      </p>
+
+      <p>
+        Hiring Manager<br>
+        TechNova Solutions<br>
+        Blue Area, Islamabad
+      </p>
+
+      <p><strong>Subject: Application for Software Engineering Internship</strong></p>
+
+      <p>Dear Hiring Manager,</p>
+
+      <p>I am writing to express my interest in the Software Engineering Internship position advertised on your careers page. As a final-year Computer Science student at FAST-NUCES with hands-on experience in web development, I am eager to contribute to TechNova's innovative projects while continuing to grow as a developer.</p>
+
+      <p>During my previous internship at TechNova, I developed five responsive landing pages that increased client engagement by 18% and improved code coverage from 62% to 89% through comprehensive unit testing. These experiences strengthened my proficiency in JavaScript, React, and collaborative development using Git and Agile methodology. My academic project — a full-stack Student Portal — further demonstrates my ability to design, build, and deploy user-centred applications.</p>
+
+      <p>I am particularly drawn to TechNova's commitment to mentoring junior developers and its focus on scalable cloud solutions. I am confident that my technical skills, combined with my strong work ethic and eagerness to learn, make me a valuable addition to your engineering team.</p>
+
+      <p>I have enclosed my resume for your review. I would welcome the opportunity to discuss how my background aligns with your team's goals. Please feel free to contact me at your convenience.</p>
+
+      <p>Sincerely,<br><strong>Ayesha Khan</strong></p>
+    </div>
+  </article>
+
+  <!-- Do's & Don'ts -->
+  <article id="rc-dosdont" class="card">
+    <h3>Do's &amp; Don'ts — Resume &amp; Cover Letter</h3>
+    <div class="dos-donts">
+      <div class="dos-col">
+        <h4>Do</h4>
+        <ul>
+          <li>Tailor each resume and cover letter to the specific job.</li>
+          <li>Use action verbs and quantify achievements.</li>
+          <li>Keep resume to one page (students).</li>
+          <li>Address the cover letter to a specific person if possible.</li>
+          <li>Proofread multiple times.</li>
+          <li>Use a professional email address.</li>
+          <li>Match the visual style of the resume and cover letter.</li>
+        </ul>
+      </div>
+      <div class="donts-col">
+        <h4>Don't</h4>
+        <ul>
+          <li>Use a generic objective for every application.</li>
+          <li>List duties instead of achievements.</li>
+          <li>Include personal details like age, religion, or marital status.</li>
+          <li>Use "To Whom It May Concern."</li>
+          <li>Repeat the resume word-for-word in the cover letter.</li>
+          <li>Use unprofessional email (coolboy99@...).</li>
+          <li>Include irrelevant hobbies ("I enjoy sleeping").</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Common Exam Mistakes</div>
+      <ul>
+        <li>Writing a cover letter that simply restates the resume without adding context or personality.</li>
+        <li>Forgetting to include quantified achievements ("Managed social media" vs. "Grew Instagram following by 40% in 3 months").</li>
+        <li>Incorrect formatting: inconsistent fonts, missing dates, no header.</li>
+        <li>Objective statement too vague: "I want a good job" — gives the examiner nothing to evaluate.</li>
+      </ul>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Exam Tips</div>
+      <ul>
+        <li>If asked to "write a resume," include <strong>all sections</strong> (header, objective, education, experience, skills, references) even if some are fictitious.</li>
+        <li>For cover letters, clearly show the <strong>three-paragraph structure</strong>: opening hook → body evidence → closing call-to-action.</li>
+        <li>If given a "bad resume" to improve, check for: missing action verbs, no quantification, poor formatting, irrelevant content, and grammatical errors.</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<!-- ============================================================
+     SECTION 3 — HOW TO READ A RESEARCH PAPER
+     ============================================================ -->
+<section id="read-research">
+  <h2><span class="section-num">3</span> How to Read a Research Paper</h2>
+
+  <article class="card">
+    <h3>Definition &amp; Purpose</h3>
+    <p>Reading a research paper is a <strong>structured analytical skill</strong> — not casual reading. The goal is to extract the paper's contribution, evaluate its methodology, understand its findings, and determine its relevance to your own work or study.</p>
+
+    <div class="callout key">
+      <div class="callout-title">Why This Matters</div>
+      In academic and professional settings, you will regularly read papers for literature reviews, project research, and staying current in your field. Efficient reading saves time and improves comprehension.
+    </div>
+  </article>
+
+  <!-- Sections of a Research Paper -->
+  <article id="rr-sections" class="card">
+    <h3>Sections of a Research Paper</h3>
+    <table>
+      <thead>
+        <tr><th>Section</th><th>Purpose</th><th>What to Look For</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Title &amp; Abstract</strong></td>
+          <td>Summarize the entire paper in ~150–300 words.</td>
+          <td>Research question, method, key finding, conclusion. Decide if the paper is relevant.</td>
+        </tr>
+        <tr>
+          <td><strong>Introduction</strong></td>
+          <td>Provide background, state the problem, and present the research objective.</td>
+          <td>Motivation for the study, gap in existing knowledge, thesis / research question.</td>
+        </tr>
+        <tr>
+          <td><strong>Literature Review</strong></td>
+          <td>Survey existing work related to the topic.</td>
+          <td>Key references, how this work differs from or builds upon prior studies.</td>
+        </tr>
+        <tr>
+          <td><strong>Methodology</strong></td>
+          <td>Describe how the research was conducted.</td>
+          <td>Research design, data collection, tools, sample size, variables, reproducibility.</td>
+        </tr>
+        <tr>
+          <td><strong>Results</strong></td>
+          <td>Present findings without interpretation.</td>
+          <td>Tables, graphs, statistical data. Look for patterns and anomalies.</td>
+        </tr>
+        <tr>
+          <td><strong>Discussion</strong></td>
+          <td>Interpret results and relate them to the research question.</td>
+          <td>Authors' explanation of findings, limitations, comparison with other studies.</td>
+        </tr>
+        <tr>
+          <td><strong>Conclusion</strong></td>
+          <td>Summarize contributions and suggest future work.</td>
+          <td>Main takeaway, practical implications, areas for further research.</td>
+        </tr>
+        <tr>
+          <td><strong>References</strong></td>
+          <td>List all cited sources.</td>
+          <td>Useful for finding related work and verifying claims.</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+
+  <!-- Step-by-step Method -->
+  <article id="rr-method" class="card">
+    <h3>Step-by-step Method: The Three-Pass Approach</h3>
+
+    <h4>Pass 1 — Skimming (5–10 minutes)</h4>
+    <p>Goal: Decide if the paper is worth reading in depth.</p>
+    <ol class="step-list">
+      <li>Read the <strong>title</strong> and <strong>abstract</strong> carefully.</li>
+      <li>Read all <strong>section headings</strong> and <strong>sub-headings</strong> to understand the structure.</li>
+      <li>Glance at <strong>figures, tables, and graphs</strong> — they often contain the core results.</li>
+      <li>Read the <strong>conclusion</strong> to understand the paper's main claims.</li>
+      <li>Scan the <strong>references</strong> — do you recognize any? This tells you the research community.</li>
+    </ol>
+    <div class="callout info">
+      <div class="callout-title">After Pass 1, answer</div>
+      <ul>
+        <li>What type of paper is it? (empirical, theoretical, review, case study)</li>
+        <li>Is it relevant to my needs?</li>
+        <li>Do the claims seem reasonable?</li>
+      </ul>
+    </div>
+
+    <h4>Pass 2 — Comprehensive Reading (30–60 minutes)</h4>
+    <p>Goal: Understand the content without worrying about every detail.</p>
+    <ol class="step-list">
+      <li>Read the entire paper, but <strong>skip complex proofs or mathematical derivations</strong> on the first pass.</li>
+      <li><strong>Annotate</strong> as you go: highlight key claims, underline definitions, mark sections you don't understand.</li>
+      <li>Study all <strong>figures and tables</strong> closely — read captions and axes labels.</li>
+      <li>Identify the <strong>main arguments</strong> and the <strong>evidence</strong> supporting each.</li>
+      <li>Note any <strong>terms or references</strong> you need to look up later.</li>
+    </ol>
+
+    <h4>Pass 3 — Critical Analysis (1–2 hours, for important papers)</h4>
+    <p>Goal: Deeply understand and evaluate the paper.</p>
+    <ol class="step-list">
+      <li><strong>Re-read the methodology</strong> in detail. Could you reproduce this study?</li>
+      <li><strong>Evaluate the evidence</strong>: Is the sample size adequate? Are the statistical tests appropriate? Are there confounding variables?</li>
+      <li><strong>Challenge every assumption.</strong> What if the authors are wrong? What alternative explanations exist?</li>
+      <li><strong>Compare</strong> with other papers you've read on the same topic.</li>
+      <li><strong>Summarize</strong> the paper in your own words: problem, method, key findings, limitations, and your assessment.</li>
+    </ol>
+  </article>
+
+  <!-- Practical Example -->
+  <article id="rr-practical" class="card">
+    <h3>Practical Example: Analyzing a Paper</h3>
+    <p>Suppose you are reading: <em>"The Impact of Social Media on Academic Performance Among University Students"</em></p>
+
+    <div class="example-block example-neutral">
+      <div class="example-label">Analysis Walkthrough</div>
+
+      <p><strong>Pass 1 — Skim:</strong></p>
+      <ul>
+        <li><strong>Title:</strong> Clearly about social media + academic performance.</li>
+        <li><strong>Abstract:</strong> Says the study surveyed 350 students and found a negative correlation between daily social media use (&gt;3 hrs) and GPA.</li>
+        <li><strong>Headings:</strong> Introduction, Literature Review, Methodology, Results, Discussion, Conclusion — standard structure.</li>
+        <li><strong>Conclusion:</strong> Recommends universities implement digital wellness programs.</li>
+        <li><strong>Decision:</strong> Relevant to my topic — proceed to Pass 2.</li>
+      </ul>
+
+      <p><strong>Pass 2 — Read:</strong></p>
+      <ul>
+        <li><strong>Introduction:</strong> Motivation is the growing use of social media among students; problem is conflicting findings in prior studies.</li>
+        <li><strong>Methodology:</strong> Quantitative survey, 350 respondents, Likert scale, correlation analysis.</li>
+        <li><strong>Results:</strong> Table shows r = −0.42 (moderate negative correlation). Figure 3 plots GPA vs. hours on social media.</li>
+        <li><strong>Discussion:</strong> Authors note that correlation ≠ causation; acknowledge self-reporting bias.</li>
+      </ul>
+
+      <p><strong>Pass 3 — Critique:</strong></p>
+      <ul>
+        <li><strong>Strength:</strong> Decent sample size (350), standardized tool.</li>
+        <li><strong>Weakness:</strong> Self-reported data, single university only (limits generalizability), no control for other variables (sleep, part-time work).</li>
+        <li><strong>My assessment:</strong> Useful as supporting evidence but not conclusive on its own. Should be cited alongside studies with experimental or longitudinal designs.</li>
+      </ul>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Exam Tips</div>
+      <ul>
+        <li>If asked "How do you read a research paper?", always mention the <strong>three-pass approach</strong>.</li>
+        <li>Be ready to explain what you look for in <strong>each section</strong> of a paper.</li>
+        <li>Practice identifying <strong>strengths and weaknesses</strong> — examiners often ask for critical evaluation.</li>
+        <li>Know the difference between <strong>correlation and causation</strong> — a frequent exam concept.</li>
+      </ul>
+    </div>
+
+    <div class="dos-donts">
+      <div class="dos-col">
+        <h4>Do</h4>
+        <ul>
+          <li>Read the abstract and conclusion first.</li>
+          <li>Take notes and annotate actively.</li>
+          <li>Look up unfamiliar terms.</li>
+          <li>Evaluate methodology critically.</li>
+          <li>Summarize in your own words.</li>
+        </ul>
+      </div>
+      <div class="donts-col">
+        <h4>Don't</h4>
+        <ul>
+          <li>Read linearly like a novel.</li>
+          <li>Accept all claims at face value.</li>
+          <li>Ignore figures and tables.</li>
+          <li>Skip the references section.</li>
+          <li>Give up if the first pass is confusing — that's normal.</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+</section>
+
+<!-- ============================================================
+     SECTION 4 — INTRODUCTION WRITING
+     ============================================================ -->
+<section id="intro-writing">
+  <h2><span class="section-num">4</span> Introduction Writing</h2>
+
+  <article class="card">
+    <h3>Overview</h3>
+    <p>The introduction is the <strong>opening section</strong> of any research paper, report, or proposal. It sets the stage by telling the reader <em>why</em> the topic matters, <em>what</em> problem exists, and <em>what</em> the study aims to achieve. A well-written introduction contains three core elements:</p>
+    <ol>
+      <li><strong>Motivation</strong> — Why should the reader care?</li>
+      <li><strong>Problem Statement</strong> — What specific gap or issue does this work address?</li>
+      <li><strong>Purpose Statement</strong> — What does this study intend to do about it?</li>
+    </ol>
+    <div class="callout key">
+      <div class="callout-title">The Funnel Structure</div>
+      Introductions typically follow a <strong>funnel (general → specific)</strong> pattern: start with broad context (motivation), narrow down to the specific problem, and then state your purpose/objective.
+    </div>
+  </article>
+
+  <!-- Motivation -->
+  <article id="iw2-motivation" class="card">
+    <h3>Motivation</h3>
+    <h4>Definition</h4>
+    <p>The <strong>motivation</strong> establishes the broader context of the research. It answers: <mark>"Why is this topic important?"</mark> and <mark>"Why should anyone care about this research?"</mark> It provides the background that justifies the existence of the study.</p>
+
+    <h4>Purpose</h4>
+    <ul>
+      <li>Hook the reader's attention.</li>
+      <li>Establish the significance and relevance of the topic.</li>
+      <li>Provide necessary background information.</li>
+      <li>Create a logical bridge to the problem statement.</li>
+    </ul>
+
+    <h4>How to Write a Strong Motivation</h4>
+    <ol class="step-list">
+      <li><strong>Start with the big picture.</strong> Introduce the general field or topic area.</li>
+      <li><strong>Cite relevant statistics or trends</strong> that show the topic's importance (e.g., "Over 4.9 billion people worldwide use social media as of 2025").</li>
+      <li><strong>Highlight real-world impact.</strong> Explain why this topic matters to society, industry, or academia.</li>
+      <li><strong>Connect to the reader's context.</strong> If your audience is students, relate the topic to their experience.</li>
+      <li><strong>Transition smoothly</strong> to the problem by indicating that despite progress, a gap or challenge remains.</li>
+    </ol>
+
+    <h4>Examples</h4>
+    <div class="example-block example-good">
+      <div class="example-label">Good Motivation</div>
+      <p>"The rapid growth of e-commerce has transformed consumer behaviour worldwide. In Pakistan alone, online retail revenue exceeded $6 billion in 2025, representing a 28% increase from the previous year (Pakistan Bureau of Statistics, 2025). As businesses increasingly shift to digital platforms, the need for effective cybersecurity measures has become paramount. Data breaches cost companies an average of $4.45 million per incident globally (IBM, 2024), making this not only a technical concern but a critical business challenge. <em>However, despite this growing threat, small and medium enterprises (SMEs) continue to lag in adopting robust security frameworks.</em>"</p>
+    </div>
+
+    <div class="example-block example-bad">
+      <div class="example-label">Bad Motivation</div>
+      <p>"Cybersecurity is very important these days. Everyone knows that hacking is bad and we should protect our data. This paper is about cybersecurity."</p>
+    </div>
+
+    <p><strong>Why is the bad version weak?</strong></p>
+    <ul>
+      <li>Too vague — no statistics, no specifics, no evidence.</li>
+      <li>Uses informal language ("Everyone knows").</li>
+      <li>Does not establish significance or context.</li>
+      <li>Jumps directly to the topic without building a logical argument.</li>
+    </ul>
+  </article>
+
+  <!-- Problem Statement -->
+  <article id="iw2-problem" class="card">
+    <h3>Problem Statement</h3>
+    <h4>Definition</h4>
+    <p>A <strong>problem statement</strong> is a clear, concise description of the specific issue, gap, or challenge that the research aims to address. It answers: <mark>"What is the specific problem this study focuses on?"</mark></p>
+
+    <h4>Purpose</h4>
+    <ul>
+      <li>Narrow the focus from the broad motivation to a specific, researchable problem.</li>
+      <li>Identify what is missing, broken, unknown, or inadequate in the current state of knowledge.</li>
+      <li>Justify the need for the study.</li>
+      <li>Give the reader a clear understanding of the research gap.</li>
+    </ul>
+
+    <h4>Characteristics of a Strong Problem Statement</h4>
+    <ul>
+      <li><strong>Specific:</strong> Addresses a well-defined issue, not a broad topic.</li>
+      <li><strong>Evidence-based:</strong> Supported by data, citations, or logical reasoning.</li>
+      <li><strong>Significant:</strong> The problem is worth solving — it has real-world or academic impact.</li>
+      <li><strong>Feasible:</strong> The problem can realistically be investigated within the scope of the study.</li>
+      <li><strong>Gap-oriented:</strong> Clearly states what existing research has <em>not</em> addressed.</li>
+    </ul>
+
+    <h4>How to Write a Problem Statement</h4>
+    <ol class="step-list">
+      <li><strong>Describe the ideal situation</strong> (what should be happening).</li>
+      <li><strong>Describe the reality</strong> (what is actually happening — supported by evidence).</li>
+      <li><strong>Identify the gap</strong> between the ideal and reality.</li>
+      <li><strong>State the consequences</strong> of this gap (why it matters if the problem is not solved).</li>
+      <li><strong>Formulate the problem</strong> as a concise statement or question.</li>
+    </ol>
+
+    <h4>Examples</h4>
+    <div class="example-block example-good">
+      <div class="example-label">Good Problem Statement</div>
+      <p>"While large corporations have invested significantly in cybersecurity infrastructure, small and medium enterprises (SMEs) in Pakistan remain highly vulnerable to cyber threats. A 2024 report by the Pakistan Telecommunication Authority found that 67% of SMEs lack a formal cybersecurity policy, and 43% experienced at least one data breach in the past year. Despite the availability of cost-effective security tools, there is a lack of research examining <em>why</em> SMEs fail to adopt these measures and what barriers — financial, educational, or organizational — prevent implementation."</p>
+    </div>
+
+    <div class="example-block example-bad">
+      <div class="example-label">Bad Problem Statement</div>
+      <p>"Small businesses have problems with cybersecurity. They get hacked sometimes and this is a big issue. Not much research has been done on this topic."</p>
+    </div>
+
+    <p><strong>Why is the bad version weak?</strong></p>
+    <ul>
+      <li>No specifics — what kind of businesses? Where? How often?</li>
+      <li>Claim "not much research" is unsupported — no citation.</li>
+      <li>Doesn't identify a clear gap in the literature.</li>
+      <li>No data or evidence to support the claims.</li>
+    </ul>
+  </article>
+
+  <!-- Purpose Statement -->
+  <article id="iw2-purpose" class="card">
+    <h3>Purpose Statement</h3>
+    <h4>Definition</h4>
+    <p>A <strong>purpose statement</strong> declares the specific aim or objective of the research. It answers: <mark>"What does this study intend to accomplish?"</mark> It directly follows from the problem statement and states how the researcher plans to address the identified gap.</p>
+
+    <h4>Purpose</h4>
+    <ul>
+      <li>Clearly communicate the research objective to the reader.</li>
+      <li>Define the scope and direction of the study.</li>
+      <li>Serve as a roadmap for the rest of the paper.</li>
+    </ul>
+
+    <h4>Key Elements</h4>
+    <ul>
+      <li><strong>Action verb:</strong> "investigate," "examine," "analyze," "evaluate," "explore," "determine."</li>
+      <li><strong>Focus:</strong> The specific phenomenon, variable, or population being studied.</li>
+      <li><strong>Context:</strong> Where and when the study takes place.</li>
+    </ul>
+
+    <h4>Common Templates</h4>
+    <pre>
+"The purpose of this study is to [action verb] the [topic/variable]
+among [population] in [context/location]."
+
+"This research aims to [action verb] the [relationship/effect/impact]
+of [Variable A] on [Variable B] in [setting]."
+
+"The objective of this paper is to [action verb] the factors that
+[influence/contribute to] [phenomenon] in [context]."</pre>
+
+    <h4>Examples</h4>
+    <div class="example-block example-good">
+      <div class="example-label">Good Purpose Statement</div>
+      <p>"The purpose of this study is to investigate the barriers preventing small and medium enterprises (SMEs) in Islamabad from adopting cybersecurity frameworks, with a specific focus on financial constraints, technical knowledge gaps, and organizational culture."</p>
+    </div>
+    <div class="example-block example-good">
+      <div class="example-label">Another Good Example</div>
+      <p>"This research aims to evaluate the effectiveness of gamification techniques in improving student engagement in undergraduate programming courses at FAST-NUCES."</p>
+    </div>
+    <div class="example-block example-bad">
+      <div class="example-label">Bad Purpose Statement</div>
+      <p>"This paper talks about cybersecurity problems in small businesses."</p>
+    </div>
+
+    <p><strong>Why is the bad version weak?</strong></p>
+    <ul>
+      <li>"Talks about" is vague — not an action verb showing clear intent.</li>
+      <li>No specific population, location, or variables.</li>
+      <li>Does not state what the study will actually <em>do</em> or <em>investigate</em>.</li>
+    </ul>
+  </article>
+
+  <!-- Comparison Table -->
+  <article id="iw2-comparison" class="card">
+    <h3>Motivation vs. Problem Statement vs. Purpose Statement</h3>
+    <table>
+      <thead>
+        <tr><th>Aspect</th><th>Motivation</th><th>Problem Statement</th><th>Purpose Statement</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Question it answers</strong></td>
+          <td>Why is this topic important?</td>
+          <td>What specific problem exists?</td>
+          <td>What will this study do about it?</td>
+        </tr>
+        <tr>
+          <td><strong>Scope</strong></td>
+          <td>Broad — general field, big picture</td>
+          <td>Narrow — specific gap or issue</td>
+          <td>Focused — clear research objective</td>
+        </tr>
+        <tr>
+          <td><strong>Typical position</strong></td>
+          <td>Beginning of introduction</td>
+          <td>Middle of introduction</td>
+          <td>End of introduction</td>
+        </tr>
+        <tr>
+          <td><strong>Contains</strong></td>
+          <td>Background, statistics, significance</td>
+          <td>Gap in knowledge, evidence of the problem</td>
+          <td>Action verb + specific research aim</td>
+        </tr>
+        <tr>
+          <td><strong>Tone</strong></td>
+          <td>Establishing importance</td>
+          <td>Identifying a deficiency</td>
+          <td>Declaring an intention</td>
+        </tr>
+        <tr>
+          <td><strong>Analogy</strong></td>
+          <td>"The city has a traffic problem"</td>
+          <td>"Route 5 has no traffic signals, causing 30 accidents/year"</td>
+          <td>"This study will evaluate signal placement options for Route 5"</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4>Complete Introduction Flow — Putting It All Together</h4>
+    <div class="example-block example-good">
+      <div class="example-label">Complete Introduction Example</div>
+      <p><strong>[Motivation]</strong> The global education sector has undergone a dramatic transformation with the integration of technology into classrooms. Online learning platforms like Coursera, edX, and Khan Academy have made quality education accessible to millions. In Pakistan, the Higher Education Commission reported a 65% increase in online course enrolments between 2022 and 2025, highlighting the growing demand for digital education.</p>
+      <p><strong>[Problem Statement]</strong> However, despite this surge in adoption, student completion rates for online courses remain alarmingly low — averaging just 12–15% globally (Jordan, 2024). Research has identified factors such as lack of motivation, poor course design, and insufficient instructor interaction as potential causes, yet few studies have focused on the specific challenges faced by Pakistani university students in completing self-paced online courses.</p>
+      <p><strong>[Purpose Statement]</strong> The purpose of this study is to identify and analyse the factors contributing to low online course completion rates among undergraduate students at Pakistani universities, with a focus on motivation, course design, and peer interaction.</p>
+    </div>
+
+    <div class="callout warning">
+      <div class="callout-title">Common Exam Mistakes</div>
+      <ul>
+        <li>Confusing motivation with problem statement — motivation is the "why it matters," not the "what's wrong."</li>
+        <li>Writing a purpose statement without an action verb (investigate, examine, analyse).</li>
+        <li>Making the problem statement too broad: "Education has problems" is not a problem statement.</li>
+        <li>Forgetting to connect the three elements — they should flow logically from one to the next.</li>
+      </ul>
+    </div>
+
+    <div class="callout tip">
+      <div class="callout-title">Exam Tips</div>
+      <ul>
+        <li>If asked to "write an introduction," always include all three parts: motivation → problem → purpose.</li>
+        <li>Label each part clearly if the question asks you to identify them.</li>
+        <li>Use the <strong>funnel structure</strong>: broad → narrow → specific.</li>
+        <li>Include at least one statistic or citation in your motivation and problem statement, even if fictional for exam purposes — it shows you understand the convention.</li>
+        <li>Memorize 2–3 strong action verbs for purpose statements: <em>investigate, evaluate, examine, analyse, explore</em>.</li>
+      </ul>
+    </div>
+  </article>
+</section>
+
+<!-- ============================================================
+     SECTION 5 — EXAM PRACTICE QUESTIONS
+     ============================================================ -->
+<section id="exam-practice">
+  <h2><span class="section-num">5</span> Exam Practice Questions</h2>
+
+  <article class="card">
+    <h3>A. Conceptual Questions</h3>
+    <ol>
+      <li>Define <strong>instructional writing</strong>. What are its key characteristics?</li>
+      <li>List and explain the essential components of a well-structured set of instructions.</li>
+      <li>What is the difference between a <strong>resume</strong> and a <strong>cover letter</strong>? How do they complement each other?</li>
+      <li>Explain the <strong>three-pass approach</strong> to reading a research paper. What is the goal of each pass?</li>
+      <li>Define <strong>motivation</strong>, <strong>problem statement</strong>, and <strong>purpose statement</strong> in the context of introduction writing. How are they different?</li>
+      <li>Why should instructional writing use <strong>imperative mood</strong>? Give an example.</li>
+      <li>What is the <strong>funnel structure</strong> in introduction writing? Illustrate with a brief outline.</li>
+      <li>Why is it important to place warnings <em>before</em> the relevant step in instructional writing?</li>
+      <li>What are the key sections of a research paper? Briefly describe the purpose of each.</li>
+      <li>What makes a problem statement "strong"? List at least four characteristics.</li>
+    </ol>
+  </article>
+
+  <article class="card">
+    <h3>B. Short-Answer Questions</h3>
+    <ol>
+      <li>Rewrite the following in imperative mood: <em>"The user should click the submit button after filling in all the fields."</em></li>
+      <li>Identify three problems with this objective statement: <em>"I want to get a good job at a nice company where I can learn stuff."</em></li>
+      <li>List five <strong>action verbs</strong> suitable for resume bullet points.</li>
+      <li>What does it mean to <strong>quantify achievements</strong> on a resume? Give two examples.</li>
+      <li>Explain the difference between <strong>correlation</strong> and <strong>causation</strong> when evaluating research paper results.</li>
+      <li>Write a one-sentence <strong>purpose statement</strong> for a study on the effects of sleep deprivation on exam performance among university students.</li>
+      <li>What is a <strong>research gap</strong>? Why is it important in a problem statement?</li>
+      <li>Name three things you should check during Pass 1 (skimming) of a research paper.</li>
+    </ol>
+  </article>
+
+  <article class="card">
+    <h3>C. Scenario-Based Writing Tasks</h3>
+
+    <h4>Task 1 — Instructional Writing</h4>
+    <p>Write a complete set of instructions for <strong>"How to Register for Courses on Your University Portal."</strong> Include: title, introduction, materials/prerequisites, at least 8 numbered steps, one warning, and an expected result.</p>
+
+    <h4>Task 2 — Resume Improvement</h4>
+    <p>The following resume bullet point is weak. Rewrite it to be stronger:</p>
+    <div class="example-block example-bad">
+      <div class="example-label">Weak Version</div>
+      <p>"Was responsible for managing social media accounts and posting content."</p>
+    </div>
+    <p><em>Hint: Add an action verb, specify the platforms, and quantify the result.</em></p>
+
+    <h4>Task 3 — Cover Letter Opening</h4>
+    <p>Write the opening paragraph of a cover letter for a <strong>Data Analyst Internship</strong> at a firm called "DataSphere Analytics." You are a third-year Statistics student at your university.</p>
+
+    <h4>Task 4 — Introduction Writing</h4>
+    <p>Write a complete introduction (motivation + problem statement + purpose statement) for a research paper on: <strong>"The Impact of Remote Work on Employee Productivity in the IT Sector."</strong></p>
+
+    <h4>Task 5 — Research Paper Analysis</h4>
+    <p>You are given a paper titled: <em>"Effects of Gamification on Student Motivation in Online Learning."</em> The abstract states: "This study surveyed 200 students and found that gamified elements increased motivation by 25%."</p>
+    <ul>
+      <li>What questions would you ask during <strong>Pass 2</strong> (comprehensive reading)?</li>
+      <li>Identify two potential <strong>weaknesses</strong> of this study based on the abstract alone.</li>
+    </ul>
+
+    <h4>Task 6 — Identify the Components</h4>
+    <p>Read the following paragraph and identify which sentence(s) represent the <strong>motivation</strong>, <strong>problem statement</strong>, and <strong>purpose statement</strong>:</p>
+    <div class="example-block example-neutral">
+      <div class="example-label">Passage</div>
+      <p>"(1) Mental health awareness among university students has become a growing concern globally, with studies reporting that 1 in 4 students experience anxiety or depression during their academic career. (2) Despite the availability of campus counselling services, a 2024 survey at XYZ University revealed that only 11% of students utilized these resources, suggesting significant barriers to access. (3) This study aims to investigate the factors that prevent undergraduate students at XYZ University from seeking mental health support."</p>
+    </div>
+  </article>
+
+  <article class="card">
+    <h3>D. Good vs. Bad — Identification Questions</h3>
+
+    <h4>Question 1</h4>
+    <p>Which of the following is a better <strong>problem statement</strong>? Explain why.</p>
+    <div class="example-block example-neutral">
+      <div class="example-label">Option A</div>
+      <p>"Pollution is a big problem and we should do something about it."</p>
+    </div>
+    <div class="example-block example-neutral">
+      <div class="example-label">Option B</div>
+      <p>"Air pollution levels in Lahore exceeded WHO safety limits on 280 out of 365 days in 2024, yet only 12% of local factories comply with the EPA's emission standards. There is limited research on the effectiveness of regulatory enforcement mechanisms in reducing industrial emissions in Punjab."</p>
+    </div>
+
+    <h4>Question 2</h4>
+    <p>Which is a better instructional step? Why?</p>
+    <div class="example-block example-neutral">
+      <div class="example-label">Option A</div>
+      <p>"You might want to click the save button now if you're done."</p>
+    </div>
+    <div class="example-block example-neutral">
+      <div class="example-label">Option B</div>
+      <p>"Click <strong>Save</strong> to store your changes."</p>
+    </div>
+
+    <h4>Question 3</h4>
+    <p>Identify all errors in this cover letter excerpt:</p>
+    <div class="example-block example-bad">
+      <div class="example-label">Excerpt with Errors</div>
+      <p>"To Whom It May Concern,<br><br>I am writing this letter because I saw your job posting and I think I would be good at it. I am a hard worker and a team player. I have attached my CV for your review. Please contact me whenever.<br><br>Thanks,<br>Ahmed"</p>
+    </div>
+  </article>
+
+  <article class="card">
+    <h3>E. Answer Key — Quick Reference</h3>
+
+    <h4>Task 2 — Sample Improved Resume Bullet</h4>
+    <div class="example-block example-good">
+      <div class="example-label">Strong Version</div>
+      <p>"Managed Instagram, Facebook, and LinkedIn accounts for a tech startup, creating 60+ posts per month and increasing follower engagement by 35% over 4 months."</p>
+    </div>
+
+    <h4>Task 6 — Component Identification</h4>
+    <table>
+      <thead>
+        <tr><th>Sentence</th><th>Component</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Sentence (1)</td><td><strong>Motivation</strong> — establishes broad importance and cites a statistic.</td></tr>
+        <tr><td>Sentence (2)</td><td><strong>Problem Statement</strong> — identifies the specific gap (low utilisation despite availability).</td></tr>
+        <tr><td>Sentence (3)</td><td><strong>Purpose Statement</strong> — declares the research aim with an action verb ("investigate").</td></tr>
+      </tbody>
+    </table>
+
+    <h4>D — Question 1 Answer</h4>
+    <p><strong>Option B</strong> is the better problem statement because it is specific (Lahore, 2024), evidence-based (WHO limits, 280/365 days, 12% compliance), and identifies a clear research gap (limited research on enforcement effectiveness).</p>
+
+    <h4>D — Question 2 Answer</h4>
+    <p><strong>Option B</strong> is better because it uses imperative mood ("Click"), is concise, specifies the action and result, and avoids hesitant language ("might want to").</p>
+
+    <h4>D — Question 3 — Errors Identified</h4>
+    <ul>
+      <li>"To Whom It May Concern" — should be addressed to a specific person or "Dear Hiring Manager."</li>
+      <li>No mention of the specific position or where it was found.</li>
+      <li>"I think I would be good at it" — vague, unsupported, lacks evidence.</li>
+      <li>"Hard worker and team player" — cliché with no specific examples.</li>
+      <li>"Please contact me whenever" — unprofessional; should specify availability.</li>
+      <li>"Thanks" — too informal; use "Sincerely" or "Best regards."</li>
+      <li>No full name or contact information in sign-off.</li>
+      <li>No mention of what value the candidate brings to the company.</li>
+    </ul>
+  </article>
+</section>
+
+<!-- Footer -->
+<footer style="text-align:center;padding:40px 0 20px;color:#94a3b8;font-size:.82rem;border-top:1px solid #e2e8f0;margin-top:60px;">
+  Technical &amp; Business Writing — Mid-2 Study Notes &nbsp;|&nbsp; Generated April 2026
+</footer>
+
+</main>
+</div>
+
+<!-- Mobile menu toggle -->
+<button class="mobile-menu-btn" onclick="document.getElementById('sidebar').style.display=document.getElementById('sidebar').style.display==='block'?'none':'block';document.getElementById('sidebar').style.position='fixed';document.getElementById('sidebar').style.top='0';document.getElementById('sidebar').style.left='0';document.getElementById('sidebar').style.zIndex='300';document.getElementById('sidebar').style.height='100vh';document.getElementById('sidebar').style.boxShadow='4px 0 24px rgba(0,0,0,.15)';" aria-label="Toggle navigation">☰</button>
+
+</body>
+</html>

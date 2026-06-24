@@ -1,0 +1,1898 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AHCI Mid-Term Exam Notes</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --surface2: #1a1a28;
+            --surface3: #222236;
+            --border: #2a2a44;
+            --text: #e8e8f0;
+            --text2: #a0a0c0;
+            --text3: #6868a0;
+            --accent: #7c5cfc;
+            --accent2: #a78bfa;
+            --accent-glow: rgba(124, 92, 252, 0.15);
+            --green: #34d399;
+            --blue: #60a5fa;
+            --orange: #fb923c;
+            --pink: #f472b6;
+            --red: #f87171;
+            --yellow: #fbbf24;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4)
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #fff
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent)
+        }
+
+        /* NAV */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 24px 16px;
+            overflow-y: auto;
+            z-index: 100;
+            transition: transform .3s
+        }
+
+        .sidebar h2 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent2);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .sidebar .nav-group {
+            margin-bottom: 16px
+        }
+
+        .sidebar .nav-group-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            padding-left: 8px
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 8px;
+            transition: all .2s;
+            margin-bottom: 2px
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: var(--accent-glow);
+            color: var(--accent2)
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 280px;
+            padding: 40px 60px;
+            max-width: 1100px
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0 40px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .hero .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: var(--accent-glow);
+            color: var(--accent2);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            border: 1px solid rgba(124, 92, 252, 0.3)
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent2), var(--pink), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px
+        }
+
+        .hero p {
+            color: var(--text2);
+            font-size: 16px
+        }
+
+        /* SECTIONS */
+        .chapter {
+            margin-bottom: 60px;
+            animation: fadeIn .5s
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .chapter-header {
+            padding: 20px 28px;
+            background: linear-gradient(135deg, var(--surface2), var(--surface3));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .chapter-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent), var(--pink))
+        }
+
+        .chapter-header h2 {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px
+        }
+
+        .chapter-header p {
+            color: var(--text2);
+            font-size: 14px
+        }
+
+        .topic {
+            margin-bottom: 32px;
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: border-color .3s
+        }
+
+        .topic:hover {
+            border-color: var(--accent)
+        }
+
+        .topic h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent2);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .topic h3 .icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0
+        }
+
+        .topic h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin: 18px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .topic p,
+        .topic li {
+            font-size: 14.5px;
+            color: var(--text2);
+            line-height: 1.8
+        }
+
+        .topic ul,
+        .topic ol {
+            padding-left: 20px;
+            margin: 8px 0
+        }
+
+        .topic li {
+            margin-bottom: 6px
+        }
+
+        .topic li::marker {
+            color: var(--accent)
+        }
+
+        /* SPECIAL */
+        .key-term {
+            display: inline;
+            font-weight: 600;
+            color: var(--green)
+        }
+
+        .formula-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 12px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--yellow)
+        }
+
+        .example-box {
+            background: rgba(52, 211, 153, 0.06);
+            border: 1px solid rgba(52, 211, 153, 0.2);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 12px 0
+        }
+
+        .example-box .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px
+        }
+
+        .warning-box {
+            background: rgba(251, 146, 60, 0.06);
+            border: 1px solid rgba(251, 146, 60, 0.2);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 12px 0
+        }
+
+        .warning-box .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--orange);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px
+        }
+
+        .exam-tip {
+            background: rgba(244, 114, 182, 0.06);
+            border: 1px solid rgba(244, 114, 182, 0.2);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 12px 0
+        }
+
+        .exam-tip .label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--pink);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 14px
+        }
+
+        th {
+            background: var(--surface2);
+            color: var(--accent2);
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 14px;
+            border: 1px solid var(--border)
+        }
+
+        td {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            color: var(--text2)
+        }
+
+        tr:hover td {
+            background: var(--surface2)
+        }
+
+        .paper-section {
+            margin-bottom: 40px;
+            padding: 28px;
+            background: linear-gradient(135deg, rgba(124, 92, 252, 0.05), rgba(244, 114, 182, 0.05));
+            border: 1px solid var(--border);
+            border-radius: var(--radius)
+        }
+
+        .paper-section h3 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 16px
+        }
+
+        .q-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 8px
+        }
+
+        .q1 {
+            background: rgba(96, 165, 250, 0.15);
+            color: var(--blue)
+        }
+
+        .q2 {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--green)
+        }
+
+        .q3 {
+            background: rgba(251, 146, 60, 0.15);
+            color: var(--orange)
+        }
+
+        .step-box {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 8px 0
+        }
+
+        .step-box .step-num {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            line-height: 24px;
+            margin-right: 8px
+        }
+
+        @media(max-width:900px) {
+            .sidebar {
+                transform: translateX(-100%)
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR NAV -->
+    <nav class="sidebar">
+        <h2>📘 AHCI Notes</h2>
+        <div class="nav-group">
+            <div class="nav-group-title">Course Content</div>
+            <a href="#shannon">Shannon Entropy</a>
+            <a href="#ch1">Ch 1 – The Human</a>
+            <a href="#ch2">Ch 2 – The Computer</a>
+            <a href="#ch3">Ch 3 – The Interaction</a>
+        </div>
+        <div class="nav-group">
+            <div class="nav-group-title">Paper Format</div>
+            <a href="#q1">Q1 – Shannon Entropy</a>
+            <a href="#q2">Q2 – Doner Model</a>
+            <a href="#q3">Q3 – AHCI Basic Concepts</a>
+        </div>
+        <div class="nav-group">
+            <div class="nav-group-title">Ch 1 Topics</div>
+            <a href="#hci-def">HCI Definition & Pillars</a>
+            <a href="#mhp">Model Human Processor</a>
+            <a href="#vision">Vision & Perception</a>
+            <a href="#senses">Hearing, Touch & Fitts's Law</a>
+            <a href="#memory">Human Memory</a>
+            <a href="#thinking">Thinking & Reasoning</a>
+            <a href="#emotion">Emotion & Errors</a>
+        </div>
+        <div class="nav-group">
+            <div class="nav-group-title">Ch 2 Topics</div>
+            <a href="#input-devices">Input Devices</a>
+            <a href="#pointing">Pointing Devices</a>
+            <a href="#displays">Display Technologies</a>
+            <a href="#vr">VR & 3D Interaction</a>
+            <a href="#output">Output & Sensing</a>
+        </div>
+        <div class="nav-group">
+            <div class="nav-group-title">Ch 3 Topics</div>
+            <a href="#interaction-models">Interaction Models</a>
+            <a href="#norman">Norman's Model</a>
+            <a href="#gulfs">Gulfs of Execution & Evaluation</a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+        <div class="hero">
+            <div class="badge">Mid-Term Examination 2026</div>
+            <h1>AHCI Complete Notes</h1>
+            <p>Applied Human Computer Interaction — Comprehensive Exam-Ready Study Guide</p>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- SHANNON ENTROPY -->
+        <!-- ============================================ -->
+        <section class="chapter" id="shannon">
+            <div class="chapter-header">
+                <h2>Shannon Entropy in HCI</h2>
+                <p>Information Theory applied to Human-Computer Interaction</p>
+            </div>
+
+            <div class="topic">
+                <h3><span class="icon" style="background:rgba(96,165,250,0.15)">📊</span> What is Shannon Entropy?</h3>
+                <p><span class="key-term">Shannon Entropy</span> is a measure of <strong>uncertainty or
+                        unpredictability</strong> in information. In HCI, it quantifies how predictable user choices are
+                    when interacting with interface elements like menus, buttons, or system responses.</p>
+
+                <h4>Mathematical Definition</h4>
+                <div class="formula-box">H = −Σ p(x) log₂ p(x)</div>
+                <p>Where <strong>p(x)</strong> is the probability of each possible event or user choice. The result is
+                    measured in <strong>bits</strong>.</p>
+
+                <h4>Why Shannon Entropy Matters in HCI</h4>
+                <ol>
+                    <li><span class="key-term">Measures uncertainty</span> in user decisions — higher entropy = more
+                        uncertain choices</li>
+                    <li><span class="key-term">Evaluates efficiency</span> of menu designs — helps designers optimize
+                        layouts</li>
+                    <li><span class="key-term">Predictive Interfaces</span> — used to enhance or evaluate system
+                        predictions</li>
+                    <li><span class="key-term">Interaction Speed</span> — lower entropy = faster and easier interaction
+                        because choices are more predictable</li>
+                </ol>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Key Takeaway</div>
+                    <p>Good interface design <strong>reduces entropy</strong> by making user choices predictable and
+                        clear. A well-designed menu with a dominant frequently-used option has lower entropy than one
+                        with equally confusing options.</p>
+                </div>
+            </div>
+
+            <div class="topic">
+                <h3><span class="icon" style="background:rgba(251,191,36,0.15)">🔢</span> Numerical Example – Complete
+                    Worked Solution</h3>
+                <p>A software interface contains <strong>four menu options (A, B, C, D)</strong>.</p>
+
+                <h4>Case 1: Equal Probabilities (HIGH Uncertainty)</h4>
+                <table>
+                    <tr>
+                        <th>Option</th>
+                        <th>p(x)</th>
+                        <th>log₂ p(x)</th>
+                        <th>p(x) × log₂ p(x)</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>0.25</td>
+                        <td>−2</td>
+                        <td>−0.50</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>0.25</td>
+                        <td>−2</td>
+                        <td>−0.50</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>0.25</td>
+                        <td>−2</td>
+                        <td>−0.50</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>0.25</td>
+                        <td>−2</td>
+                        <td>−0.50</td>
+                    </tr>
+                </table>
+                <div class="step-box"><span class="step-num">1</span> H = −[4 × (0.25 × log₂ 0.25)]</div>
+                <div class="step-box"><span class="step-num">2</span> log₂ 0.25 = log₂ (1/4) = −2</div>
+                <div class="step-box"><span class="step-num">3</span> H = −[4 × (0.25 × −2)] = −[4 × (−0.50)]</div>
+                <div class="step-box"><span class="step-num">4</span> H = −(−2.0) = <strong
+                        style="color:var(--yellow)">2.0 bits</strong></div>
+                <div class="warning-box">
+                    <div class="label">⚠️ Interpretation</div>
+                    <p><strong>H = 2 bits</strong> → Maximum entropy for 4 options. All options equally likely → user
+                        faces <strong>maximum uncertainty</strong> → <strong>slower decision-making</strong> and harder
+                        interaction.</p>
+                </div>
+
+                <h4>Case 2: Unequal Probabilities (LOW Uncertainty)</h4>
+                <table>
+                    <tr>
+                        <th>Option</th>
+                        <th>p(x)</th>
+                        <th>log₂ p(x)</th>
+                        <th>p(x) × log₂ p(x)</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>0.70</td>
+                        <td>−0.515</td>
+                        <td>−0.3605</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>0.10</td>
+                        <td>−3.322</td>
+                        <td>−0.3322</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>0.10</td>
+                        <td>−3.322</td>
+                        <td>−0.3322</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>0.10</td>
+                        <td>−3.322</td>
+                        <td>−0.3322</td>
+                    </tr>
+                </table>
+                <div class="step-box"><span class="step-num">1</span> H = −[0.70 × log₂(0.70) + 3 × (0.10 × log₂(0.10))]
+                </div>
+                <div class="step-box"><span class="step-num">2</span> log₂(0.70) ≈ −0.515 &nbsp;|&nbsp; log₂(0.10) ≈
+                    −3.322</div>
+                <div class="step-box"><span class="step-num">3</span> H = −[(0.70 × −0.515) + 3 × (0.10 × −3.322)]</div>
+                <div class="step-box"><span class="step-num">4</span> H = −[−0.3605 + 3 × (−0.3322)] = −[−0.3605 +
+                    (−0.9966)]</div>
+                <div class="step-box"><span class="step-num">5</span> H = −(−1.3571) = <strong
+                        style="color:var(--green)">≈ 1.36 bits</strong></div>
+                <div class="example-box">
+                    <div class="label">✅ Interpretation</div>
+                    <p><strong>H ≈ 1.36 bits</strong> → Lower entropy. One dominant option (A at 70%) makes the
+                        interface <strong>more predictable</strong> → <strong>faster interaction</strong> and easier
+                        decision-making for users.</p>
+                </div>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Exam Comparison Summary</div>
+                    <table>
+                        <tr>
+                            <th>Property</th>
+                            <th>Case 1 (Equal)</th>
+                            <th>Case 2 (Unequal)</th>
+                        </tr>
+                        <tr>
+                            <td>Entropy</td>
+                            <td>2.0 bits (HIGH)</td>
+                            <td>1.36 bits (LOW)</td>
+                        </tr>
+                        <tr>
+                            <td>Uncertainty</td>
+                            <td>Maximum</td>
+                            <td>Reduced</td>
+                        </tr>
+                        <tr>
+                            <td>User Decision Speed</td>
+                            <td>Slower</td>
+                            <td>Faster</td>
+                        </tr>
+                        <tr>
+                            <td>Design Quality</td>
+                            <td>Poor (confusing)</td>
+                            <td>Better (clear dominant)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- CHAPTER 1: THE HUMAN -->
+        <!-- ============================================ -->
+        <section class="chapter" id="ch1">
+            <div class="chapter-header">
+                <h2>Chapter 1 — The Human</h2>
+                <p>Understanding human cognition, perception, memory, and reasoning for HCI design</p>
+            </div>
+
+            <div class="topic" id="hci-def">
+                <h3><span class="icon" style="background:rgba(124,92,252,0.15)">🧠</span> HCI Definition & Core Concepts
+                </h3>
+                <p><span class="key-term">HCI (Human-Computer Interaction)</span> is the study of how people interact
+                    with computers and the design and evaluation of interactive systems.</p>
+
+                <h4>Three Pillars of HCI</h4>
+                <table>
+                    <tr>
+                        <th>Pillar</th>
+                        <th>Focus</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Human</strong></td>
+                        <td>Understanding user capabilities, limitations, cognition</td>
+                        <td>Memory limits, attention spans, motor abilities</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Computer</strong></td>
+                        <td>Technology, devices, I/O, display capabilities</td>
+                        <td>Keyboards, touchscreens, VR headsets</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interaction</strong></td>
+                        <td>The communication between human and computer</td>
+                        <td>Clicks, gestures, voice commands, feedback</td>
+                    </tr>
+                </table>
+
+                <h4>Why HCI Matters</h4>
+                <ul>
+                    <li><strong>Safety-critical systems</strong> — medical devices, air traffic control → poor design
+                        can cost lives</li>
+                    <li><strong>Productivity tools</strong> — efficiency depends on usability</li>
+                    <li><strong>Inclusion & accessibility</strong> — designing for all abilities</li>
+                </ul>
+
+                <h4>Key Insight: Technical vs. Practical</h4>
+                <div class="warning-box">
+                    <div class="label">⚠️ Important</div>
+                    <p>A system can be <strong>technically perfect</strong> but <strong>practically unusable</strong> if
+                        it doesn't align with human needs. Good HCI bridges this gap.</p>
+                </div>
+
+                <h4>Cognitive Psychology in HCI</h4>
+                <p>Essential for understanding how humans <strong>perceive, process, and store</strong> information. Key
+                    cognitive processes include: <span class="key-term">attention</span>, <span
+                        class="key-term">perception</span>, and <span class="key-term">problem-solving</span>.</p>
+            </div>
+
+            <div class="topic" id="mhp">
+                <h3><span class="icon" style="background:rgba(52,211,153,0.15)">⚙️</span> Model Human Processor (MHP)
+                </h3>
+                <p>Proposed by <span class="key-term">Card, Moran, and Newell (1983)</span>. Treats humans as
+                    information processing systems with three interconnected subsystems:</p>
+
+                <table>
+                    <tr>
+                        <th>Subsystem</th>
+                        <th>Function</th>
+                        <th>Analogy</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Perceptual Processor</strong></td>
+                        <td>Receives and buffers sensory input (visual, auditory, haptic)</td>
+                        <td>Computer's input devices (keyboard, mic)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cognitive Processor</strong></td>
+                        <td>Processes information, makes decisions, problem solves</td>
+                        <td>CPU / central processing unit</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Motor Processor</strong></td>
+                        <td>Executes physical responses and movements</td>
+                        <td>Output devices (printer, screen)</td>
+                    </tr>
+                </table>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Exam Tip</div>
+                    <p>MHP models human information processing as: <strong>Input → Processing → Output</strong>, just
+                        like a computer. Be ready to name all three subsystems and give examples of each.</p>
+                </div>
+            </div>
+
+            <div class="topic" id="vision">
+                <h3><span class="icon" style="background:rgba(96,165,250,0.15)">👁️</span> Vision & Perception</h3>
+
+                <h4>Two Stages of Vision</h4>
+                <ol>
+                    <li><strong>Physical Reception</strong> — light enters eye, hits retina (stimulus received)</li>
+                    <li><strong>Processing & Interpretation</strong> — brain processes and makes sense of the visual
+                        data</li>
+                </ol>
+
+                <h4>Visual Capabilities & Limitations</h4>
+                <table>
+                    <tr>
+                        <th>Capability</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Visual Acuity</strong></td>
+                        <td>Ability to perceive fine detail — affects font size decisions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contrast Sensitivity</strong></td>
+                        <td>Ability to distinguish elements from background — critical for UI readability</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Color Perception</strong></td>
+                        <td><strong>Cones</strong> = detail + color (bright light) | <strong>Rods</strong> = low light +
+                            movement detection</td>
+                    </tr>
+                </table>
+
+                <h4>Visual Angle</h4>
+                <p>Determines perceived size and depth. Familiar objects maintain <span class="key-term">"perceived
+                        size"</span> despite distance changes (size constancy).</p>
+
+                <h4>Reading Process</h4>
+                <ul>
+                    <li><span class="key-term">Saccades</span> — rapid eye movements/fixations between points in text
+                    </li>
+                    <li><span class="key-term">Regressions</span> — backward eye movements when meaning is unclear</li>
+                    <li>Optimized by: proper <strong>font size</strong>, appropriate <strong>line length</strong>, good
+                        <strong>contrast</strong></li>
+                </ul>
+
+                <h4>Optical Illusions</h4>
+                <p>Demonstrate how the brain can misinterpret visual cues:</p>
+                <ul>
+                    <li><strong>Müller-Lyer Illusion</strong> — lines with arrows appear different lengths</li>
+                    <li><strong>Ponzo Illusion</strong> — converging lines make identical objects seem different sizes
+                    </li>
+                </ul>
+                <div class="exam-tip">
+                    <div class="label">🎯 Exam Tip</div>
+                    <p>Illusions prove that perception ≠ reality. This is why UI designers must test designs with real
+                        users — what the designer assumes may not match what users perceive.</p>
+                </div>
+            </div>
+
+            <div class="topic" id="senses">
+                <h3><span class="icon" style="background:rgba(244,114,182,0.15)">🖐️</span> Hearing, Touch & Fitts's Law
+                </h3>
+
+                <h4>Hearing (Auditory Perception)</h4>
+                <ul>
+                    <li>Sound provides <strong>feedback</strong> (click sounds), <strong>notifications</strong>
+                        (alerts), and <strong>spatial cues</strong> (surround sound)</li>
+                    <li>Important for accessibility — screen readers rely entirely on auditory output</li>
+                </ul>
+
+                <h4>Touch (Haptic Perception)</h4>
+                <ul>
+                    <li>Crucial for users with <strong>visual impairments</strong></li>
+                    <li>Provides <strong>tactile feedback</strong> — vibrations, keyboard feel, force feedback</li>
+                    <li>Used in modern devices: phone vibration, game controllers, VR gloves</li>
+                </ul>
+
+                <h4>Fitts's Law — Movement & Motor Control</h4>
+                <div class="formula-box">MT = a + b × log₂(2D / W)</div>
+                <p>Where: <strong>MT</strong> = Movement Time | <strong>D</strong> = Distance to target |
+                    <strong>W</strong> = Width of target | <strong>a, b</strong> = constants</p>
+
+                <div class="example-box">
+                    <div class="label">✅ Key Principles</div>
+                    <ul>
+                        <li><strong>Larger targets</strong> are faster to hit (bigger W → lower MT)</li>
+                        <li><strong>Closer targets</strong> are faster to reach (smaller D → lower MT)</li>
+                        <li>UI implication: make frequently used buttons <strong>big and close</strong> to the user's
+                            likely cursor position</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="topic" id="memory">
+                <h3><span class="icon" style="background:rgba(251,146,60,0.15)">💾</span> Human Memory</h3>
+
+                <h4>Three Types of Memory</h4>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Duration</th>
+                        <th>Capacity</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Sensory Memory</strong></td>
+                        <td>~0.5–3 sec</td>
+                        <td>Large but brief</td>
+                        <td><strong>Iconic</strong> (visual), <strong>Echoic</strong> (auditory)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Short-Term / Working Memory</strong></td>
+                        <td>~15–30 sec</td>
+                        <td><strong>7 ± 2 chunks</strong></td>
+                        <td>Phone numbers, PINs, recent instructions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Long-Term Memory (LTM)</strong></td>
+                        <td>Unlimited</td>
+                        <td>Vast</td>
+                        <td><strong>Episodic</strong> (events) & <strong>Semantic</strong> (facts)</td>
+                    </tr>
+                </table>
+
+                <h4>Long-Term Memory Structure</h4>
+                <ul>
+                    <li><span class="key-term">Episodic Memory</span> — personal events and experiences (e.g., "I
+                        remember my first day at university")</li>
+                    <li><span class="key-term">Semantic Memory</span> — factual knowledge (e.g., "Paris is the capital
+                        of France")</li>
+                    <li>Organized as <span class="key-term">Semantic Networks</span> — nodes (concepts) linked by
+                        associations; properties inherited from parent nodes</li>
+                </ul>
+
+                <h4>Memory Processes</h4>
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Description</th>
+                        <th>HCI Implication</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Storage</strong></td>
+                        <td>Through rehearsal and repetition</td>
+                        <td>Consistent UI layouts help users memorize locations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forgetting (Decay)</strong></td>
+                        <td>Memory fades over time without use</td>
+                        <td>Don't rely on users remembering rarely used features</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Forgetting (Interference)</strong></td>
+                        <td>New info replaces/conflicts with old</td>
+                        <td>Avoid drastic UI changes that confuse existing users</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Recognition</strong></td>
+                        <td>Matching info to something seen before (EASIER)</td>
+                        <td>Menus, icons, visual cues — prefer over recall</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Recall</strong></td>
+                        <td>Retrieving from scratch without cues (HARDER)</td>
+                        <td>Command-line interfaces — harder for novices</td>
+                    </tr>
+                </table>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Exam Tip</div>
+                    <p><strong>Recognition > Recall</strong> in UI design. Always prefer showing options (menus, icons)
+                        over requiring users to remember commands. The 7±2 rule means: never overload users with more
+                        than ~7 options at once.</p>
+                </div>
+            </div>
+
+            <div class="topic" id="thinking">
+                <h3><span class="icon" style="background:rgba(124,92,252,0.15)">🧩</span> Thinking, Reasoning & Problem
+                    Solving</h3>
+
+                <h4>Three Types of Reasoning</h4>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Direction</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Deductive</strong></td>
+                        <td>General → Specific</td>
+                        <td>Necessary conclusions from premises</td>
+                        <td>"All mammals breathe air. Dogs are mammals. → Dogs breathe air."</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inductive</strong></td>
+                        <td>Specific → General</td>
+                        <td>Generalizing from observed cases</td>
+                        <td>"Every swan I've seen is white → all swans are white."</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Abductive</strong></td>
+                        <td>Effect → Cause</td>
+                        <td>Best explanation for an observation</td>
+                        <td>"Screen is black → probably the power is off."</td>
+                    </tr>
+                </table>
+
+                <h4>Problem Solving Approaches</h4>
+                <ul>
+                    <li><span class="key-term">Insight (Gestalt)</span> — sudden realization of the solution ("Aha!"
+                        moment)</li>
+                    <li><span class="key-term">Problem Space</span> — searching through possible states/paths to reach a
+                        goal</li>
+                    <li><span class="key-term">Analogy</span> — applying old knowledge/solutions to new problems</li>
+                </ul>
+
+                <h4>Skill Acquisition: Novice → Expert</h4>
+                <p>Transition happens through <span class="key-term">Proceduralization</span> — conscious rules become
+                    automatic, unconscious actions. Example: Learning to type — initially hunt-and-peck (deliberate),
+                    eventually touch-typing (automatic).</p>
+            </div>
+
+            <div class="topic" id="emotion">
+                <h3><span class="icon" style="background:rgba(248,113,113,0.15)">💡</span> Errors, Mental Models &
+                    Emotion</h3>
+
+                <h4>Types of Errors</h4>
+                <table>
+                    <tr>
+                        <th>Error Type</th>
+                        <th>Definition</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Slips</strong></td>
+                        <td>Correct plan, <strong>wrong execution</strong></td>
+                        <td>Clicking "Delete" instead of "Download" (right intention, wrong button)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mistakes</strong></td>
+                        <td>Wrong plan, <strong>correct execution</strong></td>
+                        <td>User formats drive thinking it frees up space, not realizing it erases data</td>
+                    </tr>
+                </table>
+
+                <h4>Mental Models</h4>
+                <p>A <span class="key-term">Mental Model</span> is the user's internal theory of how a system works. If
+                    the mental model doesn't match the system model, errors occur. Good design aligns the system's
+                    behavior with user expectations.</p>
+
+                <h4>Emotion (Affective Computing)</h4>
+                <ul>
+                    <li><strong>Positive affect</strong> → promotes creativity, exploration, and tolerance of minor
+                        issues</li>
+                    <li><strong>Negative affect</strong> (stress/anxiety) → narrows focus, can lead to frustration and
+                        errors</li>
+                </ul>
+
+                <h4>Individual Differences</h4>
+                <p>Designers must account for: <strong>age</strong>, <strong>gender</strong>, <strong>physical
+                        ability</strong>, and <strong>cognitive styles</strong> to create inclusive designs accessible
+                    to everyone.</p>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- CHAPTER 2: THE COMPUTER -->
+        <!-- ============================================ -->
+        <section class="chapter" id="ch2">
+            <div class="chapter-header">
+                <h2>Chapter 2 — The Computer</h2>
+                <p>Input/output devices, display technologies, VR, and processing in HCI</p>
+            </div>
+
+            <div class="topic" id="input-devices">
+                <h3><span class="icon" style="background:rgba(96,165,250,0.15)">⌨️</span> Text Entry Devices</h3>
+
+                <h4>Interactivity Evolution</h4>
+                <table>
+                    <tr>
+                        <th>Era</th>
+                        <th>Type</th>
+                        <th>Characteristics</th>
+                    </tr>
+                    <tr>
+                        <td>Past</td>
+                        <td><strong>Batch Processing</strong></td>
+                        <td>Punched cards, long waits, line printer output — if wrong, start over</td>
+                    </tr>
+                    <tr>
+                        <td>Present</td>
+                        <td><strong>Interactive Computing</strong></td>
+                        <td>Rapid feedback, user is in control, focus on "doing rather than thinking"</td>
+                    </tr>
+                </table>
+
+                <h4>Keyboards</h4>
+                <ul>
+                    <li><span class="key-term">QWERTY Layout</span> — standard but NOT optimal for speed; designed for
+                        mechanical typewriters to prevent jamming</li>
+                    <li>Persists due to <span class="key-term">technological and social inertia</span> — users resist
+                        relearning, hardware replacement costly</li>
+                    <li><strong>Alternatives:</strong> DVORAK, alphabetic, chord keyboards</li>
+                </ul>
+
+                <h4>Chord Keyboards</h4>
+                <ul>
+                    <li>Use very few keys (4-5); characters entered by pressing <strong>combinations (chords)</strong>
+                        of keys</li>
+                    <li>Often reflect letter shapes (e.g., Microwriter)</li>
+                </ul>
+
+                <h4>Phone/Numeric Entry</h4>
+                <ul>
+                    <li><strong>Layouts differ:</strong> calculators vs. phones/ATMs — muscle memory plays a key role
+                    </li>
+                    <li><span class="key-term">T9 Multi-press:</span> Press key multiple times (e.g., "Hello" =
+                        4433555[pause]555666)</li>
+                    <li><span class="key-term">T9 Predictive:</span> Type once per letter, dictionary guesses the word
+                    </li>
+                </ul>
+
+                <h4>Handwriting Recognition</h4>
+                <p>Uses pen + digitizing tablet. Challenges: capturing stroke path/pressure, segmenting joined writing,
+                    interpreting styles, coping with individual differences.</p>
+
+                <h4>Speech Recognition</h4>
+                <ul>
+                    <li>Natural and familiar; accuracy >97% for limited vocabularies</li>
+                    <li><strong>Challenges:</strong> language ambiguity, accents, emotions, illness, background noise
+                    </li>
+                </ul>
+            </div>
+
+            <div class="topic" id="pointing">
+                <h3><span class="icon" style="background:rgba(52,211,153,0.15)">🖱️</span> Pointing & Selection Devices
+                </h3>
+
+                <h4>Comprehensive Device Comparison</h4>
+                <table>
+                    <tr>
+                        <th>Device</th>
+                        <th>Type</th>
+                        <th>Pros</th>
+                        <th>Cons</th>
+                        <th>Best Use</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Mouse</strong></td>
+                        <td>Indirect, relative</td>
+                        <td>Easy, no arm fatigue</td>
+                        <td>Needs desk space</td>
+                        <td>Desktop, photo editing, precision</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Touchpad</strong></td>
+                        <td>Indirect, relative</td>
+                        <td>Compact, acceleration support</td>
+                        <td>Less precise than mouse</td>
+                        <td>Laptops, portable use</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Trackball</strong></td>
+                        <td>Indirect, fixed</td>
+                        <td>Space-constrained, precise</td>
+                        <td>Learning curve</td>
+                        <td>Kiosks, accessibility (RSI-friendly)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Joystick (Absolute)</strong></td>
+                        <td>Direct mapping</td>
+                        <td>Spatial, intuitive for games</td>
+                        <td>Not precision pointing</td>
+                        <td>Flight sims, racing games</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Joystick (Isometric)</strong></td>
+                        <td>Velocity-controlled</td>
+                        <td>Returns to center</td>
+                        <td>Continuous pressure needed</td>
+                        <td>Speed control applications</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Touchscreen</strong></td>
+                        <td>Direct input+output</td>
+                        <td>Fast, intuitive, public-friendly</td>
+                        <td>"Fat finger" problem, obscures screen</td>
+                        <td>Phones, kiosks, ATMs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stylus/Light Pen</strong></td>
+                        <td>Direct, precise</td>
+                        <td>High accuracy, natural</td>
+                        <td>Fatigue, limited to surface</td>
+                        <td>Tablets, graphic design, air traffic</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Eye Tracking</strong></td>
+                        <td>Direct</td>
+                        <td>Fast selection, attention analysis</td>
+                        <td>Calibration needed, accidental activation</td>
+                        <td>Accessibility, UX research</td>
+                    </tr>
+                </table>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Scenario-Based Exam Guide</div>
+                    <table>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Best Device</th>
+                            <th>Reason</th>
+                        </tr>
+                        <tr>
+                            <td>Photo editing with small icons</td>
+                            <td>Mouse</td>
+                            <td>Precision + drag support</td>
+                        </tr>
+                        <tr>
+                            <td>Flight simulation</td>
+                            <td>Joystick</td>
+                            <td>Fluid, continuous movement</td>
+                        </tr>
+                        <tr>
+                            <td>Tourist info kiosk</td>
+                            <td>Touchscreen</td>
+                            <td>Intuitive for walk-up users</td>
+                        </tr>
+                        <tr>
+                            <td>Air traffic control</td>
+                            <td>Light Pen/Stylus</td>
+                            <td>Safety-critical precision pointing</td>
+                        </tr>
+                        <tr>
+                            <td>VR training</td>
+                            <td>Motion Controllers + HMD</td>
+                            <td>3D immersion</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h4>Foot Mouse — Why It Failed</h4>
+                <p>Failed due to <span class="key-term">accidental activation</span>. Feet are better for
+                    single-dimension controls (car pedals, sewing machines), not precise 2D pointing.</p>
+            </div>
+
+            <div class="topic" id="displays">
+                <h3><span class="icon" style="background:rgba(251,191,36,0.15)">🖥️</span> Display Technologies</h3>
+
+                <h4>Bitmap Displays</h4>
+                <p>Grid of pixels. Color depth: 1 bit (B&W), 8 bit (256 colors), 24-32 bit (True color / millions of
+                    colors).</p>
+
+                <table>
+                    <tr>
+                        <th>Technology</th>
+                        <th>How It Works</th>
+                        <th>Pros</th>
+                        <th>Cons</th>
+                    </tr>
+                    <tr>
+                        <td><strong>CRT</strong></td>
+                        <td>Electron gun hits phosphor screen</td>
+                        <td>Good color, fast refresh</td>
+                        <td>Bulky, radiation, heavy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LCD</strong></td>
+                        <td>Voltage changes crystal polarization</td>
+                        <td>Thin, light, no radiation, less eye strain</td>
+                        <td>Viewing angle limits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gas Plasma</strong></td>
+                        <td>Gas ionization</td>
+                        <td>Large screens, high brightness</td>
+                        <td>Power hungry</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DVST</strong></td>
+                        <td>Direct View Storage Tube</td>
+                        <td>Persistent display, no flicker</td>
+                        <td>Cannot selectively erase</td>
+                    </tr>
+                </table>
+
+                <h4>Situated Displays</h4>
+                <ul>
+                    <li>Displays in <strong>public places</strong> (info boards) or <strong>specific locations</strong>
+                        (door displays)</li>
+                    <li>Meaning is <span class="key-term">location-dependent</span></li>
+                    <li><strong>Hermes Example:</strong> Small door displays for leaving handwritten notes, readable via
+                        web</li>
+                </ul>
+
+                <h4>Printing & Typography</h4>
+                <ul>
+                    <li><strong>DPI (Dots per inch):</strong> Laser printers: 600-2400 dpi</li>
+                    <li><span class="key-term">Serif fonts</span> (Times) → better for <strong>long printed
+                            text</strong></li>
+                    <li><span class="key-term">Sans-serif fonts</span> (Arial/Helvetica) → better for
+                        <strong>screens</strong></li>
+                    <li><strong>Lowercase</strong> → easier to read (word shape recognition)</li>
+                    <li><strong>Uppercase</strong> → better for individual codes (BA793)</li>
+                </ul>
+            </div>
+
+            <div class="topic" id="vr">
+                <h3><span class="icon" style="background:rgba(244,114,182,0.15)">🥽</span> VR, 3D & Advanced Interaction
+                </h3>
+
+                <h4>3D Positioning</h4>
+                <p>Moves from <strong>2DOF</strong> (X, Y) to <strong>6DOF</strong> (X, Y, Z + Pitch, Yaw, Roll).
+                    Devices: SpaceMouse (CAD), Meta Quest controllers.</p>
+
+                <h4>VR Technology</h4>
+                <ul>
+                    <li><span class="key-term">Data Gloves</span> — fiber optics track gestures, provide haptic feedback
+                    </li>
+                    <li><span class="key-term">VR Headsets</span> — use <strong>foveated rendering</strong> (GPU power
+                        focused where you look)</li>
+                    <li><span class="key-term">Motion Sickness</span> — caused by <strong>time delay (lag)</strong> and
+                        <strong>depth perception conflicts</strong> (eye angle vs. focus plane)</li>
+                </ul>
+            </div>
+
+            <div class="topic" id="output">
+                <h3><span class="icon" style="background:rgba(248,113,113,0.15)">📡</span> Output, Sensing & Processing
+                </h3>
+
+                <h4>Visual Status Indicators</h4>
+                <ul>
+                    <li><strong>LEDs</strong> — quick status feedback (charging, Wi-Fi)</li>
+                    <li><strong>Dials/Gauges</strong> — analog visuals faster for humans to spot changes/extremes</li>
+                    <li><strong>HUD (Head-Up Display)</strong> — shows info in line of sight (fighter jets), keeps
+                        attention on environment</li>
+                </ul>
+
+                <h4>Haptic Output</h4>
+                <p>Vibration and force feedback (surgical simulations, BMW iDrive menu "bumps").</p>
+
+                <h4>Environment & Bio-Sensing</h4>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Environmental</strong></td>
+                        <td>Infrared (auto washbasins), GPS, movement, pressure sensors</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Behavioral</strong></td>
+                        <td>Activity monitoring, vocabulary changes, typing rate</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Physiological</strong></td>
+                        <td>Heart rate, stress (smartwatches), face unlock (biometrics)</td>
+                    </tr>
+                </table>
+
+                <h4>Memory & Processing in Computers</h4>
+                <ul>
+                    <li><strong>RAM</strong> — short-term, volatile, very fast (~100 ns)</li>
+                    <li><strong>LTM (Storage)</strong> — persistent (SSD/HDD/Cloud), essential for auto-save and version
+                        history</li>
+                </ul>
+
+                <h4>Processing Bottlenecks</h4>
+                <table>
+                    <tr>
+                        <th>Problem</th>
+                        <th>Effect on User</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Slow Processor</strong></td>
+                        <td>"Icon Wars" — windows flash suddenly after multiple impatient clicks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Too-Fast Processor</strong></td>
+                        <td>Helpful text or stories scroll too quickly to read</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Computation Bound</strong></td>
+                        <td>CPU maxed out → system freezes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Storage Bound</strong></td>
+                        <td>Disk I/O bottleneck → slow file operations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Graphics Bound</strong></td>
+                        <td>GPU bottleneck → lag in rendering</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Network Bound</strong></td>
+                        <td>Buffering, slow loading — most common modern bottleneck</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- CHAPTER 3: THE INTERACTION -->
+        <!-- ============================================ -->
+        <section class="chapter" id="ch3">
+            <div class="chapter-header">
+                <h2>Chapter 3 — The Interaction (Slides 1–20)</h2>
+                <p>Interaction models, Norman's execution/evaluation loop, and the gulfs</p>
+            </div>
+
+            <div class="topic" id="interaction-models">
+                <h3><span class="icon" style="background:rgba(96,165,250,0.15)">🔄</span> User-Computer Communication
+                </h3>
+
+                <h4>Why Interaction Matters</h4>
+                <ul>
+                    <li>Users must <strong>communicate requirements</strong> to the system</li>
+                    <li>The computer must <strong>respond appropriately</strong></li>
+                </ul>
+
+                <h4>Communication Channels</h4>
+                <table>
+                    <tr>
+                        <th>Channel</th>
+                        <th>Direction</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Input</strong></td>
+                        <td>User → System</td>
+                        <td>Clicks, taps, typing, voice commands</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Output</strong></td>
+                        <td>System → User</td>
+                        <td>Screens, sound, vibration, animations</td>
+                    </tr>
+                </table>
+
+                <h4>Levels of Interaction</h4>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Batch Input (Low)</strong></td>
+                        <td>All input at once, no feedback during processing</td>
+                        <td>Uploading form, waiting hours for response</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interactive (High)</strong></td>
+                        <td>Continuous instructions + instant feedback</td>
+                        <td>Dragging files, pinch-to-zoom, VR games</td>
+                    </tr>
+                </table>
+
+                <h4>Key Interaction Components</h4>
+                <ul>
+                    <li><span class="key-term">Interaction Models</span> — conceptual frameworks explaining how users &
+                        systems interact</li>
+                    <li><span class="key-term">Ergonomics</span> — designing systems that fit human physical abilities
+                        (one-handed phone use, dark mode)</li>
+                    <li><span class="key-term">Interaction Styles</span> — nature of dialog (simple tap vs. complex
+                        multi-step workflows)</li>
+                    <li><span class="key-term">Context</span> — Social (group chats) or Organizational (university LMS)
+                    </li>
+                </ul>
+
+                <h4>Key Terms</h4>
+                <table>
+                    <tr>
+                        <th>Term</th>
+                        <th>Definition</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Domain</strong></td>
+                        <td>Area of work under study</td>
+                        <td>Graphic design</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Goal</strong></td>
+                        <td>What you want to achieve</td>
+                        <td>Create a solid red triangle</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Task</strong></td>
+                        <td>How you go about doing it (actions/operations)</td>
+                        <td>Select fill tool → click over triangle</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="topic" id="norman">
+                <h3><span class="icon" style="background:rgba(52,211,153,0.15)">🔁</span> Norman's Model of Interaction
+                </h3>
+                <p>One of the <strong>most influential models in HCI</strong>. Describes interaction as a cycle between
+                    user and computer: the <span class="key-term">Execution/Evaluation Loop</span>.</p>
+
+                <h4>The 7 Stages of the Execution/Evaluation Loop</h4>
+                <div class="step-box"><span class="step-num">1</span> <strong>Establish Goal</strong> — User decides
+                    what they want to achieve</div>
+                <div class="step-box"><span class="step-num">2</span> <strong>Form Intention</strong> — User formulates
+                    a plan of action</div>
+                <div class="step-box"><span class="step-num">3</span> <strong>Specify Action</strong> — User identifies
+                    specific interface actions needed</div>
+                <div class="step-box"><span class="step-num">4</span> <strong>Execute Action</strong> — User physically
+                    performs the action</div>
+                <div class="step-box"><span class="step-num">5</span> <strong>Perceive State</strong> — User observes
+                    the system's response</div>
+                <div class="step-box"><span class="step-num">6</span> <strong>Interpret State</strong> — User makes
+                    sense of what happened</div>
+                <div class="step-box"><span class="step-num">7</span> <strong>Evaluate State</strong> — User compares
+                    result against original goal</div>
+
+                <table>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Stages</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Execution Phase</strong></td>
+                        <td>Stages 1–4</td>
+                        <td>Goal → Intention → Action Specification → Execution</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Evaluation Phase</strong></td>
+                        <td>Stages 5–7</td>
+                        <td>Perception → Interpretation → Evaluation</td>
+                    </tr>
+                </table>
+
+                <div class="example-box">
+                    <div class="label">✅ Complete Example: Switching on a Light</div>
+                    <p><strong>Goal:</strong> Get more light (evening falls while reading)</p>
+                    <p><strong>Intention:</strong> Switch on the desk lamp</p>
+                    <p><strong>Action Specification:</strong> Reach for lamp, find switch</p>
+                    <p><strong>Execution:</strong> Press the switch</p>
+                    <p><strong>Perception:</strong> See light come on (or not)</p>
+                    <p><strong>Interpretation:</strong> Understand the lamp is now on</p>
+                    <p><strong>Evaluation:</strong> Is there enough light? → Goal achieved or repeat</p>
+                </div>
+
+                <div class="warning-box">
+                    <div class="label">⚠️ Key Insight: Multiple Paths</div>
+                    <p>Same goal can have <strong>different intentions</strong>. For "get more light": switch desk lamp,
+                        turn on ceiling light, ask someone, or open curtains. <strong>Goal ≠ Intention ≠
+                            Action.</strong></p>
+                </div>
+            </div>
+
+            <div class="topic" id="gulfs">
+                <h3><span class="icon" style="background:rgba(248,113,113,0.15)">🔀</span> Gulf of Execution & Gulf of
+                    Evaluation</h3>
+
+                <h4>Gulf of Execution</h4>
+                <div class="formula-box" style="border-left-color:var(--blue)">"How do I do what I want to do?"</div>
+                <p>The <span class="key-term">gap between what the user wants to do</span> and <span
+                        class="key-term">what actions the system allows</span>.</p>
+                <div class="example-box">
+                    <div class="label">✅ Example</div>
+                    <p><strong>Problem:</strong> Switch is hidden, oddly shaped, or unclear. User doesn't know which
+                        switch controls the lamp.</p>
+                    <p><strong>Solution:</strong> Design visible, labeled, and easy-to-press switches → <strong>reduce
+                            the gulf</strong>.</p>
+                    <p><strong>HCI Principle:</strong> Make actions <strong>discoverable, visible, and
+                            intuitive</strong>.</p>
+                </div>
+
+                <h4>Gulf of Evaluation</h4>
+                <div class="formula-box" style="border-left-color:var(--pink)">"Did it work? What happened?"</div>
+                <p>The <span class="key-term">gap between what the system shows</span> and <span class="key-term">what
+                        the user expects or understands</span>.</p>
+                <div class="example-box">
+                    <div class="label">✅ Example</div>
+                    <p><strong>Problem:</strong> User presses switch but light doesn't turn on. No indication why (blown
+                        bulb? no power?).</p>
+                    <p><strong>Solution:</strong> Provide <strong>immediate feedback</strong> (light turns on) or a
+                        clear indicator showing what went wrong.</p>
+                    <p><strong>HCI Principle:</strong> Always give <strong>clear, timely feedback</strong> about system
+                        state.</p>
+                </div>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Exam Summary: Two Gulfs</div>
+                    <table>
+                        <tr>
+                            <th>Gulf</th>
+                            <th>Question</th>
+                            <th>Problem</th>
+                            <th>Solution</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Execution</strong></td>
+                            <td>"How do I do this?"</td>
+                            <td>Interface actions are unclear/hidden</td>
+                            <td>Make controls visible, labeled, intuitive</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Evaluation</strong></td>
+                            <td>"Did it work?"</td>
+                            <td>System feedback is missing/confusing</td>
+                            <td>Provide immediate, clear feedback</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- PAPER FORMAT SECTION -->
+        <!-- ============================================ -->
+        <section class="chapter" id="paper-format">
+            <div class="chapter-header"
+                style="background:linear-gradient(135deg,rgba(124,92,252,0.1),rgba(244,114,182,0.1))">
+                <h2>📝 Paper Format — Exam Preparation</h2>
+                <p>Focused preparation for each expected question</p>
+            </div>
+
+            <!-- Q1 -->
+            <div class="paper-section" id="q1">
+                <h3><span class="q-badge q1">Q1</span> Shannon Entropy</h3>
+                <p>This question will test your understanding of Shannon Entropy theory and your ability to solve
+                    numerical problems.</p>
+
+                <h4>What You Must Know</h4>
+                <ul>
+                    <li><strong>Definition:</strong> Shannon Entropy measures
+                        <strong>uncertainty/unpredictability</strong> in information</li>
+                    <li><strong>Formula:</strong> H = −Σ p(x) log₂ p(x)</li>
+                    <li><strong>Units:</strong> Measured in <strong>bits</strong></li>
+                    <li><strong>HCI Application:</strong> Quantifies predictability of user choices in interface
+                        elements</li>
+                </ul>
+
+                <h4>Step-by-Step Solving Method</h4>
+                <div class="step-box"><span class="step-num">1</span> Identify all options and their probabilities p(x).
+                    Verify they sum to 1.0</div>
+                <div class="step-box"><span class="step-num">2</span> Calculate log₂ of each probability. Key values:
+                    log₂(0.25) = −2, log₂(0.5) = −1, log₂(0.10) ≈ −3.322, log₂(0.70) ≈ −0.515</div>
+                <div class="step-box"><span class="step-num">3</span> Multiply each p(x) × log₂ p(x)</div>
+                <div class="step-box"><span class="step-num">4</span> Sum all products</div>
+                <div class="step-box"><span class="step-num">5</span> Apply the negative sign: H = −(sum)</div>
+                <div class="step-box"><span class="step-num">6</span> Interpret: Higher H = more uncertainty = worse
+                    design | Lower H = more predictable = better design</div>
+
+                <h4>Quick Reference: Common log₂ Values</h4>
+                <table>
+                    <tr>
+                        <th>p(x)</th>
+                        <th>log₂ p(x)</th>
+                        <th>p(x) × log₂ p(x)</th>
+                    </tr>
+                    <tr>
+                        <td>1.0</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>0.5</td>
+                        <td>−1</td>
+                        <td>−0.5</td>
+                    </tr>
+                    <tr>
+                        <td>0.25</td>
+                        <td>−2</td>
+                        <td>−0.5</td>
+                    </tr>
+                    <tr>
+                        <td>0.125</td>
+                        <td>−3</td>
+                        <td>−0.375</td>
+                    </tr>
+                    <tr>
+                        <td>0.10</td>
+                        <td>−3.322</td>
+                        <td>−0.3322</td>
+                    </tr>
+                    <tr>
+                        <td>0.70</td>
+                        <td>−0.515</td>
+                        <td>−0.3605</td>
+                    </tr>
+                    <tr>
+                        <td>0.50</td>
+                        <td>−1.0</td>
+                        <td>−0.50</td>
+                    </tr>
+                    <tr>
+                        <td>0.30</td>
+                        <td>−1.737</td>
+                        <td>−0.5211</td>
+                    </tr>
+                    <tr>
+                        <td>0.20</td>
+                        <td>−2.322</td>
+                        <td>−0.4644</td>
+                    </tr>
+                </table>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Remember</div>
+                    <p>Maximum entropy for N equally likely options = <strong>log₂(N)</strong>. So for 4 options: max H
+                        = 2 bits. For 8 options: max H = 3 bits. If your answer exceeds this, you made a calculation
+                        error!</p>
+                </div>
+            </div>
+
+            <!-- Q2 -->
+            <div class="paper-section" id="q2">
+                <h3><span class="q-badge q2">Q2</span> Doner Model (Norman's Model of Interaction)</h3>
+                <p>This question tests your understanding of Norman's Execution/Evaluation Loop and the Gulfs.</p>
+
+                <h4>Complete Answer Framework</h4>
+
+                <h4>Part A: The 7 Stages</h4>
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Stage</th>
+                        <th>Phase</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Establish Goal</td>
+                        <td rowspan="4"><strong>EXECUTION</strong></td>
+                        <td>User decides what they want</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Form Intention</td>
+                        <td>User plans how to achieve it</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Specify Action</td>
+                        <td>User identifies interface actions</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Execute Action</td>
+                        <td>User physically performs action</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Perceive State</td>
+                        <td rowspan="3"><strong>EVALUATION</strong></td>
+                        <td>User observes system response</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Interpret State</td>
+                        <td>User makes sense of response</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Evaluate State</td>
+                        <td>User compares result vs. goal</td>
+                    </tr>
+                </table>
+
+                <h4>Part B: The Two Gulfs</h4>
+                <table>
+                    <tr>
+                        <th>Gulf</th>
+                        <th>Meaning</th>
+                        <th>User's Question</th>
+                        <th>Design Solution</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Gulf of Execution</strong></td>
+                        <td>Gap between user intent and available actions</td>
+                        <td>"How do I do this?"</td>
+                        <td>Visible, labeled, intuitive controls</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gulf of Evaluation</strong></td>
+                        <td>Gap between system state and user understanding</td>
+                        <td>"Did it work?"</td>
+                        <td>Immediate, clear feedback</td>
+                    </tr>
+                </table>
+
+                <h4>Part C: How to Write a Scenario Answer</h4>
+                <div class="example-box">
+                    <div class="label">✅ Example: Ordering Food on a Delivery App</div>
+                    <ol>
+                        <li><strong>Goal:</strong> Order dinner</li>
+                        <li><strong>Intention:</strong> Open food delivery app and find a restaurant</li>
+                        <li><strong>Action Spec:</strong> Tap app icon → Search "pizza" → Select restaurant</li>
+                        <li><strong>Execute:</strong> Tap "Add to cart" → Tap "Checkout" → Confirm payment</li>
+                        <li><strong>Perceive:</strong> See "Order Confirmed" screen with estimated delivery time</li>
+                        <li><strong>Interpret:</strong> Understand order is placed and food is being prepared</li>
+                        <li><strong>Evaluate:</strong> Correct items? Correct address? → Goal achieved</li>
+                    </ol>
+                    <p><strong>Gulf of Execution:</strong> If the checkout button is hidden or confusing → user can't
+                        complete order</p>
+                    <p><strong>Gulf of Evaluation:</strong> If no confirmation screen → user doesn't know if order went
+                        through</p>
+                </div>
+            </div>
+
+            <!-- Q3 -->
+            <div class="paper-section" id="q3">
+                <h3><span class="q-badge q3">Q3</span> AHCI Basic Concepts</h3>
+                <p>This question covers foundational HCI concepts from Chapters 1, 2, and 3.</p>
+
+                <h4>Core Definitions to Memorize</h4>
+                <table>
+                    <tr>
+                        <th>Concept</th>
+                        <th>Definition</th>
+                    </tr>
+                    <tr>
+                        <td><strong>HCI</strong></td>
+                        <td>Study of how people interact with computers and design/evaluation of interactive systems
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Three Pillars</strong></td>
+                        <td>Human, Computer, Interaction</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MHP</strong></td>
+                        <td>Model Human Processor (Card, Moran, Newell 1983) — 3 subsystems: Perceptual, Cognitive,
+                            Motor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fitts's Law</strong></td>
+                        <td>MT = a + b × log₂(2D/W) — larger/closer targets are faster to hit</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7 ± 2 Rule</strong></td>
+                        <td>Working memory capacity — humans can hold about 7 chunks of info</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sensory Memory</strong></td>
+                        <td>Iconic (visual) + Echoic (auditory) — very brief buffers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>STM vs LTM</strong></td>
+                        <td>STM: 15-30 sec, limited | LTM: unlimited, episodic + semantic</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Recognition vs Recall</strong></td>
+                        <td>Recognition (menus) is easier than Recall (commands)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Slips vs Mistakes</strong></td>
+                        <td>Slips = right plan, wrong action | Mistakes = wrong plan, right action</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mental Models</strong></td>
+                        <td>User's internal theory of how a system works</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Deductive Reasoning</strong></td>
+                        <td>General → Specific, necessary conclusions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inductive Reasoning</strong></td>
+                        <td>Specific → General, generalizing from cases</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Abductive Reasoning</strong></td>
+                        <td>Effect → Cause, best explanation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>QWERTY Inertia</strong></td>
+                        <td>Persists due to social/technological inertia, not optimal design</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gulf of Execution</strong></td>
+                        <td>"How do I do this?" — gap between user intent and system actions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gulf of Evaluation</strong></td>
+                        <td>"Did it work?" — gap between system state and user understanding</td>
+                    </tr>
+                </table>
+
+                <h4>Topics You Could Be Asked About</h4>
+                <ul>
+                    <li>Compare input devices for specific scenarios (mouse vs touchscreen vs joystick)</li>
+                    <li>Explain the Model Human Processor and its three subsystems</li>
+                    <li>Discuss human memory types and their implications for UI design</li>
+                    <li>Apply Fitts's Law to explain why certain buttons are easier to click</li>
+                    <li>Explain Norman's 7 stages with a real-world example</li>
+                    <li>Differentiate between types of reasoning with examples</li>
+                    <li>Explain why recognition is preferred over recall in UI design</li>
+                    <li>Compare display technologies (CRT, LCD, Plasma)</li>
+                    <li>Discuss the role of emotion in HCI (affective computing)</li>
+                    <li>Explain batch vs. interactive computing</li>
+                </ul>
+
+                <div class="exam-tip">
+                    <div class="label">🎯 Master These for Full Marks</div>
+                    <ol>
+                        <li>Always give <strong>examples</strong> — turn abstract concepts into concrete scenarios</li>
+                        <li>Use <strong>proper terminology</strong> — say "Gulf of Execution" not "the gap thing"</li>
+                        <li>Connect to <strong>design implications</strong> — what does this mean for building better
+                            UIs?</li>
+                        <li>Remember the <strong>formulas</strong>: Shannon Entropy and Fitts's Law</li>
+                        <li>Draw <strong>comparisons</strong>: slips vs mistakes, recognition vs recall, STM vs LTM</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <div
+            style="text-align:center;padding:40px 0;color:var(--text3);font-size:13px;border-top:1px solid var(--border);margin-top:40px">
+            <p>AHCI Mid-Term Exam Notes — Generated from Course Slides</p>
+            <p style="margin-top:4px;">Chapters 1 (Complete) • Chapter 2 (Complete) • Chapter 3 (Slides 1-20) • Shannon
+                Entropy</p>
+        </div>
+
+    </div><!-- end main -->
+
+</body>
+
+</html>

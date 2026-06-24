@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SE Midterm-II — Complete Exam-Ready Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0f19;--surface:#141926;--card:#1a2035;--border:rgba(255,255,255,.07);--primary:#60a5fa;--secondary:#a78bfa;--accent:#f472b6;--green:#34d399;--amber:#fbbf24;--text:#e2e8f0;--muted:#94a3b8;--nav-w:300px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.75;display:flex}
+a{color:var(--primary);text-decoration:none;transition:.2s}a:hover{color:var(--secondary)}
+
+/* ─── Sidebar ─── */
+#sidebar{width:var(--nav-w);background:rgba(20,25,38,.92);backdrop-filter:blur(16px);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;overflow-y:auto;padding:1.5rem 1rem;z-index:100}
+#sidebar::-webkit-scrollbar{width:4px}#sidebar::-webkit-scrollbar-thumb{background:var(--primary);border-radius:4px}
+.logo{font-family:'Outfit';font-size:1.35rem;font-weight:800;text-align:center;margin-bottom:1.8rem;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nav-section{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:1.2rem 0 .5rem .5rem;font-weight:600}
+.nav-link{display:block;padding:.6rem .8rem;margin-bottom:2px;border-radius:8px;color:var(--muted);font-size:.85rem;font-weight:500;transition:.25s;border:1px solid transparent}
+.nav-link:hover,.nav-link.active{background:rgba(96,165,250,.08);color:var(--primary);border-color:rgba(96,165,250,.15);transform:translateX(4px)}
+.nav-sub{padding-left:1.2rem;font-size:.8rem}
+
+/* ─── Main ─── */
+#main{margin-left:var(--nav-w);padding:2.5rem 4% 6rem;width:calc(100% - var(--nav-w));max-width:1000px}
+h1{font-family:'Outfit';font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.5rem}
+.subtitle{color:var(--muted);font-size:1.05rem;margin-bottom:3rem;border-bottom:1px solid var(--border);padding-bottom:1.5rem}
+h2{font-family:'Outfit';font-size:1.9rem;font-weight:700;margin:3rem 0 1rem;padding-left:1rem;border-left:4px solid var(--primary);color:var(--text)}
+h3{font-family:'Outfit';font-size:1.35rem;font-weight:600;color:var(--secondary);margin:1.8rem 0 .8rem}
+h4{font-family:'Outfit';font-size:1.1rem;font-weight:600;color:var(--green);margin:1.3rem 0 .6rem}
+section{margin-bottom:3.5rem;animation:fadeUp .6s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── Cards ─── */
+.card{background:var(--card);border-radius:12px;padding:1.8rem;margin-bottom:1.4rem;border:1px solid var(--border);transition:.3s}
+.card:hover{border-color:rgba(96,165,250,.2);box-shadow:0 8px 32px rgba(0,0,0,.25)}
+p{margin-bottom:.8rem;color:var(--muted);font-size:.97rem}
+strong{color:var(--text)}
+em{color:var(--accent);font-style:italic}
+
+/* ─── Lists ─── */
+ul,ol{margin:.5rem 0 1rem 1.2rem}
+ul{list-style:none}
+ul li{position:relative;padding-left:1.5rem;margin-bottom:.55rem;color:var(--muted);font-size:.95rem}
+ul li::before{content:'▸';position:absolute;left:0;color:var(--primary);font-weight:bold}
+ol li{margin-bottom:.55rem;color:var(--muted);font-size:.95rem}
+
+/* ─── Highlight / Exam-Tip ─── */
+.highlight{background:rgba(96,165,250,.08);border:1px solid rgba(96,165,250,.2);border-radius:8px;padding:1rem 1.2rem;margin:1rem 0;font-size:.95rem}
+.highlight strong{color:var(--primary)}
+.exam-tip{background:rgba(251,191,36,.06);border-left:4px solid var(--amber);padding:1rem 1.2rem;border-radius:0 8px 8px 0;margin:1rem 0;font-size:.92rem}
+.exam-tip::before{content:'⚠ Exam Tip: ';font-weight:700;color:var(--amber)}
+
+/* ─── Tables ─── */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0;background:var(--card);border-radius:8px;overflow:hidden;font-size:.9rem}
+th,td{padding:.8rem 1rem;text-align:left;border-bottom:1px solid var(--border)}
+th{background:rgba(255,255,255,.04);color:var(--primary);font-family:'Outfit';font-weight:600}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ─── Code ─── */
+pre{background:#0d1117;border:1px solid var(--border);border-radius:8px;padding:1.2rem;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;margin:1rem 0;color:#c9d1d9;line-height:1.6}
+
+/* ─── Scenario boxes ─── */
+.scenario{background:linear-gradient(135deg,rgba(26,32,53,.95),rgba(11,15,25,.95));border-left:4px solid var(--accent);padding:1.5rem;border-radius:0 10px 10px 0;margin-bottom:2rem}
+.scenario .q{font-weight:600;font-size:1.05rem;color:var(--text);margin-bottom:.8rem}
+.scenario .tag{display:inline-block;font-size:.7rem;padding:2px 8px;border-radius:4px;background:rgba(244,114,182,.15);color:var(--accent);font-weight:600;margin-bottom:.6rem}
+.answer{max-height:0;overflow:hidden;transition:max-height .5s ease;background:rgba(0,0,0,.25);border-radius:8px;padding:0 1.2rem}
+.answer.open{max-height:3000px;padding:1.2rem;margin-top:.8rem;border:1px solid var(--border)}
+.btn{background:var(--primary);color:#0b0f19;border:none;padding:.5rem 1.1rem;border-radius:6px;font-family:'Outfit';font-weight:600;font-size:.85rem;cursor:pointer;transition:.2s}
+.btn:hover{background:var(--secondary);color:#fff;transform:scale(1.04)}
+
+@media(max-width:900px){#sidebar{display:none}#main{margin-left:0;width:100%;padding:1.5rem}}
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+<div class="logo">SE Midterm-II Notes</div>
+
+<div class="nav-section">Week 07 — Software Design</div>
+<a href="#sd-intro" class="nav-link">What is Software Design?</a>
+<a href="#sd-model" class="nav-link">Design Model</a>
+<a href="#sd-quality" class="nav-link">Quality Guidelines & FURPS</a>
+<a href="#sd-concepts" class="nav-link">Design Concepts</a>
+<a href="#sd-abstraction" class="nav-link nav-sub">Abstraction</a>
+<a href="#sd-architecture" class="nav-link nav-sub">Architecture</a>
+<a href="#sd-patterns" class="nav-link nav-sub">Patterns</a>
+<a href="#sd-modularity" class="nav-link nav-sub">Modularity</a>
+<a href="#sd-hiding" class="nav-link nav-sub">Information Hiding</a>
+<a href="#sd-independence" class="nav-link nav-sub">Functional Independence</a>
+<a href="#sd-refinement" class="nav-link nav-sub">Refinement</a>
+<a href="#sd-refactoring" class="nav-link nav-sub">Refactoring</a>
+<a href="#sd-classes" class="nav-link">Design Classes</a>
+
+<div class="nav-section">Week 08 — Architecture</div>
+<a href="#arch-intro" class="nav-link">Architecture vs Design</a>
+<a href="#arch-decisions" class="nav-link">Architectural Decisions</a>
+<a href="#arch-views" class="nav-link">4+1 Architectural Views</a>
+<a href="#design-patterns-intro" class="nav-link">Design Patterns Overview</a>
+<a href="#arch-patterns" class="nav-link">Architectural Patterns</a>
+<a href="#arch-mvc" class="nav-link nav-sub">MVC Pattern</a>
+<a href="#arch-layered" class="nav-link nav-sub">Layered (N-Tier)</a>
+<a href="#arch-repo" class="nav-link nav-sub">Repository</a>
+<a href="#arch-cs" class="nav-link nav-sub">Client-Server</a>
+<a href="#arch-pipe" class="nav-link nav-sub">Pipe &amp; Filter</a>
+
+<div class="nav-section">Week 09–10 — Applications</div>
+<a href="#app-arch" class="nav-link">Application Architectures</a>
+<a href="#app-transaction" class="nav-link nav-sub">Transaction Processing</a>
+<a href="#app-info" class="nav-link nav-sub">Information Systems</a>
+<a href="#app-lang" class="nav-link nav-sub">Language Processing</a>
+
+<div class="nav-section">Week 09–11 — UI Design</div>
+<a href="#ui-intro" class="nav-link">UI Design Introduction</a>
+<a href="#ui-golden" class="nav-link">3 Golden Rules</a>
+<a href="#ui-models" class="nav-link">4 UI Design Models</a>
+<a href="#ui-process" class="nav-link">UI Design Process</a>
+<a href="#ui-analysis" class="nav-link">Interface Analysis</a>
+<a href="#ui-design-steps" class="nav-link">Interface Design Steps</a>
+<a href="#ui-issues" class="nav-link">Design Issues</a>
+<a href="#ui-webapp" class="nav-link">WebApp Interface Principles</a>
+
+<div class="nav-section">Week 11 — Testing</div>
+<a href="#test-intro" class="nav-link">Testing Fundamentals</a>
+<a href="#test-vv" class="nav-link">Verification vs Validation</a>
+<a href="#test-inspect" class="nav-link">Inspections vs Testing</a>
+<a href="#test-dev" class="nav-link">Development Testing</a>
+<a href="#test-unit" class="nav-link nav-sub">Unit Testing</a>
+<a href="#test-component" class="nav-link nav-sub">Component Testing</a>
+<a href="#test-system" class="nav-link nav-sub">System Testing</a>
+<a href="#test-partition" class="nav-link">Equivalence Partitioning</a>
+<a href="#test-tdd" class="nav-link">Test-Driven Development</a>
+<a href="#test-release" class="nav-link">Release Testing</a>
+<a href="#test-perf" class="nav-link nav-sub">Performance Testing</a>
+<a href="#test-user" class="nav-link">User Testing</a>
+<a href="#test-path" class="nav-link">Basis Path Testing</a>
+
+<div class="nav-section">Practice</div>
+<a href="#practice" class="nav-link">📝 Scenario Questions</a>
+</nav>
+
+<main id="main">
+<h1>Software Engineering — Midterm II</h1>
+<p class="subtitle">Comprehensive, slide-accurate notes covering Weeks 7–11. Every concept, definition, example, and diagram description from your uploaded lectures is included below.</p>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SECTION: SOFTWARE DESIGN (Week 07)                   -->
+<!-- ══════════════════════════════════════════════════════ -->
+
+<section id="sd-intro">
+<h2>1. Software Design Fundamentals</h2>
+
+<div class="card">
+<h3>What is Software Design?</h3>
+<p>Design is where <strong>stakeholder requirements, business needs, and technical considerations</strong> all come together in the formulation of a product or system.</p>
+<p><strong>Software Design</strong> is the process of transforming user requirements into some suitable form, which helps the programmer in software coding and implementation. During the software design phase, the <strong>design document</strong> is produced, based on the customer requirements as documented in the <strong>SRS document</strong>. Hence the aim of this phase is to transform the SRS document into the design document.</p>
+<p>Design allows you to <strong>model the system</strong> that is to be built. This model can be assessed for quality and improved <strong>before code is generated</strong>, tests are conducted, and end users become involved in large numbers. <strong>Design is the place where software quality is established.</strong></p>
+
+<h4>The Roman Architecture Analogy</h4>
+<p>The Roman architecture notion about well-designed buildings — good software exhibits:</p>
+<ul>
+<li><strong>Firmness:</strong> A program should not have any bugs that inhibit its function.</li>
+<li><strong>Commodity:</strong> A program should be suitable for the purposes for which it was intended.</li>
+<li><strong>Delight:</strong> The experience of using the program should be a pleasurable one.</li>
+</ul>
+
+<h4>Why is Design Important?</h4>
+<p>Design allows you to model the system or product that is to be built. This model can be assessed for quality and improved before code is generated, tests are conducted, and end users become involved in large numbers.</p>
+</div>
+</section>
+
+<section id="sd-model">
+<div class="card">
+<h3>The Design Model</h3>
+<p>Translating the requirements model into the design model produces four types of design:</p>
+<table>
+<tr><th>Design Type</th><th>Description</th></tr>
+<tr><td><strong>Data/Class Design</strong></td><td>Objects and relationships defined in the CRC diagram and the detailed data content depicted by class attributes provide the basis for the data design action.</td></tr>
+<tr><td><strong>Architectural Design</strong></td><td>Defines the relationship between major structural elements of the software. The "Big Picture" — what and why? Where data gets stored, where servers are arranged? Architecture patterns: MVC, Cloud-based. Tradeoffs: may need more space for non-functional requirements.</td></tr>
+<tr><td><strong>Interface Design</strong></td><td>Describes how the software communicates with systems that interoperate with it, and with humans who use it. An interface implies a flow of information (data and/or control) and a specific type of behavior.</td></tr>
+<tr><td><strong>Component-Level Design</strong></td><td>Transforms structural elements of the software architecture into a procedural description of software components.</td></tr>
+</table>
+
+<h4>Design Process</h4>
+<p>Software design is an <strong>iterative process</strong> through which requirements are translated into a "blueprint" for constructing the software. As design iterations occur, subsequent refinement leads to design representations at <strong>much lower levels of abstraction</strong>.</p>
+</div>
+</section>
+
+<section id="sd-quality">
+<div class="card">
+<h3>Software Quality Guidelines &amp; Attributes</h3>
+<p>Throughout the design process, the quality of the evolving design is assessed with a series of <strong>technical reviews</strong>. McGlaughlin [McG91] suggests three characteristics that serve as a guide for the evaluation of a good design:</p>
+<ol>
+<li>The design must implement <strong>all of the explicit requirements</strong> contained in the requirements model, and it must accommodate all of the <strong>implicit requirements</strong> desired by stakeholders.</li>
+<li>The design must be a <strong>readable, understandable guide</strong> for those who generate code and for those who test and subsequently support the software.</li>
+<li>The design should provide a <strong>complete picture of the software</strong>, addressing the data, functional, and behavioral domains from an implementation perspective.</li>
+</ol>
+
+<h4>Quality Guidelines</h4>
+<ul>
+<li>A design should exhibit an <strong>architecture</strong>.</li>
+<li>A design should be <strong>modular</strong>.</li>
+<li>A design should contain <strong>distinct representations of data</strong>.</li>
+<li>A design should lead to <strong>data structures</strong>.</li>
+<li>A design should lead to interfaces that <strong>reduce the complexity of connections</strong>.</li>
+</ul>
+
+<h4>FURPS Quality Attributes</h4>
+<p>The <strong>FURPS</strong> quality attributes represent a target for all software design:</p>
+<table>
+<tr><th>Attribute</th><th>Description</th></tr>
+<tr><td><strong>F — Functionality</strong></td><td>Assessed by evaluating the feature set and capabilities of the program.</td></tr>
+<tr><td><strong>U — Usability</strong></td><td>Assessed by considering human factors. Usability is how easily a person can accomplish a given task with your product.</td></tr>
+<tr><td><strong>R — Reliability</strong></td><td>Evaluated by measuring the frequency and severity of failure, accuracy of output results, the mean-time-to-failure (MTTF), the ability to recover from failure, and the predictability of the program.</td></tr>
+<tr><td><strong>P — Performance</strong></td><td>Measured by considering processing speed, response time, resource consumption, throughput, and efficiency.</td></tr>
+<tr><td><strong>S — Supportability</strong></td><td>Combines the ability to extend the program (extensibility), adaptability, and serviceability.</td></tr>
+</table>
+
+<div class="exam-tip">FURPS is a frequently tested acronym. Make sure you can expand it and explain each attribute with an example.</div>
+</div>
+</section>
+
+<section id="sd-concepts">
+<div class="card">
+<h3>Software Design Concepts</h3>
+<p>The software design concept describes the <strong>idea or principle behind the design</strong>. It describes how you plan to solve the problem of designing software — the logic or thinking behind how you will design software. It allows the software engineer to create the model of the system to be developed.</p>
+<p>The fundamental design concepts are:</p>
+<ul>
+<li>Abstraction — data, procedure, control</li>
+<li>Architecture — the overall structure of the software</li>
+<li>Patterns — "conveys the essence" of a proven design solution</li>
+<li>Separation of concerns — any complex problem can be more easily handled if it is subdivided into pieces</li>
+<li>Modularity — compartmentalization of data and function</li>
+<li>Hiding — controlled interfaces</li>
+<li>Functional independence — single-minded function and low coupling</li>
+<li>Refinement — elaboration of detail for all abstractions</li>
+<li>Aspects — a mechanism for understanding how global requirements affect design</li>
+<li>Refactoring — a reorganization technique that simplifies the design</li>
+<li>OO design concepts</li>
+<li>Design Classes — provide design detail that will enable analysis classes to be implemented</li>
+</ul>
+</div>
+</section>
+
+<section id="sd-abstraction">
+<div class="card">
+<h3>1. Abstraction</h3>
+<p>The process of <strong>hiding the complex properties or characteristics</strong> from the software itself to keep things more simple.</p>
+<ul>
+<li><strong>Procedural Abstraction:</strong> A sequence of instructions that contain a specific and limited function. The word "open" on a door — the user only knows the concept, but the implementation details (algorithms for mechanisms like pull, push, slide, etc.) are hidden.</li>
+<li><strong>Data Abstraction:</strong> A collection of data that describes a data object. For example, "door" implies a set of attributes: manufacturer, model number, type, swing direction, inserts, lights, locking mechanism, weight, opening mechanism — all described at a high level, but <strong>implemented as a data structure</strong>.</li>
+</ul>
+</div>
+</section>
+
+<section id="sd-architecture">
+<div class="card">
+<h3>2. Architecture</h3>
+<p>The complete structure of the software is known as <strong>software architecture</strong>. Structure provides conceptual integrity for a system in a number of ways:</p>
+<ul>
+<li><strong>Structural Properties:</strong> Defines the components of a system (e.g., modules, objects, filters) and the manner in which those components are packaged and interact with one another. For example, objects are packaged to encapsulate both data and the processing that manipulates the data and interact via the invocation of methods.</li>
+<li><strong>Extra-functional Properties:</strong> The architectural design should address how the design architecture achieves requirements for performance, capacity, reliability, security, adaptability, and other system characteristics.</li>
+<li><strong>Families of Related Systems:</strong> The architectural design should draw upon repeatable patterns commonly encountered in the design of families of similar systems. The design should have the ability to <strong>reuse architectural building blocks</strong>.</li>
+</ul>
+</div>
+</section>
+
+<section id="sd-patterns">
+<div class="card">
+<h3>3. Patterns</h3>
+<p>"A pattern is a <strong>named nugget of insight</strong> which conveys the essence of a proven solution to a recurring problem within a certain context amidst competing concerns."</p>
+<p>A design pattern can be characterized as "a <strong>three-part rule</strong> which expresses a relation between a certain context, a problem, and a solution."</p>
+<ul>
+<li><strong>Component Pattern:</strong> Addresses a specific element of the design such as an aggregation of components to solve some design problem, relationships among elements.</li>
+<li><strong>Design Pattern:</strong> A medium-level pattern type that is used by developers to solve the problem in the design stage of development.</li>
+</ul>
+
+<h4>Design Pattern Template</h4>
+<table>
+<tr><th>Element</th><th>Description</th></tr>
+<tr><td><strong>Pattern Name</strong></td><td>Describes the essence of the pattern in a short but expressive name.</td></tr>
+<tr><td><strong>Intent</strong></td><td>Describes the pattern and what it does.</td></tr>
+<tr><td><strong>Also-Known-As</strong></td><td>Lists any synonyms for the pattern.</td></tr>
+<tr><td><strong>Motivation</strong></td><td>Provides an example of the problem.</td></tr>
+<tr><td><strong>Applicability</strong></td><td>Notes specific design situations in which the pattern is applicable.</td></tr>
+<tr><td><strong>Structure</strong></td><td>Describes the classes that are required to implement the pattern.</td></tr>
+<tr><td><strong>Participants</strong></td><td>Describes the responsibilities of the classes required to implement the pattern.</td></tr>
+<tr><td><strong>Collaborations</strong></td><td>Describes how the participants collaborate to carry out their responsibilities.</td></tr>
+<tr><td><strong>Consequences</strong></td><td>Describes the "design forces" that affect the pattern and potential trade-offs.</td></tr>
+<tr><td><strong>Related Patterns</strong></td><td>Cross-references related design patterns.</td></tr>
+</table>
+</div>
+</section>
+
+<section id="sd-modularity">
+<div class="card">
+<h3>4. Modularity</h3>
+<p>Software is separately divided into <strong>named and addressable components</strong>. Sometimes they are called <strong>modules</strong> which integrate to satisfy the problem requirements.</p>
+<p>Modularity is the <strong>single attribute</strong> of a software that permits a program to be <strong>managed easily</strong>. Monolithic software (i.e., a large program composed of a single module) cannot be easily grasped.</p>
+<div class="highlight">
+<strong>Modularity and Software Cost:</strong> There is an optimal number of modules. Too few modules → each module is too complex. Too many modules → integration cost increases due to interfaces. The total cost has a minimum at some intermediate number of modules.
+</div>
+
+<h4>Separation of Concerns</h4>
+<p>Any complex problem can be more easily handled if it is <strong>subdivided into pieces</strong> that can each be solved and/or optimized independently. This is a key design principle that modularity supports.</p>
+</div>
+</section>
+
+<section id="sd-hiding">
+<div class="card">
+<h3>5. Information Hiding</h3>
+<p>Modules must be specified and designed so that the information like <strong>algorithms and data</strong> presented in a module is <strong>not accessible</strong> for other modules not requiring that information.</p>
+<p>A module has a <strong>controlled interface</strong> — a "secret" that it hides. The hidden "secrets" include:</p>
+<ul>
+<li>Algorithm details</li>
+<li>Data structure internals</li>
+<li>Details of external interface</li>
+<li>Resource allocation policy</li>
+</ul>
+<p>Clients interact with the module through the controlled interface only, without knowledge of the internal design decisions.</p>
+</div>
+</section>
+
+<section id="sd-independence">
+<div class="card">
+<h3>6. Functional Independence</h3>
+<p>Functional independence is achieved by developing modules with <strong>"single-minded" function</strong> and an <strong>"aversion" to excessive interaction</strong> with other modules. It is assessed using two qualitative criteria:</p>
+<table>
+<tr><th>Criteria</th><th>Description</th></tr>
+<tr><td><strong>Cohesion</strong></td><td>An indication of the <strong>relative functional strength</strong> of a module. A module should do one thing well (high cohesion is desirable).</td></tr>
+<tr><td><strong>Coupling</strong></td><td>An indication of the <strong>relative interdependence among modules</strong>. Modules should have minimal dependencies on each other (low coupling is desirable).</td></tr>
+</table>
+<div class="exam-tip">Remember: Good design = High Cohesion + Low Coupling. This is one of the most fundamental design principles in software engineering.</div>
+</div>
+</section>
+
+<section id="sd-refinement">
+<div class="card">
+<h3>7. Refinement</h3>
+<p>Stepwise Refinement is the process of <strong>breaking down a programming problem into a series of steps</strong>. It is a <strong>top-down design approach</strong>.</p>
+<ol>
+<li>You start with a <strong>general set of steps</strong> to solve the problem, defining each in turn.</li>
+<li>Once you have defined each of the steps, you break the problem down into a series of <strong>smaller sub-steps</strong>.</li>
+<li>You keep on going until you have described the problem in such a level of detail that you can <strong>code a solution</strong>.</li>
+</ol>
+<p><strong>Example from slides:</strong> Making tea — Step-01: boil water → Step-02: add tea bag → etc. Each step can be further refined into sub-steps.</p>
+</div>
+</section>
+
+<section id="sd-refactoring">
+<div class="card">
+<h3>8. Refactoring</h3>
+<p>Refactoring is a reorganization technique that <strong>simplifies the design</strong> (or internal code structure) of a component <strong>without changing its function or external behaviour</strong>.</p>
+<p>It removes:</p>
+<ul>
+<li>Redundancy</li>
+<li>Unused design elements</li>
+<li>Inefficient or unnecessary algorithms</li>
+<li>Poorly constructed or inappropriate data structures</li>
+<li>Any other design failures</li>
+</ul>
+</div>
+</section>
+
+<section id="sd-classes">
+<div class="card">
+<h3>Design Classes</h3>
+<p>The requirements model defines a set of analysis classes. There are <strong>five different types of design classes</strong>, each representing a different layer of the design architecture:</p>
+<table>
+<tr><th>Class Type</th><th>Description</th></tr>
+<tr><td><strong>User Interface Classes</strong></td><td>Define all abstractions necessary for human-computer interaction.</td></tr>
+<tr><td><strong>Business Domain Classes</strong></td><td>Represent entities from the problem domain (e.g., Customer, Order).</td></tr>
+<tr><td><strong>Process Classes</strong></td><td>Implement business logic and rules.</td></tr>
+<tr><td><strong>Persistent Classes</strong></td><td>Java classes whose objects have to be stored in the database tables. They show data stores that will persist beyond the execution of the software.</td></tr>
+<tr><td><strong>System Classes</strong></td><td>Implement software management and control functions that allow the system to operate and communicate in the computing environment. Belongs to <code>java.lang</code> package (e.g., <code>java.lang.System</code>).</td></tr>
+</table>
+
+<h4>Four Characteristics of a Well-Formed Design Class</h4>
+<ul>
+<li><strong>Complete and Sufficient:</strong> A design class should be the <strong>complete encapsulation</strong> of all attributes and methods that can reasonably be expected to exist for the class. Example: the class <code>Scene</code> for video-editing software is complete only if it contains all attributes and methods that can reasonably be associated with the creation of a video scene. Sufficiency ensures the design class contains only those methods that are sufficient to achieve the intent of the class — no more and no less.</li>
+<li><strong>Primitiveness:</strong> Methods associated with a design class should be focused on <strong>accomplishing one service</strong> for the class. Once the service has been implemented with a method, the class should not provide another way to accomplish the same thing.</li>
+<li><strong>High Cohesion:</strong> A cohesive design class has a <strong>small and focused set of responsibilities</strong>. Single-mindedly applied methods and attributes.</li>
+<li><strong>Low Coupling:</strong> All design classes should collaborate with each other, but the <strong>minimum acceptable level of collaboration</strong> must be kept. If a design model is highly coupled, the system is difficult to implement, test, and maintain over time. This is called the <strong>Law of Demeter</strong> — a method should only send messages to methods in <strong>neighboring classes</strong>.</li>
+</ul>
+
+<div class="exam-tip">The Law of Demeter ("Don't talk to strangers") is a favorite exam concept. A method should only call methods on: (1) itself, (2) its parameters, (3) objects it creates, (4) its direct component objects.</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  SECTION: ARCHITECTURAL DESIGN (Week 08)             -->
+<!-- ══════════════════════════════════════════════════════ -->
+
+<section id="arch-intro">
+<h2>2. Architectural Design</h2>
+
+<div class="card">
+<h3>Architecture vs Design</h3>
+<p>There is a <strong>distinct difference</strong> between architecture and design:</p>
+<ul>
+<li>A <strong>design</strong> is an instance of an architecture, similar to an object being an instance of a class.</li>
+<li>Example: Consider the client-server architecture. You can design a network-centric software system in many different ways — using Java EE or .NET. So there is <strong>one architecture, but many designs</strong> based on it.</li>
+<li>Software <strong>architecture</strong> is responsible for the skeleton and high-level infrastructure (the <em>abstract view</em> of the idea).</li>
+<li>Software <strong>design</strong> is responsible for the code-level specifics — what each module does, class scope, function purposes (the <em>implementation view</em> of the idea).</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>What is Architectural Design?</h3>
+<p>Architectural design is concerned with understanding how a software system should be <strong>organized</strong> and designing the <strong>overall structure</strong> of that system. The information is obtained from the requirement model and other information collected during requirement engineering.</p>
+</div>
+
+<div class="card">
+<h3>Agility and Architecture</h3>
+<p>It is generally accepted that an <strong>early stage of agile processes</strong> is to design an overall systems architecture. <strong>Refactoring the system architecture is usually expensive</strong> because it affects so many components in the system.</p>
+</div>
+
+<div class="card">
+<h3>Architecture Level of Abstraction</h3>
+<ul>
+<li><strong>Architecture in the Small:</strong> Concerned with the architecture of <strong>individual programs</strong>. How an individual program is decomposed into components.</li>
+<li><strong>Architecture in the Large:</strong> Concerned with the architecture of <strong>complex enterprise systems</strong> that include other systems, programs, and program components. These may be distributed over different computers, owned and managed by different companies.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Advantages of Explicit Architecture</h3>
+<p>Non-functional requirements have the <strong>most significant effect</strong> on the system's architecture ("architecturally significant requirements"). Bass et al. suggest three advantages of explicitly designing and documenting software architecture:</p>
+<ul>
+<li>Stakeholder communication — architecture is a high-level presentation of the system.</li>
+<li>System analysis — enables analysis of whether the system can meet non-functional requirements.</li>
+<li>Large-scale reuse — architecture may be reusable across systems with similar requirements.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Architectural Representations (Block Diagrams)</h3>
+<ul>
+<li>Block diagrams present a <strong>high-level picture</strong> of the system structure.</li>
+<li>Each <strong>box</strong> represents a component.</li>
+<li><strong>Boxes within boxes</strong> indicate a component has been decomposed into subcomponents.</li>
+<li><strong>Arrows</strong> mean data and/or control signals are passed from component to component in the direction of the arrows.</li>
+</ul>
+</div>
+</section>
+
+<section id="arch-decisions">
+<div class="card">
+<h3>Architectural Design Decisions</h3>
+<p>Architectural design is a <strong>creative process</strong> — the process differs depending on the type of system. However, common decisions span all design processes and affect the <strong>non-functional characteristics</strong> of the system.</p>
+<div class="highlight">
+<strong>Architecture and System Characteristics (Quality Attributes):</strong> The architecture directly influences Performance, Security, Safety, Availability, and Maintainability of the system.
+</div>
+</div>
+</section>
+
+<section id="arch-views">
+<div class="card">
+<h3>Krutchen's 4+1 Architectural Views</h3>
+<p>It is <strong>impossible</strong> to represent all relevant information about a system's architecture in a single diagram, as a graphical model can only show one view or perspective. For both design and documentation, you usually need to present <strong>multiple views</strong>.</p>
+
+<h4>1. Logical View</h4>
+<ul>
+<li>Focuses on <strong>functional requirements</strong>.</li>
+<li>Shows key abstractions in the system as objects.</li>
+<li>Describes how the system is structured in terms of units of implementation.</li>
+<li>Elements: packages, classes, and interfaces.</li>
+<li>Relationships: dependencies, interface realizations, part-whole relationships.</li>
+<li><strong>Viewer:</strong> End User.</li>
+<li><strong>Diagrams used:</strong> Class Diagram, Sequence Diagram, Communication Diagram.</li>
+</ul>
+
+<h4>2. Process View</h4>
+<ul>
+<li>Shows <strong>how the system runs</strong> at runtime.</li>
+<li>Focuses on achieving <strong>non-functional requirements</strong>.</li>
+<li>Shows how the system is composed of interacting processes.</li>
+<li>Useful for making judgments about <strong>performance and availability</strong>.</li>
+<li><strong>Viewer:</strong> Integrators.</li>
+</ul>
+
+<h4>3. Development View</h4>
+<ul>
+<li>Shows the <strong>decomposition of the system into modules</strong> implemented by different development teams.</li>
+<li>Represents the <strong>logical organization of the code</strong>.</li>
+</ul>
+
+<h4>4. Implementation / Physical View</h4>
+<ul>
+<li>Depicts how the software is <strong>deployed in data centers</strong>.</li>
+<li>Example: Web-based app would show which web service is used, number of servers and their roles, software components installed on them.</li>
+<li><strong>Viewer:</strong> System Engineers.</li>
+</ul>
+
+<div class="exam-tip">The 4+1 model is a favorite exam topic. Know which viewer (End User, Integrator, System Engineer) maps to which view, and what diagrams are used.</div>
+</div>
+</section>
+
+<section id="design-patterns-intro">
+<div class="card">
+<h3>Design Patterns (Overview)</h3>
+<p>Design patterns solve <strong>reoccurring problems</strong> in software design. They are categorized into three types:</p>
+
+<h4>Creational Patterns</h4>
+<p>Focus on <strong>how to instantiate</strong> an object or group of related objects.</p>
+<ul><li>Abstract Factory, Builder, Factory Method, Prototype, <strong>Singleton Pattern</strong></li></ul>
+
+<h4>Structural Patterns</h4>
+<p>Identifying a simple way to <strong>realize relationships among entities</strong>.</p>
+<ul><li>Adapter, Bridge, Decorator, Facade, <strong>Proxy Pattern</strong></li></ul>
+
+<h4>Behavioral Patterns</h4>
+<p>Identify common <strong>communication patterns</strong> between objects.</p>
+<ul><li>Command, Interpreter, Iterator, Mediator, Null Object, <strong>Observer</strong></li></ul>
+</div>
+</section>
+
+<section id="arch-patterns">
+<div class="card">
+<h3>Architectural Patterns</h3>
+<p>Patterns are a means of <strong>representing, sharing and reusing knowledge</strong>. An architectural pattern is a <em>stylized description of a good design practice</em>, tried and tested in different environments. Patterns help you build on the <strong>collective experience of skilled software engineers</strong>.</p>
+<p>Patterns should include information about <strong>when they are and when they are not useful</strong>. Patterns may be represented using tabular and graphical descriptions.</p>
+<p><strong>Architectural patterns address issues such as:</strong> Performance, High Availability, Scalability, Security, Maintainability, Testing, Deployment, Technology Stack.</p>
+<p><strong>Examples of patterns:</strong> MVC, MVP, Layered (N-tier), Master-Slave, REST, Monolithic, Microservice, Event-Driven Architecture (EDA), Service-Oriented Architecture (SOA).</p>
+</div>
+</section>
+
+<section id="arch-mvc">
+<div class="card">
+<h3>A. Model-View-Controller (MVC) Pattern</h3>
+<p>The MVC framework is an architectural pattern that <strong>separates an application into three main logical components</strong>. It is <strong>widely used in modern web applications</strong> and generally used on applications that run on a single graphical workstation.</p>
+
+<table>
+<tr><th>Component</th><th>Responsibility</th></tr>
+<tr><td><strong>Model</strong></td><td>Data-related logic. Communicates with the controller. Can sometimes update the view directly or through the controller (depends on framework).</td></tr>
+<tr><td><strong>View</strong></td><td>What the end user sees. Usually consists of HTML/CSS. Communicates with controller.</td></tr>
+<tr><td><strong>Controller</strong></td><td>Processes user requests. Gets data from the user. Acts as intermediary between Model and View.</td></tr>
+</table>
+
+<p><strong>Demo Example from slides:</strong></p>
+<ul>
+<li>A <code>DemoModel</code> object has instance variables for storing an array of Points and a color.</li>
+<li><code>DemoController</code> implements the MouseMotionListener interface (mouseDragged and mouseMoved) and the ListSelectionListener interface (valueChanged).</li>
+<li><code>DemoView</code> is a subclass of JFrame.</li>
+</ul>
+<p><strong>Popular MVC Frameworks:</strong> ASP.NET MVC, Django, Ruby on Rails, Spring MVC, AngularJS, Laravel.</p>
+</div>
+</section>
+
+<section id="arch-layered">
+<div class="card">
+<h3>B. Layered Architecture (N-Tier)</h3>
+<p>Components are organized in <strong>horizontal layers</strong>. This is the <strong>traditional method</strong> for designing most software and is meant to be <strong>self-independent</strong> — all components are interconnected but do <strong>not depend on each other</strong>.</p>
+<div class="highlight"><strong>Key Point:</strong> Layered architecture is the <strong>best choice when security is highly concerned</strong>.</div>
+
+<h4>The Four Standard Layers</h4>
+<table>
+<tr><th>Layer</th><th>Description</th></tr>
+<tr><td><strong>Presentation Layer</strong></td><td>Contains all user interfaces exposed to a user. May provide web, desktop, and native mobile applications.</td></tr>
+<tr><td><strong>Business Logic Layer</strong></td><td>Handles all business logic, validations, and business processes.</td></tr>
+<tr><td><strong>Data Access Layer</strong></td><td>Responsible for interacting with a database. Also known as the <em>persistence layer</em>.</td></tr>
+<tr><td><strong>Data Store Layer</strong></td><td>The actual data store for the application (database).</td></tr>
+</table>
+
+<h4>Advantages</h4>
+<p>The advantage of a layered architecture is the <strong>separation of concerns</strong> — each layer focuses solely on its role. This makes it:</p>
+<ul>
+<li><strong>Maintainable</strong> — changes in one layer don't affect others.</li>
+<li><strong>Testable</strong> — layers can be tested independently.</li>
+<li>Easy to assign separate "roles" to development teams.</li>
+<li>Easy to update and enhance layers separately.</li>
+</ul>
+<p><strong>Example:</strong> A business user requests customer information → the request passes through Presentation → Business Logic → Data Access → Data Store and the response flows back up.</p>
+</div>
+</section>
+
+<section id="arch-repo">
+<div class="card">
+<h3>C. Repository / Data Center Architecture</h3>
+<ul>
+<li>Data is stored in a <strong>central shared repository</strong>.</li>
+<li>Components interact <strong>through the repository only</strong>.</li>
+<li>Components do <strong>not interact directly</strong> with each other.</li>
+<li>It is a <strong>data-centric architecture</strong> that supports user interaction for data processing.</li>
+</ul>
+<p><strong>Example:</strong> Compiler/IDE (Eclipse) — All data (symbol tables, syntax trees, etc.) in the system is managed in a central repository accessible to all system components (editor, compiler, debugger, etc.).</p>
+</div>
+</section>
+
+<section id="arch-cs">
+<div class="card">
+<h3>D. Client-Server Architecture</h3>
+<p>A computing model in which the <strong>server hosts, delivers and manages</strong> most of the resources and services to be consumed by the client. One or more client computers are connected to a central server over a <strong>network or internet connection</strong>.</p>
+
+<h4>Components</h4>
+<ul>
+<li><strong>Client:</strong> Software/application that takes input and sends requests to servers.</li>
+<li><strong>Server:</strong> Software that receives and processes requests from clients.</li>
+<li><strong>Load Balancer:</strong> Distributes incoming network traffic across a group of backend servers to optimize resource usage.</li>
+</ul>
+
+<h4>Request Flow (from slides)</h4>
+<ol>
+<li>Client requests data from server.</li>
+<li>Load balancer routes the request to the appropriate server.</li>
+<li>Server processes the request.</li>
+<li>Server queries appropriate database for data.</li>
+<li>Database returns queried data to server.</li>
+<li>Server processes the data and sends it back to client.</li>
+<li>This process repeats.</li>
+</ol>
+<p><strong>Examples:</strong> Web Server, Mail Server.</p>
+</div>
+</section>
+
+<section id="arch-pipe">
+<div class="card">
+<h3>E. Pipe and Filter Architecture</h3>
+<p>A model of the runtime organization of a system where <strong>functional transformations process inputs and produce outputs</strong>. Independent entities called <strong>filters</strong> (components) perform transformations on data, and <strong>pipes</strong> serve as connectors for the stream of data being transformed.</p>
+<ul>
+<li>Many systems require transforming streams of discrete data items from input to output.</li>
+<li>Many types of transformations occur repeatedly → desirable to create them as <strong>independent, reusable parts (Filters)</strong>.</li>
+<li>The name comes from the original <strong>Unix system</strong> where processes could be linked using "pipes."</li>
+<li><strong>Best suited for:</strong> Batch processing systems and embedded systems where there is limited user interaction.</li>
+</ul>
+<p><strong>Example:</strong> Compilers: Lexical Analysis → Parsing → Semantic Analysis → Code Generation. Also: Signal Processing pipelines.</p>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION: APPLICATION ARCHITECTURES (Week 09-10)       -->
+<!-- ══════════════════════════════════════════════════════ -->
+
+<section id="app-arch">
+<h2>3. Application Architectures</h2>
+
+<div class="card">
+<h3>What are Application Architectures?</h3>
+<p>Application systems are intended to meet a <strong>business or organizational need</strong>. Businesses have much in common (hiring, invoicing, accounting), which has led to <strong>generic software architectures</strong> describing the structure and organization of particular types of software systems. The application architecture may be <strong>reimplemented</strong> when developing new systems.</p>
+
+<h4>Uses of Application Architecture Models</h4>
+<ul>
+<li><strong>Starting point</strong> for the architectural design process.</li>
+<li><strong>Design checklist</strong> — base your initial design on a generic application architecture if unfamiliar with the type of application.</li>
+<li><strong>Assessing components for reuse</strong> — compare existing components with generic structures.</li>
+<li><strong>Organizing the work</strong> of the development team — identifies stable structural features.</li>
+<li><strong>Vocabulary</strong> for talking about and comparing applications.</li>
+</ul>
+
+<h4>Types of Application Architecture</h4>
+<table>
+<tr><th>Type</th><th>Description</th><th>Examples</th></tr>
+<tr><td><strong>Data Processing</strong></td><td>Data-driven apps that process data in batches without explicit user intervention.</td><td>Scientific data processing, commercial data processing, data analysis.</td></tr>
+<tr><td><strong>Transaction Processing</strong></td><td>Data-centered apps that process user requests and update a system database.</td><td>E-commerce, bank transfers.</td></tr>
+<tr><td><strong>Event Processing</strong></td><td>System actions depend on interpreting events from the environment.</td><td>Wireless sensor applications.</td></tr>
+<tr><td><strong>Language Processing</strong></td><td>Users' intentions are specified in a formal language that is processed and interpreted by the system.</td><td>Compilers, Natural Language Processing.</td></tr>
+</table>
+</div>
+</section>
+
+<section id="app-transaction">
+<div class="card">
+<h3>Transaction Processing Systems</h3>
+<p>Process user requests for information from a database or requests to update the database. Organized so that <strong>user actions can't interfere with each other</strong> and the <strong>integrity of the database is maintained</strong>.</p>
+<p>From a user perspective, a transaction is: <strong>Any coherent sequence of operations that satisfies a goal</strong> (e.g., find the times of flights from London to Paris).</p>
+<p><strong>Examples:</strong> Interactive banking systems, e-commerce systems, information systems, and booking systems. Users make <strong>asynchronous requests</strong> for service which are then processed by a <strong>transaction manager</strong>.</p>
+<p><strong>ATM System Architecture:</strong> The slides show an ATM system architecture as an example of transaction processing, where the ATM communicates with a central banking server through a transaction processing middleware.</p>
+</div>
+</section>
+
+<section id="app-info">
+<div class="card">
+<h3>Information Systems Architecture</h3>
+<p>Information systems are almost always <strong>web-based systems</strong> where the UI is implemented in a web browser. All systems that involve interaction with a shared database can be considered transaction-based information systems.</p>
+<p><strong>Examples:</strong> Library catalog, flight timetable, records of patients in a hospital.</p>
+<p>Information systems have a <strong>generic layered architecture</strong>:</p>
+<ul>
+<li>The user interface</li>
+<li>User communications</li>
+<li>Information retrieval</li>
+<li>System database</li>
+</ul>
+
+<h4>Web-based Information Systems</h4>
+<p>In an e-commerce system, the <strong>application-specific layer</strong> includes additional functionality supporting a 'shopping cart' — users can place items in separate transactions, then pay for them all together in a single transaction.</p>
+
+<h4>Server Implementation (Multi-tier)</h4>
+<ul>
+<li><strong>Web server:</strong> Responsible for all user communications, with the UI implemented using a web browser.</li>
+<li><strong>Application server:</strong> Responsible for implementing application-specific logic as well as information storage and retrieval requests.</li>
+<li><strong>Database server:</strong> Moves information to and from the database and handles transaction management.</li>
+</ul>
+</div>
+</section>
+
+<section id="app-lang">
+<div class="card">
+<h3>Language Processing Systems</h3>
+<p>Systems in which the user's intentions are expressed in a <strong>formal language</strong> (such as a programming language). The system processes this language into an internal format and then interprets this internal representation.</p>
+<p>The best known are <strong>compilers</strong>, which translate high-level language programs into machine code. Also used to interpret command languages for databases and markup languages such as XML.</p>
+
+<h4>Compiler Components</h4>
+<ul>
+<li><strong>Lexical Analyzer:</strong> Takes input language tokens and converts them to an internal form.</li>
+<li><strong>Symbol Table:</strong> Holds information about names of entities (variables, class names, object names) used in the text being translated.</li>
+<li><strong>Syntax Analyzer:</strong> Checks the syntax of the language being translated.</li>
+<li><strong>Syntax Tree:</strong> An internal structure representing the program being compiled.</li>
+</ul>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION: USER INTERFACE DESIGN (Weeks 09-11)          -->
+<!-- ══════════════════════════════════════════════════════ -->
+
+<section id="ui-intro">
+<h2>4. User Interface Design</h2>
+
+<div class="card">
+<h3>Why Care About UI Design?</h3>
+<p>Interface inconsistency <strong>can cost a big company millions of dollars</strong> in lost productivity. Software becomes more popular if its user interface is:</p>
+<ul>
+<li><strong>Attractive</strong></li>
+<li><strong>Simple to use</strong></li>
+<li><strong>Responsive in short time</strong></li>
+<li><strong>Clear to understand</strong></li>
+<li><strong>Consistent on all interfacing screens</strong></li>
+</ul>
+
+<h4>What Does Interface Design Focus On?</h4>
+<ul>
+<li>The design of interfaces <strong>between software components</strong>.</li>
+<li>The design of interfaces between the software and other <strong>nonhuman producers and consumers</strong> of information.</li>
+<li>The design of the interface between a <strong>human and the computer</strong>.</li>
+</ul>
+<p>GUIs have helped eliminate many horrific interface problems. However, some are still difficult to learn and hard to use. User interface analysis and design has to do with the <strong>study of people and how they relate to technology</strong>.</p>
+</div>
+</section>
+
+<section id="ui-golden">
+<div class="card">
+<h3>The 3 Golden Rules</h3>
+
+<h4>Golden Rule 1: Place the User in Control</h4>
+<ul>
+<li><strong>Provide for flexible interaction:</strong> Different users have different interaction preferences; choices should be provided (keyboard commands, mouse, digitizer pen, multitouch screen, voice recognition).</li>
+<li><strong>Define interaction modes that don't force unnecessary actions:</strong> Example — if spell check is selected in a word-processor, the user should be able to make a small text edit without being forced to remain in spell-checking mode. The user should enter and exit the mode with little or no effort.</li>
+<li><strong>Allow user interaction to be interruptible and undoable:</strong> The user should be able to "undo" any action.</li>
+<li><strong>Hide technical internals from the casual user:</strong> The user should not be aware of OS or file management functions.</li>
+<li><strong>Design for direct interaction with objects that appear on the screen:</strong> The user feels a sense of control when able to manipulate objects in a manner similar to what would occur if the object were a physical thing.</li>
+</ul>
+
+<h4>Golden Rule 2: Reduce the User's Memory Load</h4>
+<ul>
+<li><strong>Reduce demand on short-term memory:</strong> The interface shall reduce the user's requirement to remember past actions and results by <strong>providing visual cues</strong>.</li>
+<li><strong>Establish meaningful defaults:</strong> The system shall provide default values that make sense to the average user but allow changes.</li>
+<li><strong>Define shortcuts that are intuitive:</strong> Provide mnemonics (i.e., Ctrl or Alt combinations).</li>
+<li><strong>Visual layout based on real-world metaphor:</strong> The screen layout shall contain well-understood visual cues that the user can relate to real-world actions.</li>
+<li><strong>Disclose information in a progressive fashion:</strong> The interface shall be organized hierarchically, moving the user progressively in a step-wise fashion from an abstract concept to a concrete action (e.g., text format options → format dialog box).</li>
+</ul>
+
+<h4>Golden Rule 3: Make the Interface Consistent</h4>
+<ul>
+<li><strong>Allow the user to put the current task into a meaningful context:</strong> Provide indicators (e.g., window titles, consistent color coding) that enable the user to know the context of the work at hand.</li>
+<li>All visual information shall be organized according to a <strong>design standard maintained throughout all screen displays</strong>.</li>
+<li>Input mechanisms shall be constrained to a <strong>limited set used consistently</strong> throughout the application.</li>
+<li>Mechanisms for navigating from task to task shall be <strong>consistently defined and implemented</strong>.</li>
+<li><strong>Maintain consistency across a family of applications:</strong> A set of applications performing complementary functionality shall all implement the same design rules.</li>
+</ul>
+
+<div class="exam-tip">Golden Rules are highly likely exam questions. Memorize each sub-point with its example (e.g., spell-check mode for Rule 1, Ctrl+combinations for Rule 2).</div>
+</div>
+</section>
+
+<section id="ui-models">
+<div class="card">
+<h3>Four UI Analysis &amp; Design Models</h3>
+
+<h4>1. User Profile Model</h4>
+<ul>
+<li>Establishes the <strong>profile of the end-users</strong> of the system.</li>
+<li>Based on: age, gender, physical abilities, education, cultural/ethnic background, motivation, goals, and personality.</li>
+<li>Considers <strong>syntactic knowledge</strong> of the user — the mechanics of interaction required to use the interface effectively.</li>
+<li>Considers <strong>semantic knowledge</strong> of the user — the underlying sense of the application; an understanding of the functions performed, meaning of I/O, and objectives of the system.</li>
+</ul>
+
+<h4>2. Design Model</h4>
+<ul>
+<li>Derived from the <strong>analysis model of the requirements</strong>.</li>
+<li>Incorporates <strong>data, architectural, interface, and procedural representations</strong> of the software.</li>
+<li>Constrained by information in the requirements specification that helps define the user of the system.</li>
+<li>Normally is incidental to other parts of the design model, but in many cases it is <strong>as important as the other parts</strong>.</li>
+</ul>
+
+<h4>3. Implementation Model</h4>
+<ul>
+<li>Consists of the <strong>look and feel</strong> of the interface combined with all supporting information (books, videos, help files) that describe system syntax and semantics.</li>
+<li>Strives to <strong>agree with the user's mental model</strong>; users then feel comfortable with the software and use it effectively.</li>
+<li>Serves as a <strong>translation of the design model</strong> by providing a realization of the information contained in the user profile model and the user's mental model.</li>
+</ul>
+
+<h4>4. User's Mental Model</h4>
+<ul>
+<li>Often called the user's <strong>system perception</strong>.</li>
+<li>Consists of the <strong>image of the system that users carry in their heads</strong>.</li>
+<li>Accuracy of the description depends upon the user's profile and overall familiarity with the software in the application domain.</li>
+</ul>
+
+<div class="highlight"><strong>Key Principle:</strong> An effective design is one in which the <strong>User's Mental Model and the Implementation Model coincide</strong>.</div>
+</div>
+</section>
+
+<section id="ui-process">
+<div class="card">
+<h3>UI Design Process (Spiral Model)</h3>
+<p>The analysis and design process for user interfaces is <strong>iterative</strong> and can be represented using a <strong>spiral model</strong>. Since it's a spiral model, these steps need to be processed again and again:</p>
+<ol>
+<li><strong>Interface Analysis and Modeling</strong></li>
+<li><strong>Interface Design</strong></li>
+<li><strong>Interface Construction:</strong> Create prototypes against use-case scenarios &amp; validate the design.</li>
+<li><strong>Interface Validation:</strong> Focuses on — Does the system accommodate all variety of tasks? Is the system easy to use &amp; learn? Is there user acceptance of the system as a useful tool?</li>
+</ol>
+</div>
+</section>
+
+<section id="ui-analysis">
+<div class="card">
+<h3>Interface Analysis</h3>
+<p><strong>Understand the problem before designing the solution.</strong> Understand:</p>
+<ol>
+<li>The <strong>people</strong> (end users) who will interact with the system.</li>
+<li>The <strong>tasks</strong> that end users must perform.</li>
+<li>The <strong>content</strong> that is presented as part of the interface.</li>
+<li>The <strong>environment</strong> in which these tasks will be conducted.</li>
+</ol>
+
+<h4>User Analysis</h4>
+<p>Information for system understanding can be obtained by:</p>
+<ul>
+<li><strong>User Interviews:</strong> Software team members meet with end users to identify their needs and work culture (one-on-one meetings or focus groups).</li>
+<li><strong>Sales Input:</strong> Sales people meet with users to assess user categories &amp; understand requirements.</li>
+<li><strong>Marketing Input:</strong> Market surveys checking how many ways the product could be useful.</li>
+<li><strong>Support Input:</strong> Support staff takes feedback on what works/what doesn't, which features are easy to use or not.</li>
+</ul>
+
+<h4>User Analysis Questions for Better User Categorization</h4>
+<ul>
+<li>Are users trained professionals, technicians, clerical, or manufacturing workers?</li>
+<li>What level of formal education does the average user have?</li>
+<li>Are users capable of learning from written materials or do they desire classroom training?</li>
+<li>Are users expert typists or keyboard-phobic?</li>
+<li>What is the age range of the user community?</li>
+<li>What is the user's gender distribution?</li>
+<li>Do users work normal office hours or until the job is done?</li>
+<li>Is the software integral to their work or used occasionally?</li>
+<li>What is the primary spoken language among users?</li>
+<li>What are the consequences if a user makes a mistake?</li>
+<li>Are users experts in the subject matter? Do they want to know about the underlying technology?</li>
+</ul>
+
+<h4>Task Analysis &amp; Modelling</h4>
+<p>Goal is to answer: What work will the user perform? What tasks/subtasks will be performed? What objects will the user manipulate? What is the sequence of work tasks (workflow)? What is the hierarchy of tasks?</p>
+<p><strong>Techniques applied to the UI:</strong></p>
+<ul>
+<li><strong>Use Cases:</strong> Define basic interaction of actor and system, written using informal paragraphs. Can be used to derive tasks, subtasks, and interfaces.</li>
+<li><strong>Task Elaboration:</strong> Stepwise elaboration or task refinement of interactive tasks (functional decomposition). Example: "furniture layout" can be refined into subtasks like (1) draw floor plan, (2) place windows/doors, (3a) use furniture templates, (3b) use accent templates, (4) move outlines for best placement, (5) label outlines, (6) draw dimensions, (7) draw perspective-rendering view.</li>
+<li><strong>Object Elaboration:</strong> Extract physical objects from system to define their classes and behavior. Example: "furniture template" translates into a class called Furniture with attributes like size, shape, location.</li>
+<li><strong>Workflow Analysis:</strong> Defines how a work process is completed when several people and roles are involved. Shown using <strong>UML Swimlane diagrams</strong>. Example: Different users (patient, pharmacist, physician) implement different tasks, so look and feel of each interface differs. The interface for pharmacists and physicians must accommodate secondary information sources (e.g., inventory, alternative medications).</li>
+</ul>
+
+<h4>Hierarchical Task Representation Example</h4>
+<p>User task: Requests that a prescription be refilled → Subtasks: Provide identifying information → Specify name → Specify userid → Specify PIN and password → Specify prescription number → Specify date refill is required.</p>
+
+<h4>Analysis of Display Content</h4>
+<ul>
+<li>Format of the content, aesthetics.</li>
+<li>Content displayed using <strong>stepwise refinement approach</strong>.</li>
+</ul>
+
+<h4>Analysis of the Work Environment</h4>
+<ul>
+<li>Work environment should be helpful in proper operation and concentration.</li>
+<li>Must co-relate with the designed software aesthetics.</li>
+<li>People are influenced by activity around them — lighting, noise, display height, keyboard access.</li>
+<li>Will system interaction be measured (time per transaction, accuracy)?</li>
+<li>Will two or more people share information before an input can be provided?</li>
+<li>How will support be provided to users?</li>
+</ul>
+</div>
+</section>
+
+<section id="ui-design-steps">
+<div class="card">
+<h3>Interface Design Steps</h3>
+<ol>
+<li>Define interface objects and actions (operations) using information developed during interface analysis.</li>
+<li>Define <strong>events</strong> (user actions) that will cause the state of the user interface to change.</li>
+<li><strong>Model this behavior.</strong></li>
+<li>Depict each <strong>interface state</strong> as it will actually look to the end-user.</li>
+<li>Indicate how the user interprets the state of the system from information provided through the interface.</li>
+</ol>
+
+<h4>Applying Interface Design Steps</h4>
+<p>Once objects and actions have been defined and elaborated iteratively, they are <strong>categorized by type</strong>:</p>
+<ul>
+<li><strong>Source object:</strong> e.g., a report icon — dragged and dropped onto a target.</li>
+<li><strong>Target object:</strong> e.g., a printer icon.</li>
+<li><strong>Application object:</strong> Represents application-specific data. e.g., a mailing list that can be sorted, merged, or purged (menu-based actions) but is not dragged and dropped via user interaction.</li>
+</ul>
+
+<h4>Interface Construction &amp; Implementation (WebApp)</h4>
+<ol>
+<li>Review information from the requirements model and refine as required.</li>
+<li>Develop a rough sketch of the WebApp interface layout.</li>
+<li>Map user objectives into specific interface actions.</li>
+<li>Define user tasks associated with each action.</li>
+<li>Storyboard screen images for each interface action.</li>
+<li>Refine interface layout and storyboards using aesthetic design input.</li>
+<li>Identify user interface objects required to implement the interface.</li>
+<li>Describe the interface layout for each state.</li>
+<li>Refine and review the interface design model.</li>
+</ol>
+</div>
+</section>
+
+<section id="ui-issues">
+<div class="card">
+<h3>Design Issues</h3>
+
+<h4>Issue 1: System Response Time</h4>
+<p>Primary complaint for almost every interactive system. Two characteristics:</p>
+<ul>
+<li><strong>Length:</strong> Longer response times are not appreciated and lead to user frustration. If response is too long → inform user about delay.</li>
+<li><strong>Variability:</strong> Varying response time leads to user confusion — the user wonders whether something went wrong at the backend, leading to a different response time than the average.</li>
+</ul>
+
+<h4>Issue 2: Help Facilities</h4>
+<ul>
+<li>Online helpdesk, detailed user manuals.</li>
+<li>Help availability for all functionalities?</li>
+<li>How will the user demand help? (Menu or function key mapped to help)</li>
+<li>How is help presented? (via another window or a printed manual)</li>
+<li>How to return to normal UI after consulting help?</li>
+</ul>
+
+<h4>Issue 3: Error Handling</h4>
+<p>Error messages &amp; warnings are bad news. Error messages <strong>must be explanatory</strong> and should <strong>include some remedies</strong>. A good error message includes:</p>
+<ul>
+<li>Describe the problem in <strong>plain language</strong> the user can understand.</li>
+<li>Provide <strong>constructive advice</strong> for recovering from the error.</li>
+<li>List the <strong>negative consequences</strong> of the error (e.g., potentially corrupted data files).</li>
+<li>Be accompanied by an <strong>audible or visual cue</strong> (beep, momentary flash, error color).</li>
+<li>Be <strong>non-judgmental</strong> — never place blame on the user.</li>
+</ul>
+
+<h4>Issue 4: Menu &amp; Command Labeling</h4>
+<p>Different styles: command-oriented architecture and UI-based architecture. How commands are assigned to each menu item so that it may run without UI as well.</p>
+
+<h4>Issue 5: Application Accessibility</h4>
+<p>UI should cater to the needs of <strong>physically challenged persons</strong> (e.g., voice inputs to facilitate handicapped users).</p>
+
+<h4>Issue 6: Internationalization</h4>
+<p>UI must target the <strong>global market</strong>. Follow global design standards &amp; facilitate <strong>multiple languages</strong>.</p>
+</div>
+</section>
+
+<section id="ui-webapp">
+<div class="card">
+<h3>Interface Design Principles for WebApps</h3>
+
+<h4>Anticipation</h4>
+<p>A WebApp should be designed so that it <strong>anticipates the user's next move</strong>. Example: If a user requests info about a printer driver for a newly released OS, the designer should anticipate that the user might want to <strong>download the driver</strong> and provide navigation facilities for this.</p>
+
+<h4>Communication</h4>
+<p>The interface should <strong>communicate the status</strong> of any activity initiated by the user (e.g., paper moving through a printer icon).</p>
+
+<h4>Consistency</h4>
+<p>The use of navigation controls, menus, icons, and aesthetics (color, shape, layout) should be <strong>consistent throughout</strong> the WebApp.</p>
+
+<h4>Controlled Autonomy</h4>
+<p>The interface should facilitate user movement throughout the WebApp — an environment that is <strong>neither confining nor infinite</strong> (Golden Rule: place user in control). E.g., navigation to a secure portion should be restricted by userid and password.</p>
+
+<h4>Efficiency</h4>
+<p>The design should optimize the <strong>user's work efficiency</strong>, not the efficiency of the web engineer. Example: Requiring customers to enter telephone numbers without spacing or punctuation saves a single line of code but makes the user's life harder — <strong>don't do this</strong>.</p>
+
+<h4>Focus</h4>
+<p>The WebApp interface should <strong>stay focused on the user task(s) at hand</strong>.</p>
+
+<h4>Latency Reduction</h4>
+<p>Rather than making the user wait for some internal operation to complete (e.g., downloading a complex graphical image), the WebApp should use <strong>multitasking</strong>.</p>
+
+<h4>Learnability</h4>
+<p>A WebApp interface should be designed to <strong>minimize learning time</strong>, and once learned, to minimize <strong>relearning</strong> required when the WebApp is revisited.</p>
+
+<h4>Fitt's Law</h4>
+<p>Fitt's Law states that the <strong>time to acquire a target is a function of the distance to and size of the target</strong>. This means:</p>
+<ul>
+<li>Design <strong>large targets (big buttons)</strong> for important functions — they're easier to interact with.</li>
+<li>Better to support <strong>immediate selection of interactive elements</strong> than dropdown menus, as the user doesn't have to move the cursor from its current position.</li>
+<li>The time required to acquire <strong>multiple targets is the sum</strong> of the time to acquire each. So reduce distances, increase target sizes, and reduce the <strong>total number of targets</strong> to increase efficiency.</li>
+</ul>
+
+<div class="exam-tip">Fitt's Law is a frequently tested concept. Remember: bigger buttons = faster interaction, and total interaction time = sum of all individual target acquisitions.</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION: SOFTWARE TESTING (Week 11)                   -->
+<!-- ══════════════════════════════════════════════════════ -->
+
+<section id="test-intro">
+<h2>5. Software Testing</h2>
+
+<div class="card">
+<h3>What is Software Testing?</h3>
+<p>Software testing is an investigation conducted to provide stakeholders with <strong>information about the quality</strong> of the product or service under test. When you test software, you execute a program using <strong>artificial data</strong>. You check the results for errors, anomalies, or information about non-functional attributes.</p>
+<p>Program testing can show the <strong>presence of bugs, but never their absence</strong>.</p>
+
+<h4>Testing Process Goals</h4>
+<table>
+<tr><th>Goal</th><th>Description</th><th>Success Criteria</th></tr>
+<tr><td><strong>Validation Testing</strong></td><td>Demonstrate to developer and customer that software meets its requirements.</td><td>A successful test shows the system operates as intended.</td></tr>
+<tr><td><strong>Defect Testing</strong></td><td>Discover faults or defects where behavior is incorrect or doesn't conform to spec.</td><td>A successful test makes the system perform incorrectly and exposes a defect.</td></tr>
+</table>
+
+<p><strong>Defect Testing sub-categories:</strong> Data Corruption, Wrong Computation, Unwanted Interaction, System Crashes.</p>
+</div>
+</section>
+
+<section id="test-vv">
+<div class="card">
+<h3>Verification vs Validation</h3>
+<table>
+<tr><th></th><th>Verification</th><th>Validation</th></tr>
+<tr><td><strong>Question</strong></td><td>"Are we building the product <strong>right</strong>?"</td><td>"Are we building the <strong>right</strong> product?"</td></tr>
+<tr><td><strong>Focus</strong></td><td>Software should conform to its <strong>specification</strong>.</td><td>Software should do what the <strong>user really requires</strong>.</td></tr>
+</table>
+
+<p><strong>Example from slides:</strong> A clickable button with name "Submet" — <strong>Verification</strong> would check the design doc and correct the spelling mistake to "Submit." Once the code is ready, <strong>Validation</strong> is done to check if the button performs its intended function.</p>
+
+<h4>V &amp; V Confidence</h4>
+<p>The goal of V&amp;V processes is to establish confidence that the software system is <strong>"fit for purpose."</strong> Level of confidence depends on:</p>
+<ul>
+<li><strong>Software Purpose:</strong> The more critical the software, the more important reliability is.</li>
+<li><strong>Marketing Environment:</strong> A company may release a program before fully tested to be <strong>first to market</strong>.</li>
+<li><strong>User Expectations:</strong> Users may have low initial expectations for certain types of software.</li>
+</ul>
+</div>
+</section>
+
+<section id="test-inspect">
+<div class="card">
+<h3>Software Inspections vs Testing</h3>
+<table>
+<tr><th>Inspections (Static V&amp;V)</th><th>Testing (Dynamic V&amp;V)</th></tr>
+<tr><td>Analysis of the static system representation to discover problems.</td><td>Exercising and observing product behaviour.</td></tr>
+<tr><td>May be supplemented by tool-based document and code analysis.</td><td>The system is executed with test data and its operational behaviour is observed.</td></tr>
+<tr><td>Focus on source code, requirements, design models — any <strong>readable representation</strong>.</td><td>Requires the system to actually <strong>run</strong>.</td></tr>
+</table>
+
+<h4>What Can Be Inspected?</h4>
+<p>Requirements specification, System prototype, Software architecture, UML design models, Database schemas, Program code.</p>
+
+<h4>Advantages of Inspections</h4>
+<ul>
+<li>During testing, errors can <strong>mask (hide) other errors</strong>. Inspection is static — no concern with interactions between errors.</li>
+<li><strong>Incomplete versions</strong> of a system can be inspected without additional costs. If a program is incomplete, you need specialized test harnesses.</li>
+<li>Inspections can also consider <strong>broader quality attributes</strong>: compliance with standards, portability, maintainability, inefficiencies, inappropriate algorithms, and poor programming style.</li>
+</ul>
+</div>
+</section>
+
+<section id="test-dev">
+<div class="card">
+<h3>Stages of Testing</h3>
+<p>There are three stages: <strong>Development Testing → Release Testing → User Testing</strong></p>
+
+<h4>Development Testing</h4>
+<p>Includes all testing activities carried out by the <strong>team developing the system</strong>. It is primarily a <strong>defect testing process</strong>, interleaved with <strong>debugging</strong> (locating problems and fixing them).</p>
+<ul>
+<li><strong>Unit Testing:</strong> Individual program units or object classes are tested.</li>
+<li><strong>Component Testing:</strong> Several individual units are integrated to create composite components.</li>
+<li><strong>System Testing:</strong> Some or all components in a system are integrated and tested as a whole.</li>
+</ul>
+</div>
+</section>
+
+<section id="test-unit">
+<div class="card">
+<h3>Unit Testing</h3>
+<p>The process of testing <strong>individual program components in isolation</strong> — such as methods or object classes. Individual functions or methods are the simplest type of component. Your tests should be calls to these routines with <strong>different input parameters</strong>.</p>
+
+<h4>Object Class Testing</h4>
+<p>Complete test coverage of a class involves:</p>
+<ul>
+<li>Testing <strong>all operations</strong> associated with an object.</li>
+<li><strong>Setting and interrogating</strong> all object attributes.</li>
+<li>Exercising the object in <strong>all possible states</strong>.</li>
+<li><strong>Inheritance</strong> makes it more difficult to design object class tests as information to be tested is not localised.</li>
+</ul>
+
+<p><strong>Weather Station Example (from slides):</strong></p>
+<p>Need to define test cases for reportWeather, startup, and shutdown. Using a state model, identify sequences of state transitions:</p>
+<ul>
+<li>Shutdown → Running → Shutdown</li>
+<li>Configuring → Running → Testing → Transmitting → Running</li>
+<li>Running → Collecting → Running → Summarizing → Transmitting → Running</li>
+</ul>
+
+<h4>Automated Test Components</h4>
+<ul>
+<li><strong>Setup part:</strong> Initialize the system with the test case (inputs and expected outputs).</li>
+<li><strong>Call part:</strong> Call the object or method to be tested.</li>
+<li><strong>Assertion part:</strong> Compare the result of the call with the expected result. If assertion evaluates to <strong>true</strong> → test successful; if <strong>false</strong> → test failed.</li>
+</ul>
+
+<h4>Choosing Unit Test Cases</h4>
+<p>Test cases should show that:</p>
+<ol>
+<li>When used as expected, the component <strong>does what it is supposed to do</strong> (normal operation).</li>
+<li>Based on testing experience, use <strong>abnormal inputs</strong> to check they are properly processed and don't crash the component.</li>
+</ol>
+<p><strong>Two strategies for choosing test cases:</strong></p>
+<ul>
+<li><strong>Partition Testing</strong> (Equivalence Partitioning)</li>
+<li><strong>Guideline-Based Testing</strong></li>
+</ul>
+</div>
+</section>
+
+<section id="test-partition">
+<div class="card">
+<h3>Equivalence Partitioning</h3>
+<p>Input data and output results often fall into <strong>different classes</strong> where all members of a class are related. Each class is an <strong>equivalence partition or domain</strong> where the program behaves in an <strong>equivalent way</strong> for each class member.</p>
+<p>Test cases should be chosen <strong>from each partition</strong>.</p>
+
+<div class="highlight">
+<strong>How it works:</strong> Identify groups of inputs that have common characteristics and should be processed the same way. Choose tests from within each group. Include both <strong>valid</strong> and <strong>invalid</strong> partitions.
+</div>
+
+<h4>Testing Guidelines (Sequences)</h4>
+<ul>
+<li>Test software with sequences having a <strong>single value</strong>.</li>
+<li>Use sequences of <strong>different sizes</strong> in different tests.</li>
+<li>Tests to access the <strong>first, middle, and last</strong> elements.</li>
+<li>Test with sequences of <strong>zero length</strong>.</li>
+</ul>
+
+<h4>General Testing Guidelines</h4>
+<ul>
+<li>Repeat the same input <strong>numerous times</strong>.</li>
+<li>Choose inputs that force the system to <strong>generate all error messages</strong>.</li>
+<li>Design inputs that cause <strong>input buffers to overflow</strong>.</li>
+<li>Force <strong>invalid outputs</strong> to be generated.</li>
+<li>Force computation results to be <strong>too large or too small</strong>.</li>
+</ul>
+</div>
+</section>
+
+<section id="test-component">
+<div class="card">
+<h3>Component Testing</h3>
+<p>A sub-category of software testing in which each individual component is separately tested <strong>without integrating with other components</strong>. Also known as <strong>module testing</strong>, when viewed from an architecture perspective.</p>
+<ul>
+<li>Software components are <strong>composite components of several interacting objects</strong>.</li>
+<li>Access functionality through <strong>defined component interfaces</strong>.</li>
+<li>Focus on showing that the <strong>component interface behaves according to its specification</strong>.</li>
+</ul>
+
+<h4>Interface Testing</h4>
+<p>Objectives are to detect faults due to <strong>interface errors or invalid assumptions about interfaces</strong>. Interface testing is done during <strong>integration of components</strong> for system testing.</p>
+
+<h4>Types of Interfaces</h4>
+<table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td><strong>Parameter Interfaces</strong></td><td>Data passed from one method or procedure to another.</td></tr>
+<tr><td><strong>Shared Memory Interfaces</strong></td><td>Block of memory shared between procedures or functions.</td></tr>
+<tr><td><strong>Procedural Interfaces</strong></td><td>Encapsulates set of procedures called by other sub-systems.</td></tr>
+<tr><td><strong>Message Passing Interfaces</strong></td><td>Sub-systems request services from other sub-systems.</td></tr>
+</table>
+</div>
+</section>
+
+<section id="test-system">
+<div class="card">
+<h3>System Testing</h3>
+<p>Involves integrating components to create a version of the system and then testing the integrated system. Focus is on testing the <strong>interactions between components</strong>.</p>
+<ul>
+<li>Checks that components are <strong>compatible</strong>, interact correctly, and transfer the right data at the right time across their interfaces.</li>
+<li>Tests the <strong>emergent behaviour</strong> of a system.</li>
+<li>Reusable and off-the-shelf components may be integrated with newly developed components.</li>
+<li>System testing is a <strong>collective rather than an individual process</strong>.</li>
+<li>In some companies, a <strong>separate testing team</strong> with no involvement from designers and programmers may do system testing.</li>
+</ul>
+</div>
+</section>
+
+<section id="test-tdd">
+<div class="card">
+<h3>Test-Driven Development (TDD)</h3>
+<p>An approach to program development in which you <strong>inter-leave testing and code development</strong>. Tests are written <strong>before code</strong> and 'passing' the tests is the critical driver. Introduced as part of <strong>agile methods such as Extreme Programming</strong>, but can also be used in plan-driven processes.</p>
+
+<h4>The Fundamental TDD Process</h4>
+<ol>
+<li><strong>Identify the increment</strong> of functionality that is required.</li>
+<li><strong>Write a test</strong> for this functionality and implement it as an automated test.</li>
+<li><strong>Run the test</strong> — it should FAIL (because functionality isn't implemented yet).</li>
+<li><strong>Implement the functionality</strong> and re-run the test. This may involve refactoring existing code.</li>
+<li>Once <strong>all tests run successfully</strong>, move on to the next chunk of functionality.</li>
+</ol>
+
+<h4>TDD Cycle</h4>
+<p><strong>Add Test → Watch Test Fail → Write Code → Run Tests → Refactor → (repeat)</strong></p>
+
+<h4>Benefits of TDD</h4>
+<ul>
+<li><strong>Code coverage:</strong> Every code segment you write has at least one associated test.</li>
+<li><strong>Regression testing:</strong> A test suite is developed incrementally. You can always run regression tests to check that changes haven't introduced new bugs.</li>
+<li><strong>System documentation:</strong> Tests themselves act as documentation describing what the code should do.</li>
+<li><strong>Simplified debugging:</strong> When a test fails, it should be obvious where the problem lies.</li>
+</ul>
+
+<h4>Regression Testing</h4>
+<p>Involves running test sets that have <strong>successfully executed after changes</strong> have been made. Checks that changes have <strong>not introduced new bugs</strong> and that new code interacts as expected with existing code. Regression testing is expensive and sometimes impractical when a system is <strong>manually tested</strong>.</p>
+</div>
+</section>
+
+<section id="test-release">
+<div class="card">
+<h3>Release Testing</h3>
+<p>The process of testing a particular release intended for use <strong>outside the development team</strong>. The primary goal is to <strong>convince the supplier</strong> that the system is good enough for use.</p>
+<p>Release testing has to show that the system delivers its specified <strong>functionality, performance and dependability</strong>, and that it <strong>does not fail during normal use</strong>.</p>
+<p>Release testing is usually a <strong>black-box testing process</strong> where tests are only derived from the system specification.</p>
+
+<h4>Release Testing vs System Testing</h4>
+<ul>
+<li>A <strong>separate team</strong> (not involved in development) should be responsible for release testing.</li>
+<li>System testing by the development team focuses on <strong>discovering bugs</strong> (defect testing).</li>
+<li>Release testing objective: Check that the system <strong>meets requirements and is good enough for external use</strong> (validation testing).</li>
+</ul>
+
+<h4>MHC-PMS Case Study (Requirements Testing)</h4>
+<p>Requirements:</p>
+<ul>
+<li>If a patient is known to be <strong>allergic</strong> to a medication, then prescription shall result in a <strong>warning message</strong>.</li>
+<li>If a prescriber chooses to <strong>ignore</strong> an allergy warning, they shall provide a <strong>reason</strong>.</li>
+</ul>
+
+<table>
+<tr><th>Requirement Test</th><th>Action</th><th>Expected Result</th></tr>
+<tr><td>Patient with no known allergies</td><td>Prescribe medication for allergies</td><td>Warning message should NOT be issued</td></tr>
+<tr><td>Patient with a known allergy</td><td>Prescribe the allergic medication</td><td>Warning message SHOULD be issued</td></tr>
+<tr><td>Patient with allergies to 2+ drugs</td><td>Prescribe both drugs separately</td><td>Correct warning for EACH drug</td></tr>
+<tr><td>Patient with two known allergic drugs</td><td>Prescribe two allergic drugs</td><td>Two warnings issued correctly</td></tr>
+<tr><td>Overrule the warning</td><td>Prescribe a drug that issues a warning</td><td>System requires user to provide reason for overrule</td></tr>
+</table>
+
+<p><strong>Features tested by scenario:</strong> Authentication by logging, Downloading/uploading patient records, Home visit scheduling, Encryption/decryption of patient records, Record retrieval and modification, Links with drugs database &amp; side-effect information, System for call prompting.</p>
+</div>
+</section>
+
+<section id="test-perf">
+<div class="card">
+<h3>Performance Testing</h3>
+<p>Part of release testing. A software application's performance — response time, reliability, resource usage, and scalability — matters. The goal is <strong>not to find bugs but to eliminate performance bottlenecks</strong>.</p>
+
+<h4>Types of Performance Testing</h4>
+<table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td><strong>Load Testing</strong></td><td>Checks the application's ability to perform under <strong>anticipated user loads</strong>. Objective: identify bottlenecks before going live.</td></tr>
+<tr><td><strong>Stress Testing</strong></td><td>Tests under <strong>extreme workloads</strong> to see how it handles high traffic or data processing. Objective: identify the <strong>breaking point</strong>.</td></tr>
+</table>
+
+<h4>Example Performance Test Cases (from slides)</h4>
+<ul>
+<li>Verify response time is not more than <strong>4 seconds</strong> when 1000 users access the website simultaneously.</li>
+<li>Verify response time under load is within acceptable range when network connectivity is slow.</li>
+<li>Check <strong>maximum number of users</strong> the application can handle before it crashes.</li>
+<li>Check database execution time when <strong>500 records</strong> are read/written simultaneously.</li>
+<li>Check <strong>CPU and memory usage</strong> under peak load.</li>
+<li>Verify response time under low, normal, moderate, and heavy load conditions.</li>
+</ul>
+
+<h4>Real-World Load Testing Failures (from slides)</h4>
+<ul>
+<li><strong>Target.com</strong> lost $780,000 in sales in just 3 hours when the site was down during a promotion in 2015.</li>
+<li><strong>Amazon.com</strong> servers crashed in 2013 for 30 minutes — lost $66,240 per minute.</li>
+<li><strong>Virgin Blue airlines</strong> experienced outages for 11 days, leading to a loss of $20 million.</li>
+</ul>
+<p><strong>Load Testing Tools:</strong> LoadNinja, Eggplant, LoadRunner.</p>
+
+<h4>Stress Testing Details</h4>
+<p>Includes testing the behavior of software under <strong>abnormal conditions</strong>. The aim is to identify the breaking point. It tests the <strong>failure behaviour</strong> of the system. Scenarios include:</p>
+<ul>
+<li>Shutdown or restart of network ports randomly.</li>
+<li>Turning the database on or off.</li>
+<li>Running different processes that consume resources such as CPU, memory, server.</li>
+</ul>
+</div>
+</section>
+
+<section id="test-user">
+<div class="card">
+<h3>User Testing</h3>
+<p>A stage where users or customers provide input and advice on system testing. User testing is <strong>essential</strong> even when comprehensive system and release testing have been carried out, because influences from the user's working environment (reliability, performance, usability, robustness) <strong>cannot be replicated</strong> in a testing environment.</p>
+
+<h4>Types of User Testing</h4>
+<table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td><strong>Alpha Testing</strong></td><td>Users work <strong>with the development team</strong> to test software <strong>at the developer's site</strong>.</td></tr>
+<tr><td><strong>Beta Testing</strong></td><td>A release is made available to users to allow them to <strong>experiment and raise problems</strong> they discover.</td></tr>
+<tr><td><strong>Acceptance Testing</strong></td><td>Customers test a system to decide whether to <strong>accept it from developers and deploy it</strong>. Primarily for custom systems.</td></tr>
+</table>
+
+<h4>Stages in the Acceptance Testing Process</h4>
+<ol>
+<li>Define acceptance criteria.</li>
+<li>Plan acceptance testing.</li>
+<li>Derive acceptance tests.</li>
+<li>Run acceptance tests.</li>
+<li>Negotiate test results.</li>
+<li>Reject/accept system.</li>
+</ol>
+</div>
+</section>
+
+<section id="test-path">
+<div class="card">
+<h3>Basis Path Testing</h3>
+<p>The objective of path testing is to ensure that the set of test cases is such that <strong>each path through the program is executed at least once</strong>.</p>
+<p>The starting point is a <strong>program flow graph</strong> that shows nodes representing program decisions and arcs representing the flow of control.</p>
+
+<h4>Steps for Basis Path Testing</h4>
+<ol>
+<li><strong>Draw a control flow graph</strong> to determine different program paths.</li>
+<li><strong>Calculate Cyclomatic Complexity</strong> — a metric to determine the number of independent paths. <strong>Formula: V = E − N + 2</strong> (E = number of edges, N = number of nodes).</li>
+<li><strong>Find a basis set of independent paths.</strong></li>
+<li><strong>Generate test cases</strong> to exercise each path.</li>
+</ol>
+
+<h4>Detailed Example (Shipping Calculator from Slides)</h4>
+<pre>
+public double calculate(int amount) {
+  -1-  double rushCharge = 0;
+  -1-  if (nextday.equals("yes")) {
+  -2-    rushCharge = 14.50;
+       }
+  -3-  double tax = amount * .0725;
+  -3-  if (amount >= 1000) {
+  -4-    shipcharge = amount * .06 + rushCharge;
+       }
+  -5-  else if (amount >= 200) {
+  -6-    shipcharge = amount * .08 + rushCharge;
+       }
+  -7-  else if (amount >= 100) {
+  -8-    shipcharge = 13.25 + rushCharge;
+       }
+  -9-  else if (amount >= 50) {
+  -10-   shipcharge = 9.95 + rushCharge;
+       }
+  -11- else if (amount >= 25) {
+  -12-   shipcharge = 7.25 + rushCharge;
+       }
+       else {
+  -13-   shipcharge = 5.25 + rushCharge;
+       }
+  -14- total = amount + tax + shipcharge;
+  -14- return total;
+}
+</pre>
+
+<p><strong>Step 1:</strong> Draw the flow graph from labeled nodes 1–14.</p>
+<p><strong>Step 2:</strong> Calculate Cyclomatic Complexity: <strong>V = E − N + 2 = 19 − 14 + 2 = 7</strong></p>
+<p><strong>Step 3:</strong> Determine the 7 independent paths:</p>
+<ul>
+<li>P-01: 1, 2, 3, 5, 7, 9, 11, 13, 14</li>
+<li>P-02: 1, 3, 4, 14</li>
+<li>P-03: 1, 3, 5, 6, 14</li>
+<li>P-04: 1, 3, 5, 7, 8, 14</li>
+<li>P-05: 1, 3, 5, 7, 9, 10, 14</li>
+<li>P-06: 1, 3, 5, 7, 9, 11, 12, 14</li>
+<li>P-07: 1, 3, 5, 7, 9, 11, 13, 14</li>
+</ul>
+<p><strong>Step 4:</strong> Generate test cases for each path with specific values for <code>amount</code> and <code>nextday</code> to exercise each unique path.</p>
+
+<h4>Binary Search Flow Graph Example</h4>
+<p>Paths:</p>
+<ul>
+<li>Path 1: 1, 2, 3, 5, 6, 7</li>
+<li>Path 2: 1, 2, 4, 5, 6, 7</li>
+<li>Path 3: 1, 6, 7</li>
+</ul>
+
+<h4>Advantages of Basic Path Testing</h4>
+<ul>
+<li>Helps <strong>reduce redundant tests</strong>.</li>
+<li>Focuses attention on <strong>program logic</strong>.</li>
+<li>Helps facilitate <strong>analytical versus arbitrary</strong> case design.</li>
+<li>Test cases which exercise basis set will execute <strong>every statement</strong> in a program at least once.</li>
+</ul>
+
+<div class="exam-tip">Basis Path Testing is a highly likely scenario question. Practice: (1) drawing flow graphs from code, (2) calculating V = E − N + 2, (3) listing independent paths, and (4) writing test case values for each path.</div>
+</div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SECTION: PRACTICE SCENARIO QUESTIONS                  -->
+<!-- ══════════════════════════════════════════════════════ -->
+
+<section id="practice">
+<h2>6. Scenario-Based Practice Questions</h2>
+<p>These scenarios are formulated from your syllabus and slides to practice for your exam. Click "Reveal Answer" to check.</p>
+
+<!-- S1 -->
+<div class="scenario">
+<span class="tag">Architecture Pattern</span>
+<div class="q">Scenario 1: A national bank needs a new internal fund-processing module. The system requires ultra-strict security constraints where database interactions must be completely isolated from the user presentation layer. Several auditing and business-validation rules must lie between data retrieval and user interaction. Which architecture pattern is best suited, and why?</div>
+<button class="btn" onclick="toggle('a1')">Reveal Answer</button>
+<div id="a1" class="answer">
+<p><strong>Layered Architecture (N-Tier Pattern)</strong> is the best choice.</p>
+<p>Per the slides: "Layered architecture is the best choice when security is highly concerned." The separation of concerns isolates the Presentation Layer from the Data Store layer. The business logic layer sits in between to handle all validations, auditing, and business processes. No direct communication occurs between the user-facing layer and the database, satisfying the security requirement.</p>
+</div>
+</div>
+
+<!-- S2 -->
+<div class="scenario">
+<span class="tag">Architecture Pattern</span>
+<div class="q">Scenario 2: A software company wants to build an IDE where multiple tools (editor, debugger, compiler, code analyzer) all need access to a shared syntax tree and symbol table. No tool should communicate directly with another tool. Which architecture pattern should they use?</div>
+<button class="btn" onclick="toggle('a2')">Reveal Answer</button>
+<div id="a2" class="answer">
+<p><strong>Repository Architecture.</strong></p>
+<p>The slides explicitly use a Compiler/IDE (Eclipse) as the canonical example for the Repository pattern. Data is stored in a central shared repository, and components interact through the repository only — they do not interact directly with each other. The syntax tree and symbol table are the shared data store that all tools access.</p>
+</div>
+</div>
+
+<!-- S3 -->
+<div class="scenario">
+<span class="tag">UI Golden Rules</span>
+<div class="q">Scenario 3: A hospital kiosk forces patients to memorize a 12-digit patient token from an email and type it in. If they make a typo, the screen silently wipes their data and returns to the start screen without any error message. Identify which Golden Rules or Design Issues are violated and suggest improvements.</div>
+<button class="btn" onclick="toggle('a3')">Reveal Answer</button>
+<div id="a3" class="answer">
+<p><strong>Violations:</strong></p>
+<ul>
+<li><strong>Golden Rule 2 — Reduce the User's Memory Load:</strong> Forcing patients to memorize a 12-digit token demands too much of short-term memory. <em>Fix:</em> Allow lookup by phone number/name, or provide visual cues like showing a partially masked token.</li>
+<li><strong>Golden Rule 1 — Place the User in Control:</strong> Wiping data without notice removes the ability to undo or correct mistakes. <em>Fix:</em> Allow the interaction to be interruptible and undoable.</li>
+<li><strong>Design Issue 3 — Error Handling:</strong> No error message is shown. Per the slides, a good error message must describe the problem simply, provide constructive advice for recovery, list negative consequences, and be accompanied by an audible or visual cue. <em>Fix:</em> Display a clear, non-judgmental error highlighting the erroneous field.</li>
+</ul>
+</div>
+</div>
+
+<!-- S4 -->
+<div class="scenario">
+<span class="tag">Equivalence Partitioning</span>
+<div class="q">Scenario 4: You are testing a function that accepts a student's age (integer) and returns "Eligible" if age is between 18 and 25 (inclusive), or "Not Eligible" otherwise. Define the equivalence partitions and provide one test case value for each partition.</div>
+<button class="btn" onclick="toggle('a4')">Reveal Answer</button>
+<div id="a4" class="answer">
+<p><strong>Partitions:</strong></p>
+<table>
+<tr><th>Partition</th><th>Range</th><th>Expected Output</th><th>Test Case Value</th></tr>
+<tr><td>Invalid (below range)</td><td>age &lt; 18</td><td>Not Eligible</td><td>age = 15</td></tr>
+<tr><td>Valid</td><td>18 ≤ age ≤ 25</td><td>Eligible</td><td>age = 21</td></tr>
+<tr><td>Invalid (above range)</td><td>age &gt; 25</td><td>Not Eligible</td><td>age = 30</td></tr>
+</table>
+<p>Additionally, boundary values should be tested: age = 17, 18, 25, 26.</p>
+</div>
+</div>
+
+<!-- S5 -->
+<div class="scenario">
+<span class="tag">Basis Path Testing</span>
+<div class="q">Scenario 5: Given the following code, draw the flow graph, calculate cyclomatic complexity, list the independent paths, and write test case values.<br><br>
+<pre>
+public String classify(int score) {
+  -1-  String result;
+  -1-  if (score >= 90) {
+  -2-    result = "A";
+       }
+  -3-  else if (score >= 80) {
+  -4-    result = "B";
+       }
+  -5-  else if (score >= 70) {
+  -6-    result = "C";
+       }
+       else {
+  -7-    result = "F";
+       }
+  -8-  return result;
+}
+</pre></div>
+<button class="btn" onclick="toggle('a5')">Reveal Answer</button>
+<div id="a5" class="answer">
+<p><strong>Flow Graph:</strong> Nodes: 1, 2, 3, 4, 5, 6, 7, 8. Edges: 1→2, 1→3, 2→8, 3→4, 3→5, 4→8, 5→6, 5→7, 6→8, 7→8. Total = 10 edges, 8 nodes.</p>
+<p><strong>Cyclomatic Complexity:</strong> V = E − N + 2 = 10 − 8 + 2 = <strong>4</strong></p>
+<p><strong>4 Independent Paths:</strong></p>
+<ul>
+<li>P1: 1 → 2 → 8 (score ≥ 90 → "A") — Test: score = 95</li>
+<li>P2: 1 → 3 → 4 → 8 (score ≥ 80 → "B") — Test: score = 85</li>
+<li>P3: 1 → 3 → 5 → 6 → 8 (score ≥ 70 → "C") — Test: score = 75</li>
+<li>P4: 1 → 3 → 5 → 7 → 8 (score &lt; 70 → "F") — Test: score = 50</li>
+</ul>
+</div>
+</div>
+
+<!-- S6 -->
+<div class="scenario">
+<span class="tag">Performance Testing</span>
+<div class="q">Scenario 6: Your team is launching a university admission portal. The stakeholders want to verify the site can process 1,000 document uploads simultaneously without crashing. A separate developer is asked to find exactly how many concurrent users it takes before the server breaks. (a) Name the two types of testing. (b) What is the goal of performance testing in general?</div>
+<button class="btn" onclick="toggle('a6')">Reveal Answer</button>
+<div id="a6" class="answer">
+<p><strong>(a)</strong> Verifying 1,000 anticipated uploads = <strong>Load Testing</strong>. Pushing the server to find its breaking point = <strong>Stress Testing</strong>.</p>
+<p><strong>(b)</strong> Per the slides: "The goal of Performance Testing is not to find bugs but to eliminate performance bottlenecks." It provides stakeholders with information about speed, stability, and scalability.</p>
+</div>
+</div>
+
+<!-- S7 -->
+<div class="scenario">
+<span class="tag">MVC Pattern</span>
+<div class="q">Scenario 7: A team is building an online shopping application. The customer wants to see product listings (HTML pages), the system needs to fetch product data from a database, and user requests (add to cart, checkout) need to be processed. Map these requirements to the MVC components and explain each.</div>
+<button class="btn" onclick="toggle('a7')">Reveal Answer</button>
+<div id="a7" class="answer">
+<p><strong>Model:</strong> Handles data-related logic — fetching product data from the database, managing cart state, processing checkout calculations. Communicates with the Controller.</p>
+<p><strong>View:</strong> What the end user sees — the HTML/CSS product listing pages, shopping cart display, checkout forms. Communicates with the Controller.</p>
+<p><strong>Controller:</strong> Processes user requests (add to cart, checkout, search). Gets data from the user, passes requests to the Model, and determines which View to render. Acts as the intermediary.</p>
+</div>
+</div>
+
+<!-- S8 -->
+<div class="scenario">
+<span class="tag">4+1 Views</span>
+<div class="q">Scenario 8: A senior developer is sketching a diagram focusing on Database servers, Web Application server clusters, and Load Balancers to understand deployment and runtime performance. Which specific architectural views from Krutchen's 4+1 model are being utilized?</div>
+<button class="btn" onclick="toggle('a8')">Reveal Answer</button>
+<div id="a8" class="answer">
+<p>The developer is utilizing:</p>
+<ul>
+<li><strong>Process View:</strong> Focuses on how the system runs at runtime, interacting processes, and judgments about non-functional characteristics like performance and availability.</li>
+<li><strong>Implementation/Physical View:</strong> Depicts how the software is physically deployed in data centers — which servers are used, their roles, and softwaren components installed on them. Useful for System Engineers.</li>
+</ul>
+</div>
+</div>
+
+<!-- S9 -->
+<div class="scenario">
+<span class="tag">TDD</span>
+<div class="q">Scenario 9: A developer writes a function to calculate discounts but writes all functional code first, then writes tests at the end and discovers 3 bugs. How does Test-Driven Development (TDD) differ from this approach, and what specific benefits would TDD have provided?</div>
+<button class="btn" onclick="toggle('a9')">Reveal Answer</button>
+<div id="a9" class="answer">
+<p>In TDD, tests are written <strong>before the code</strong>. The cycle is: Write failing test → Write code to pass → Refactor → Repeat.</p>
+<p><strong>Benefits TDD would have provided:</strong></p>
+<ul>
+<li><strong>Code Coverage:</strong> Every code segment would have had at least one associated test from the start.</li>
+<li><strong>Simplified Debugging:</strong> When a test fails, it's obvious where the problem lies because you're only adding small increments.</li>
+<li><strong>Regression Testing:</strong> The growing test suite would catch any newly introduced bugs immediately.</li>
+<li><strong>System Documentation:</strong> The tests themselves document what the code should be doing.</li>
+</ul>
+</div>
+</div>
+
+<!-- S10 -->
+<div class="scenario">
+<span class="tag">Verification vs Validation</span>
+<div class="q">Scenario 10: A software team builds a login system. The specifications say the password field must accept at least 8 characters. The team verifies that the implementation correctly enforces 8 characters. However, during user testing, users complain the system doesn't allow special characters in passwords, which they expected. Classify each issue as Verification or Validation and explain.</div>
+<button class="btn" onclick="toggle('a10')">Reveal Answer</button>
+<div id="a10" class="answer">
+<p><strong>Checking 8-character enforcement against the spec = Verification</strong> ("Are we building the product right?" — conforming to specification).</p>
+<p><strong>Users expecting special characters = Validation issue</strong> ("Are we building the right product?" — the specification itself may be incomplete; the software doesn't do what the user really requires).</p>
+</div>
+</div>
+
+<!-- S11 -->
+<div class="scenario">
+<span class="tag">Inspections vs Testing</span>
+<div class="q">Scenario 11: During development, a tester finds that a particular bug in Module A hides/masks another bug in Module B that only shows up when Module A's bug is fixed. Another team member suggests doing code inspections instead. What advantage of inspections addresses this specific problem?</div>
+<button class="btn" onclick="toggle('a11')">Reveal Answer</button>
+<div id="a11" class="answer">
+<p>Per the slides: "During testing, errors can mask (hide) other errors. Because inspection is a static process, you don't have to be concerned with interactions between errors."</p>
+<p>Inspections analyze the code statically — since the code is not executed, there's no possibility of one error masking another. Both bugs in Module A and Module B would be visible during a code inspection review.</p>
+</div>
+</div>
+
+<!-- S12 -->
+<div class="scenario">
+<span class="tag">WebApp Principles</span>
+<div class="q">Scenario 12: A web application has tiny 10px × 10px buttons for its most critical actions (Submit Order, Cancel Order). Users frequently miss-click. Which specific UI design principle from the slides addresses this problem, and what does it state?</div>
+<button class="btn" onclick="toggle('a12')">Reveal Answer</button>
+<div id="a12" class="answer">
+<p><strong>Fitt's Law:</strong> "The time to acquire a target is a function of the distance to and size of the target." This means it's better to design <strong>large targets (big buttons) for important functions</strong> — they're easier to interact with.</p>
+<p>The fix: Make the Submit Order and Cancel Order buttons significantly larger to reduce acquisition time and miss-clicks.</p>
+</div>
+</div>
+
+<!-- S13 -->
+<div class="scenario">
+<span class="tag">User Testing</span>
+<div class="q">Scenario 13: A company releases a v1.0 of its software to 500 external users to experiment with and report bugs before full launch. Meanwhile, internally, the development team tests the next set of features alongside external users at the developer's site. Name the two types of user testing described here.</div>
+<button class="btn" onclick="toggle('a13')">Reveal Answer</button>
+<div id="a13" class="answer">
+<p>Releasing to 500 external users to experiment and raise problems = <strong>Beta Testing</strong>.</p>
+<p>Users working with the development team at the developer's site = <strong>Alpha Testing</strong>.</p>
+</div>
+</div>
+
+<!-- S14 -->
+<div class="scenario">
+<span class="tag">Pipe &amp; Filter</span>
+<div class="q">Scenario 14: A signal processing system receives raw audio data and transforms it through: Noise Reduction → Frequency Analysis → Compression → Encoding → Output. Each step is independent and reusable. Which architectural pattern is this, and why is it suited for this type of system?</div>
+<button class="btn" onclick="toggle('a14')">Reveal Answer</button>
+<div id="a14" class="answer">
+<p><strong>Pipe and Filter Architecture.</strong></p>
+<p>Each processing step (Noise Reduction, Frequency Analysis, etc.) is an independent filter that transforms data and passes it via pipes to the next filter. The slides state this pattern is "best suited to batch processing systems and embedded systems where there is limited user interaction" and uses Signal Processing as a direct example. Each transformation occurs repeatedly in practice, so it's desirable to create them as independent, reusable parts — exactly what this system does.</p>
+</div>
+</div>
+
+<!-- S15 -->
+<div class="scenario">
+<span class="tag">Component Testing</span>
+<div class="q">Scenario 15: Two development teams built Module A and Module B independently. When integrated, Module A sends data in XML format but Module B expects JSON. What type of testing would catch this, and what is the specific type of interface involved?</div>
+<button class="btn" onclick="toggle('a15')">Reveal Answer</button>
+<div id="a15" class="answer">
+<p><strong>Interface Testing</strong> (part of Component Testing) would catch this. The objective of interface testing is to detect faults due to <strong>interface errors or invalid assumptions about interfaces</strong>.</p>
+<p>The interface type involved is a <strong>Message Passing Interface</strong> — where sub-systems request services from other sub-systems. The data format mismatch (XML vs JSON) represents an invalid assumption about the interface contract.</p>
+</div>
+</div>
+
+</section>
+
+</main>
+
+<script>
+function toggle(id){const d=document.getElementById(id);d.classList.toggle('open')}
+
+// Active nav link highlighting on scroll
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav-link');
+window.addEventListener('scroll',()=>{
+  let current='';
+  sections.forEach(s=>{
+    const top=s.offsetTop-120;
+    if(scrollY>=top)current=s.getAttribute('id');
+  });
+  navLinks.forEach(l=>{
+    l.classList.remove('active');
+    if(l.getAttribute('href')==='#'+current)l.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

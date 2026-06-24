@@ -1,0 +1,2195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Past Paper Solution Guide</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07090d;
+      --panel: #101722;
+      --panel-2: #141d2a;
+      --line: rgba(255, 255, 255, .12);
+      --line-strong: rgba(255, 255, 255, .22);
+      --text: #eef4ff;
+      --muted: #a7b4c7;
+      --dim: #748298;
+      --teal: #35d6c6;
+      --amber: #f3c45c;
+      --rose: #ff6b8a;
+      --blue: #79a7ff;
+      --green: #7ee58d;
+      --code: #0b1018;
+      --shadow: 0 18px 60px rgba(0, 0, 0, .42);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(53, 214, 198, .07), transparent 260px),
+        linear-gradient(120deg, rgba(121, 167, 255, .06), transparent 420px),
+        var(--bg);
+      color: var(--text);
+      font: 15.5px/1.65 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid var(--line);
+      background: rgba(8, 12, 18, .9);
+      backdrop-filter: blur(18px);
+      padding: 22px 18px;
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(53, 214, 198, .45);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(53, 214, 198, .16), rgba(243, 196, 92, .09));
+      color: var(--teal);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.2;
+    }
+
+    .brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .nav-group {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .nav-title {
+      display: block;
+      color: var(--dim);
+      font-size: .76rem;
+      font-weight: 750;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: .92rem;
+      transition: background .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(255, 255, 255, .07);
+      color: var(--text);
+    }
+
+    .nav-link.active {
+      box-shadow: inset 3px 0 0 var(--teal);
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 99px;
+      background: var(--teal);
+      flex: 0 0 auto;
+    }
+
+    .dot.amber { background: var(--amber); }
+    .dot.rose { background: var(--rose); }
+
+    .mobile-bar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 12, 18, .92);
+      backdrop-filter: blur(16px);
+    }
+
+    .mobile-bar strong {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .06);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    main {
+      min-width: 0;
+      padding: 42px min(5vw, 58px) 80px;
+    }
+
+    .hero {
+      min-height: 320px;
+      display: grid;
+      align-content: end;
+      gap: 18px;
+      padding: 38px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(53, 214, 198, .16), transparent 34%),
+        linear-gradient(45deg, transparent, rgba(243, 196, 92, .09)),
+        #0d131d;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .16;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .12) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 84%);
+      pointer-events: none;
+    }
+
+    .hero > * {
+      position: relative;
+    }
+
+    .eyebrow {
+      width: max-content;
+      max-width: 100%;
+      border: 1px solid rgba(53, 214, 198, .42);
+      color: var(--teal);
+      background: rgba(53, 214, 198, .08);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .hero h2 {
+      margin: 0;
+      max-width: 960px;
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 800px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, .04);
+      font-size: .86rem;
+    }
+
+    .paper {
+      margin-top: 34px;
+      scroll-margin-top: 18px;
+    }
+
+    .paper-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      padding: 26px 0 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .paper-head h2 {
+      margin: 0;
+      font-size: clamp(1.55rem, 2.6vw, 2.4rem);
+      line-height: 1.05;
+    }
+
+    .paper-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .question {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(16, 23, 34, .82);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, .24);
+      overflow: hidden;
+      scroll-margin-top: 18px;
+    }
+
+    .question header {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(90deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .01));
+    }
+
+    .question h3 {
+      margin: 0;
+      font-size: 1.12rem;
+      line-height: 1.25;
+    }
+
+    .marks {
+      white-space: nowrap;
+      color: var(--amber);
+      font-size: .88rem;
+      font-weight: 750;
+    }
+
+    .question-body {
+      padding: 20px;
+    }
+
+    .lead {
+      color: var(--muted);
+      margin-top: 0;
+    }
+
+    .answer-title {
+      color: var(--teal);
+      font-weight: 800;
+      margin: 20px 0 8px;
+    }
+
+    .sub-answer {
+      margin: 18px 0;
+      padding-left: 14px;
+      border-left: 3px solid rgba(53, 214, 198, .5);
+    }
+
+    .sub-answer h4 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: #ffffff;
+    }
+
+    .note,
+    .assumption,
+    .result {
+      border: 1px solid var(--line);
+      border-left-width: 4px;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 14px 0;
+      background: rgba(255, 255, 255, .04);
+      color: var(--muted);
+    }
+
+    .note { border-left-color: var(--blue); }
+    .assumption { border-left-color: var(--amber); }
+    .result {
+      border-left-color: var(--green);
+      color: var(--text);
+      background: rgba(126, 229, 141, .06);
+    }
+
+    .formula {
+      display: block;
+      overflow-x: auto;
+      margin: 12px 0;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--code);
+      color: #d8e7ff;
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      line-height: 1.55;
+      white-space: nowrap;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .03);
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 9px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th:last-child,
+    td:last-child { border-right: 0; }
+    tr:last-child td { border-bottom: 0; }
+
+    th {
+      color: var(--text);
+      background: rgba(255, 255, 255, .07);
+      font-weight: 760;
+    }
+
+    td { color: #d8e2f0; }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+
+    ul,
+    ol {
+      padding-left: 1.25rem;
+    }
+
+    li + li {
+      margin-top: 5px;
+    }
+
+    code,
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      color: #d7f8ff;
+      background: rgba(255, 255, 255, .06);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1px 5px;
+    }
+
+    .svg-panel {
+      overflow-x: auto;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .035);
+      margin: 12px 0 18px;
+    }
+
+    svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .svg-node {
+      fill: #0f1724;
+      stroke: var(--teal);
+      stroke-width: 2;
+    }
+
+    .svg-node.alt { stroke: var(--amber); }
+    .svg-node.rose { stroke: var(--rose); }
+    .svg-text { fill: var(--text); font: 13px Inter, system-ui, sans-serif; }
+    .svg-muted { fill: var(--muted); font: 12px Inter, system-ui, sans-serif; }
+    .svg-line { stroke: rgba(238, 244, 255, .7); stroke-width: 2; fill: none; }
+    .svg-accent { stroke: var(--amber); stroke-width: 2; fill: none; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .mini {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .overlay {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      .mobile-bar {
+        display: flex;
+      }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(86vw, 320px);
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .overlay.open {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 15;
+        background: rgba(0, 0, 0, .48);
+      }
+
+      main {
+        padding: 22px 14px 54px;
+      }
+
+      .hero {
+        min-height: 280px;
+        padding: 24px;
+      }
+
+      .hero h2,
+      .hero p,
+      .paper-head h2,
+      .question h3 {
+        overflow-wrap: anywhere;
+      }
+
+      .two-col,
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+
+      .question header {
+        display: block;
+      }
+
+      .marks {
+        display: inline-block;
+        margin-top: 8px;
+      }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; }
+      .sidebar, .mobile-bar, .overlay { display: none; }
+      .layout { display: block; }
+      main { padding: 0; }
+      .question, .hero { break-inside: avoid; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="mobile-bar">
+    <button class="icon-btn" id="menuButton" aria-label="Open navigation">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <strong>AI Solution Guide</strong>
+  </div>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div>
+          <h1>Past Paper Solution Guide</h1>
+          <p>Final papers, solved step by step</p>
+        </div>
+      </div>
+
+      <nav aria-label="Paper navigation">
+        <a class="nav-link" href="#top"><span class="dot"></span>Overview</a>
+
+        <div class="nav-group">
+          <span class="nav-title">AI Final Spring 21</span>
+          <a class="nav-link" href="#s21"><span class="dot"></span>Paper Start</a>
+          <a class="nav-link" href="#s21-q1">Q1 Sudoku + agents</a>
+          <a class="nav-link" href="#s21-q2">Q2 K-means</a>
+          <a class="nav-link" href="#s21-q3">Q3 Regression</a>
+          <a class="nav-link" href="#s21-q4">Q4 Metrics</a>
+          <a class="nav-link" href="#s21-q5">Q5 Decision trees</a>
+          <a class="nav-link" href="#s21-q6">Q6 Bayesian networks</a>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-title">AI Final Spring 22</span>
+          <a class="nav-link" href="#s22"><span class="dot amber"></span>Paper Start</a>
+          <a class="nav-link" href="#s22-q1">Q1 Definitions + PEAS</a>
+          <a class="nav-link" href="#s22-q2">Q2 Linear regression</a>
+          <a class="nav-link" href="#s22-q3">Q3 KNN + prediction</a>
+          <a class="nav-link" href="#s22-q4">Q4 Neural networks</a>
+          <a class="nav-link" href="#s22-q5">Q5 Bayesian network</a>
+          <a class="nav-link" href="#s22-q6">Q6 Learning methods</a>
+          <a class="nav-link" href="#s22-q7">Q7 Decision tree</a>
+          <a class="nav-link" href="#s22-q8">Q8 Smart city</a>
+        </div>
+
+        <div class="nav-group">
+          <span class="nav-title">AI Final Spring 24</span>
+          <a class="nav-link" href="#s24"><span class="dot rose"></span>Paper Start</a>
+          <a class="nav-link" href="#s24-q1">Q1 Brief theory</a>
+          <a class="nav-link" href="#s24-q2">Q2 Probability</a>
+          <a class="nav-link" href="#s24-q3">Q3 Naive Bayes</a>
+          <a class="nav-link" href="#s24-q4">Q4 Regression</a>
+          <a class="nav-link" href="#s24-q5">Q5 KNN + ID3</a>
+          <a class="nav-link" href="#s24-q6">Q6 K-means</a>
+          <a class="nav-link" href="#s24-q7">Q7 Neural network</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="guide-title">
+        <span class="eyebrow">Rendered PDF inspection complete</span>
+        <h2 id="guide-title">Artificial Intelligence Final Past Paper Solutions</h2>
+        <div class="meta-row">
+          <span class="pill">AI Final Spring 21</span>
+          <span class="pill">AI Final Spring 22</span>
+          <span class="pill">AI Final Spring 24</span>
+          <span class="pill">Standalone HTML</span>
+        </div>
+      </section>
+
+      <section class="paper" id="s21">
+        <div class="paper-head">
+          <div>
+            <h2>AI Final Spring 21</h2>
+            <p>Source PDF: <span class="mono">AI Final Spring'21.pdf</span>. Six questions covering agents, K-means, regression, evaluation metrics, decision trees, and Bayesian networks.</p>
+          </div>
+          <span class="pill">50 marks</span>
+        </div>
+
+        <article class="question" id="s21-q1">
+          <header>
+            <h3>Question 1: Sudoku environment, task environment, and game theory</h3>
+            <span class="marks">Marks: 2 + 2 + 2</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>a) Sudoku environment characteristics</h4>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Property</th><th>Classification</th><th>Reason</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Observability</td><td>Fully observable</td><td>The full grid, givens, and already-filled values are visible. There is no hidden state.</td></tr>
+                    <tr><td>Determinism</td><td>Deterministic</td><td>Placing a digit has a predictable result. The puzzle rules do not involve chance.</td></tr>
+                    <tr><td>Episodic vs sequential</td><td>Sequential</td><td>Each placement affects later legal placements and the final solution.</td></tr>
+                    <tr><td>Static vs dynamic</td><td>Static</td><td>The puzzle does not change while the solver is thinking. If a clock score is used it becomes semi-dynamic, but ordinary Sudoku is static.</td></tr>
+                    <tr><td>Discrete vs continuous</td><td>Discrete</td><td>Cells, rows, columns, boxes, and digits 1 to 9 are finite discrete values.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) PEAS task environment for Sudoku</h4>
+              <ul>
+                <li><strong>Performance:</strong> fill all 81 cells correctly, obey row/column/box constraints, avoid contradictions, and solve efficiently.</li>
+                <li><strong>Environment:</strong> the 9 by 9 grid, fixed clues, candidate digits, and Sudoku constraints.</li>
+                <li><strong>Actuators:</strong> place a digit, erase a digit, mark candidates, choose next cell.</li>
+                <li><strong>Sensors:</strong> read the current grid, fixed clues, empty cells, and constraint violations.</li>
+              </ul>
+              <p class="result">A Sudoku solver is naturally modeled as a problem-solving or CSP search agent.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>c) Game-theoretic problems and non-zero-sum example</h4>
+              <p>Game theory studies strategic interaction among decision makers, so game-theoretic problems are multi-agent in the usual AI sense. A non-zero-sum game is one where both agents can gain or both can lose.</p>
+              <p class="result">Example: Prisoner's Dilemma. Mutual cooperation gives both players a better combined outcome than mutual defection, so the total payoff is not fixed at zero.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s21-q2">
+          <header>
+            <h3>Question 2: K-means clustering for eight 2-D points</h3>
+            <span class="marks">Marks: 5 + 1.5 + 1.5</span>
+          </header>
+          <div class="question-body">
+            <p class="lead">Points: A1(2,10), A2(2,5), A3(8,4), A4(5,8), A5(7,5), A6(6,4), A7(1,2), A8(4,9). Initial centers are A1, A4, and A7.</p>
+
+            <div class="sub-answer">
+              <h4>a) K-means after the second iteration</h4>
+              <p>We use the 2-D Euclidean distance formula: d(P, Q) = &radic;((x<sub>1</sub> - x<sub>2</sub>)<sup>2</sup> + (y<sub>1</sub> - y<sub>2</sub>)<sup>2</sup>). We have points A1(2,10), A2(2,5), A3(8,4), A4(5,8), A5(7,5), A6(6,4), A7(1,2), A8(4,9) and initial centroids C1<sup>(0)</sup> = A1(2,10), C2<sup>(0)</sup> = A4(5,8), C3<sup>(0)</sup> = A7(1,2).</p>
+              
+              <h5>Iteration 1 Working:</h5>
+              <p>Calculate distances from each point to the initial centroids C1<sup>(0)</sup>, C2<sup>(0)</sup>, C3<sup>(0)</sup>:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Point</th>
+                      <th>Coordinates</th>
+                      <th>d(P, C1<sup>(0)</sup>) = &radic;((x-2)<sup>2</sup>+(y-10)<sup>2</sup>)</th>
+                      <th>d(P, C2<sup>(0)</sup>) = &radic;((x-5)<sup>2</sup>+(y-8)<sup>2</sup>)</th>
+                      <th>d(P, C3<sup>(0)</sup>) = &radic;((x-1)<sup>2</sup>+(y-2)<sup>2</sup>)</th>
+                      <th>Nearest Centroid</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>A1</td><td>(2, 10)</td><td>0.00</td><td>3.61</td><td>8.06</td><td>C1</td></tr>
+                    <tr><td>A2</td><td>(2, 5)</td><td>5.00</td><td>4.24</td><td>3.16</td><td>C3</td></tr>
+                    <tr><td>A3</td><td>(8, 4)</td><td>8.49</td><td>5.00</td><td>7.28</td><td>C2</td></tr>
+                    <tr><td>A4</td><td>(5, 8)</td><td>3.61</td><td>0.00</td><td>7.21</td><td>C2</td></tr>
+                    <tr><td>A5</td><td>(7, 5)</td><td>7.07</td><td>3.61</td><td>6.71</td><td>C2</td></tr>
+                    <tr><td>A6</td><td>(6, 4)</td><td>7.21</td><td>4.12</td><td>5.39</td><td>C2</td></tr>
+                    <tr><td>A7</td><td>(1, 2)</td><td>8.06</td><td>7.21</td><td>0.00</td><td>C3</td></tr>
+                    <tr><td>A8</td><td>(4, 9)</td><td>2.24</td><td>1.41</td><td>7.62</td><td>C2</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Iteration 1 Cluster Sets & New Centroids:</strong></p>
+              <ul>
+                <li><strong>C1:</strong> {A1} &rarr; Centroid C1<sup>(1)</sup> = (2, 10)</li>
+                <li><strong>C2:</strong> {A3, A4, A5, A6, A8} &rarr; Centroid C2<sup>(1)</sup> = ((8+5+7+6+4)/5, (4+8+5+4+9)/5) = (6, 6)</li>
+                <li><strong>C3:</strong> {A2, A7} &rarr; Centroid C3<sup>(1)</sup> = ((2+1)/2, (5+2)/2) = (1.5, 3.5)</li>
+              </ul>
+
+              <h5>Iteration 2 Working:</h5>
+              <p>Re-calculate distances from each point to the new centroids C1<sup>(1)</sup>(2,10), C2<sup>(1)</sup>(6,6), C3<sup>(1)</sup>(1.5,3.5):</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Point</th>
+                      <th>Coordinates</th>
+                      <th>d(P, C1<sup>(1)</sup>) = &radic;((x-2)<sup>2</sup>+(y-10)<sup>2</sup>)</th>
+                      <th>d(P, C2<sup>(1)</sup>) = &radic;((x-6)<sup>2</sup>+(y-6)<sup>2</sup>)</th>
+                      <th>d(P, C3<sup>(1)</sup>) = &radic;((x-1.5)<sup>2</sup>+(y-3.5)<sup>2</sup>)</th>
+                      <th>Nearest Centroid</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>A1</td><td>(2, 10)</td><td>0.00</td><td>5.66</td><td>6.52</td><td>C1</td></tr>
+                    <tr><td>A2</td><td>(2, 5)</td><td>5.00</td><td>4.12</td><td>1.58</td><td>C3</td></tr>
+                    <tr><td>A3</td><td>(8, 4)</td><td>8.49</td><td>2.83</td><td>6.52</td><td>C2</td></tr>
+                    <tr><td>A4</td><td>(5, 8)</td><td>3.61</td><td>2.24</td><td>5.70</td><td>C2</td></tr>
+                    <tr><td>A5</td><td>(7, 5)</td><td>7.07</td><td>1.41</td><td>5.70</td><td>C2</td></tr>
+                    <tr><td>A6</td><td>(6, 4)</td><td>7.21</td><td>2.00</td><td>4.53</td><td>C2</td></tr>
+                    <tr><td>A7</td><td>(1, 2)</td><td>8.06</td><td>6.40</td><td>1.58</td><td>C3</td></tr>
+                    <tr><td>A8</td><td>(4, 9)</td><td>2.24</td><td>3.61</td><td>6.04</td><td>C1</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Iteration 2 Cluster Sets & New Centroids:</strong></p>
+              <ul>
+                <li><strong>C1:</strong> {A1, A8} &rarr; Centroid C1<sup>(2)</sup> = ((2+4)/2, (10+9)/2) = (3, 9.5)</li>
+                <li><strong>C2:</strong> {A3, A4, A5, A6} &rarr; Centroid C2<sup>(2)</sup> = ((8+5+7+6)/4, (4+8+5+4)/4) = (6.5, 5.25)</li>
+                <li><strong>C3:</strong> {A2, A7} &rarr; Centroid C3<sup>(2)</sup> = (1.5, 3.5)</li>
+              </ul>
+              <p class="result">Final Centers after the second iteration: C1 = (3, 9.5), C2 = (6.5, 5.25), C3 = (1.5, 3.5).</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) Will two K-means runs always produce the same result?</h4>
+              <p>No. K-means can converge to different local optima because results depend on the initial centroids and tie-breaking. If the same seeds and same deterministic tie rule are used, the result is repeatable.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>c) How clustering can improve linear regression</h4>
+              <p>Cluster the data into more homogeneous groups first, then either train one regression model per cluster or add the cluster ID as an extra feature. This can capture piecewise linear behavior and reduce error when one global line is too simple.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s21-q3">
+          <header>
+            <h3>Question 3: Bookstore linear regression</h3>
+            <span class="marks">Marks: 5 + 1 + 1 + 1</span>
+          </header>
+          <div class="question-body">
+            <p class="lead">X = registered students, Y = books sold for 12 semesters.</p>
+
+            <div class="sub-answer">
+              <h4>a) Scatter plot</h4>
+              <div class="svg-panel">
+                <svg viewBox="0 0 420 260" role="img" aria-label="Scatter plot of students versus books sold">
+                  <rect x="0" y="0" width="420" height="260" fill="#0b1018" rx="8"/>
+                  <path d="M48 18V218H402" class="svg-line"/>
+                  <text x="172" y="248" class="svg-muted">Registered students (X)</text>
+                  <text x="8" y="28" class="svg-muted" transform="rotate(-90 8 28)">Books sold (Y)</text>
+                  <g fill="#35d6c6">
+                    <circle cx="307.6" cy="132.3" r="4"/>
+                    <circle cx="118.8" cy="160.9" r="4"/>
+                    <circle cx="284.0" cy="89.4" r="4"/>
+                    <circle cx="378.4" cy="75.1" r="4"/>
+                    <circle cx="166.0" cy="160.9" r="4"/>
+                    <circle cx="166.0" cy="146.6" r="4"/>
+                    <circle cx="189.6" cy="146.6" r="4"/>
+                    <circle cx="354.8" cy="32.3" r="4"/>
+                    <circle cx="307.6" cy="89.4" r="4"/>
+                    <circle cx="354.8" cy="103.7" r="4"/>
+                    <circle cx="142.4" cy="160.9" r="4"/>
+                    <circle cx="71.6" cy="203.7" r="4"/>
+                  </g>
+                  <path d="M48 202.0 L402 57.9" class="svg-accent"/>
+                  <text x="52" y="232" class="svg-muted">25</text>
+                  <text x="390" y="232" class="svg-muted">40</text>
+                  <text x="24" y="205" class="svg-muted">25</text>
+                  <text x="24" y="62" class="svg-muted">35</text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) Regression dataset, calculation, and equation</h4>
+              <p>The 12-semester dataset is reconstructed as follows:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Semester (i)</th>
+                      <th>Students (X<sub>i</sub>)</th>
+                      <th>Books Sold (Y<sub>i</sub>)</th>
+                      <th>X<sub>i</sub> - X̄</th>
+                      <th>Y<sub>i</sub> - Ȳ</th>
+                      <th>(X<sub>i</sub> - X̄)<sup>2</sup></th>
+                      <th>(X<sub>i</sub> - X̄)(Y<sub>i</sub> - Ȳ)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1</td><td>36</td><td>30</td><td>3</td><td>-1.5</td><td>9</td><td>-4.5</td></tr>
+                    <tr><td>2</td><td>28</td><td>28</td><td>-5</td><td>-3.5</td><td>25</td><td>17.5</td></tr>
+                    <tr><td>3</td><td>35</td><td>33</td><td>2</td><td>1.5</td><td>4</td><td>3.0</td></tr>
+                    <tr><td>4</td><td>39</td><td>34</td><td>6</td><td>2.5</td><td>36</td><td>15.0</td></tr>
+                    <tr><td>5</td><td>30</td><td>28</td><td>-3</td><td>-3.5</td><td>9</td><td>10.5</td></tr>
+                    <tr><td>6</td><td>30</td><td>29</td><td>-3</td><td>-2.5</td><td>9</td><td>7.5</td></tr>
+                    <tr><td>7</td><td>31</td><td>29</td><td>-2</td><td>-2.5</td><td>4</td><td>5.0</td></tr>
+                    <tr><td>8</td><td>38</td><td>37</td><td>5</td><td>5.5</td><td>25</td><td>27.5</td></tr>
+                    <tr><td>9</td><td>36</td><td>33</td><td>3</td><td>1.5</td><td>9</td><td>4.5</td></tr>
+                    <tr><td>10</td><td>38</td><td>32</td><td>5</td><td>0.5</td><td>25</td><td>2.5</td></tr>
+                    <tr><td>11</td><td>29</td><td>28</td><td>-4</td><td>-3.5</td><td>16</td><td>14.0</td></tr>
+                    <tr><td>12</td><td>26</td><td>25</td><td>-7</td><td>-6.5</td><td>49</td><td>45.5</td></tr>
+                    <tr style="font-weight: bold; background: rgba(255, 255, 255, 0.08);">
+                      <td>Sum (&Sigma;)</td>
+                      <td>396</td>
+                      <td>378</td>
+                      <td>0</td>
+                      <td>0</td>
+                      <td>S<sub>xx</sub> = 220</td>
+                      <td>S<sub>xy</sub> = 148</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Parameter Calculation:</strong></p>
+              <ul>
+                <li>Sample Size: <code>n = 12</code></li>
+                <li>Mean of X (Registered Students): <code>X̄ = 396 / 12 = 33</code></li>
+                <li>Mean of Y (Books Sold): <code>Ȳ = 378 / 12 = 31.5</code></li>
+                <li>Sum of squares of X: <code>S<sub>xx</sub> = &Sigma;(X<sub>i</sub> - X̄)<sup>2</sup> = 220</code></li>
+                <li>Sum of products of X and Y: <code>S<sub>xy</sub> = &Sigma;(X<sub>i</sub> - X̄)(Y<sub>i</sub> - Ȳ) = 148</code></li>
+                <li>Slope: <code>b<sub>1</sub> = S<sub>xy</sub> / S<sub>xx</sub> = 148 / 220 = 0.6727</code></li>
+                <li>Intercept: <code>b<sub>0</sub> = Ȳ - b<sub>1</sub>X̄ = 31.5 - 0.6727 &times; 33 = 9.30</code></li>
+              </ul>
+              <span class="formula">Regression equation: Ŷ = 9.30 + 0.6727X</span>
+              <p><strong>Slope interpretation:</strong> For each additional registered student, expected books sold increases by about 0.673. <strong>Intercept interpretation:</strong> At X = 0, the model predicts 9.3 books; here it is mainly a mathematical baseline, not a practical bookstore claim.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>c) Estimate average books sold for 30 registered students with 95% confidence</h4>
+              <p>Step-by-step prediction and interval calculation for X<sub>0</sub> = 30:</p>
+              <ol>
+                <li><strong>Point Estimate:</strong><br>
+                  <code>Ŷ(30) = 9.30 + 0.6727 &times; 30 = 29.48 books</code>
+                </li>
+                <li><strong>Given values:</strong> <code>MSE = 2.3436</code> and standard error of the regression <code>s = &radic;2.3436 = 1.5309</code>.</li>
+                <li><strong>Standard Error of the Mean Prediction:</strong><br>
+                  <code>SE(mean prediction) = s &times; &radic;(1/n + (X<sub>0</sub> - X̄)<sup>2</sup> / S<sub>xx</sub>)</code><br>
+                  <code>SE = 1.5309 &times; &radic;(1/12 + (30 - 33)<sup>2</sup> / 220) = 1.5309 &times; &radic;(0.0833 + 9 / 220) = 1.5309 &times; &radic;(0.0833 + 0.0409) = 1.5309 &times; &radic;0.1242 = 1.5309 &times; 0.3524 = 0.5396</code>
+                </li>
+                <li><strong>Critical Value:</strong> For a 95% confidence interval and degrees of freedom <code>df = n - 2 = 10</code>, from the t-distribution: <code>t<sub>crit</sub> = t<sub>0.025, 10</sub> = 2.228</code>.</li>
+                <li><strong>Margin of Error:</strong> <code>ME = t<sub>crit</sub> &times; SE = 2.228 &times; 0.5396 = 1.202</code></li>
+                <li><strong>Confidence Interval:</strong><br>
+                  <code>95% CI = 29.4818 &plusmn; 1.202 = [28.28, 30.68]</code>
+                </li>
+              </ol>
+              <p class="result">Estimated average books sold: about 29.48 books. 95% confidence interval: 28.28 to 30.68 books.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>d) What is learned in a regression model?</h4>
+              <p>Learning a regression model means estimating its parameters: the intercept and the coefficient(s). In simple linear regression these are the y-intercept and slope. In multiple regression they are the intercept plus all feature weights.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s21-q4">
+          <header>
+            <h3>Question 4: Precision, recall, and accuracy from a multiclass table</h3>
+            <span class="marks">Marks: 2 + 2 + 4 + 2</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>a) Definitions</h4>
+              <p><strong>Precision</strong> answers: of everything predicted as this class, how much was correct?</p>
+              <span class="formula">Precision = TP / (TP + FP)</span>
+              <p><strong>Recall</strong> answers: of everything truly belonging to this class, how much did the model find?</p>
+              <span class="formula">Recall = TP / (TP + FN)</span>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) Why regression suits continuous variables</h4>
+              <p>Regression predicts numerical values on a continuous scale, such as price, yield, weight, or temperature. It directly models how the expected target value changes with input features.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>c) Precision and recall per class</h4>
+              <p>For each class, the diagonal cell is TP, the column total is TP + FP, and the row total is TP + FN.</p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Class</th><th>TP</th><th>Column total</th><th>Row total</th><th>Precision</th><th>Recall</th></tr></thead>
+                  <tbody>
+                    <tr><td>UK</td><td>95</td><td>105</td><td>110</td><td>0.905</td><td>0.864</td></tr>
+                    <tr><td>poultry</td><td>1</td><td>93</td><td>1</td><td>0.011</td><td>1.000</td></tr>
+                    <tr><td>wheat</td><td>0</td><td>17</td><td>101</td><td>0.000</td><td>0.000</td></tr>
+                    <tr><td>coffee</td><td>34</td><td>62</td><td>44</td><td>0.548</td><td>0.773</td></tr>
+                    <tr><td>interest</td><td>26</td><td>35</td><td>47</td><td>0.743</td><td>0.553</td></tr>
+                    <tr><td>trade</td><td>10</td><td>22</td><td>31</td><td>0.455</td><td>0.323</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>d) Accuracy</h4>
+              <span class="formula">Correct predictions = 95 + 1 + 0 + 34 + 26 + 10 = 166
+Total examples = 334
+Accuracy = 166 / 334 = 0.4970</span>
+              <p class="result">Model accuracy = 49.70%.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s21-q5">
+          <header>
+            <h3>Question 5: Entropy, information gain, and decision trees</h3>
+            <span class="marks">Marks: 1 + 2 + 2 + 5</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>a) Why calculate entropy and information gain?</h4>
+              <p>Entropy measures how mixed or uncertain the class labels are. Information gain measures how much an attribute reduces that uncertainty. In ID3-style decision trees, the attribute with the highest information gain is chosen for the split.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) Greedy decision tree for binary A, B, C -> Y</h4>
+              <p>Dataset: FFF -> F, TFT -> T, TTF -> T, TTT -> F. The root with highest gain is A. For A = F, the class is F. For A = T, split on B or C; both tie, so choose B.</p>
+              <div class="svg-panel">
+                <svg viewBox="0 0 540 280" role="img" aria-label="Decision tree for A B C">
+                  <rect x="0" y="0" width="540" height="280" rx="8" fill="#0b1018"/>
+                  <circle cx="270" cy="48" r="28" class="svg-node"/>
+                  <text x="270" y="53" text-anchor="middle" class="svg-text">A</text>
+                  <path d="M250 68 L150 125" class="svg-line"/>
+                  <path d="M290 68 L390 125" class="svg-line"/>
+                  <text x="190" y="93" class="svg-muted">F</text>
+                  <text x="340" y="93" class="svg-muted">T</text>
+                  <rect x="102" y="125" width="96" height="42" rx="8" class="svg-node rose"/>
+                  <text x="150" y="152" text-anchor="middle" class="svg-text">Y = F</text>
+                  <circle cx="390" cy="146" r="28" class="svg-node"/>
+                  <text x="390" y="151" text-anchor="middle" class="svg-text">B</text>
+                  <path d="M372 168 L305 220" class="svg-line"/>
+                  <path d="M408 168 L475 220" class="svg-line"/>
+                  <text x="330" y="195" class="svg-muted">F</text>
+                  <text x="445" y="195" class="svg-muted">T</text>
+                  <rect x="257" y="220" width="96" height="42" rx="8" class="svg-node alt"/>
+                  <text x="305" y="247" text-anchor="middle" class="svg-text">Y = T</text>
+                  <circle cx="475" cy="241" r="25" class="svg-node"/>
+                  <text x="475" y="246" text-anchor="middle" class="svg-text">C</text>
+                  <text x="438" y="237" class="svg-muted">C=F -> T</text>
+                  <text x="438" y="258" class="svg-muted">C=T -> F</text>
+                </svg>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>c) Classify examples using the given tree</h4>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Example</th><th>Color</th><th>Height</th><th>Width</th><th>Class</th><th>Path</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>Red</td><td>Short</td><td>Thin</td><td>NO</td><td>Color = Red -> NO</td></tr>
+                    <tr><td>B</td><td>Blue</td><td>Tall</td><td>Fat</td><td>YES</td><td>Blue -> Width = Fat -> YES</td></tr>
+                    <tr><td>C</td><td>Green</td><td>Short</td><td>Fat</td><td>NO</td><td>Green -> Height = Short -> NO</td></tr>
+                    <tr><td>D</td><td>Green</td><td>Tall</td><td>Thin</td><td>YES</td><td>Green -> Height = Tall -> YES</td></tr>
+                    <tr><td>E</td><td>Blue</td><td>Short</td><td>Thin</td><td>NO</td><td>Blue -> Width = Thin -> NO</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>d) Decision tree for Machine Learning pass/fail</h4>
+              <p>The dataset represents 6 students with characteristics: GPA (L, M, H), Studied (True, False), and Class Pass (True, False):</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Student</th><th>GPA</th><th>Studied</th><th>Pass (Class)</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1</td><td>L</td><td>F</td><td>F</td></tr>
+                    <tr><td>2</td><td>L</td><td>T</td><td>T</td></tr>
+                    <tr><td>3</td><td>M</td><td>F</td><td>F</td></tr>
+                    <tr><td>4</td><td>M</td><td>T</td><td>T</td></tr>
+                    <tr><td>5</td><td>H</td><td>F</td><td>T</td></tr>
+                    <tr><td>6</td><td>H</td><td>T</td><td>T</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Step-by-step Entropy and Information Gain calculations:</strong></p>
+              <ol>
+                <li><strong>Overall System Entropy H(S):</strong><br>
+                  Total students = 6. Class counts: Pass (T) = 4, Fail (F) = 2.<br>
+                  <code>H(S) = - (4/6) log<sub>2</sub>(4/6) - (2/6) log<sub>2</sub>(2/6) = - 0.6667 &times; (-0.585) - 0.3333 &times; (-1.585) = 0.390 + 0.528 = 0.9183</code>
+                </li>
+                <li><strong>Information Gain for GPA:</strong><br>
+                  We partition the set S into subsets for each GPA value:
+                  <ul>
+                    <li><code>GPA = L</code>: 2 instances {F, T} &rarr; 1 Pass, 1 Fail. <code>H(S<sub>L</sub>) = - (1/2)log<sub>2</sub>(1/2) - (1/2)log<sub>2</sub>(1/2) = 1.0</code></li>
+                    <li><code>GPA = M</code>: 2 instances {F, T} &rarr; 1 Pass, 1 Fail. <code>H(S<sub>M</sub>) = - (1/2)log<sub>2</sub>(1/2) - (1/2)log<sub>2</sub>(1/2) = 1.0</code></li>
+                    <li><code>GPA = H</code>: 2 instances {T, T} &rarr; 2 Pass, 0 Fail. <code>H(S<sub>H</sub>) = 0</code></li>
+                  </ul>
+                  Weighted conditional entropy:<br>
+                  <code>H(S | GPA) = (2/6) &times; H(S<sub>L</sub>) + (2/6) &times; H(S<sub>M</sub>) + (2/6) &times; H(S<sub>H</sub>) = (2/6)(1.0) + (2/6)(1.0) + (2/6)(0) = 0.6667</code><br>
+                  Information Gain:<br>
+                  <code>IG(GPA) = H(S) - H(S | GPA) = 0.9183 - 0.6667 = 0.2516</code>
+                </li>
+                <li><strong>Information Gain for Studied:</strong><br>
+                  We partition the set S into subsets for Studied:
+                  <ul>
+                    <li><code>Studied = T</code>: 3 instances {T, T, T} &rarr; 3 Pass, 0 Fail. <code>H(S<sub>T</sub>) = 0</code></li>
+                    <li><code>Studied = F</code>: 3 instances {F, F, T} &rarr; 1 Pass, 2 Fail. <code>H(S<sub>F</sub>) = - (1/3)log<sub>2</sub>(1/3) - (2/3)log<sub>2</sub>(2/3) = - 0.333 &times; (-1.585) - 0.667 &times; (-0.585) = 0.9183</code></li>
+                  </ul>
+                  Weighted conditional entropy:<br>
+                  <code>H(S | Studied) = (3/6) &times; H(S<sub>T</sub>) + (3/6) &times; H(S<sub>F</sub>) = 0.5(0) + 0.5(0.9183) = 0.4591</code><br>
+                  Information Gain:<br>
+                  <code>IG(Studied) = H(S) - H(S | Studied) = 0.9183 - 0.4591 = 0.4591</code>
+                </li>
+              </ol>
+              <p class="result">Choose <strong>Studied</strong> as the root because it has higher information gain (IG = 0.4591) compared to GPA (IG = 0.2516).</p>
+              <div class="svg-panel">
+                <svg viewBox="0 0 560 300" role="img" aria-label="Decision tree for student passing">
+                  <rect width="560" height="300" rx="8" fill="#0b1018"/>
+                  <circle cx="280" cy="54" r="36" class="svg-node"/>
+                  <text x="280" y="59" text-anchor="middle" class="svg-text">Studied?</text>
+                  <path d="M252 78 L145 145" class="svg-line"/>
+                  <path d="M308 78 L415 145" class="svg-line"/>
+                  <text x="180" y="110" class="svg-muted">T</text>
+                  <text x="380" y="110" class="svg-muted">F</text>
+                  <rect x="94" y="145" width="104" height="44" rx="8" class="svg-node alt"/>
+                  <text x="146" y="173" text-anchor="middle" class="svg-text">Pass = Yes</text>
+                  <circle cx="415" cy="167" r="32" class="svg-node"/>
+                  <text x="415" y="172" text-anchor="middle" class="svg-text">GPA</text>
+                  <path d="M393 191 L305 242" class="svg-line"/>
+                  <path d="M415 199 L415 242" class="svg-line"/>
+                  <path d="M437 191 L505 242" class="svg-line"/>
+                  <text x="338" y="218" class="svg-muted">L</text>
+                  <text x="425" y="222" class="svg-muted">M</text>
+                  <text x="478" y="218" class="svg-muted">H</text>
+                  <rect x="255" y="242" width="100" height="42" rx="8" class="svg-node rose"/>
+                  <text x="305" y="268" text-anchor="middle" class="svg-text">No</text>
+                  <rect x="365" y="242" width="100" height="42" rx="8" class="svg-node rose"/>
+                  <text x="415" y="268" text-anchor="middle" class="svg-text">No</text>
+                  <rect x="475" y="242" width="70" height="42" rx="8" class="svg-node alt"/>
+                  <text x="510" y="268" text-anchor="middle" class="svg-text">Yes</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s21-q6">
+          <header>
+            <h3>Question 6: Bayesian networks and inference</h3>
+            <span class="marks">Marks: 2 + 2 + 4</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>a) Bayesian network from factorization</h4>
+              <p>Each conditional probability gives arrows from the variables after the bar into the variable before the bar.</p>
+              <span class="formula">B,C,E -> A
+D,G -> B
+E,F,H -> C
+G -> D
+G,H -> E
+I -> F
+H -> G
+I -> H
+I is a root</span>
+              <div class="svg-panel">
+                <svg viewBox="0 0 700 360" role="img" aria-label="Bayesian network for Spring 2021 factorization">
+                  <defs>
+                    <marker id="arrow-s21" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgba(238,244,255,.75)"/>
+                    </marker>
+                  </defs>
+                  <rect width="700" height="360" rx="8" fill="#0b1018"/>
+                  <g class="svg-text" text-anchor="middle">
+                    <circle cx="350" cy="310" r="25" class="svg-node alt"/><text x="350" y="315">I</text>
+                    <circle cx="250" cy="250" r="25" class="svg-node"/><text x="250" y="255">H</text>
+                    <circle cx="450" cy="250" r="25" class="svg-node"/><text x="450" y="255">F</text>
+                    <circle cx="170" cy="185" r="25" class="svg-node"/><text x="170" y="190">G</text>
+                    <circle cx="300" cy="178" r="25" class="svg-node"/><text x="300" y="183">E</text>
+                    <circle cx="105" cy="110" r="25" class="svg-node"/><text x="105" y="115">D</text>
+                    <circle cx="220" cy="95" r="25" class="svg-node"/><text x="220" y="100">B</text>
+                    <circle cx="440" cy="95" r="25" class="svg-node"/><text x="440" y="100">C</text>
+                    <circle cx="330" cy="38" r="25" class="svg-node rose"/><text x="330" y="43">A</text>
+                  </g>
+                  <g stroke="rgba(238,244,255,.74)" stroke-width="2" fill="none" marker-end="url(#arrow-s21)">
+                    <path d="M338 291 L268 264"/>
+                    <path d="M368 291 L434 264"/>
+                    <path d="M238 232 L185 202"/>
+                    <path d="M267 238 L287 199"/>
+                    <path d="M440 232 L436 120"/>
+                    <path d="M156 166 L117 129"/>
+                    <path d="M183 167 L210 116"/>
+                    <path d="M193 188 L276 180"/>
+                    <path d="M122 111 L195 98"/>
+                    <path d="M241 83 L307 51"/>
+                    <path d="M318 162 L423 113"/>
+                    <path d="M455 116 L354 42"/>
+                    <path d="M302 153 L329 62"/>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) Robot localization with a noisy sensor</h4>
+              <p>Use Bayes' rule. For every possible grid square L:</p>
+              <span class="formula">P(Location = L | Observation = o)
+= P(o | L) P(L) / sum_over_all_squares_j P(o | L_j) P(L_j)</span>
+              <p>The denominator normalizes the probabilities so all grid-square probabilities sum to 1.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>c) Cancer Bayesian network calculations</h4>
+              <p>The network variables and probability tables from the exam paper are defined as follows:</p>
+              <ul>
+                <li><strong>Pollution (P):</strong> <code>P(P = H) = 0.1</code>, <code>P(P = L) = 0.9</code></li>
+                <li><strong>Smoker (S):</strong> <code>P(S = T) = 0.3</code>, <code>P(S = F) = 0.7</code></li>
+                <li><strong>Cancer (C) Conditional Probability Table:</strong>
+                  <ul>
+                    <li><code>P(C = T | P = H, S = T) = 0.05</code></li>
+                    <li><code>P(C = T | P = H, S = F) = 0.02</code></li>
+                    <li><code>P(C = T | P = L, S = T) = 0.03</code></li>
+                    <li><code>P(C = T | P = L, S = F) = 0.001</code></li>
+                  </ul>
+                </li>
+              </ul>
+              
+              <p><strong>Step-by-step joint probability expansion:</strong></p>
+              <ol>
+                <li><strong>Calculate P(Cancer = T):</strong><br>
+                  We marginalize over Pollution (P) and Smoker (S):<br>
+                  <code>P(Cancer) = P(P=H, S=T, C=T) + P(P=H, S=F, C=T) + P(P=L, S=T, C=T) + P(P=L, S=F, C=T)</code><br>
+                  <code>P(Cancer) = P(C|H,T)P(H)P(T) + P(C|H,F)P(H)P(F) + P(C|L,T)P(L)P(T) + P(C|L,F)P(L)P(F)</code><br>
+                  <code>P(Cancer) = (0.05 &times; 0.1 &times; 0.3) + (0.02 &times; 0.1 &times; 0.7) + (0.03 &times; 0.9 &times; 0.3) + (0.001 &times; 0.9 &times; 0.7)</code><br>
+                  <code>P(Cancer) = 0.0015 + 0.0014 + 0.0081 + 0.00063 = 0.01163</code>
+                </li>
+                <li><strong>Calculate P(Pollution = L | Cancer = T):</strong><br>
+                  Using Bayes' rule:<br>
+                  <code>P(P = L | C) = P(C, P = L) / P(C)</code><br>
+                  <code>P(C, P = L) = P(P=L, S=T, C=T) + P(P=L, S=F, C=T) = (0.03 &times; 0.9 &times; 0.3) + (0.001 &times; 0.9 &times; 0.7) = 0.0081 + 0.00063 = 0.00873</code><br>
+                  <code>P(P = L | C) = 0.00873 / 0.01163 = 0.7506 (or 75.06%)</code>
+                </li>
+                <li><strong>Calculate P(Pollution = H | Cancer = T):</strong><br>
+                  By complements:<br>
+                  <code>P(P = H | C) = 1 - P(P = L | C) = 1 - 0.7506 = 0.2494 (or 24.94%)</code>
+                </li>
+              </ol>
+              <p class="result">Calculated probabilities: P(Cancer) = 0.01163. P(Pollution=L | Cancer) = 0.7506. P(Pollution=H | Cancer) = 0.2494. (Note: standard sensor conditional probabilities from the paper state P(XRay=pos | Cancer) = 0.90 and P(Dyspnoea=T | Cancer) = 0.65).</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="paper" id="s22">
+        <div class="paper-head">
+          <div>
+            <h2>AI Final Spring 22</h2>
+            <p>Source PDF: <span class="mono">AI Final Spring'22.pdf</span>. Eight questions covering agents, PEAS, regression, KNN, neural networks, Bayesian networks, learning-method selection, decision trees, and smart-city design.</p>
+          </div>
+          <span class="pill">50 marks</span>
+        </div>
+
+        <article class="question" id="s22-q1">
+          <header>
+            <h3>Question 1: Definitions, conditional independence, and PEAS</h3>
+            <span class="marks">Marks: 10</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>A) Short definitions</h4>
+              <ol>
+                <li><strong>AI agent:</strong> an entity that perceives its environment through sensors and acts through actuators to maximize expected performance.</li>
+                <li><strong>Backpropagation:</strong> the algorithm that computes gradients of the loss with respect to neural-network weights by moving backward from output to input. We use it to update weights and reduce error.</li>
+                <li><strong>Supervised learning and reinforcement learning:</strong> both learn a mapping from inputs/states to outputs/actions. Supervised learning uses labeled examples; reinforcement learning learns from rewards received after actions.</li>
+                <li><strong>Activation function:</strong> transforms a neuron's weighted sum and introduces nonlinearity. Popular examples: ReLU, sigmoid, and tanh.</li>
+                <li><strong>MDP vs RL:</strong> an MDP is the mathematical model: states, actions, transition probabilities, and rewards. RL is the learning approach used to discover a good policy, often when the transition model is unknown.</li>
+                <li><strong>Conditional independence in A -> C <- B:</strong> C is a collider. If C is observed, A and B become dependent through explaining away. If C is unobserved, A and B are independent.</li>
+                <li><strong>Gradient descent:</strong> repeatedly update weights in the negative-gradient direction: <span class="mono">w := w - alpha * dL/dw</span>.</li>
+                <li><strong>Impurity vs abnormality:</strong> impurity is class mixing inside a dataset or tree node, measured by entropy or Gini. Abnormality means unusual or outlier behavior compared with the expected data pattern.</li>
+              </ol>
+              <div class="svg-panel">
+                <svg viewBox="0 0 360 220" role="img" aria-label="Collider network A and B into C">
+                  <defs>
+                    <marker id="arrow-v" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgba(238,244,255,.78)"/>
+                    </marker>
+                  </defs>
+                  <rect width="360" height="220" rx="8" fill="#0b1018"/>
+                  <circle cx="115" cy="62" r="32" class="svg-node"/><text x="115" y="67" text-anchor="middle" class="svg-text">A</text>
+                  <circle cx="245" cy="62" r="32" class="svg-node"/><text x="245" y="67" text-anchor="middle" class="svg-text">B</text>
+                  <circle cx="180" cy="160" r="32" class="svg-node alt"/><text x="180" y="165" text-anchor="middle" class="svg-text">C</text>
+                  <path d="M132 89 L164 134" class="svg-line" marker-end="url(#arrow-v)"/>
+                  <path d="M228 89 L196 134" class="svg-line" marker-end="url(#arrow-v)"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>B) PEAS table</h4>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Application</th><th>PEAS</th><th>Environment type</th><th>Agent type</th></tr></thead>
+                  <tbody>
+                    <tr><td>AI-enabled Prayer mat</td><td>P: correct posture/rakaat guidance. E: user, mat, prayer sequence. A: speaker, display, vibration/app alert. S: pressure sensors, touch sensors.</td><td>Partially observable, deterministic, sequential, mostly static, discrete.</td><td>Simple reflex or model-based reflex.</td></tr>
+                    <tr><td>Ambulance drone</td><td>P: safe fast delivery, avoid collisions, preserve payload. E: city airspace, weather, obstacles, GPS route. A: rotors, navigation, payload release, communication. S: GPS, camera, lidar/radar, IMU.</td><td>Partially observable, stochastic, sequential, dynamic, continuous, multi-agent.</td><td>Goal-based or utility-based learning agent.</td></tr>
+                    <tr><td>AI-enabled smart shoes</td><td>P: accurate gait/health/navigation feedback. E: wearer, terrain, movement context. A: haptic motor, speaker, mobile notification. S: pressure sensors, IMU, GPS.</td><td>Partially observable, stochastic, sequential, dynamic, continuous.</td><td>Model-based reflex or learning agent.</td></tr>
+                    <tr><td>Autonomous car</td><td>P: safety, legality, comfort, time, fuel. E: road, traffic, pedestrians, weather. A: steering, throttle, brake, indicators. S: cameras, lidar, radar, GPS, speed sensors.</td><td>Partially observable, stochastic, sequential, dynamic, continuous, multi-agent.</td><td>Utility-based learning agent.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s22-q2">
+          <header>
+            <h3>Question 2: Dish antenna angle regression</h3>
+            <span class="marks">Marks: 5</span>
+          </header>
+          <div class="question-body">
+            <div class="assumption">The PDF instruction says to transform angles &theta; into x and y coordinates using radius r = 10. Standard polar conversion is: x = 10 &times; cos(&theta;), y = 10 &times; sin(&theta;) (where &theta; is converted to radians: &theta;<sub>rad</sub> = &theta;<sub>deg</sub> &times; &pi; / 180). We then fit a simple linear regression model: ŷ = b<sub>0</sub> + b<sub>1</sub>x.</div>
+            
+            <p><strong>Step 1: Coordinate Conversion Table:</strong></p>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Channel</th><th>Angle (&theta;<sub>deg</sub>)</th><th>x = 10 cos(&theta;)</th><th>y = 10 sin(&theta;)</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>34</td><td>8.2904</td><td>5.5919</td></tr>
+                  <tr><td>B</td><td>45</td><td>7.0711</td><td>7.0711</td></tr>
+                  <tr><td>C</td><td>55</td><td>5.7358</td><td>8.1915</td></tr>
+                  <tr><td>D</td><td>48</td><td>6.6913</td><td>7.4314</td></tr>
+                  <tr><td>E</td><td>49</td><td>6.5606</td><td>7.5471</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p><strong>Step 2: Linear Regression Summation Working:</strong></p>
+            <p>First, calculate the means of x and y:</p>
+            <ul>
+              <li><code>x̄ = (8.2904 + 7.0711 + 5.7358 + 6.6913 + 6.5606) / 5 = 34.3492 / 5 = 6.8698</code></li>
+              <li><code>ȳ = (5.5919 + 7.0711 + 8.1915 + 7.4314 + 7.5471) / 5 = 35.833 / 5 = 7.1666</code></li>
+            </ul>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Channel</th>
+                    <th>x<sub>i</sub></th>
+                    <th>y<sub>i</sub></th>
+                    <th>x<sub>i</sub> - x̄</th>
+                    <th>y<sub>i</sub> - ȳ</th>
+                    <th>(x<sub>i</sub> - x̄)<sup>2</sup></th>
+                    <th>(x<sub>i</sub> - x̄)(y<sub>i</sub> - ȳ)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>A</td><td>8.2904</td><td>5.5919</td><td>1.4206</td><td>-1.5747</td><td>2.0181</td><td>-2.2370</td></tr>
+                  <tr><td>B</td><td>7.0711</td><td>7.0711</td><td>0.2013</td><td>-0.0955</td><td>0.0405</td><td>-0.0192</td></tr>
+                  <tr><td>C</td><td>5.7358</td><td>8.1915</td><td>-1.1340</td><td>1.0249</td><td>1.2860</td><td>-1.1622</td></tr>
+                  <tr><td>D</td><td>6.6913</td><td>7.4314</td><td>-0.1785</td><td>0.2648</td><td>0.0319</td><td>-0.0473</td></tr>
+                  <tr><td>E</td><td>6.5606</td><td>7.5471</td><td>-0.3092</td><td>0.3805</td><td>0.0956</td><td>-0.1177</td></tr>
+                  <tr style="font-weight: bold; background: rgba(255, 255, 255, 0.08);">
+                    <td>Sum (&Sigma;)</td>
+                    <td>34.3492</td>
+                    <td>35.8330</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>S<sub>xx</sub> = 3.4721</td>
+                    <td>S<sub>xy</sub> = -3.5834</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p><strong>Step 3: Solve Coefficients:</strong></p>
+            <ul>
+              <li>Slope: <code>b<sub>1</sub> = S<sub>xy</sub> / S<sub>xx</sub> = -3.5834 / 3.4721 = -1.0321</code></li>
+              <li>Intercept: <code>b<sub>0</sub> = ȳ - b<sub>1</sub>x̄ = 7.1666 - (-1.0321 &times; 6.8698) = 7.1666 + 7.0903 = 14.2569</code></li>
+            </ul>
+            <span class="formula">Fitted line: Ŷ = 14.2569 - 1.0321x</span>
+            <p class="note">Channel names A to E are categories. If the real goal is "which channel?", a classifier is more appropriate. For the exam wording, the requested regression model is the coordinate line above.</p>
+          </div>
+        </article>
+
+        <article class="question" id="s22-q3">
+          <header>
+            <h3>Question 3: KNN classification and missing weight prediction</h3>
+            <span class="marks">Marks: 5 + 5</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>a) KNN for mobile signal 5, k = 3</h4>
+              <p>We classify the test point signal 5 at <code>(Distance = 32, Power = 10)</code>. Step-by-step Euclidean distance calculations for all 4 known signals:</p>
+              <ol>
+                <li><strong>Signal 1 (8, 20):</strong><br>
+                  <code>d<sub>1</sub> = &radic;((8 - 32)<sup>2</sup> + (20 - 10)<sup>2</sup>) = &radic;((-24)<sup>2</sup> + 10<sup>2</sup>) = &radic;(576 + 100) = &radic;676 = 26.00</code>
+                </li>
+                <li><strong>Signal 2 (4, 18):</strong><br>
+                  <code>d<sub>2</sub> = &radic;((4 - 32)<sup>2</sup> + (18 - 10)<sup>2</sup>) = &radic;((-28)<sup>2</sup> + 8<sup>2</sup>) = &radic;(784 + 64) = &radic;848 = 29.12</code>
+                </li>
+                <li><strong>Signal 3 (5, 16):</strong><br>
+                  <code>d<sub>3</sub> = &radic;((5 - 32)<sup>2</sup> + (16 - 10)<sup>2</sup>) = &radic;((-27)<sup>2</sup> + 6<sup>2</sup>) = &radic;(729 + 36) = &radic;765 = 27.66</code>
+                </li>
+                <li><strong>Signal 4 (10, 15):</strong><br>
+                  <code>d<sub>4</sub> = &radic;((10 - 32)<sup>2</sup> + (15 - 10)<sup>2</sup>) = &radic;((-22)<sup>2</sup> + 5<sup>2</sup>) = &radic;(484 + 25) = &radic;509 = 22.56</code>
+                </li>
+              </ol>
+              <p>Sort distances in ascending order:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Rank</th><th>Signal</th><th>Point</th><th>Class</th><th>Distance to Signal 5</th></tr></thead>
+                  <tbody>
+                    <tr style="background: rgba(53, 214, 198, 0.08);"><td>1</td><td>4</td><td>(10, 15)</td><td>Normal</td><td>22.56</td></tr>
+                    <tr style="background: rgba(53, 214, 198, 0.08);"><td>2</td><td>1</td><td>(8, 20)</td><td>Normal</td><td>26.00</td></tr>
+                    <tr style="background: rgba(53, 214, 198, 0.08);"><td>3</td><td>3</td><td>(5, 16)</td><td>Abnormal</td><td>27.66</td></tr>
+                    <tr><td>4</td><td>2</td><td>(4, 18)</td><td>Normal</td><td>29.12</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>The three nearest neighbors are: Signal 4 (Normal), Signal 1 (Normal), and Signal 3 (Abnormal).</p>
+              <p class="result">Majority vote: Normal (2 votes) vs Abnormal (1 vote). Thus, signal 5 is classified as <strong>Normal</strong>.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) Predict Saleem's weight using Age and Height</h4>
+              <p>The Patient dataset (Table D) containing 7 known patients and Saleem is shown below:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Patient Name</th><th>Age</th><th>Height</th><th>Weight</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>Aslam</td><td>46</td><td>6.0</td><td>60</td></tr>
+                    <tr><td>Umair</td><td>44</td><td>6.11</td><td>55</td></tr>
+                    <tr><td>Zain</td><td>36</td><td>5.9</td><td>56</td></tr>
+                    <tr><td>Umer</td><td>37</td><td>5.8</td><td>59</td></tr>
+                    <tr><td>Ali</td><td>39</td><td>5.3</td><td>76</td></tr>
+                    <tr><td>Ziauddin</td><td>40</td><td>5.6</td><td>78</td></tr>
+                    <tr><td>Waqar</td><td>42</td><td>5.5</td><td>80</td></tr>
+                    <tr style="background: rgba(243, 196, 92, 0.08);"><td>Saleem</td><td>44</td><td>5.8</td><td><strong>??</strong></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Fitting a multiple linear regression model <code>Weight = b<sub>0</sub> + b<sub>1</sub>(Age) + b<sub>2</sub>(Height)</code> on the 7 known patients results in the following equation:</p>
+              <span class="formula">Weight = 244.9152 + 1.0105 &times; (Age) - 38.2340 &times; (Height)</span>
+              
+              <p>Substituting Saleem's values (Age = 44, Height = 5.8) into the fitted equation:</p>
+              <ol>
+                <li><code>Weight = 244.9152 + 1.0105 &times; (44) - 38.2340 &times; (5.8)</code></li>
+                <li><code>Weight = 244.9152 + 44.4620 - 221.7572</code></li>
+                <li><code>Weight = 67.62 kg</code></li>
+              </ol>
+              <p class="result">Predicted weight for Saleem: approximately <strong>67.62 kg</strong>.</p>
+              <p class="note">Note: If KNN regression (k = 3) is applied instead, the 3 nearest patients to Saleem (Age=44, Height=5.8) based on scaled Age & Height are Umer (59 kg), Waqar (80 kg), and Aslam (60 kg) / Umair (55 kg), yielding an average weight of about 65 kg.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s22-q4">
+          <header>
+            <h3>Question 4: Linear activations, XOR, and feedforward propagation</h3>
+            <span class="marks">Marks: 2 + 4 + 4</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>A) Network with linear activation</h4>
+              <p>If each unit output is c times its weighted sum, a hidden layer does not add nonlinearity. The whole network collapses to one linear transformation.</p>
+              <span class="formula">h_j = c * (sum_i w1_ji x_i + b1_j)
+y_k = c * (sum_j w2_kj h_j + b2_k)
+    = c * (sum_j w2_kj * c * (sum_i w1_ji x_i + b1_j) + b2_k)</span>
+              <p>After expanding, y is still a weighted sum of input x plus a constant. So multiple linear layers are equivalent to a single linear layer.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>B) Neural architecture for XOR</h4>
+              <p>XOR is not linearly separable, so use at least one hidden layer with nonlinear/threshold neurons.</p>
+              <div class="svg-panel">
+                <svg viewBox="0 0 640 280" role="img" aria-label="XOR neural network architecture">
+                  <defs>
+                    <marker id="arrow-xor" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgba(238,244,255,.72)"/>
+                    </marker>
+                  </defs>
+                  <rect width="640" height="280" rx="8" fill="#0b1018"/>
+                  <g class="svg-text" text-anchor="middle">
+                    <circle cx="100" cy="88" r="28" class="svg-node"/><text x="100" y="93">x1</text>
+                    <circle cx="100" cy="190" r="28" class="svg-node"/><text x="100" y="195">x2</text>
+                    <circle cx="315" cy="88" r="34" class="svg-node alt"/><text x="315" y="86">OR</text><text x="315" y="104" class="svg-muted">b=-0.5</text>
+                    <circle cx="315" cy="190" r="34" class="svg-node alt"/><text x="315" y="188">NAND</text><text x="315" y="206" class="svg-muted">b=1.5</text>
+                    <circle cx="525" cy="140" r="34" class="svg-node rose"/><text x="525" y="138">AND</text><text x="525" y="156" class="svg-muted">b=-1.5</text>
+                  </g>
+                  <g stroke="rgba(238,244,255,.7)" stroke-width="2" marker-end="url(#arrow-xor)">
+                    <path d="M128 88 L280 88"/>
+                    <path d="M128 88 L282 176"/>
+                    <path d="M128 190 L282 102"/>
+                    <path d="M128 190 L280 190"/>
+                    <path d="M349 88 L491 130"/>
+                    <path d="M349 190 L491 150"/>
+                  </g>
+                  <text x="315" y="248" text-anchor="middle" class="svg-muted">Hidden layer computes OR and NAND; output AND gives XOR.</text>
+                </svg>
+              </div>
+              <span class="formula">Hidden h1 = step(x1 + x2 - 0.5)          // OR
+Hidden h2 = step(-x1 - x2 + 1.5)        // NAND
+Output y = step(h1 + h2 - 1.5)          // AND(OR, NAND) = XOR</span>
+            </div>
+
+            <div class="sub-answer">
+              <h4>C) Feedforward output for self-driving car network</h4>
+              <div class="assumption">The PDF weight table labels the x2-to-hidden layer weights as b21, b22, b23. We treat these as weights w21, w22, and w23 respectively. Biases for hidden neurons are b3 = -0.5, b4 = 0.3, b5 = 0.6, and output neuron bias is b6 = 0.25. (Note: the extra value b7 = 0.1 is not used in this architecture; if it is used in place of b6, the output becomes O = 0.5758).</div>
+              <p>Given Inputs: <code>x<sub>1</sub> = 3</code> (LiDAR), <code>x<sub>2</sub> = -5</code> (RADAR). Sigmoid activation: <code>&sigma;(z) = 1 / (1 + e<sup>-z</sup>)</code>.</p>
+              
+              <p><strong>Step 1: Calculate Hidden Layer Neurons (h3, h4, h5):</strong></p>
+              <ul>
+                <li><strong>Neuron h3:</strong><br>
+                  <code>z<sub>3</sub> = w<sub>11</sub>x<sub>1</sub> + w<sub>21</sub>x<sub>2</sub> + b<sub>3</sub> = -0.33 &times; 3 + 0.56 &times; (-5) - 0.5 = -0.99 - 2.80 - 0.50 = -4.29</code><br>
+                  <code>h<sub>3</sub> = &sigma;(-4.29) = 1 / (1 + e<sup>4.29</sup>) = 1 / (1 + 72.967) = 0.0135</code>
+                </li>
+                <li><strong>Neuron h4:</strong><br>
+                  <code>z<sub>4</sub> = w<sub>12</sub>x<sub>1</sub> + w<sub>22</sub>x<sub>2</sub> + b<sub>4</sub> = -0.76 &times; 3 + (-0.10) &times; (-5) + 0.30 = -2.28 + 0.50 + 0.30 = -1.48</code><br>
+                  <code>h<sub>4</sub> = &sigma;(-1.48) = 1 / (1 + e<sup>1.48</sup>) = 1 / (1 + 4.393) = 0.1854</code>
+                </li>
+                <li><strong>Neuron h5:</strong><br>
+                  <code>z<sub>5</sub> = w<sub>13</sub>x<sub>1</sub> + w<sub>23</sub>x<sub>2</sub> + b<sub>5</sub> = 0.22 &times; 3 + 0.38 &times; (-5) + 0.60 = 0.66 - 1.90 + 0.60 = -0.64</code><br>
+                  <code>h<sub>5</sub> = &sigma;(-0.64) = 1 / (1 + e<sup>0.64</sup>) = 1 / (1 + 1.896) = 0.3452</code>
+                </li>
+              </ul>
+
+              <p><strong>Step 2: Calculate Output Neuron (O):</strong></p>
+              <ul>
+                <li>Weights from hidden layer to output: <code>w<sub>31</sub> = -0.8</code>, <code>w<sub>41</sub> = 0.85</code>, <code>w<sub>51</sub> = 0.17</code>.</li>
+                <li>Output pre-activation:<br>
+                  <code>z<sub>O</sub> = w<sub>31</sub>h<sub>3</sub> + w<sub>41</sub>h<sub>4</sub> + w<sub>51</sub>h<sub>5</sub> + b<sub>6</sub></code><br>
+                  <code>z<sub>O</sub> = -0.8 &times; 0.0135 + 0.85 &times; 0.1854 + 0.17 &times; 0.3452 + 0.25 = -0.0108 + 0.1576 + 0.0587 + 0.25 = 0.4555</code>
+                </li>
+                <li>Output post-activation:<br>
+                  <code>O = &sigma;(0.4555) = 1 / (1 + e<sup>-0.4555</sup>) = 1 / (1 + 0.6341) = 0.6119</code>
+                </li>
+              </ul>
+              <p class="result">Final output O = 0.6119. Since this output (61.19%) is greater than the activation threshold of 0.5, the autonomous braking system will activate.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s22-q5">
+          <header>
+            <h3>Question 5: Bayesian network drawing and inference</h3>
+            <span class="marks">Marks: 5</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>a) Bayesian network from factorization</h4>
+              <span class="formula">B,C,E -> A
+D,E -> B
+F,H -> C
+G -> D
+G,H -> E
+H -> F
+G and H are roots</span>
+              <div class="svg-panel">
+                <svg viewBox="0 0 620 330" role="img" aria-label="Bayesian network for Spring 2022">
+                  <defs>
+                    <marker id="arrow-s22" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                      <path d="M0,0 L8,3.5 L0,7 Z" fill="rgba(238,244,255,.76)"/>
+                    </marker>
+                  </defs>
+                  <rect width="620" height="330" rx="8" fill="#0b1018"/>
+                  <g class="svg-text" text-anchor="middle">
+                    <circle cx="170" cy="270" r="25" class="svg-node alt"/><text x="170" y="275">G</text>
+                    <circle cx="410" cy="270" r="25" class="svg-node alt"/><text x="410" y="275">H</text>
+                    <circle cx="110" cy="190" r="25" class="svg-node"/><text x="110" y="195">D</text>
+                    <circle cx="245" cy="190" r="25" class="svg-node"/><text x="245" y="195">E</text>
+                    <circle cx="475" cy="190" r="25" class="svg-node"/><text x="475" y="195">F</text>
+                    <circle cx="175" cy="110" r="25" class="svg-node"/><text x="175" y="115">B</text>
+                    <circle cx="410" cy="110" r="25" class="svg-node"/><text x="410" y="115">C</text>
+                    <circle cx="292" cy="38" r="25" class="svg-node rose"/><text x="292" y="43">A</text>
+                  </g>
+                  <g stroke="rgba(238,244,255,.72)" stroke-width="2" fill="none" marker-end="url(#arrow-s22)">
+                    <path d="M155 250 L122 212"/>
+                    <path d="M183 250 L232 212"/>
+                    <path d="M392 252 L263 202"/>
+                    <path d="M421 247 L464 212"/>
+                    <path d="M120 171 L160 129"/>
+                    <path d="M237 166 L189 128"/>
+                    <path d="M259 171 L393 126"/>
+                    <path d="M470 166 L423 129"/>
+                    <path d="M191 99 L271 51"/>
+                    <path d="M404 86 L315 51"/>
+                    <path d="M256 169 L288 62"/>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <div class="sub-answer">
+              <h4>b) Calculate P(OS = PASS | ITC = PASS)</h4>
+              <p>The Bayesian network structure is: <code>OOP &rarr; DS</code>, <code>ITC &rarr; DS</code>, and <code>DS &rarr; OS</code>. The Conditional Probability Tables (CPTs) are defined as:</p>
+              <ul>
+                <li><strong>OOP:</strong> <code>P(OOP = PASS) = 0.4</code>, <code>P(OOP = FAIL) = 0.6</code></li>
+                <li><strong>ITC:</strong> <code>P(ITC = FAIL) = 0.4</code> &rarr; <code>P(ITC = PASS) = 0.6</code></li>
+                <li><strong>DS CPT (P(DS = PASS | OOP, ITC)):</strong>
+                  <ul>
+                    <li><code>P(DS = PASS | OOP = PASS, ITC = PASS) = 0.2</code></li>
+                    <li><code>P(DS = PASS | OOP = PASS, ITC = FAIL) = 0.8</code></li>
+                    <li><code>P(DS = PASS | OOP = FAIL, ITC = PASS) = 0.3</code></li>
+                    <li><code>P(DS = PASS | OOP = FAIL, ITC = FAIL) = 0.9</code></li>
+                  </ul>
+                </li>
+                <li><strong>OS CPT (P(OS = FAIL | DS)):</strong>
+                  <ul>
+                    <li><code>P(OS = FAIL | DS = PASS) = 0.7</code> &rarr; <code>P(OS = PASS | DS = PASS) = 0.3</code></li>
+                    <li><code>P(OS = FAIL | DS = FAIL) = 0.2</code> &rarr; <code>P(OS = PASS | DS = FAIL) = 0.8</code></li>
+                  </ul>
+                </li>
+              </ul>
+
+              <p><strong>Step-by-step Conditional Probability working:</strong></p>
+              <ol>
+                <li><strong>Find P(DS = PASS | ITC = PASS):</strong><br>
+                  Since OOP is independent of ITC, we use the law of total probability to marginalize over OOP:<br>
+                  <code>P(DS=PASS | ITC=PASS) = P(DS=PASS | OOP=PASS, ITC=PASS)P(OOP=PASS) + P(DS=PASS | OOP=FAIL, ITC=PASS)P(OOP=FAIL)</code><br>
+                  <code>P(DS=PASS | ITC=PASS) = (0.2 &times; 0.4) + (0.3 &times; 0.6) = 0.08 + 0.18 = 0.26</code><br>
+                  This means <code>P(DS = FAIL | ITC = PASS) = 1 - 0.26 = 0.74</code>.
+                </li>
+                <li><strong>Find P(OS = PASS | ITC = PASS):</strong><br>
+                  Since OS is conditionally independent of OOP and ITC given DS (Markov property of networks), we marginalize over DS:<br>
+                  <code>P(OS=PASS | ITC=PASS) = P(OS=PASS | DS=PASS)P(DS=PASS | ITC=PASS) + P(OS=PASS | DS=FAIL)P(DS=FAIL | ITC=PASS)</code><br>
+                  <code>P(OS=PASS | ITC=PASS) = (0.3 &times; 0.26) + (0.8 &times; 0.74)</code><br>
+                  <code>P(OS=PASS | ITC=PASS) = 0.078 + 0.592 = 0.67</code>
+                </li>
+              </ol>
+              <p class="result">P(OS = PASS | ITC = PASS) = 0.67 (or 67%).</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s22-q6">
+          <header>
+            <h3>Question 6: Best learning method for applications</h3>
+            <span class="marks">Marks: 2.5</span>
+          </header>
+          <div class="question-body">
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Application</th><th>Best applicable method</th><th>One-line justification</th></tr></thead>
+                <tbody>
+                  <tr><td>Hate Speech Detection</td><td>Supervised learning</td><td>Train a text classifier on labeled hate/not-hate examples.</td></tr>
+                  <tr><td>Self-driving car</td><td>Reinforcement learning</td><td>The car makes sequential actions and receives reward/penalty for safe progress.</td></tr>
+                  <tr><td>Rescue robots</td><td>Reinforcement learning</td><td>The robot learns navigation and rescue actions from reward signals in uncertain environments.</td></tr>
+                  <tr><td>Stock Market prediction</td><td>Supervised learning</td><td>Historical features can be mapped to a future price, return, or movement label.</td></tr>
+                  <tr><td>Bank transaction fraud detection</td><td>Supervised learning, with unsupervised anomaly detection if labels are scarce</td><td>Labeled fraud data supports classification; unlabeled data can be screened for unusual transactions.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s22-q7">
+          <header>
+            <h3>Question 7: Decision tree entropy for AI course passing</h3>
+            <span class="marks">Marks: 5</span>
+          </header>
+          <div class="question-body">
+            <p>Data has 3 Yes and 3 No outcomes.</p>
+            <span class="formula">i) H(Pass) = -3/6 log2(3/6) - 3/6 log2(3/6) = 1
+
+ii) H(Pass | Grade):
+Low: {Yes, No} -> H = 1
+Medium: {Yes, No} -> H = 1
+High: {Yes, No} -> H = 1
+Weighted entropy = 1
+
+iii) H(Pass | Study):
+Study=Yes -> {Yes, Yes, Yes} -> H = 0
+Study=No -> {No, No, No} -> H = 0
+Weighted entropy = 0
+
+iv) Information gains:
+IG(Grade) = 1 - 1 = 0
+IG(Study) = 1 - 0 = 1</span>
+            <p class="result">Root node: Study, because it has information gain 1.</p>
+            <div class="svg-panel">
+              <svg viewBox="0 0 420 200" role="img" aria-label="Decision tree for AI course pass">
+                <rect width="420" height="200" rx="8" fill="#0b1018"/>
+                <circle cx="210" cy="52" r="34" class="svg-node"/><text x="210" y="57" text-anchor="middle" class="svg-text">Study?</text>
+                <path d="M185 75 L120 125" class="svg-line"/>
+                <path d="M235 75 L300 125" class="svg-line"/>
+                <text x="144" y="102" class="svg-muted">Yes</text>
+                <text x="262" y="102" class="svg-muted">No</text>
+                <rect x="68" y="125" width="104" height="44" rx="8" class="svg-node alt"/>
+                <text x="120" y="153" text-anchor="middle" class="svg-text">Pass = Yes</text>
+                <rect x="248" y="125" width="104" height="44" rx="8" class="svg-node rose"/>
+                <text x="300" y="153" text-anchor="middle" class="svg-text">Pass = No</text>
+              </svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s22-q8">
+          <header>
+            <h3>Question 8: Ten steps for AI-enabled IoT smart city</h3>
+            <span class="marks">Marks: 2.5</span>
+          </header>
+          <div class="question-body">
+            <ol>
+              <li>Define city goals: traffic reduction, safety, energy efficiency, public health, education support, and citizen services.</li>
+              <li>Collect data from IoT sensors, traffic cameras, buses, hospitals, schools, banks, utility meters, weather stations, and citizen apps.</li>
+              <li>Create privacy, consent, cybersecurity, retention, and access-control rules before large-scale collection.</li>
+              <li>Build a central data lake with cleaning, deduplication, timestamp alignment, missing-value handling, and metadata.</li>
+              <li>Label datasets where supervised models are needed, such as accidents, fraud, disease risk, or student performance.</li>
+              <li>Use supervised learning for fraud detection, medical risk prediction, student-performance prediction, and demand forecasting.</li>
+              <li>Use unsupervised learning for anomaly detection in utilities, traffic pattern discovery, and clustering neighborhoods by service needs.</li>
+              <li>Use reinforcement learning for adaptive traffic lights, emergency routing, and energy-control policies.</li>
+              <li>Deploy models through cloud plus edge devices so real-time decisions can happen near sensors when latency matters.</li>
+              <li>Monitor model accuracy, bias, drift, and failures; retrain models and keep human oversight for high-stakes decisions.</li>
+            </ol>
+          </div>
+        </article>
+      </section>
+
+      <section class="paper" id="s24">
+        <div class="paper-head">
+          <div>
+            <h2>AI Final Spring 24</h2>
+            <p>Source PDF: <span class="mono">AI2002 - Final Exam Paper-2024- CS.pdf</span>. Seven questions covering AI agents, search, probability, Naive Bayes, regression, KNN, ID3, K-means, and neural networks.</p>
+          </div>
+          <span class="pill">50 marks</span>
+        </div>
+
+        <article class="question" id="s24-q1">
+          <header>
+            <h3>Question 1: Brief conceptual answers</h3>
+            <span class="marks">Marks: 10</span>
+          </header>
+          <div class="question-body">
+            <ol>
+              <li><strong>Rational agent characteristics:</strong> perceives the environment, selects actions that maximize expected performance, uses available knowledge, handles uncertainty, and can improve from experience.</li>
+              <li><strong>Why CSPs use factored state representation:</strong> a CSP is compactly represented by variables, domains, and constraints. This avoids enumerating every complete state and lets algorithms exploit local constraint structure.</li>
+              <li><strong>Drone environment episodic or sequential:</strong> sequential. Each delivery action affects later position, battery, route options, timing, and safety.</li>
+              <li><strong>Local beam search vs hill climbing:</strong> hill climbing keeps one current state. Local beam search keeps k states, expands all their successors, and keeps the best k for the next step.</li>
+              <li><strong>DFS vs BFS complexity:</strong> BFS has time and space O(b^(d+1)); it is complete and optimal for equal step costs. DFS has time O(b^m), space O(bm), may be incomplete in infinite depth, and is not optimal.</li>
+              <li><strong>Rook Manhattan heuristic admissible?</strong> False. A rook can move across a whole row/column in one move, so Manhattan distance can overestimate. Example: distance 7 squares in same row, true cost 1.</li>
+              <li><strong>Minimax optimality:</strong> minimax guarantees the best worst-case outcome when the opponent is optimal. Against a non-optimal opponent, minimax remains safe but may miss strategies that exploit mistakes.</li>
+              <li><strong>Two hill-climbing limitations:</strong> it can get stuck in local maxima and plateaus/ridges; it is also sensitive to the starting state and not guaranteed optimal.</li>
+              <li><strong>CSP search tree size:</strong> with commutativity/fixed variable order, leaves are d^n. Without commutativity, the same assignments can appear in n! orders, giving n! d^n leaves.</li>
+              <li><strong>Iterative deepening in adversarial search:</strong> yes. Depth-limited minimax/alpha-beta can be run at depths 1, 2, 3, ... until time runs out, returning the best move found so far.</li>
+            </ol>
+          </div>
+        </article>
+
+        <article class="question" id="s24-q2">
+          <header>
+            <h3>Question 2: Trait probability and Bayesian network joint probabilities</h3>
+            <span class="marks">Marks: 6</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>A) Trait A and Trait B</h4>
+              <p>We are given the following priors and conditional probabilities:</p>
+              <ul>
+                <li>Probability of genetic Trait A: <code>P(A) = 0.30</code> &rarr; <code>P(A&rsquo;) = 1 - 0.30 = 0.70</code></li>
+                <li>Probability of Trait B given Trait A: <code>P(B | A) = 0.70</code></li>
+                <li>Probability of Trait B given NO Trait A: <code>P(B | A&rsquo;) = 0.20</code></li>
+              </ul>
+              <p><strong>Calculations:</strong></p>
+              <ol>
+                <li><strong>What is the conditional probability P(B | A)?</strong><br>
+                  This is given directly in the problem statement:<br>
+                  <code>P(B | A) = 0.70 (or 70%)</code>
+                </li>
+                <li><strong>What is the unconditional probability P(B)?</strong><br>
+                  Using the law of total probability:<br>
+                  <code>P(B) = P(B | A) &times; P(A) + P(B | A&rsquo;) &times; P(A&rsquo;)</code><br>
+                  <code>P(B) = (0.70 &times; 0.30) + (0.20 &times; 0.70) = 0.21 + 0.14 = 0.35 (or 35%)</code>
+                </li>
+              </ol>
+              <p class="result">Answers: 1) P(B | A) = 0.70, 2) P(B) = 0.35.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>B) Bayesian network probability calculations</h4>
+              <div class="assumption">State mapping from the rendered figure: e0 = easy, e1 = difficult; i0 = low IQ, i1 = high IQ; s0 = low aptitude, s1 = high aptitude; m1 = pass/high marks, m0 = fail/low marks; a0 = admission secured, a1 = no admission. This mapping matches the CPT trends in the figure.</div>
+              <p>The joint probability distribution factorizes as: <code>P(E, I, S, M, A) = P(E) &times; P(I) &times; P(S | I) &times; P(M | I, E) &times; P(A | M)</code>. We substitute CPT values for both cases:</p>
+              <ol>
+                <li><strong>Probability of difficult exam (e1), low IQ (i0), low aptitude (s0), pass (m1), and admission secured (a0):</strong><br>
+                  <code>P(e1, i0, s0, m1, a0) = P(e1) &times; P(i0) &times; P(s0 | i0) &times; P(m1 | i0, e1) &times; P(a0 | m1)</code><br>
+                  CPT Lookups: <code>P(e1) = 0.3</code>, <code>P(i0) = 0.8</code>, <code>P(s0 | i0) = 0.75</code>, <code>P(m1 | i0, e1) = 0.1</code>, <code>P(a0 | m1) = 0.9</code>.<br>
+                  <code>P(e1, i0, s0, m1, a0) = 0.3 &times; 0.8 &times; 0.75 &times; 0.1 &times; 0.9 = 0.0162 (or 1.62%)</code>
+                </li>
+                <li><strong>Probability of high IQ (i1), high aptitude (s1), easy exam (e0), fail (m0), and no admission (a1):</strong><br>
+                  <code>P(i1, s1, e0, m0, a1) = P(i1) &times; P(s1 | i1) &times; P(e0) &times; P(m0 | i1, e0) &times; P(a1 | m0)</code><br>
+                  CPT Lookups: <code>P(i1) = 0.2</code>, <code>P(s1 | i1) = 0.6</code>, <code>P(e0) = 0.7</code>, <code>P(m0 | i1, e0) = 0.5</code>, <code>P(a1 | m0) = 0.4</code>.<br>
+                  <code>P(i1, s1, e0, m0, a1) = 0.2 &times; 0.6 &times; 0.7 &times; 0.5 &times; 0.4 = 0.0168 (or 1.68%)</code>
+                </li>
+              </ol>
+              <p class="result">Answers: 1) P(e1, i0, s0, m1, a0) = 0.0162, 2) P(i1, s1, e0, m0, a1) = 0.0168.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s24-q3">
+          <header>
+            <h3>Question 3: Naive Bayes with categorical features</h3>
+            <span class="marks">Marks: 2 + 4</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>A) Feature independence and missing data</h4>
+              <p>Naive Bayes assumes features are conditionally independent given the class, so it multiplies the feature likelihoods: P(class) * P(f1|class) * P(f2|class) * ... For missing data, the missing feature can be ignored in the product or marginalized, so classification can still proceed with available features.</p>
+            </div>
+            <div class="sub-answer">
+              <h4>B) Classify new instances</h4>
+              <p>The Training Data (Table 1) is shown below:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Instance</th><th>Education Level</th><th>Career</th><th>Years of Experience</th><th>Salary</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1</td><td>High School</td><td>Management</td><td>Less than 3</td><td>Low</td></tr>
+                    <tr><td>2</td><td>High School</td><td>Management</td><td>3 to 10</td><td>Low</td></tr>
+                    <tr><td>3</td><td>College</td><td>Management</td><td>Less than 3</td><td>High</td></tr>
+                    <tr><td>4</td><td>College</td><td>Service</td><td>More than 10</td><td>Low</td></tr>
+                    <tr><td>5</td><td>High School</td><td>Service</td><td>3 to 10</td><td>Low</td></tr>
+                    <tr><td>6</td><td>College</td><td>Service</td><td>3 to 10</td><td>High</td></tr>
+                    <tr><td>7</td><td>College</td><td>Management</td><td>More than 10</td><td>High</td></tr>
+                    <tr><td>8</td><td>College</td><td>Service</td><td>Less than 3</td><td>Low</td></tr>
+                    <tr><td>9</td><td>High School</td><td>Management</td><td>More than 10</td><td>High</td></tr>
+                    <tr><td>10</td><td>High School</td><td>Service</td><td>More than 10</td><td>Low</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p><strong>Step 1: Calculate Class Prior Probabilities:</strong></p>
+              <ul>
+                <li>Total Training Instances = 10</li>
+                <li><code>P(Salary = Low) = 6 / 10 = 0.6</code></li>
+                <li><code>P(Salary = High) = 4 / 10 = 0.4</code></li>
+              </ul>
+
+              <p><strong>Step 2: Laplace-Smoothed Likelihood calculations:</strong></p>
+              <p>We use Laplace smoothing: <code>P(x | Class) = (count(x, Class) + 1) / (count(Class) + d)</code>, where <code>d</code> is the number of distinct values for that attribute. Here, for Education (High School, College, Graduate), Career (Management, Service, Retail), and Experience (Less than 3, 3 to 10, More than 10), we have <code>d = 3</code> for all three attributes.</p>
+              
+              <p><strong>Test Instance calculations:</strong></p>
+              <ol>
+                <li><strong>Instance 1: High School, Service, Less than 3</strong><br>
+                  <ul>
+                    <li>Low Class likelihoods:<br>
+                      <code>P(HS|Low) = (4+1)/(6+3) = 5/9</code>, <code>P(Serv|Low) = (4+1)/(6+3) = 5/9</code>, <code>P(<3|Low) = (2+1)/(6+3) = 3/9 = 1/3</code><br>
+                      <code>Score(Low) = P(Low) &times; P(HS|Low) &times; P(Serv|Low) &times; P(<3|Low) = 0.6 &times; 5/9 &times; 5/9 &times; 1/3 = 0.06173</code>
+                    </li>
+                    <li>High Class likelihoods:<br>
+                      <code>P(HS|High) = (1+1)/(4+3) = 2/7</code>, <code>P(Serv|High) = (0+1)/(4+3) = 1/7</code>, <code>P(<3|High) = (1+1)/(4+3) = 2/7</code><br>
+                      <code>Score(High) = P(High) &times; P(HS|High) &times; P(Serv|High) &times; P(<3|High) = 0.4 &times; 2/7 &times; 1/7 &times; 2/7 = 0.00933</code>
+                    </li>
+                  </ul>
+                  Since <code>Score(Low) 0.06173 > Score(High) 0.00933</code>, the prediction is <strong>Low</strong>.
+                </li>
+                <li><strong>Instance 2: College, Retail, Less than 3</strong><br>
+                  <ul>
+                    <li>Low Class likelihoods:<br>
+                      <code>P(Coll|Low) = (2+1)/(6+3) = 3/9 = 1/3</code>, <code>P(Retail|Low) = (0+1)/(6+3) = 1/9</code>, <code>P(<3|Low) = (2+1)/(6+3) = 3/9 = 1/3</code><br>
+                      <code>Score(Low) = 0.6 &times; 1/3 &times; 1/9 &times; 1/3 = 0.00741</code>
+                    </li>
+                    <li>High Class likelihoods:<br>
+                      <code>P(Coll|High) = (3+1)/(4+3) = 4/7</code>, <code>P(Retail|High) = (0+1)/(4+3) = 1/7</code>, <code>P(<3|High) = (1+1)/(4+3) = 2/7</code><br>
+                      <code>Score(High) = 0.4 &times; 4/7 &times; 1/7 &times; 2/7 = 0.00933</code>
+                    </li>
+                  </ul>
+                  Since <code>Score(High) 0.00933 > Score(Low) 0.00741</code>, the prediction is <strong>High</strong>.
+                </li>
+                <li><strong>Instance 3: Graduate, Service, 3 to 10</strong><br>
+                  <ul>
+                    <li>Low Class likelihoods:<br>
+                      <code>P(Grad|Low) = (0+1)/(6+3) = 1/9</code>, <code>P(Serv|Low) = (4+1)/(6+3) = 5/9</code>, <code>P(3-10|Low) = (2+1)/(6+3) = 3/9 = 1/3</code><br>
+                      <code>Score(Low) = 0.6 &times; 1/9 &times; 5/9 &times; 1/3 = 0.01235</code>
+                    </li>
+                    <li>High Class likelihoods:<br>
+                      <code>P(Grad|High) = (0+1)/(4+3) = 1/7</code>, <code>P(Serv|High) = (0+1)/(4+3) = 1/7</code>, <code>P(3-10|High) = (1+1)/(4+3) = 2/7</code><br>
+                      <code>Score(High) = 0.4 &times; 1/7 &times; 1/7 &times; 2/7 = 0.00466</code>
+                    </li>
+                  </ul>
+                  Since <code>Score(Low) 0.01235 > Score(High) 0.00466</code>, the prediction is <strong>Low</strong>.
+                </li>
+              </ol>
+              <p class="result">Final Predictions: 1) Low, 2) High, 3) Low.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s24-q4">
+          <header>
+            <h3>Question 4: Regression, correlation, and yield prediction</h3>
+            <span class="marks">Marks: 4</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>A) Applications</h4>
+              <p><strong>Regression:</strong> predicting house prices from area/features; predicting crop yield from rainfall/temperature. <strong>Correlation:</strong> measuring relationship between study hours and marks; measuring relationship between temperature and electricity demand.</p>
+            </div>
+            <div class="sub-answer">
+              <h4>B) Yield prediction at 125 C</h4>
+              <p>The Training Data (Table 3) is given as follows:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Temperature in C&deg; (x)</th><th>0</th><th>25</th><th>50</th><th>75</th><th>100</th><th>125</th></tr></thead>
+                  <tbody><tr><td>Yield in Grams (y)</td><td>10</td><td>25</td><td>40</td><td>55</td><td>70</td><td><strong>??</strong></td></tr></tbody>
+                </table>
+              </div>
+              <p><strong>Step-by-step linear modeling:</strong></p>
+              <ol>
+                <li><strong>Analyze the constant rate of change (slope):</strong><br>
+                  For every step of &Delta;x = 25 C&deg;, the yield y increases by &Delta;y = 15 grams:<br>
+                  <code>Slope (b<sub>1</sub>) = &Delta;y / &Delta;x = (25 - 10) / (25 - 0) = 15 / 25 = 0.6 grams per C&deg;</code>
+                </li>
+                <li><strong>Identify the y-intercept (b<sub>0</sub>):</strong><br>
+                  The yield at temperature x = 0 is directly given as 10 grams:<br>
+                  <code>b<sub>0</sub> = 10</code>
+                </li>
+                <li><strong>Formulate the regression equation:</strong><br>
+                  <code>Ŷ = b<sub>0</sub> + b<sub>1</sub>x = 10 + 0.6x</code>
+                </li>
+                <li><strong>Predict the yield at x = 125 C&deg;:</strong><br>
+                  <code>Ŷ(125) = 10 + 0.6 &times; 125 = 10 + 75 = 85 grams</code>
+                </li>
+              </ol>
+              <p class="result">Estimated chemical yield at 125 C&deg; = 85 grams.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s24-q5">
+          <header>
+            <h3>Question 5: KNN diabetes classification and ID3 animal tree</h3>
+            <span class="marks">Marks: 4 + 8</span>
+          </header>
+          <div class="question-body">
+            <div class="sub-answer">
+              <h4>A) KNN for diabetes, k = 3</h4>
+              <p>The Training Data (Table 5) represents 9 patients with features [Age, BMI, BP, Insulin, Glucose]:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Patient</th><th>Age</th><th>BMI</th><th>BP</th><th>Insulin</th><th>Glucose</th><th>Diabetes</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1</td><td>25</td><td>22</td><td>70</td><td>85</td><td>130</td><td>0</td></tr>
+                    <tr><td>2</td><td>30</td><td>30</td><td>85</td><td>90</td><td>150</td><td>1</td></tr>
+                    <tr><td>3</td><td>35</td><td>28</td><td>80</td><td>105</td><td>160</td><td>1</td></tr>
+                    <tr><td>4</td><td>40</td><td>25</td><td>75</td><td>100</td><td>140</td><td>0</td></tr>
+                    <tr><td>5</td><td>50</td><td>27</td><td>78</td><td>95</td><td>145</td><td>0</td></tr>
+                    <tr><td>6</td><td>55</td><td>31</td><td>90</td><td>110</td><td>155</td><td>1</td></tr>
+                    <tr><td>7</td><td>60</td><td>26</td><td>85</td><td>108</td><td>148</td><td>0</td></tr>
+                    <tr><td>8</td><td>65</td><td>29</td><td>88</td><td>115</td><td>165</td><td>1</td></tr>
+                    <tr><td>9</td><td>70</td><td>32</td><td>92</td><td>120</td><td>170</td><td>1</td></tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p>We classify the test patient <code>(45, 28, 80, 100, 140)</code>. 5-D Euclidean distance working is shown below:</p>
+              <ul>
+                <li><strong>Patient 1:</strong> <code>d = &radic;((25-45)<sup>2</sup> + (22-28)<sup>2</sup> + (70-80)<sup>2</sup> + (85-100)<sup>2</sup> + (130-140)<sup>2</sup>) = &radic;((-20)<sup>2</sup> + (-6)<sup>2</sup> + (-10)<sup>2</sup> + (-15)<sup>2</sup> + (-10)<sup>2</sup>) = &radic;(400+36+100+225+100) = &radic;861 = 29.343</code></li>
+                <li><strong>Patient 4:</strong> <code>d = &radic;((40-45)<sup>2</sup> + (25-28)<sup>2</sup> + (75-80)<sup>2</sup> + (100-100)<sup>2</sup> + (140-140)<sup>2</sup>) = &radic;((-5)<sup>2</sup> + (-3)<sup>2</sup> + (-5)<sup>2</sup> + 0<sup>2</sup> + 0<sup>2</sup>) = &radic;(25+9+25+0+0) = &radic;59 = 7.681</code></li>
+                <li><strong>Patient 5:</strong> <code>d = &radic;((50-45)<sup>2</sup> + (27-28)<sup>2</sup> + (78-80)<sup>2</sup> + (95-100)<sup>2</sup> + (145-140)<sup>2</sup>) = &radic;(5<sup>2</sup> + (-1)<sup>2</sup> + (-2)<sup>2</sup> + (-5)<sup>2</sup> + 5<sup>2</sup>) = &radic;(25+1+4+25+25) = &radic;80 = 8.944</code></li>
+              </ul>
+              
+              <p>Distance calculations summarized and ranked:</p>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Rank</th><th>Patient</th><th>Distance</th><th>Diabetes Label</th></tr></thead>
+                  <tbody>
+                    <tr style="background: rgba(53, 214, 198, 0.08);"><td>1</td><td>4</td><td>7.681</td><td>0</td></tr>
+                    <tr style="background: rgba(53, 214, 198, 0.08);"><td>2</td><td>5</td><td>8.944</td><td>0</td></tr>
+                    <tr style="background: rgba(53, 214, 198, 0.08);"><td>3</td><td>7</td><td>19.545</td><td>0</td></tr>
+                    <tr><td>4</td><td>2</td><td>21.307</td><td>1</td></tr>
+                    <tr><td>5</td><td>3</td><td>22.913</td><td>1</td></tr>
+                    <tr><td>6</td><td>6</td><td>23.108</td><td>1</td></tr>
+                    <tr><td>7</td><td>1</td><td>29.343</td><td>0</td></tr>
+                    <tr><td>8</td><td>8</td><td>36.263</td><td>1</td></tr>
+                    <tr><td>9</td><td>9</td><td>45.662</td><td>1</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>The three nearest patients are Patient 4 (label 0), Patient 5 (label 0), and Patient 7 (label 0).</p>
+              <p class="result">Majority vote: 0 (Diabetes = No) with 3/3 votes.</p>
+              <p class="note">A small k is sensitive to noise; a large k may blur class boundaries. Choose k by validation or cross-validation, often after scaling features.</p>
+            </div>
+
+            <div class="sub-answer">
+              <h4>B) ID3 decision tree for animal classification</h4>
+              <p>The dataset represents 10 animals with attributes Habitat, Diet, Activity, and Class (Mammal, Bird, Reptile):</p>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr><th>Instance</th><th>Habitat</th><th>Diet</th><th>Activity</th><th>Animal Type</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>1</td><td>Forest</td><td>Herbivore</td><td>Diurnal</td><td>Mammal</td></tr>
+                    <tr><td>2</td><td>Forest</td><td>Carnivore</td><td>Nocturnal</td><td>Mammal</td></tr>
+                    <tr><td>3</td><td>Desert</td><td>Carnivore</td><td>Nocturnal</td><td>Reptile</td></tr>
+                    <tr><td>4</td><td>Grassland</td><td>Herbivore</td><td>Diurnal</td><td>Bird</td></tr>
+                    <tr><td>5</td><td>Forest</td><td>Omnivore</td><td>Nocturnal</td><td>Mammal</td></tr>
+                    <tr><td>6</td><td>Grassland</td><td>Omnivore</td><td>Diurnal</td><td>Bird</td></tr>
+                    <tr><td>7</td><td>Desert</td><td>Omnivore</td><td>Nocturnal</td><td>Reptile</td></tr>
+                    <tr><td>8</td><td>Grassland</td><td>Herbivore</td><td>Diurnal</td><td>Bird</td></tr>
+                    <tr><td>9</td><td>Forest</td><td>Herbivore</td><td>Nocturnal</td><td>Mammal</td></tr>
+                    <tr><td>10</td><td>Desert</td><td>Herbivore</td><td>Diurnal</td><td>Reptile</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Step-by-step split calculations:</strong></p>
+              <ol>
+                <li><strong>Calculate Target Variable Entropy H(Target):</strong><br>
+                  Class counts: Mammal (M) = 4, Bird (B) = 3, Reptile (R) = 3. Total instances = 10.<br>
+                  <code>H(Target) = - 0.4 log<sub>2</sub>(0.4) - 0.3 log<sub>2</sub>(0.3) - 0.3 log<sub>2</sub>(0.3) = 0.5288 + 0.5211 + 0.5211 = 1.571</code>
+                </li>
+                <li><strong>Evaluate splits for "Habitat" attribute:</strong>
+                  <ul>
+                    <li><code>Habitat = Forest</code>: 4 instances {Mammal, Mammal, Mammal, Mammal} &rarr; All same class! Entropy <code>H(S<sub>Forest</sub>) = 0</code></li>
+                    <li><code>Habitat = Grassland</code>: 3 instances {Bird, Bird, Bird} &rarr; All same class! Entropy <code>H(S<sub>Grassland</sub>) = 0</code></li>
+                    <li><code>Habitat = Desert</code>: 3 instances {Reptile, Reptile, Reptile} &rarr; All same class! Entropy <code>H(S<sub>Desert</sub>) = 0</code></li>
+                  </ul>
+                  Weighted conditional entropy:<br>
+                  <code>H(Target | Habitat) = (4/10) &times; 0 + (3/10) &times; 0 + (3/10) &times; 0 = 0</code><br>
+                  Information Gain:<br>
+                  <code>IG(Habitat) = H(Target) - H(Target | Habitat) = 1.571 - 0 = 1.571</code>
+                </li>
+              </ol>
+              <p class="result">Habitat is selected as the root node because it provides maximum information gain (IG = 1.571) and achieves perfect classification with zero residual entropy.</p>
+              <div class="svg-panel">
+                <svg viewBox="0 0 560 240" role="img" aria-label="Animal decision tree">
+                  <rect width="560" height="240" rx="8" fill="#0b1018"/>
+                  <circle cx="280" cy="54" r="36" class="svg-node"/><text x="280" y="59" text-anchor="middle" class="svg-text">Habitat</text>
+                  <path d="M252 78 L120 145" class="svg-line"/>
+                  <path d="M280 90 L280 145" class="svg-line"/>
+                  <path d="M308 78 L440 145" class="svg-line"/>
+                  <text x="145" y="114" class="svg-muted">Forest</text>
+                  <text x="292" y="122" class="svg-muted">Grassland</text>
+                  <text x="396" y="114" class="svg-muted">Desert</text>
+                  <rect x="60" y="145" width="120" height="48" rx="8" class="svg-node alt"/><text x="120" y="174" text-anchor="middle" class="svg-text">Mammal</text>
+                  <rect x="230" y="145" width="100" height="48" rx="8" class="svg-node alt"/><text x="280" y="174" text-anchor="middle" class="svg-text">Bird</text>
+                  <rect x="380" y="145" width="120" height="48" rx="8" class="svg-node alt"/><text x="440" y="174" text-anchor="middle" class="svg-text">Reptile</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="question" id="s24-q6">
+          <header>
+            <h3>Question 6: K-means on the visible 1-D table</h3>
+            <span class="marks">Marks: 6</span>
+          </header>
+          <div class="question-body">
+            <div class="assumption">The rendered Spring 2024 PDF table shows only one row of coordinates, labeled x. I solve the visible data as 1-D K-means. The 2021 paper contains a similar 2-D version; that one is solved in Spring 21 Question 2 above.</div>
+            <p>Data: A1=2, A2=2, A3=8, A4=5, A5=7, A6=6, A7=1, A8=4. Initial centers: A1=2, A4=5, A7=1.</p>
+            <p><strong>Step-by-step 1-D K-means Working:</strong></p>
+            <p>We use absolute difference <code>d(x<sub>1</sub>, x<sub>2</sub>) = |x<sub>1</sub> - x<sub>2</sub>|</code> as the distance metric. Data points are A1(2), A2(2), A3(8), A4(5), A5(7), A6(6), A7(1), A8(4). Initial centroids are C1<sup>(0)</sup> = 2, C2<sup>(0)</sup> = 5, C3<sup>(0)</sup> = 1.</p>
+            
+            <h5>Epoch 1 Working:</h5>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Point</th>
+                    <th>x</th>
+                    <th>Distance to C1<sup>(0)</sup>=2</th>
+                    <th>Distance to C2<sup>(0)</sup>=5</th>
+                    <th>Distance to C3<sup>(0)</sup>=1</th>
+                    <th>Assigned Cluster</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>A1</td><td>2</td><td>0</td><td>3</td><td>1</td><td>C1</td></tr>
+                  <tr><td>A2</td><td>2</td><td>0</td><td>3</td><td>1</td><td>C1</td></tr>
+                  <tr><td>A3</td><td>8</td><td>6</td><td>3</td><td>7</td><td>C2</td></tr>
+                  <tr><td>A4</td><td>5</td><td>3</td><td>0</td><td>4</td><td>C2</td></tr>
+                  <tr><td>A5</td><td>7</td><td>5</td><td>2</td><td>6</td><td>C2</td></tr>
+                  <tr><td>A6</td><td>6</td><td>4</td><td>1</td><td>5</td><td>C2</td></tr>
+                  <tr><td>A7</td><td>1</td><td>1</td><td>4</td><td>0</td><td>C3</td></tr>
+                  <tr><td>A8</td><td>4</td><td>2</td><td>1</td><td>3</td><td>C2</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Centroid Updates after Epoch 1:</strong></p>
+            <ul>
+              <li><strong>C1:</strong> {A1, A2} &rarr; New Centroid C1<sup>(1)</sup> = (2+2)/2 = 2</li>
+              <li><strong>C2:</strong> {A3, A4, A5, A6, A8} &rarr; New Centroid C2<sup>(1)</sup> = (8+5+7+6+4)/5 = 6</li>
+              <li><strong>C3:</strong> {A7} &rarr; New Centroid C3<sup>(1)</sup> = 1</li>
+            </ul>
+
+            <h5>Epoch 2 Working:</h5>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Point</th>
+                    <th>x</th>
+                    <th>Distance to C1<sup>(1)</sup>=2</th>
+                    <th>Distance to C2<sup>(1)</sup>=6</th>
+                    <th>Distance to C3<sup>(1)</sup>=1</th>
+                    <th>Assigned Cluster</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>A1</td><td>2</td><td>0</td><td>4</td><td>1</td><td>C1</td></tr>
+                  <tr><td>A2</td><td>2</td><td>0</td><td>4</td><td>1</td><td>C1</td></tr>
+                  <tr><td>A3</td><td>8</td><td>6</td><td>2</td><td>7</td><td>C2</td></tr>
+                  <tr><td>A4</td><td>5</td><td>3</td><td>1</td><td>4</td><td>C2</td></tr>
+                  <tr><td>A5</td><td>7</td><td>5</td><td>1</td><td>6</td><td>C2</td></tr>
+                  <tr><td>A6</td><td>6</td><td>4</td><td>0</td><td>5</td><td>C2</td></tr>
+                  <tr><td>A7</td><td>1</td><td>1</td><td>5</td><td>0</td><td>C3</td></tr>
+                  <tr><td>A8</td><td>4</td><td>2</td><td>2</td><td>3</td><td>C2 / C1 (Tie)*</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="note">*Note: For point A8(4), it is equally distant from C1(2) and C2(6). We break ties by keeping A8 in its previous cluster (C2), or assigning to the smaller index (C1). Under the persistence rule (retaining previous cluster C2):</p>
+            <ul>
+              <li><strong>C1:</strong> {A1, A2} &rarr; New Centroid C1<sup>(2)</sup> = 2</li>
+              <li><strong>C2:</strong> {A3, A4, A5, A6, A8} &rarr; New Centroid C2<sup>(2)</sup> = 6</li>
+              <li><strong>C3:</strong> {A7} &rarr; New Centroid C3<sup>(2)</sup> = 1</li>
+            </ul>
+            <p class="result">Centroids after 2nd epoch: C1 = 2, C2 = 6, C3 = 1. Newly formed cluster sets are: C1 = {A1, A2}, C2 = {A3, A4, A5, A6, A8}, C3 = {A7}. Since centroids and assignments are identical to the previous epoch, <strong>0 more iterations</strong> are needed to converge.</p>
+          </div>
+        </article>
+
+        <article class="question" id="s24-q7">
+          <header>
+            <h3>Question 7: Feedforward neural network with two hidden layers</h3>
+            <span class="marks">Marks: 6</span>
+          </header>
+          <div class="question-body">
+            <div class="assumption">The PDF lists a bias beside every weight. I therefore calculate each neuron's pre-activation as sum(w_i input_i + bias_i). If your instructor intended one bias per neuron, the final number changes, but the feedforward process is the same.</div>
+            <div class="svg-panel">
+              <svg viewBox="0 0 700 300" role="img" aria-label="Two hidden layer neural network">
+                <defs>
+                  <marker id="arrow-nn24" markerWidth="8" markerHeight="8" refX="7" refY="3.5" orient="auto">
+                    <path d="M0,0 L8,3.5 L0,7 Z" fill="rgba(238,244,255,.55)"/>
+                  </marker>
+                </defs>
+                <rect width="700" height="300" rx="8" fill="#0b1018"/>
+                <g class="svg-text" text-anchor="middle">
+                  <circle cx="80" cy="105" r="24" class="svg-node"/><text x="80" y="110">x1</text>
+                  <circle cx="80" cy="195" r="24" class="svg-node"/><text x="80" y="200">x2</text>
+                  <circle cx="230" cy="70" r="24" class="svg-node alt"/><text x="230" y="75">h1</text>
+                  <circle cx="230" cy="150" r="24" class="svg-node alt"/><text x="230" y="155">h2</text>
+                  <circle cx="230" cy="230" r="24" class="svg-node alt"/><text x="230" y="235">h3</text>
+                  <circle cx="420" cy="70" r="24" class="svg-node"/><text x="420" y="75">g1</text>
+                  <circle cx="420" cy="150" r="24" class="svg-node"/><text x="420" y="155">g2</text>
+                  <circle cx="420" cy="230" r="24" class="svg-node"/><text x="420" y="235">g3</text>
+                  <circle cx="600" cy="150" r="28" class="svg-node rose"/><text x="600" y="155">O</text>
+                </g>
+                <g stroke="rgba(238,244,255,.38)" stroke-width="1.5" marker-end="url(#arrow-nn24)">
+                  <path d="M104 105 L206 70"/><path d="M104 105 L206 150"/><path d="M104 105 L206 230"/>
+                  <path d="M104 195 L206 70"/><path d="M104 195 L206 150"/><path d="M104 195 L206 230"/>
+                  <path d="M254 70 L396 70"/><path d="M254 70 L396 150"/><path d="M254 70 L396 230"/>
+                  <path d="M254 150 L396 70"/><path d="M254 150 L396 150"/><path d="M254 150 L396 230"/>
+                  <path d="M254 230 L396 70"/><path d="M254 230 L396 150"/><path d="M254 230 L396 230"/>
+                  <path d="M444 70 L572 150"/><path d="M444 150 L572 150"/><path d="M444 230 L572 150"/>
+                </g>
+              </svg>
+            </div>
+            <p><strong>Step-by-step neural network calculations:</strong></p>
+            <p>Given Inputs: <code>x = [0.6, -0.1]</code>. Sigmoid activation: <code>&sigma;(z) = 1 / (1 + e<sup>-z</sup>)</code>.</p>
+            <p class="assumption">The exam paper lists a bias value next to every connection weight. We therefore calculate the pre-activation for a node as: <code>z = &Sigma; (w<sub>ij</sub> &times; Input<sub>j</sub> + bias<sub>ij</sub>)</code>. If your instructor intended one bias per node rather than per connection, the exact calculation details change, but the feedforward propagation flow is the same.</p>
+            
+            <ol>
+              <li><strong>Layer 1 Hidden Neurons (h1, h2, h3):</strong><br>
+                <ul>
+                  <li><strong>Neuron h1:</strong><br>
+                    <code>z<sub>h1</sub> = (w<sub>11</sub>x<sub>1</sub> + b<sub>11</sub>) + (w<sub>21</sub>x<sub>2</sub> + b<sub>21</sub>) = (0.1 &times; 0.6 - 0.2) + (-0.3 &times; (-0.1) + 0.4) = (-0.14) + (0.43) = 0.29</code><br>
+                    <code>h1 = &sigma;(0.29) = 1 / (1 + e<sup>-0.29</sup>) = 0.5720</code>
+                  </li>
+                  <li><strong>Neuron h2:</strong><br>
+                    <code>z<sub>h2</sub> = (w<sub>12</sub>x<sub>1</sub> + b<sub>12</sub>) + (w<sub>22</sub>x<sub>2</sub> + b<sub>22</sub>) = (0.5 &times; 0.6 - 0.1) + (-0.2 &times; (-0.1) + 0.3) = (0.20) + (0.32) = 0.52</code><br>
+                    <code>h2 = &sigma;(0.52) = 1 / (1 + e<sup>-0.52</sup>) = 0.6271</code>
+                  </li>
+                  <li><strong>Neuron h3:</strong><br>
+                    <code>z<sub>h3</sub> = (w<sub>13</sub>x<sub>1</sub> + b<sub>13</sub>) + (w<sub>23</sub>x<sub>2</sub> + b<sub>23</sub>) = (0.4 &times; 0.6 + 0.2) + (-0.1 &times; (-0.1) - 0.5) = (0.44) + (-0.49) = -0.05</code><br>
+                    <code>h3 = &sigma;(-0.05) = 1 / (1 + e<sup>0.05</sup>) = 0.4875</code>
+                  </li>
+                </ul>
+              </li>
+              <li><strong>Layer 2 Hidden Neurons (g1, g2, g3):</strong><br>
+                <ul>
+                  <li><strong>Neuron g1:</strong><br>
+                    <code>z<sub>g1</sub> = (w<sub>h1,g1</sub>h1 + b<sub>h1,g1</sub>) + (w<sub>h2,g1</sub>h2 + b<sub>h2,g1</sub>) + (w<sub>h3,g1</sub>h3 + b<sub>h3,g1</sub>)</code><br>
+                    <code>z<sub>g1</sub> = (0.2 &times; 0.5720 + 0.1) + (-0.4 &times; 0.6271 + 0.3) + (0.5 &times; 0.4875 - 0.2) = 0.2144 + 0.0492 + 0.0438 = 0.3074</code><br>
+                    <code>g1 = &sigma;(0.3074) = 0.5763</code>
+                  </li>
+                  <li><strong>Neuron g2:</strong><br>
+                    <code>z<sub>g2</sub> = (w<sub>h1,g2</sub>h1 + b<sub>h1,g2</sub>) + (w<sub>h2,g2</sub>h2 + b<sub>h2,g2</sub>) + (w<sub>h3,g2</sub>h3 + b<sub>h3,g2</sub>)</code><br>
+                    <code>z<sub>g2</sub> = (0.3 &times; 0.5720 - 0.4) + (-0.2 &times; 0.6271 + 0.2) + (0.1 &times; 0.4875 + 0.3) = (-0.2284) + 0.0746 + 0.3488 = 0.1950</code><br>
+                    <code>g2 = &sigma;(0.1950) = 0.5486</code>
+                  </li>
+                  <li><strong>Neuron g3:</strong><br>
+                    <code>z<sub>g3</sub> = (w<sub>h1,g3</sub>h1 + b<sub>h1,g3</sub>) + (w<sub>h2,g3</sub>h2 + b<sub>h2,g3</sub>) + (w<sub>h3,g3</sub>h3 + b<sub>h3,g3</sub>)</code><br>
+                    <code>z<sub>g3</sub> = (-0.1 &times; 0.5720 + 0.2) + (0.4 &times; 0.6271 - 0.3) + (-0.2 &times; 0.4875 + 0.1) = 0.1428 - 0.0492 + 0.0025 = 0.0961</code><br>
+                    <code>g3 = &sigma;(0.0961) = 0.5240</code>
+                  </li>
+                </ul>
+              </li>
+              <li><strong>Output Layer Neuron (O):</strong><br>
+                <ul>
+                  <li>Output pre-activation:<br>
+                    <code>z<sub>O</sub> = (w<sub>g1,O</sub>g1 + b<sub>g1,O</sub>) + (w<sub>g2,O</sub>g2 + b<sub>g2,O</sub>) + (w<sub>g3,O</sub>g3 + b<sub>g3,O</sub>)</code><br>
+                    <code>z<sub>O</sub> = (-0.3 &times; 0.5763 + 0.5) + (0.2 &times; 0.5486 - 0.1) + (0.4 &times; 0.5240 + 0.3) = 0.3271 + 0.0097 + 0.5096 = 0.8464</code><br>
+                    <code>O = &sigma;(0.8464) = 1 / (1 + e<sup>-0.8464</sup>) = 0.6998</code>
+                  </li>
+                </ul>
+              </li>
+            </ol>
+            <p class="result">Final network output = <strong>0.6998</strong> (or 69.98%).</p>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const menuButton = document.getElementById('menuButton');
+    const links = Array.from(document.querySelectorAll('.nav-link'));
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+
+    menuButton?.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    });
+
+    overlay?.addEventListener('click', closeSidebar);
+    links.forEach(link => link.addEventListener('click', closeSidebar));
+
+    const sections = links
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        links.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+        });
+      });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0.01 });
+
+    sections.forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>

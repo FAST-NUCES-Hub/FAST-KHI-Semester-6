@@ -49,19 +49,19 @@ For any queries/improvement feel free to contact me on k232001@nu.edu.pk<br>For 
   </tr>
   <tr>
     <td>2</td>
-    <td>CS3009</td>
-    <td>SE</td>
-    <td><a href="#-software-engineering">Software Engineering</a></td>
-    <td>Core</td>
-    <td>3</td>
-  </tr>
-  <tr>
-    <td>3</td>
     <td>AI2002</td>
     <td>AI</td>
     <td><a href="#-artificial-intelligence">Artificial Intelligence</a></td>
     <td>Core</td>
     <td>3+1</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>CS3009</td>
+    <td>SE</td>
+    <td><a href="#-software-engineering">Software Engineering</a></td>
+    <td>Core</td>
+    <td>3</td>
   </tr>
   <tr>
     <td>4</td>
@@ -215,6 +215,19 @@ pata chale toh mujhe bhi bata dena pls
 🔗 Full courses:
 
 ---
+### 📌 Artificial Intelligence:
+🔗 Useful Youtube Playlists:
+- [Introduction to AI](https://www.youtube.com/playlist?list=PLVH9dsU_QdUItPfJCI7oySNlrEIYk2hG9) - playlist under supervision of Sir Usama Antuley.
+
+🔗 Resources:
+
+🔗 Lab:
+- [Constraint Optimization](https://developers.google.com/optimization/cp) - Google OR Tools guide.
+
+🔗 Google Drives:
+
+🔗 Full courses:
+---
 
 ### 📌 Software Engineering:
 🔗 Useful Youtube Playlists:
@@ -227,17 +240,8 @@ pata chale toh mujhe bhi bata dena pls
 
 🔗 Full courses:
 
----
-### 📌 Artificial Intelligence:
-🔗 Useful Youtube Playlists:
-
-🔗 Resources:
-
-🔗 Lab:
-
-🔗 Google Drives:
-
-🔗 Full courses:
+🔗 Projects:
+- [WARZISH](https://warzish.vercel.app) - minimalist workout logging webapp.
 
 ---
 ### 📌 Applied Human Computer Interaction:
@@ -249,6 +253,11 @@ pata chale toh mujhe bhi bata dena pls
 🔗 Useful Youtube Playlists:
 
 🔗 Resources:
+- AI Tools for reading Research Papers:
+  - [researchrabbit.ai](https://www.researchrabbit.ai/)
+  - [scholarcy.com](https://www.scholarcy.com/)
+  - [jenni.ai](https://jenni.ai/)
+- [How to read any research paper faster than everyone else](https://www.youtube.com/watch?v=CjHXKmf3dC8&authuser=1)
 
 🔗 Lab:
 

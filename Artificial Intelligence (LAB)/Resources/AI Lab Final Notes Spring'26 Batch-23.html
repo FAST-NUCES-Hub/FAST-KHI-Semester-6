@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Lab — Cram Notes</title>
+<style>
+:root {
+  --bg: #fdfdfa;
+  --panel: #ffffff;
+  --text: #1a1a1a;
+  --muted: #666;
+  --accent: #c2410c;
+  --accent2: #0369a1;
+  --code-bg: #f5f3ee;
+  --code-border: #e5e1d8;
+  --keyword: #c2410c;
+  --string: #15803d;
+  --comment: #94a3b8;
+  --func: #0369a1;
+  --num: #9333ea;
+  --kbd-bg: #eee;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --hl: #fef3c7;
+}
+[data-theme="dark"] {
+  --bg: #0f1115;
+  --panel: #181b22;
+  --text: #e6e6e6;
+  --muted: #9aa0a6;
+  --accent: #fb923c;
+  --accent2: #38bdf8;
+  --code-bg: #11141a;
+  --code-border: #2a2f3a;
+  --keyword: #fb923c;
+  --string: #86efac;
+  --comment: #6b7280;
+  --func: #38bdf8;
+  --num: #c4b5fd;
+  --kbd-bg: #2a2f3a;
+  --shadow: 0 1px 3px rgba(0,0,0,0.4);
+  --hl: #422006;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  font-size: 15px;
+}
+.layout { display: flex; min-height: 100vh; }
+nav.side {
+  width: 260px;
+  background: var(--panel);
+  border-right: 1px solid var(--code-border);
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  font-size: 13.5px;
+}
+nav.side h2 {
+  font-size: 14px;
+  margin: 14px 0 6px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--code-border);
+  padding-bottom: 4px;
+}
+nav.side h2:first-child { margin-top: 0; }
+nav.side a {
+  display: block;
+  color: var(--text);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin: 1px 0;
+}
+nav.side a:hover { background: var(--code-bg); color: var(--accent); }
+main {
+  flex: 1;
+  padding: 32px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+h1 { font-size: 28px; color: var(--accent); margin: 0 0 4px; }
+h1 + .sub { color: var(--muted); margin-bottom: 28px; font-size: 14px; }
+h2 {
+  font-size: 22px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 6px;
+  margin-top: 40px;
+  color: var(--accent);
+}
+h3 {
+  font-size: 18px;
+  color: var(--accent2);
+  margin-top: 26px;
+}
+h4 { font-size: 15px; color: var(--text); margin-top: 18px; }
+p { margin: 8px 0; }
+.toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+  background: var(--panel);
+  border: 1px solid var(--code-border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: var(--shadow);
+}
+.toggle:hover { border-color: var(--accent); }
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-left: 3px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 13px;
+  position: relative;
+  margin: 10px 0;
+}
+code {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13px;
+}
+:not(pre) > code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--code-border);
+  font-size: 12.5px;
+}
+.kw { color: var(--keyword); font-weight: 600; }
+.str { color: var(--string); }
+.cm { color: var(--comment); font-style: italic; }
+.fn { color: var(--func); }
+.num { color: var(--num); }
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--panel);
+  border: 1px solid var(--code-border);
+  color: var(--muted);
+  padding: 2px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.copy-btn:hover { color: var(--accent); }
+.note {
+  background: var(--code-bg);
+  border-left: 3px solid var(--accent2);
+  padding: 10px 14px;
+  margin: 12px 0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.warn {
+  background: var(--hl);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  margin: 12px 0;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.swap {
+  background: var(--hl);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+ul, ol { padding-left: 22px; }
+li { margin: 3px 0; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 13.5px;
+}
+th, td {
+  border: 1px solid var(--code-border);
+  padding: 6px 10px;
+  text-align: left;
+}
+th { background: var(--code-bg); color: var(--accent); }
+.qa {
+  background: var(--panel);
+  border: 1px solid var(--code-border);
+  border-left: 3px solid var(--accent2);
+  padding: 10px 14px;
+  margin: 8px 0;
+  border-radius: 4px;
+}
+.qa .q { font-weight: 600; color: var(--accent2); }
+.qa .a { font-family: "SF Mono", Menlo, monospace; font-size: 13px; margin-top: 4px; }
+hr { border: none; border-top: 1px dashed var(--code-border); margin: 24px 0; }
+.tag {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.tag.blue { background: var(--accent2); }
+@media (max-width: 768px) {
+  .layout { flex-direction: column; }
+  nav.side { width: 100%; height: auto; position: static; }
+  main { padding: 20px; }
+}
+</style>
+</head>
+<body data-theme="light">
+<button class="toggle" onclick="toggleTheme()">🌙 Dark</button>
+
+<div class="layout">
+<nav class="side">
+  <h2>Quick Jump</h2>
+  <a href="#exam-strategy">⚡ Exam Strategy</a>
+  <a href="#oneliners">📝 One-Liners (Part 1)</a>
+  <a href="#question-bank">❓ Possible Questions</a>
+
+  <h2>Lab 7 — CSP</h2>
+  <a href="#csp-concepts">Concepts</a>
+  <a href="#csp-template">Master Template</a>
+  <a href="#csp-constraints">All Constraint Types</a>
+  <a href="#csp-variables">Variable Types</a>
+  <a href="#csp-examples">Worked Examples</a>
+
+  <h2>Lab 8 — Alpha-Beta</h2>
+  <a href="#ab-concepts">Concepts</a>
+  <a href="#ab-template">Master Template</a>
+  <a href="#ab-chess">Chess Game</a>
+
+  <h2>Lab 9 — Bayesian</h2>
+  <a href="#bn-concepts">Concepts</a>
+  <a href="#bn-template">Master Template</a>
+  <a href="#bn-cpd-rules">CPD Rules</a>
+
+  <h2>Lab 9 — Markov</h2>
+  <a href="#mm-concepts">Concepts</a>
+  <a href="#mm-template">Master Template</a>
+
+  <h2>Lab 10 — Supervised</h2>
+  <a href="#sl-concepts">Concepts</a>
+  <a href="#sl-eda">EDA & Preprocessing</a>
+  <a href="#sl-template">Master Template</a>
+  <a href="#sl-models">All Models</a>
+  <a href="#sl-metrics">Metrics</a>
+
+  <h2>Lab 11 — Unsupervised</h2>
+  <a href="#usl-concepts">Concepts</a>
+  <a href="#usl-template">KMeans Template</a>
+
+  <h2>Reference</h2>
+  <a href="#libraries">Library Cheat Sheet</a>
+  <a href="#errors">Common Errors</a>
+</nav>
+
+<main>
+<h1>AI Lab — Final Cram Notes</h1>
+<div class="sub">Exam-ready. Memorize the templates → swap the highlighted parts for whatever the question asks.</div>
+
+<!-- ============ EXAM STRATEGY ============ -->
+<h2 id="exam-strategy">⚡ Exam Strategy (Read First)</h2>
+<div class="warn">
+<strong>Game plan:</strong> Memorize ONE master template per lab. Every question is the same template with different variables/constraints/columns. Don't memorize 5 versions of CSP code — memorize 1 and swap pieces.
+</div>
+
+<table>
+<tr><th>Part</th><th>Format</th><th>Strategy</th></tr>
+<tr><td>Part 1</td><td>10 × one-liners</td><td>Memorize the import / function / method calls below. Most ask for ONE line.</td></tr>
+<tr><td>Part 2 — Q1</td><td>CSP</td><td>Use the CSP master template. Just rewrite variables, domain, constraints.</td></tr>
+<tr><td>Part 2 — Q2</td><td>Bayesian / Markov / α-β</td><td>3 templates. Pick which one matches the question.</td></tr>
+<tr><td>Part 2 — Q3</td><td>ML + EDA</td><td>One pipeline: load → EDA → preprocess → split → model → predict → evaluate.</td></tr>
+</table>
+
+<div class="note">
+<strong>Universal swap principle:</strong> In all ML/CSP code, only 3 things really change between problems:
+<ol>
+<li>The <span class="swap">data / variables</span> (feature names, domain values, CPT numbers)</li>
+<li>The <span class="swap">model line</span> (e.g. <code>LinearRegression()</code> → <code>DecisionTreeClassifier()</code>)</li>
+<li>The <span class="swap">evaluation metric</span> (accuracy_score / r2_score / mean_squared_error)</li>
+</ol>
+The 80% scaffolding around them stays the same.
+</div>
+
+<!-- ============ ONE LINERS ============ -->
+<h2 id="oneliners">📝 One-Liner Cheat Sheet (Part 1)</h2>
+<p>10 most-likely one-line questions. Memorize the verb + library combo.</p>
+
+<h3>Imports — every lab has these</h3>
+<pre><code><span class="kw">from</span> ortools.sat.python <span class="kw">import</span> cp_model
+<span class="kw">from</span> pgmpy.models <span class="kw">import</span> DiscreteBayesianNetwork
+<span class="kw">from</span> pgmpy.factors.discrete <span class="kw">import</span> TabularCPD
+<span class="kw">from</span> pgmpy.inference <span class="kw">import</span> VariableElimination
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split, KFold, LeaveOneOut
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> LabelEncoder, StandardScaler
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression, LogisticRegression
+<span class="kw">from</span> sklearn.tree <span class="kw">import</span> DecisionTreeClassifier
+<span class="kw">from</span> sklearn.svm <span class="kw">import</span> SVC
+<span class="kw">from</span> sklearn.naive_bayes <span class="kw">import</span> GaussianNB
+<span class="kw">from</span> sklearn.cluster <span class="kw">import</span> KMeans
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> accuracy_score, r2_score, mean_squared_error, confusion_matrix, roc_curve, roc_auc_score</code></pre>
+
+<h3>One-liner answers — memorize these</h3>
+
+<div class="qa"><div class="q">Q: Read a CSV into pandas</div>
+<div class="a">df = pd.read_csv("data.csv")</div></div>
+
+<div class="qa"><div class="q">Q: Show first 5 rows</div>
+<div class="a">df.head()</div></div>
+
+<div class="qa"><div class="q">Q: Check missing values</div>
+<div class="a">df.isnull().sum()</div></div>
+
+<div class="qa"><div class="q">Q: Drop missing values</div>
+<div class="a">df.dropna()</div></div>
+
+<div class="qa"><div class="q">Q: Fill missing 'age' with mean</div>
+<div class="a">df['age'] = df['age'].fillna(df['age'].mean())</div></div>
+
+<div class="qa"><div class="q">Q: Fill 'embarked' with mode</div>
+<div class="a">df['embarked'] = df['embarked'].fillna(df['embarked'].mode()[0])</div></div>
+
+<div class="qa"><div class="q">Q: Label encode 'gender' column</div>
+<div class="a">df['gender'] = LabelEncoder().fit_transform(df['gender'])</div></div>
+
+<div class="qa"><div class="q">Q: One-hot encode 'embarked'</div>
+<div class="a">df = pd.get_dummies(df, columns=['embarked'], drop_first=True)</div></div>
+
+<div class="qa"><div class="q">Q: Standardize features</div>
+<div class="a">X_scaled = StandardScaler().fit_transform(X)</div></div>
+
+<div class="qa"><div class="q">Q: 80/20 train-test split</div>
+<div class="a">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)</div></div>
+
+<div class="qa"><div class="q">Q: Train any sklearn model</div>
+<div class="a">model.fit(X_train, y_train)</div></div>
+
+<div class="qa"><div class="q">Q: Predict using trained model</div>
+<div class="a">y_pred = model.predict(X_test)</div></div>
+
+<div class="qa"><div class="q">Q: Get probability (for ROC)</div>
+<div class="a">probs = model.predict_proba(X_test)[:, 1]</div></div>
+
+<div class="qa"><div class="q">Q: Compute classification accuracy</div>
+<div class="a">accuracy_score(y_test, y_pred)</div></div>
+
+<div class="qa"><div class="q">Q: Compute R² score (regression)</div>
+<div class="a">r2_score(y_test, y_pred)</div></div>
+
+<div class="qa"><div class="q">Q: Compute MSE</div>
+<div class="a">mean_squared_error(y_test, y_pred)</div></div>
+
+<div class="qa"><div class="q">Q: 5-fold cross-validation object</div>
+<div class="a">kf = KFold(n_splits=5, shuffle=True, random_state=42)</div></div>
+
+<div class="qa"><div class="q">Q: Create CSP model</div>
+<div class="a">model = cp_model.CpModel()</div></div>
+
+<div class="qa"><div class="q">Q: Create integer variable in CSP (range 0..n-1)</div>
+<div class="a">x = model.new_int_var(0, n - 1, "x")</div></div>
+
+<div class="qa"><div class="q">Q: Add inequality constraint</div>
+<div class="a">model.add(x != y)</div></div>
+
+<div class="qa"><div class="q">Q: All variables must differ</div>
+<div class="a">model.add_all_different([x, y, z])</div></div>
+
+<div class="qa"><div class="q">Q: Maximize objective</div>
+<div class="a">model.maximize(2*x + 2*y + 3*z)</div></div>
+
+<div class="qa"><div class="q">Q: Solve CSP</div>
+<div class="a">solver = cp_model.CpSolver(); status = solver.solve(model)</div></div>
+
+<div class="qa"><div class="q">Q: Get solution value</div>
+<div class="a">solver.value(x)</div></div>
+
+<div class="qa"><div class="q">Q: Define a Bayesian Network structure</div>
+<div class="a">model = DiscreteBayesianNetwork([('A', 'B'), ('B', 'C')])</div></div>
+
+<div class="qa"><div class="q">Q: Define a CPD with no parents</div>
+<div class="a">TabularCPD(variable='A', variable_card=2, values=[[0.7], [0.3]])</div></div>
+
+<div class="qa"><div class="q">Q: Add CPDs to model</div>
+<div class="a">model.add_cpds(cpd1, cpd2, cpd3)</div></div>
+
+<div class="qa"><div class="q">Q: Verify Bayesian model</div>
+<div class="a">model.check_model()</div></div>
+
+<div class="qa"><div class="q">Q: Inference object</div>
+<div class="a">inference = VariableElimination(model)</div></div>
+
+<div class="qa"><div class="q">Q: Run a query</div>
+<div class="a">inference.query(variables=['Burglary'], evidence={'JohnCalls': 1})</div></div>
+
+<div class="qa"><div class="q">Q: Pick a random next state (Markov)</div>
+<div class="a">np.random.choice(states, p=transition_matrix[i])</div></div>
+
+<div class="qa"><div class="q">Q: Run K-Means with 3 clusters</div>
+<div class="a">KMeans(n_clusters=3, random_state=42, n_init=10).fit(X)</div></div>
+
+<div class="qa"><div class="q">Q: Get cluster labels</div>
+<div class="a">kmeans.labels_  # or kmeans.fit_predict(X)</div></div>
+
+<div class="qa"><div class="q">Q: Get K-Means inertia</div>
+<div class="a">kmeans.inertia_</div></div>
+
+<div class="qa"><div class="q">Q: Quick histogram of numerical features</div>
+<div class="a">df[['age', 'fare']].hist(bins=20, figsize=(8,4)); plt.show()</div></div>
+
+<div class="qa"><div class="q">Q: Seaborn scatter plot</div>
+<div class="a">sns.scatterplot(x='x', y='y', data=df)</div></div>
+
+<div class="qa"><div class="q">Q: Drop a column</div>
+<div class="a">X = df.drop('country', axis=1)</div></div>
+
+<div class="qa"><div class="q">Q: Group-wise mean</div>
+<div class="a">df.groupby('Cluster').mean()</div></div>
+
+<div class="qa"><div class="q">Q: Math infinity (for α/β)</div>
+<div class="a">import math; math.inf  # or float('inf')</div></div>
+
+<!-- ============ QUESTION BANK ============ -->
+<h2 id="question-bank">❓ Possible Exam Questions (compiled from labs)</h2>
+
+<h3>Part 1 — One-line questions (10 likely)</h3>
+<ol>
+<li>Write a line to import the OR-Tools CP-SAT module.</li>
+<li>Create a CP-SAT integer variable x with domain 0..4.</li>
+<li>Add a constraint that x and y must differ.</li>
+<li>Add an "all different" constraint over [a, b, c, d].</li>
+<li>Maximize the objective <code>2x + 3y</code>.</li>
+<li>Define a Bayesian Network with edges A→C and B→C.</li>
+<li>Create a TabularCPD for a binary node 'Rain' with P(Rain)=0.2.</li>
+<li>Run inference for P(Burglary | JohnCalls=1).</li>
+<li>Build a Markov transition matrix for 2 states.</li>
+<li>Sample the next state given current row index 0.</li>
+<li>Read CSV "data.csv" into a pandas DataFrame.</li>
+<li>Print the count of nulls per column.</li>
+<li>Fill missing 'age' with the mean.</li>
+<li>Label-encode the 'gender' column.</li>
+<li>One-hot encode 'embarked', dropping the first dummy.</li>
+<li>Standard-scale a feature matrix X.</li>
+<li>Split data 80/20 with random_state=42.</li>
+<li>Train a Linear Regression model on (X_train, y_train).</li>
+<li>Predict using a trained model on X_test.</li>
+<li>Compute classification accuracy.</li>
+<li>Compute R² for a regression model.</li>
+<li>Make a 5-fold CV iterator.</li>
+<li>Make a Decision Tree classifier object.</li>
+<li>Make an SVM with RBF kernel.</li>
+<li>Make a KMeans with 3 clusters.</li>
+<li>Get the inertia of a fitted KMeans.</li>
+<li>Plot a histogram of two columns.</li>
+<li>Compute confusion matrix.</li>
+<li>Compute ROC AUC score.</li>
+<li>Drop a column called 'country'.</li>
+</ol>
+
+<h3>Part 2 — Likely full-question prompts</h3>
+<h4>CSP (Q1)</h4>
+<ul>
+<li>Map coloring (no two neighbors same color).</li>
+<li>Sudoku 4×4 or 9×9 with row/col/box uniqueness.</li>
+<li>N-Queens (board_size variable).</li>
+<li>Diagonal-only robot path on a grid.</li>
+<li>Largest landmass / island perimeter on a binary grid.</li>
+<li>TSP for N cities (minimize tour length).</li>
+<li>Job scheduling with deadlines.</li>
+<li>Equation-style: maximize <code>2x+2y+3z</code> subject to linear inequalities.</li>
+<li>Cryptarithmetic (SEND + MORE = MONEY style).</li>
+<li>Class scheduling (no overlap of teacher/room).</li>
+</ul>
+
+<h4>Bayesian / Markov / Alpha-Beta (Q2)</h4>
+<ul>
+<li>Burglary–Earthquake–Alarm–John–Mary network.</li>
+<li>Disease (Flu/Cold) given symptoms (Fever, Cough, Fatigue, Chills).</li>
+<li>Student exam network: Intelligence + StudyHours + Difficulty → Grade → Pass.</li>
+<li>Card-deck conditional probability questions.</li>
+<li>Marble bag Markov chain (Red/Blue).</li>
+<li>Weather Markov (Sunny/Cloudy/Rainy) — simulate N days, count rainy days.</li>
+<li>α-β pruning on a given game tree (numbers at leaves).</li>
+<li>α-β coin-pickup game (Max vs Min from list ends).</li>
+<li>α-β chess (depth-limited, evaluation function).</li>
+<li>α-β Tic-Tac-Toe AI move.</li>
+</ul>
+
+<h4>Supervised / Unsupervised + EDA (Q3)</h4>
+<ul>
+<li>House price prediction (regression).</li>
+<li>Spam classifier (binary classification).</li>
+<li>High-value vs low-value customer (SVM).</li>
+<li>Titanic survival prediction (classification).</li>
+<li>Iris flower classification.</li>
+<li>Decision tree for any tabular dataset.</li>
+<li>K-Means clustering on country / customer / wine data.</li>
+<li>Elbow method to choose K.</li>
+<li>Find optimal K then profile clusters.</li>
+<li>EDA: head, info, isnull, describe + histogram + correlation heatmap.</li>
+</ul>
+
+
+<!-- ============ LAB 7 CSP ============ -->
+<h2 id="csp-concepts">Lab 7 — Constraint Satisfaction Problems</h2>
+
+<h3 id="csp-concepts">Concepts (1-line each)</h3>
+<ul>
+<li><strong>CSP</strong> = problem defined by 3 things: <code>X</code> (variables), <code>D</code> (domains), <code>C</code> (constraints). Goal: assign values from D to X without breaking any C.</li>
+<li><strong>Consistent (legal) assignment</strong>: doesn't violate any constraint (e.g. Ludo players each get a different colour).</li>
+<li><strong>Complete assignment</strong>: every variable has a value (e.g. fully solved Sudoku).</li>
+<li><strong>Partial assignment</strong>: only some variables assigned (e.g. half-filled Sudoku).</li>
+<li><strong>Discrete domain</strong>: infinite, multiple variables can map to same state.</li>
+<li><strong>Finite domain</strong>: one specific domain per variable, continuous states.</li>
+</ul>
+
+<h4>Constraint types — memorise the names</h4>
+<table>
+<tr><th>Type</th><th>Meaning</th><th>OR-Tools call</th></tr>
+<tr><td>Unary</td><td>Restricts ONE variable</td><td><code>model.add(x != 3)</code></td></tr>
+<tr><td>Binary</td><td>Two variables related</td><td><code>model.add(x != y)</code></td></tr>
+<tr><td>Global</td><td>Whole set, no pairwise pattern</td><td><code>model.add_all_different([x,y,z])</code></td></tr>
+<tr><td>Linear</td><td>Integer variables in linear form</td><td><code>model.add(2*x + 3*y &lt;= 10)</code></td></tr>
+<tr><td>Non-linear</td><td>Non-linear integer relation</td><td><code>model.add(x*y == z)</code></td></tr>
+</table>
+
+<h4>Consistencies</h4>
+<ul>
+<li><strong>Node consistency</strong>: every value in domain satisfies unary constraints.</li>
+<li><strong>Arc consistency</strong>: every value in domain satisfies binary constraints with a related variable.</li>
+<li><strong>Path consistency</strong>: arc consistency extended over a third variable.</li>
+<li><strong>k-consistency</strong>: stronger generalisation over k variables.</li>
+<li><strong>Constraint propagation</strong>: special inference that prunes illegal values from domains using these consistencies.</li>
+</ul>
+
+<h3 id="csp-template">🔑 CSP Master Template</h3>
+<p>This single template covers <strong>every</strong> CSP question. Just edit the highlighted sections.</p>
+
+<pre><code><span class="kw">from</span> ortools.sat.python <span class="kw">import</span> cp_model
+
+model = cp_model.CpModel()
+
+<span class="cm"># ===== 1. VARIABLES — change names + domain =====</span>
+n = <span class="num">3</span>                                       <span class="cm"># <-- swap domain size</span>
+x = model.new_int_var(<span class="num">0</span>, n - <span class="num">1</span>, <span class="str">"x"</span>)
+y = model.new_int_var(<span class="num">0</span>, n - <span class="num">1</span>, <span class="str">"y"</span>)
+z = model.new_int_var(<span class="num">0</span>, n - <span class="num">1</span>, <span class="str">"z"</span>)
+
+<span class="cm"># ===== 2. CONSTRAINTS — pick what you need =====</span>
+model.add(x != y)                            <span class="cm"># binary !=</span>
+model.add(x + y == z)                        <span class="cm"># linear ==</span>
+model.add(<span class="num">2</span>*x + <span class="num">7</span>*y + <span class="num">3</span>*z &lt;= <span class="num">50</span>)             <span class="cm"># linear inequality</span>
+model.add_all_different([x, y, z])           <span class="cm"># global</span>
+<span class="cm"># model.maximize(2*x + 2*y + 3*z)            # uncomment if optimisation</span>
+
+<span class="cm"># ===== 3. SOLVE =====</span>
+solver = cp_model.CpSolver()
+status = solver.solve(model)
+
+<span class="cm"># ===== 4. PRINT =====</span>
+<span class="kw">if</span> status == cp_model.OPTIMAL <span class="kw">or</span> status == cp_model.FEASIBLE:
+    print(<span class="str">f"x = {solver.value(x)}"</span>)
+    print(<span class="str">f"y = {solver.value(y)}"</span>)
+    print(<span class="str">f"z = {solver.value(z)}"</span>)
+<span class="kw">else</span>:
+    print(<span class="str">"No solution found."</span>)</code></pre>
+
+<h3 id="csp-constraints">Every constraint syntax you might need</h3>
+<pre><code><span class="cm"># UNARY (one variable)</span>
+model.add(x != <span class="num">3</span>)
+model.add(x &gt;= <span class="num">2</span>)
+model.add(x &lt;= <span class="num">8</span>)
+
+<span class="cm"># BINARY (two variables)</span>
+model.add(x != y)
+model.add(x &lt; y)
+model.add(x + y == <span class="num">5</span>)
+
+<span class="cm"># GLOBAL — all different</span>
+model.add_all_different([x, y, z, w])
+
+<span class="cm"># LINEAR INEQUALITY</span>
+model.add(<span class="num">2</span>*x + <span class="num">7</span>*y + <span class="num">3</span>*z &lt;= <span class="num">50</span>)
+model.add(<span class="num">3</span>*x - <span class="num">5</span>*y + <span class="num">7</span>*z &lt;= <span class="num">45</span>)
+
+<span class="cm"># NON-LINEAR (multiplication)</span>
+model.add_multiplication_equality(p, [x, y])  <span class="cm"># p = x * y</span>
+
+<span class="cm"># OBJECTIVE</span>
+model.maximize(<span class="num">2</span>*x + <span class="num">2</span>*y + <span class="num">3</span>*z)
+model.minimize(x + y + z)
+
+<span class="cm"># IF-THEN (conditional / reified)</span>
+b = model.new_bool_var(<span class="str">"b"</span>)
+model.add(x &gt; <span class="num">5</span>).only_enforce_if(b)</code></pre>
+
+<h3 id="csp-variables">Every variable type you might need</h3>
+<pre><code><span class="cm"># Integer variable in a range</span>
+x = model.new_int_var(<span class="num">0</span>, <span class="num">9</span>, <span class="str">"x"</span>)
+
+<span class="cm"># Boolean variable (0 or 1)</span>
+b = model.new_bool_var(<span class="str">"b"</span>)
+
+<span class="cm"># Array of integer variables (Sudoku / N-Queens)</span>
+queens = [model.new_int_var(<span class="num">0</span>, <span class="num">7</span>, <span class="str">f"q_{i}"</span>) <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">8</span>)]
+
+<span class="cm"># 2D grid of variables (Sudoku)</span>
+grid = [[model.new_int_var(<span class="num">1</span>, <span class="num">9</span>, <span class="str">f"c_{i}{j}"</span>) <span class="kw">for</span> j <span class="kw">in</span> range(<span class="num">9</span>)] <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">9</span>)]
+
+<span class="cm"># Variable from a non-contiguous set of values</span>
+x = model.new_int_var_from_domain(
+    cp_model.Domain.from_values([<span class="num">1</span>, <span class="num">3</span>, <span class="num">5</span>, <span class="num">7</span>]), <span class="str">"x"</span>)</code></pre>
+
+<h3>Print all solutions (callback class — memorise the skeleton)</h3>
+<pre><code><span class="kw">class</span> <span class="fn">VarArraySolutionPrinter</span>(cp_model.CpSolverSolutionCallback):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, variables):
+        cp_model.CpSolverSolutionCallback.__init__(self)
+        self.__variables = variables
+        self.__solution_count = <span class="num">0</span>
+    <span class="kw">def</span> <span class="fn">on_solution_callback</span>(self):
+        self.__solution_count += <span class="num">1</span>
+        <span class="kw">for</span> v <span class="kw">in</span> self.__variables:
+            print(<span class="str">f"{v}={self.value(v)}"</span>, end=<span class="str">" "</span>)
+        print()
+    <span class="kw">@property</span>
+    <span class="kw">def</span> <span class="fn">solution_count</span>(self): <span class="kw">return</span> self.__solution_count
+
+solver = cp_model.CpSolver()
+printer = VarArraySolutionPrinter([x, y, z])
+solver.parameters.enumerate_all_solutions = <span class="kw">True</span>
+solver.solve(model, printer)
+print(<span class="str">f"Found {printer.solution_count} solutions"</span>)</code></pre>
+
+<h3 id="csp-examples">Worked Example: N-Queens (chess board)</h3>
+<pre><code><span class="kw">from</span> ortools.sat.python <span class="kw">import</span> cp_model
+model = cp_model.CpModel()
+board_size = <span class="num">8</span>
+
+queens = [model.new_int_var(<span class="num">0</span>, board_size - <span class="num">1</span>, <span class="str">f"x_{i}"</span>)
+          <span class="kw">for</span> i <span class="kw">in</span> range(board_size)]
+
+<span class="cm"># All rows different</span>
+model.add_all_different(queens)
+<span class="cm"># No two on same diagonal (the two key tricks)</span>
+model.add_all_different(queens[i] + i <span class="kw">for</span> i <span class="kw">in</span> range(board_size))
+model.add_all_different(queens[i] - i <span class="kw">for</span> i <span class="kw">in</span> range(board_size))
+
+solver = cp_model.CpSolver()
+solver.parameters.enumerate_all_solutions = <span class="kw">True</span>
+solver.solve(model)</code></pre>
+
+<h3>Worked Example: Map Coloring (Ludo / Australia)</h3>
+<pre><code>model = cp_model.CpModel()
+<span class="cm"># 4 regions, 3 colours (0=Red, 1=Green, 2=Blue)</span>
+WA  = model.new_int_var(<span class="num">0</span>, <span class="num">2</span>, <span class="str">"WA"</span>)
+NT  = model.new_int_var(<span class="num">0</span>, <span class="num">2</span>, <span class="str">"NT"</span>)
+SA  = model.new_int_var(<span class="num">0</span>, <span class="num">2</span>, <span class="str">"SA"</span>)
+Q   = model.new_int_var(<span class="num">0</span>, <span class="num">2</span>, <span class="str">"Q"</span>)
+
+<span class="cm"># Adjacent regions must have different colours</span>
+<span class="kw">for</span> a, b <span class="kw">in</span> [(WA,NT),(WA,SA),(NT,SA),(NT,Q),(SA,Q)]:
+    model.add(a != b)
+
+solver = cp_model.CpSolver(); solver.solve(model)</code></pre>
+
+<h3>Worked Example: Maximize linear objective</h3>
+<pre><code>model = cp_model.CpModel()
+ub = max(<span class="num">50</span>, <span class="num">45</span>, <span class="num">37</span>)
+x = model.new_int_var(<span class="num">0</span>, ub, <span class="str">"x"</span>)
+y = model.new_int_var(<span class="num">0</span>, ub, <span class="str">"y"</span>)
+z = model.new_int_var(<span class="num">0</span>, ub, <span class="str">"z"</span>)
+
+model.add(<span class="num">2</span>*x + <span class="num">7</span>*y + <span class="num">3</span>*z &lt;= <span class="num">50</span>)
+model.add(<span class="num">3</span>*x - <span class="num">5</span>*y + <span class="num">7</span>*z &lt;= <span class="num">45</span>)
+model.add(<span class="num">5</span>*x + <span class="num">2</span>*y - <span class="num">6</span>*z &lt;= <span class="num">37</span>)
+
+model.maximize(<span class="num">2</span>*x + <span class="num">2</span>*y + <span class="num">3</span>*z)
+
+solver = cp_model.CpSolver(); status = solver.solve(model)
+<span class="kw">if</span> status == cp_model.OPTIMAL:
+    print(<span class="str">f"max = {solver.objective_value}"</span>)
+    print(solver.value(x), solver.value(y), solver.value(z))</code></pre>
+
+<div class="note">
+<strong>Trick to remember:</strong> in <em>every</em> CSP question, write the answer in 4 blocks: (1) make model, (2) make variables, (3) add constraints, (4) solve & print. If you can't think — just dump that scaffold and fill blanks.
+</div>
+
+
+<!-- ============ LAB 8 ALPHA-BETA ============ -->
+<h2 id="ab-concepts">Lab 8 — Alpha-Beta Pruning</h2>
+
+<h3>Concepts</h3>
+<ul>
+<li><strong>Game Theory</strong>: models strategic interactions; one player wins, the other loses.</li>
+<li><strong>Adversarial Search</strong>: agents have conflicting goals (chess, tic-tac-toe).</li>
+<li><strong>Game tree elements</strong>: Player(s), Actions(s), Result(s,a), Terminal-Test(s), Utility(s,p) (= +1 win / 0 draw / −1 lose).</li>
+<li><strong>Max</strong>: tries to <em>maximise</em> the value. <strong>Min</strong>: tries to <em>minimise</em> it.</li>
+<li><strong>α (alpha)</strong>: best (highest) value Max is currently guaranteed → starts at <code>-∞</code>. Lower bound.</li>
+<li><strong>β (beta)</strong>: best (lowest) value Min is currently guaranteed → starts at <code>+∞</code>. Upper bound.</li>
+<li><strong>Pruning rule</strong>: if <code>β ≤ α</code>, stop exploring further children — they can't change the decision.</li>
+<li>Alpha-Beta gives the <em>same</em> answer as Minimax but faster (less nodes explored).</li>
+<li>It uses <strong>DFS</strong> (Depth-First Search), not BFS.</li>
+</ul>
+
+<h3 id="ab-template">🔑 Alpha-Beta Master Template (game tree)</h3>
+<pre><code><span class="kw">import</span> math
+
+<span class="kw">def</span> <span class="fn">alpha_beta</span>(node, depth, alpha, beta, maximizing):
+    <span class="cm"># Leaf or depth limit -> return static value</span>
+    <span class="kw">if</span> depth == <span class="num">0</span> <span class="kw">or</span> <span class="kw">not</span> node.children:
+        <span class="kw">return</span> node.value
+
+    <span class="kw">if</span> maximizing:
+        value = -math.inf
+        <span class="kw">for</span> child <span class="kw">in</span> node.children:
+            value = max(value, alpha_beta(child, depth-<span class="num">1</span>, alpha, beta, <span class="kw">False</span>))
+            alpha = max(alpha, value)
+            <span class="kw">if</span> beta &lt;= alpha:
+                print(<span class="str">"Pruned at:"</span>, child.value)
+                <span class="kw">break</span>                                <span class="cm"># β cut-off</span>
+        node.minmax_value = value
+        <span class="kw">return</span> value
+    <span class="kw">else</span>:
+        value = math.inf
+        <span class="kw">for</span> child <span class="kw">in</span> node.children:
+            value = min(value, alpha_beta(child, depth-<span class="num">1</span>, alpha, beta, <span class="kw">True</span>))
+            beta = min(beta, value)
+            <span class="kw">if</span> beta &lt;= alpha:
+                print(<span class="str">"Pruned at:"</span>, child.value)
+                <span class="kw">break</span>                                <span class="cm"># α cut-off</span>
+        node.minmax_value = value
+        <span class="kw">return</span> value
+
+
+<span class="kw">class</span> <span class="fn">Node</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, value=<span class="kw">None</span>):
+        self.value = value
+        self.children = []
+        self.minmax_value = <span class="kw">None</span>
+
+<span class="cm"># ===== Build the tree (swap shape per question) =====</span>
+root = Node(<span class="str">'A'</span>)
+b1 = Node(<span class="str">'B'</span>); b2 = Node(<span class="str">'C'</span>); root.children = [b1, b2]
+d  = Node(<span class="str">'D'</span>); e  = Node(<span class="str">'E'</span>); b1.children = [d, e]
+f  = Node(<span class="str">'F'</span>); g  = Node(<span class="str">'G'</span>); b2.children = [f, g]
+d.children = [Node(<span class="num">2</span>), Node(<span class="num">3</span>)]
+e.children = [Node(<span class="num">5</span>), Node(<span class="num">9</span>)]
+f.children = [Node(<span class="num">0</span>), Node(<span class="num">1</span>)]
+g.children = [Node(<span class="num">7</span>), Node(<span class="num">5</span>)]
+
+<span class="cm"># ===== Run from root with α=-∞, β=+∞, Max starts =====</span>
+best = alpha_beta(root, depth=<span class="num">3</span>, alpha=-math.inf, beta=math.inf, maximizing=<span class="kw">True</span>)
+print(<span class="str">"Best value at root:"</span>, best)</code></pre>
+
+<div class="note">
+<strong>How to memorise the recursion:</strong>
+<ol>
+<li>Base case: leaf or depth=0 → return the value.</li>
+<li>If MAX: start <code>v = -∞</code>, loop children, <code>v = max(v, recurse)</code>, then <code>α = max(α, v)</code>, then check <code>β ≤ α</code> → break.</li>
+<li>If MIN: mirror — start <code>v = +∞</code>, use <code>min</code>, update <code>β = min(β, v)</code>, same prune check.</li>
+</ol>
+The check <code>β ≤ α</code> is the same in both — only <code>v</code>, the comparator, and which bound updates change.
+</div>
+
+<h3 id="ab-chess">Chess Game with Alpha-Beta (memorize this exact pattern)</h3>
+<p>Uses the <code>python-chess</code> library. The trick: same α-β recursion, but <em>moves</em> are children and a piece-value <strong>evaluation function</strong> replaces the leaf value.</p>
+
+<pre><code><span class="kw">import</span> chess
+<span class="kw">import</span> math
+
+<span class="cm"># --- Piece values for the evaluation function ---</span>
+PIECE_VALUES = {
+    chess.PAWN:   <span class="num">1</span>,
+    chess.KNIGHT: <span class="num">3</span>,
+    chess.BISHOP: <span class="num">3</span>,
+    chess.ROOK:   <span class="num">5</span>,
+    chess.QUEEN:  <span class="num">9</span>,
+    chess.KING:   <span class="num">0</span>,
+}
+
+<span class="kw">def</span> <span class="fn">evaluate</span>(board):
+    <span class="cm"># White - Black material count</span>
+    score = <span class="num">0</span>
+    <span class="kw">for</span> piece_type <span class="kw">in</span> PIECE_VALUES:
+        score += len(board.pieces(piece_type, chess.WHITE)) * PIECE_VALUES[piece_type]
+        score -= len(board.pieces(piece_type, chess.BLACK)) * PIECE_VALUES[piece_type]
+    <span class="kw">return</span> score
+
+<span class="kw">def</span> <span class="fn">alpha_beta</span>(board, depth, alpha, beta, maximizing):
+    <span class="kw">if</span> depth == <span class="num">0</span> <span class="kw">or</span> board.is_game_over():
+        <span class="kw">return</span> evaluate(board)
+
+    <span class="kw">if</span> maximizing:
+        value = -math.inf
+        <span class="kw">for</span> move <span class="kw">in</span> board.legal_moves:
+            board.push(move)
+            value = max(value, alpha_beta(board, depth-<span class="num">1</span>, alpha, beta, <span class="kw">False</span>))
+            board.pop()
+            alpha = max(alpha, value)
+            <span class="kw">if</span> beta &lt;= alpha: <span class="kw">break</span>
+        <span class="kw">return</span> value
+    <span class="kw">else</span>:
+        value = math.inf
+        <span class="kw">for</span> move <span class="kw">in</span> board.legal_moves:
+            board.push(move)
+            value = min(value, alpha_beta(board, depth-<span class="num">1</span>, alpha, beta, <span class="kw">True</span>))
+            board.pop()
+            beta = min(beta, value)
+            <span class="kw">if</span> beta &lt;= alpha: <span class="kw">break</span>
+        <span class="kw">return</span> value
+
+<span class="kw">def</span> <span class="fn">best_move</span>(board, depth):
+    best, best_val = <span class="kw">None</span>, -math.inf
+    <span class="kw">for</span> move <span class="kw">in</span> board.legal_moves:
+        board.push(move)
+        val = alpha_beta(board, depth-<span class="num">1</span>, -math.inf, math.inf, <span class="kw">False</span>)
+        board.pop()
+        <span class="kw">if</span> val &gt; best_val:
+            best_val, best = val, move
+    <span class="kw">return</span> best
+
+<span class="cm"># ===== Game loop: AI vs Human =====</span>
+board = chess.Board()
+<span class="kw">while</span> <span class="kw">not</span> board.is_game_over():
+    print(board)
+    <span class="kw">if</span> board.turn == chess.WHITE:                  <span class="cm"># AI move</span>
+        move = best_move(board, depth=<span class="num">3</span>)
+        print(<span class="str">"AI plays:"</span>, move)
+        board.push(move)
+    <span class="kw">else</span>:                                          <span class="cm"># Human move</span>
+        uci = input(<span class="str">"Your move (e.g. e7e5): "</span>)
+        board.push_uci(uci)
+
+print(<span class="str">"Result:"</span>, board.result())</code></pre>
+
+<div class="note">
+<strong>Why this is the only chess code you need:</strong> the same <code>alpha_beta</code> function works for any board game — just swap (a) the legal moves enumeration, (b) <code>evaluate()</code>, and (c) the make/undo move. For tic-tac-toe just replace board operations.
+</div>
+
+<h3>Coin-pick game with α-β (Task 2 of lab)</h3>
+<pre><code><span class="kw">import</span> math
+
+<span class="kw">def</span> <span class="fn">alpha_beta</span>(coins, alpha, beta, maximizing):
+    <span class="kw">if</span> <span class="kw">not</span> coins:
+        <span class="kw">return</span> <span class="num">0</span>
+    <span class="kw">if</span> maximizing:
+        v = -math.inf
+        <span class="kw">for</span> pick <span class="kw">in</span> [coins[<span class="num">0</span>], coins[-<span class="num">1</span>]]:
+            rest = coins[<span class="num">1</span>:] <span class="kw">if</span> pick == coins[<span class="num">0</span>] <span class="kw">else</span> coins[:-<span class="num">1</span>]
+            v = max(v, pick + alpha_beta(rest, alpha, beta, <span class="kw">False</span>))
+            alpha = max(alpha, v)
+            <span class="kw">if</span> beta &lt;= alpha: <span class="kw">break</span>
+        <span class="kw">return</span> v
+    <span class="kw">else</span>:
+        v = math.inf
+        <span class="kw">for</span> pick <span class="kw">in</span> [coins[<span class="num">0</span>], coins[-<span class="num">1</span>]]:
+            rest = coins[<span class="num">1</span>:] <span class="kw">if</span> pick == coins[<span class="num">0</span>] <span class="kw">else</span> coins[:-<span class="num">1</span>]
+            v = min(v, alpha_beta(rest, alpha, beta, <span class="kw">True</span>))
+            beta = min(beta, v)
+            <span class="kw">if</span> beta &lt;= alpha: <span class="kw">break</span>
+        <span class="kw">return</span> v
+
+print(alpha_beta([<span class="num">3</span>, <span class="num">9</span>, <span class="num">1</span>, <span class="num">2</span>, <span class="num">7</span>, <span class="num">5</span>], -math.inf, math.inf, <span class="kw">True</span>))</code></pre>
+
+
+<!-- ============ LAB 9 BAYESIAN ============ -->
+<h2 id="bn-concepts">Lab 9 — Bayesian Networks</h2>
+
+<h3>Concepts</h3>
+<ul>
+<li><strong>Bayesian Network</strong> = Directed Acyclic Graph (DAG) of variables + a Conditional Probability Table (CPT) at every node. Used for prediction, diagnostics, anomaly detection under uncertainty.</li>
+<li><strong>2 components</strong>: (1) DAG = structure of dependencies, (2) CPTs = the actual numbers.</li>
+<li><strong>Nodes</strong> = random variables (observable like symptoms, or hidden like disease).</li>
+<li><strong>Edges</strong> A → B mean B is conditionally dependent on A.</li>
+<li><strong>Root nodes</strong> = no parents (priors).</li>
+<li><strong>Leaf nodes</strong> = no children (often the observed outputs).</li>
+<li><strong>Parent nodes</strong> = nodes pointing into the current one. CPT must list a probability for every combination of parents' values.</li>
+</ul>
+
+<h3 id="bn-template">🔑 Bayesian Network Master Template (Burglary–Alarm flavour)</h3>
+<p>Every BN question is the same skeleton. Just swap the edges and CPDs.</p>
+
+<pre><code><span class="kw">from</span> pgmpy.models <span class="kw">import</span> DiscreteBayesianNetwork
+<span class="kw">from</span> pgmpy.factors.discrete <span class="kw">import</span> TabularCPD
+<span class="kw">from</span> pgmpy.inference <span class="kw">import</span> VariableElimination
+
+<span class="cm"># ===== 1. STRUCTURE — list of (parent, child) edges =====</span>
+model = DiscreteBayesianNetwork([
+    (<span class="str">'Burglary'</span>,   <span class="str">'Alarm'</span>),
+    (<span class="str">'Earthquake'</span>, <span class="str">'Alarm'</span>),
+    (<span class="str">'Alarm'</span>,      <span class="str">'JohnCalls'</span>),
+    (<span class="str">'Alarm'</span>,      <span class="str">'MaryCalls'</span>),
+])
+
+<span class="cm"># ===== 2. CPDs — root nodes have NO evidence =====</span>
+cpd_b = TabularCPD(<span class="str">'Burglary'</span>,   <span class="num">2</span>, [[<span class="num">0.999</span>], [<span class="num">0.001</span>]])
+cpd_e = TabularCPD(<span class="str">'Earthquake'</span>, <span class="num">2</span>, [[<span class="num">0.998</span>], [<span class="num">0.002</span>]])
+
+<span class="cm"># Child node with 2 parents -> 2*2 = 4 columns</span>
+<span class="cm"># Column order: (B=F,E=F), (B=F,E=T), (B=T,E=F), (B=T,E=T)</span>
+cpd_a = TabularCPD(<span class="str">'Alarm'</span>, <span class="num">2</span>,
+    values=[[<span class="num">0.999</span>, <span class="num">0.71</span>, <span class="num">0.06</span>, <span class="num">0.05</span>],   <span class="cm"># Alarm=False</span>
+            [<span class="num">0.001</span>, <span class="num">0.29</span>, <span class="num">0.94</span>, <span class="num">0.95</span>]],  <span class="cm"># Alarm=True</span>
+    evidence=[<span class="str">'Burglary'</span>, <span class="str">'Earthquake'</span>],
+    evidence_card=[<span class="num">2</span>, <span class="num">2</span>])
+
+cpd_j = TabularCPD(<span class="str">'JohnCalls'</span>, <span class="num">2</span>,
+    values=[[<span class="num">0.3</span>, <span class="num">0.9</span>], [<span class="num">0.7</span>, <span class="num">0.1</span>]],
+    evidence=[<span class="str">'Alarm'</span>], evidence_card=[<span class="num">2</span>])
+
+cpd_m = TabularCPD(<span class="str">'MaryCalls'</span>, <span class="num">2</span>,
+    values=[[<span class="num">0.2</span>, <span class="num">0.99</span>], [<span class="num">0.8</span>, <span class="num">0.01</span>]],
+    evidence=[<span class="str">'Alarm'</span>], evidence_card=[<span class="num">2</span>])
+
+<span class="cm"># ===== 3. ATTACH + VERIFY =====</span>
+model.add_cpds(cpd_b, cpd_e, cpd_a, cpd_j, cpd_m)
+<span class="kw">assert</span> model.check_model()
+
+<span class="cm"># ===== 4. INFERENCE =====</span>
+inference = VariableElimination(model)
+result = inference.query(variables=[<span class="str">'Burglary'</span>],
+                         evidence={<span class="str">'JohnCalls'</span>: <span class="num">1</span>, <span class="str">'MaryCalls'</span>: <span class="num">1</span>})
+print(result)</code></pre>
+
+<h3 id="bn-cpd-rules">⚠️ The 3 CPD rules you MUST remember</h3>
+<div class="warn">
+<ol>
+<li><strong>Number of rows</strong> = number of states the node has (<code>variable_card</code>).</li>
+<li><strong>Number of columns</strong> = product of parents' cards (e.g. 2 binary parents → 4 columns).</li>
+<li><strong>Each column must sum to 1</strong> (it's a probability distribution).</li>
+</ol>
+</div>
+
+<h3>Worked Example: Disease (Flu/Cold) given symptoms</h3>
+<pre><code><span class="kw">from</span> pgmpy.models <span class="kw">import</span> DiscreteBayesianNetwork
+<span class="kw">from</span> pgmpy.factors.discrete <span class="kw">import</span> TabularCPD
+<span class="kw">from</span> pgmpy.inference <span class="kw">import</span> VariableElimination
+
+model = DiscreteBayesianNetwork([
+    (<span class="str">'Disease'</span>, <span class="str">'Fever'</span>),
+    (<span class="str">'Disease'</span>, <span class="str">'Cough'</span>),
+    (<span class="str">'Disease'</span>, <span class="str">'Fatigue'</span>),
+    (<span class="str">'Disease'</span>, <span class="str">'Chills'</span>),
+])
+
+<span class="cm"># Disease: 0=Flu, 1=Cold</span>
+cpd_d = TabularCPD(<span class="str">'Disease'</span>, <span class="num">2</span>, [[<span class="num">0.3</span>], [<span class="num">0.7</span>]])
+
+<span class="cm"># For each symptom: rows = [No, Yes], cols = [Flu, Cold]</span>
+cpd_fev = TabularCPD(<span class="str">'Fever'</span>,   <span class="num">2</span>, [[<span class="num">0.1</span>, <span class="num">0.5</span>], [<span class="num">0.9</span>, <span class="num">0.5</span>]],
+                    evidence=[<span class="str">'Disease'</span>], evidence_card=[<span class="num">2</span>])
+cpd_cou = TabularCPD(<span class="str">'Cough'</span>,   <span class="num">2</span>, [[<span class="num">0.2</span>, <span class="num">0.4</span>], [<span class="num">0.8</span>, <span class="num">0.6</span>]],
+                    evidence=[<span class="str">'Disease'</span>], evidence_card=[<span class="num">2</span>])
+cpd_fat = TabularCPD(<span class="str">'Fatigue'</span>, <span class="num">2</span>, [[<span class="num">0.3</span>, <span class="num">0.7</span>], [<span class="num">0.7</span>, <span class="num">0.3</span>]],
+                    evidence=[<span class="str">'Disease'</span>], evidence_card=[<span class="num">2</span>])
+cpd_chi = TabularCPD(<span class="str">'Chills'</span>,  <span class="num">2</span>, [[<span class="num">0.4</span>, <span class="num">0.6</span>], [<span class="num">0.6</span>, <span class="num">0.4</span>]],
+                    evidence=[<span class="str">'Disease'</span>], evidence_card=[<span class="num">2</span>])
+
+model.add_cpds(cpd_d, cpd_fev, cpd_cou, cpd_fat, cpd_chi)
+inf = VariableElimination(model)
+
+<span class="cm"># P(Disease | Fever=Yes, Cough=Yes)</span>
+print(inf.query(variables=[<span class="str">'Disease'</span>], evidence={<span class="str">'Fever'</span>:<span class="num">1</span>, <span class="str">'Cough'</span>:<span class="num">1</span>}))
+
+<span class="cm"># P(Fatigue=Yes | Disease=Flu) — direct CPT lookup</span>
+print(inf.query(variables=[<span class="str">'Fatigue'</span>], evidence={<span class="str">'Disease'</span>:<span class="num">0</span>}))</code></pre>
+
+<h3>Worked Example: Student Exam network (3 parents → Grade)</h3>
+<pre><code>model = DiscreteBayesianNetwork([
+    (<span class="str">'I'</span>, <span class="str">'G'</span>), (<span class="str">'S'</span>, <span class="str">'G'</span>), (<span class="str">'D'</span>, <span class="str">'G'</span>),
+    (<span class="str">'G'</span>, <span class="str">'P'</span>),
+])
+
+cpd_i = TabularCPD(<span class="str">'I'</span>, <span class="num">2</span>, [[<span class="num">0.7</span>], [<span class="num">0.3</span>]])    <span class="cm"># High, Low</span>
+cpd_s = TabularCPD(<span class="str">'S'</span>, <span class="num">2</span>, [[<span class="num">0.6</span>], [<span class="num">0.4</span>]])    <span class="cm"># Sufficient, Insufficient</span>
+cpd_d = TabularCPD(<span class="str">'D'</span>, <span class="num">2</span>, [[<span class="num">0.4</span>], [<span class="num">0.6</span>]])    <span class="cm"># Hard, Easy</span>
+
+<span class="cm"># G has 3 states (A,B,C), 3 binary parents -> 8 columns</span>
+cpd_g = TabularCPD(<span class="str">'G'</span>, <span class="num">3</span>,
+    values=[[<span class="num">0.7</span>,<span class="num">0.5</span>,<span class="num">0.3</span>,<span class="num">0.1</span>,<span class="num">0.9</span>,<span class="num">0.7</span>,<span class="num">0.5</span>,<span class="num">0.2</span>],   <span class="cm"># A</span>
+            [<span class="num">0.2</span>,<span class="num">0.3</span>,<span class="num">0.4</span>,<span class="num">0.4</span>,<span class="num">0.08</span>,<span class="num">0.2</span>,<span class="num">0.3</span>,<span class="num">0.5</span>], <span class="cm"># B</span>
+            [<span class="num">0.1</span>,<span class="num">0.2</span>,<span class="num">0.3</span>,<span class="num">0.5</span>,<span class="num">0.02</span>,<span class="num">0.1</span>,<span class="num">0.2</span>,<span class="num">0.3</span>]],<span class="cm"># C</span>
+    evidence=[<span class="str">'I'</span>,<span class="str">'S'</span>,<span class="str">'D'</span>], evidence_card=[<span class="num">2</span>,<span class="num">2</span>,<span class="num">2</span>])
+
+<span class="cm"># Pass | Grade — 2 states, 1 parent (3-state) -> 3 columns</span>
+cpd_p = TabularCPD(<span class="str">'P'</span>, <span class="num">2</span>,
+    values=[[<span class="num">0.05</span>, <span class="num">0.20</span>, <span class="num">0.50</span>],     <span class="cm"># P=No  given G=A,B,C</span>
+            [<span class="num">0.95</span>, <span class="num">0.80</span>, <span class="num">0.50</span>]],    <span class="cm"># P=Yes</span>
+    evidence=[<span class="str">'G'</span>], evidence_card=[<span class="num">3</span>])
+
+model.add_cpds(cpd_i, cpd_s, cpd_d, cpd_g, cpd_p)
+inf = VariableElimination(model)
+
+<span class="cm"># P(Pass | StudyHours=Sufficient, Difficulty=Hard)</span>
+print(inf.query(variables=[<span class="str">'P'</span>], evidence={<span class="str">'S'</span>: <span class="num">0</span>, <span class="str">'D'</span>: <span class="num">0</span>}))
+
+<span class="cm"># P(Intelligence=High | Pass=Yes)</span>
+print(inf.query(variables=[<span class="str">'I'</span>], evidence={<span class="str">'P'</span>: <span class="num">1</span>}))</code></pre>
+
+<h3>Card-deck conditional probability (Task 1 lab 9, hand-computed)</h3>
+<table>
+<tr><th>Question</th><th>Answer</th><th>Working</th></tr>
+<tr><td>P(red card)</td><td>26/52 = 1/2</td><td>13 hearts + 13 diamonds</td></tr>
+<tr><td>P(heart | red)</td><td>13/26 = 1/2</td><td>half of red cards are hearts</td></tr>
+<tr><td>P(diamond | face)</td><td>3/12 = 1/4</td><td>12 face cards, 3 are diamonds</td></tr>
+<tr><td>P(spade ∪ queen | face)</td><td>4/12 = 1/3</td><td>3 spade-faces + 1 queen-of-other = 4 / 12</td></tr>
+</table>
+
+<!-- ============ MARKOV ============ -->
+<h2 id="mm-concepts">Lab 9 — Markov Models</h2>
+
+<h3>Concepts</h3>
+<ul>
+<li><strong>Markov property</strong> = "memoryless": next state depends only on the <em>current</em> state, not on history.</li>
+<li><strong>Two types</strong>: <em>Observable Markov Models</em> (states known) and <em>Hidden Markov Models, HMMs</em> (states inferred from observable outputs).</li>
+<li><strong>Transition matrix</strong> = NxN matrix; row i, col j = P(next = j | current = i). Each row sums to 1.</li>
+<li>The marble-bag example: 50/50 because the bag is reset every draw (with replacement).</li>
+</ul>
+
+<h3 id="mm-template">🔑 Markov Master Template</h3>
+<pre><code><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># ===== 1. STATES + TRANSITION MATRIX (rows must sum to 1) =====</span>
+states = [<span class="str">"Sunny"</span>, <span class="str">"Cloudy"</span>, <span class="str">"Rainy"</span>]
+P = np.array([
+    [<span class="num">0.7</span>, <span class="num">0.2</span>, <span class="num">0.1</span>],     <span class="cm"># from Sunny</span>
+    [<span class="num">0.3</span>, <span class="num">0.4</span>, <span class="num">0.3</span>],     <span class="cm"># from Cloudy</span>
+    [<span class="num">0.2</span>, <span class="num">0.3</span>, <span class="num">0.5</span>],     <span class="cm"># from Rainy</span>
+])
+
+<span class="cm"># ===== 2. SIMULATION =====</span>
+<span class="kw">def</span> <span class="fn">simulate</span>(start, steps):
+    seq = [start]
+    cur = states.index(start)
+    <span class="kw">for</span> _ <span class="kw">in</span> range(steps):
+        cur = np.random.choice(len(states), p=P[cur])
+        seq.append(states[cur])
+    <span class="kw">return</span> seq
+
+sequence = simulate(<span class="str">"Sunny"</span>, <span class="num">10</span>)
+print(<span class="str">" -&gt; "</span>.join(sequence))
+
+<span class="cm"># ===== 3. P(at least 3 rainy days over 10 days) — Monte Carlo =====</span>
+trials = <span class="num">10000</span>
+hits = <span class="num">0</span>
+<span class="kw">for</span> _ <span class="kw">in</span> range(trials):
+    seq = simulate(<span class="str">"Sunny"</span>, <span class="num">10</span>)
+    <span class="kw">if</span> seq.count(<span class="str">"Rainy"</span>) &gt;= <span class="num">3</span>:
+        hits += <span class="num">1</span>
+print(<span class="str">"P(>=3 rainy) ≈"</span>, hits / trials)</code></pre>
+
+<div class="note">
+The marble-bag question? Same code — just use <code>states = ["Red","Blue"]</code> and <code>P = [[0.5,0.5],[0.5,0.5]]</code>.
+</div>
+
+
+<!-- ============ LAB 10 SUPERVISED ============ -->
+<h2 id="sl-concepts">Lab 10 — Supervised Learning</h2>
+
+<h3>Concepts (1-line)</h3>
+<ul>
+<li><strong>Supervised learning</strong>: trained on <em>labelled</em> data (X, y). Goal: learn mapping X → y.</li>
+<li><strong>Two sub-types</strong>: <em>Classification</em> (categorical output: spam/not, yes/no) and <em>Regression</em> (continuous output: price, age).</li>
+<li><strong>Underfitting</strong>: model too simple; bad on both train and test.</li>
+<li><strong>Overfitting</strong>: memorises training data; great on train, bad on test. Fix: train-test split + cross-validation.</li>
+<li><strong>K-Fold CV</strong>: split into K folds; train on K-1, test on 1; repeat K times; average accuracy.</li>
+<li><strong>LOOCV</strong>: extreme case — K = N samples (one sample per fold).</li>
+<li><strong>Confusion matrix</strong>: TP / FP / TN / FN for binary classification.</li>
+<li><strong>ROC curve</strong>: TPR (y) vs FPR (x). AUC near 1 = great, near 0.5 = random.</li>
+</ul>
+
+<h4>SVM Kernels</h4>
+<ul>
+<li><strong>Linear</strong>: K(x,x') = xᵀx' — for linearly separable data.</li>
+<li><strong>Polynomial</strong>: K(x,x') = (xᵀx' + c)<sup>d</sup>.</li>
+<li><strong>RBF (Radial Basis Function)</strong>: K(x,x') = e<sup>−γ‖x−x'‖²</sup> — most common, handles non-linear.</li>
+</ul>
+
+<h4>Decision Tree terms</h4>
+<ul>
+<li><strong>Root node</strong>: first split.</li>
+<li><strong>Splitting</strong>: dividing a node into sub-nodes.</li>
+<li><strong>Decision node</strong>: a node that splits further.</li>
+<li><strong>Leaf node</strong>: terminal — gives the prediction.</li>
+<li><strong>Branch / sub-tree</strong>: subsection of the tree.</li>
+<li>Steps: pick best attribute (using Attribute Selection Measure / ASM) → split → recurse on subsets.</li>
+</ul>
+
+<h3 id="sl-eda">EDA & Preprocessing — minimum required steps</h3>
+<pre><code><span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+
+<span class="cm"># ===== Load =====</span>
+df = pd.read_csv(<span class="str">"data.csv"</span>)
+<span class="cm"># sns.load_dataset("titanic")  # alternative built-in</span>
+
+<span class="cm"># ===== EDA (always do these 4) =====</span>
+print(df.head())                <span class="cm"># first 5 rows</span>
+print(df.info())                <span class="cm"># dtypes + non-null count</span>
+print(df.describe())            <span class="cm"># summary stats</span>
+print(df.isnull().sum())        <span class="cm"># missing per column</span>
+
+<span class="cm"># ===== Visualisations =====</span>
+df[[<span class="str">'age'</span>, <span class="str">'fare'</span>]].hist(bins=<span class="num">20</span>, figsize=(<span class="num">8</span>,<span class="num">4</span>))      <span class="cm"># histograms</span>
+plt.show()
+sns.scatterplot(x=<span class="str">'age'</span>, y=<span class="str">'fare'</span>, data=df)            <span class="cm"># scatter</span>
+plt.show()
+sns.heatmap(df.corr(numeric_only=<span class="kw">True</span>), annot=<span class="kw">True</span>) <span class="cm"># correlation heatmap</span>
+plt.show()
+sns.boxplot(x=<span class="str">'survived'</span>, y=<span class="str">'age'</span>, data=df)            <span class="cm"># box plot</span>
+plt.show()
+
+<span class="cm"># ===== Handle missing =====</span>
+df[<span class="str">'age'</span>] = df[<span class="str">'age'</span>].fillna(df[<span class="str">'age'</span>].mean())               <span class="cm"># numeric -> mean</span>
+df[<span class="str">'embarked'</span>] = df[<span class="str">'embarked'</span>].fillna(df[<span class="str">'embarked'</span>].mode()[<span class="num">0</span>]) <span class="cm"># categ -> mode</span>
+df = df.dropna()                                              <span class="cm"># or just drop</span>
+
+<span class="cm"># ===== Encoding (3 ways combined) =====</span>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> LabelEncoder
+<span class="cm"># 1) Label Encoding — for binary / ordinal columns</span>
+df[<span class="str">'gender'</span>] = LabelEncoder().fit_transform(df[<span class="str">'gender'</span>])
+
+<span class="cm"># 2) One-Hot Encoding — for nominal multi-class</span>
+df = pd.get_dummies(df, columns=[<span class="str">'embarked'</span>], drop_first=<span class="kw">True</span>)
+
+<span class="cm"># 3) Manual mapping — for ordinals with known order</span>
+df[<span class="str">'class'</span>] = df[<span class="str">'class'</span>].map({<span class="str">'First'</span>:<span class="num">0</span>, <span class="str">'Second'</span>:<span class="num">1</span>, <span class="str">'Third'</span>:<span class="num">2</span>})
+
+<span class="cm"># ===== Feature scaling =====</span>
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+X_scaled = StandardScaler().fit_transform(X)</code></pre>
+
+<h3 id="sl-template">🔑 Supervised Learning Master Template</h3>
+<p>One pipeline. To switch between classification and regression, change ONLY two lines (marked).</p>
+
+<pre><code><span class="kw">import</span> pandas <span class="kw">as</span> pd, numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt, seaborn <span class="kw">as</span> sns
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> train_test_split
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> LabelEncoder, StandardScaler
+
+<span class="cm"># ----- ❶ MODEL CHOICE — pick ONE line, comment others -----</span>
+<span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression, LogisticRegression
+<span class="kw">from</span> sklearn.tree <span class="kw">import</span> DecisionTreeClassifier
+<span class="kw">from</span> sklearn.svm <span class="kw">import</span> SVC
+<span class="kw">from</span> sklearn.naive_bayes <span class="kw">import</span> GaussianNB
+<span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> RandomForestClassifier
+
+<span class="cm"># ----- ❷ METRICS — pick to match task -----</span>
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> (accuracy_score, r2_score, mean_squared_error,
+                             confusion_matrix, classification_report,
+                             roc_curve, roc_auc_score)
+
+<span class="cm"># ===== 1. LOAD =====</span>
+df = pd.read_csv(<span class="str">"data.csv"</span>)
+<span class="cm"># df = sns.load_dataset("titanic")</span>
+
+<span class="cm"># ===== 2. EDA (4 must-haves) =====</span>
+print(df.head()); print(df.info()); print(df.describe()); print(df.isnull().sum())
+
+<span class="cm"># ===== 3. CLEAN + ENCODE =====</span>
+df[<span class="str">'age'</span>]    = df[<span class="str">'age'</span>].fillna(df[<span class="str">'age'</span>].mean())
+df[<span class="str">'gender'</span>] = LabelEncoder().fit_transform(df[<span class="str">'gender'</span>])
+df = pd.get_dummies(df, columns=[<span class="str">'embarked'</span>], drop_first=<span class="kw">True</span>)
+df = df.dropna()
+
+<span class="cm"># ===== 4. SPLIT FEATURES / TARGET =====</span>
+X = df.drop(<span class="str">'survived'</span>, axis=<span class="num">1</span>)        <span class="cm"># &lt;-- target column name</span>
+y = df[<span class="str">'survived'</span>]
+
+<span class="cm"># Optional scaling (needed for SVM / Logistic Regression)</span>
+X = StandardScaler().fit_transform(X)
+
+<span class="cm"># ===== 5. TRAIN-TEST SPLIT =====</span>
+x_train, x_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>)
+
+<span class="cm"># ===== 6. PICK ONE MODEL — &lt;--- THE LINE TO CHANGE ---&gt; =====</span>
+model = DecisionTreeClassifier()
+<span class="cm"># model = LinearRegression()</span>
+<span class="cm"># model = LogisticRegression()</span>
+<span class="cm"># model = SVC(kernel='rbf', C=1, gamma='scale', probability=True)</span>
+<span class="cm"># model = GaussianNB()</span>
+<span class="cm"># model = RandomForestClassifier()</span>
+
+<span class="cm"># ===== 7. TRAIN =====</span>
+model.fit(x_train, y_train)
+
+<span class="cm"># ===== 8. PREDICT =====</span>
+y_pred = model.predict(x_test)
+
+<span class="cm"># ===== 9. EVALUATE — pick ONE block =====</span>
+<span class="cm"># --- Classification ---</span>
+print(<span class="str">"Train Acc:"</span>, model.score(x_train, y_train) * <span class="num">100</span>)
+print(<span class="str">"Test  Acc:"</span>, accuracy_score(y_test, y_pred) * <span class="num">100</span>)
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+<span class="cm"># --- Regression ---</span>
+<span class="cm"># print("R²:", r2_score(y_test, y_pred) * 100)</span>
+<span class="cm"># print("MSE:", mean_squared_error(y_test, y_pred))</span>
+
+<span class="cm"># ===== 10. ROC (only for classification with predict_proba) =====</span>
+probs = model.predict_proba(x_test)[:, <span class="num">1</span>]
+fpr, tpr, _ = roc_curve(y_test, probs)
+auc = roc_auc_score(y_test, probs)
+plt.plot(fpr, tpr, label=<span class="str">f"AUC = {auc:.2f}"</span>)
+plt.plot([<span class="num">0</span>,<span class="num">1</span>],[<span class="num">0</span>,<span class="num">1</span>], <span class="str">'--'</span>, color=<span class="str">'gray'</span>)
+plt.xlabel(<span class="str">"False Positive Rate"</span>); plt.ylabel(<span class="str">"True Positive Rate"</span>)
+plt.title(<span class="str">"ROC Curve"</span>); plt.legend(); plt.show()</code></pre>
+
+<h3 id="sl-models">All Model Constructors (just swap the one line above)</h3>
+<table>
+<tr><th>Task</th><th>Model line</th><th>When to use</th></tr>
+<tr><td>Regression</td><td><code>LinearRegression()</code></td><td>Continuous output (price, age)</td></tr>
+<tr><td>Binary Classification</td><td><code>LogisticRegression()</code></td><td>Yes/No, simple, fast</td></tr>
+<tr><td>Classification</td><td><code>DecisionTreeClassifier()</code></td><td>Interpretable, no scaling needed</td></tr>
+<tr><td>Classification</td><td><code>RandomForestClassifier()</code></td><td>Many trees, more robust</td></tr>
+<tr><td>Classification</td><td><code>SVC(kernel='rbf', C=1, gamma='scale')</code></td><td>High-dim, non-linear boundary</td></tr>
+<tr><td>Classification</td><td><code>GaussianNB()</code></td><td>Naïve Bayes, very fast baseline</td></tr>
+<tr><td>Regression Tree</td><td><code>DecisionTreeRegressor()</code></td><td>Tree on continuous output</td></tr>
+</table>
+
+<h3 id="sl-metrics">Metrics — which goes with which</h3>
+<table>
+<tr><th>Task</th><th>Metric</th><th>Code</th></tr>
+<tr><td>Classification</td><td>Accuracy</td><td><code>accuracy_score(y_test, y_pred)</code></td></tr>
+<tr><td>Classification</td><td>Confusion Matrix</td><td><code>confusion_matrix(y_test, y_pred)</code></td></tr>
+<tr><td>Classification</td><td>ROC AUC</td><td><code>roc_auc_score(y_test, probs)</code></td></tr>
+<tr><td>Regression</td><td>R²</td><td><code>r2_score(y_test, y_pred)</code></td></tr>
+<tr><td>Regression</td><td>MSE</td><td><code>mean_squared_error(y_test, y_pred)</code></td></tr>
+<tr><td>Regression</td><td>RMSE</td><td><code>np.sqrt(mean_squared_error(y_test, y_pred))</code></td></tr>
+</table>
+
+<h3>K-Fold Cross-Validation snippet (drop into the master template)</h3>
+<pre><code><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> KFold
+kf = KFold(n_splits=<span class="num">5</span>, shuffle=<span class="kw">True</span>, random_state=<span class="num">42</span>)
+scores = []
+<span class="kw">for</span> tr, te <span class="kw">in</span> kf.split(X):
+    model.fit(X[tr], y.iloc[tr])
+    scores.append(accuracy_score(y.iloc[te], model.predict(X[te])))
+print(<span class="str">"Avg accuracy:"</span>, np.mean(scores))</code></pre>
+
+<h3>LOOCV snippet</h3>
+<pre><code><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> LeaveOneOut
+loo = LeaveOneOut()
+scores = []
+<span class="kw">for</span> tr, te <span class="kw">in</span> loo.split(X):
+    model.fit(X[tr], y.iloc[tr])
+    scores.append(accuracy_score(y.iloc[te], model.predict(X[te])))
+print(<span class="str">"LOOCV Acc:"</span>, np.mean(scores))</code></pre>
+
+
+<!-- ============ LAB 11 USL ============ -->
+<h2 id="usl-concepts">Lab 11 — Unsupervised Learning (K-Means)</h2>
+
+<h3>Concepts</h3>
+<ul>
+<li><strong>Unsupervised learning</strong>: <em>no labels</em>. Algorithm finds hidden structure in X alone.</li>
+<li><strong>K-Means</strong>: groups data into K clusters by minimising sum of squared distances to each cluster centre (= <em>inertia</em>).</li>
+<li>Sensitive to feature scales → <strong>always scale</strong> with <code>StandardScaler</code> first.</li>
+<li><strong>Elbow Method</strong>: plot inertia vs K for K = 1..10; pick the K at the "elbow" bend (where adding more clusters stops giving big improvements).</li>
+<li>No "true labels" so a confusion matrix isn't directly applicable — instead <em>profile clusters</em> (mean of features per cluster) and list members.</li>
+<li><strong>K-Fold CV for clustering</strong> isn't for accuracy — it checks <em>stability</em> (how consistent inertia is across folds).</li>
+</ul>
+
+<h3 id="usl-template">🔑 K-Means Master Template (mirrors the Country-data notebook)</h3>
+<pre><code><span class="kw">import</span> pandas <span class="kw">as</span> pd, numpy <span class="kw">as</span> np
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt, seaborn <span class="kw">as</span> sns
+<span class="kw">from</span> sklearn.preprocessing <span class="kw">import</span> StandardScaler
+<span class="kw">from</span> sklearn.cluster      <span class="kw">import</span> KMeans
+<span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> KFold
+
+<span class="cm"># ===== 1. LOAD =====</span>
+data = pd.read_csv(<span class="str">"Country-data.csv"</span>)
+
+<span class="cm"># ===== 2. EDA (the 4 must-haves) =====</span>
+print(data.head())
+print(data.info())
+print(data.isnull().sum())
+print(data.describe())
+
+<span class="cm"># ===== 3. PREPROCESS — drop non-numeric, then scale =====</span>
+X = data.drop(<span class="str">'country'</span>, axis=<span class="num">1</span>)            <span class="cm"># &lt;-- swap 'country' for ID column</span>
+X_scaled = StandardScaler().fit_transform(X)
+
+<span class="cm"># ===== 4. ELBOW METHOD — find best K =====</span>
+inertia = []
+k_range = range(<span class="num">1</span>, <span class="num">11</span>)
+<span class="kw">for</span> k <span class="kw">in</span> k_range:
+    km = KMeans(n_clusters=k, random_state=<span class="num">42</span>, n_init=<span class="num">10</span>)
+    km.fit(X_scaled)
+    inertia.append(km.inertia_)
+
+plt.figure(figsize=(<span class="num">10</span>, <span class="num">6</span>))
+plt.plot(k_range, inertia, marker=<span class="str">'o'</span>)
+plt.title(<span class="str">"Elbow Method for Optimal K"</span>)
+plt.xlabel(<span class="str">"Number of clusters (K)"</span>)
+plt.ylabel(<span class="str">"Inertia"</span>)
+plt.xticks(k_range); plt.grid(<span class="kw">True</span>); plt.show()
+
+<span class="cm"># ===== 5. FIT WITH OPTIMAL K =====</span>
+optimal_k = <span class="num">3</span>                              <span class="cm"># &lt;-- pick from elbow visually</span>
+kmeans = KMeans(n_clusters=optimal_k, random_state=<span class="num">42</span>, n_init=<span class="num">10</span>)
+data[<span class="str">'Cluster'</span>] = kmeans.fit_predict(X_scaled)
+
+<span class="cm"># ===== 6. INSPECT =====</span>
+print(data.head())
+print(data[<span class="str">'Cluster'</span>].value_counts().sort_index())  <span class="cm"># size of each cluster</span>
+
+<span class="cm"># ===== 7. PROFILE — mean of original features per cluster =====</span>
+cluster_means = data.groupby(<span class="str">'Cluster'</span>)[X.columns].mean()
+print(cluster_means)
+
+<span class="cm"># ===== 8. LIST MEMBERS =====</span>
+<span class="kw">for</span> cid <span class="kw">in</span> sorted(data[<span class="str">'Cluster'</span>].unique()):
+    members = data[data[<span class="str">'Cluster'</span>] == cid][<span class="str">'country'</span>].tolist()
+    print(<span class="str">f"Cluster {cid} ({len(members)}): {members}"</span>)
+
+<span class="cm"># ===== 9. K-FOLD STABILITY CHECK =====</span>
+kf = KFold(n_splits=<span class="num">5</span>, shuffle=<span class="kw">True</span>, random_state=<span class="num">42</span>)
+fold_inertias = []
+<span class="kw">for</span> tr, te <span class="kw">in</span> kf.split(X_scaled):
+    km = KMeans(n_clusters=optimal_k, random_state=<span class="num">42</span>, n_init=<span class="num">10</span>)
+    km.fit(X_scaled[tr])
+    fold_inertias.append(km.inertia_)
+print(<span class="str">"Avg inertia:"</span>, np.mean(fold_inertias))
+print(<span class="str">"Std inertia:"</span>, np.std(fold_inertias))</code></pre>
+
+<div class="note">
+<strong>EDA bits to drop in if asked:</strong>
+<pre><code>data.hist(bins=<span class="num">20</span>, figsize=(<span class="num">12</span>,<span class="num">8</span>)); plt.show()           <span class="cm"># histograms of all numeric</span>
+sns.heatmap(data.corr(numeric_only=<span class="kw">True</span>), annot=<span class="kw">True</span>); plt.show()  <span class="cm"># correlation</span>
+sns.pairplot(data, hue=<span class="str">'Cluster'</span>); plt.show()                  <span class="cm"># pair plot AFTER clustering</span>
+sns.scatterplot(x=X.columns[<span class="num">0</span>], y=X.columns[<span class="num">1</span>],
+                hue=<span class="str">'Cluster'</span>, data=data); plt.show()             <span class="cm"># 2-feature cluster view</span></code></pre>
+</div>
+
+<!-- ============ LIBRARY CHEAT SHEET ============ -->
+<h2 id="libraries">Library Cheat Sheet</h2>
+
+<table>
+<tr><th>Library</th><th>What it gives you</th></tr>
+<tr><td><code>numpy</code> (np)</td><td>Arrays, math, <code>np.array</code>, <code>np.mean</code>, <code>np.random.choice</code></td></tr>
+<tr><td><code>pandas</code> (pd)</td><td>DataFrames; <code>read_csv</code>, <code>head</code>, <code>info</code>, <code>describe</code>, <code>isnull</code>, <code>dropna</code>, <code>fillna</code>, <code>get_dummies</code>, <code>groupby</code></td></tr>
+<tr><td><code>matplotlib.pyplot</code> (plt)</td><td>Plots: <code>plot</code>, <code>bar</code>, <code>hist</code>, <code>show</code>, <code>title</code>, <code>xlabel</code></td></tr>
+<tr><td><code>seaborn</code> (sns)</td><td>Pretty plots: <code>scatterplot</code>, <code>heatmap</code>, <code>boxplot</code>, <code>pairplot</code>, <code>load_dataset</code></td></tr>
+<tr><td><code>sklearn.preprocessing</code></td><td><code>LabelEncoder</code>, <code>StandardScaler</code></td></tr>
+<tr><td><code>sklearn.model_selection</code></td><td><code>train_test_split</code>, <code>KFold</code>, <code>LeaveOneOut</code>, <code>cross_val_score</code></td></tr>
+<tr><td><code>sklearn.linear_model</code></td><td><code>LinearRegression</code>, <code>LogisticRegression</code></td></tr>
+<tr><td><code>sklearn.tree</code></td><td><code>DecisionTreeClassifier</code>, <code>DecisionTreeRegressor</code></td></tr>
+<tr><td><code>sklearn.svm</code></td><td><code>SVC</code> (classification), <code>SVR</code> (regression)</td></tr>
+<tr><td><code>sklearn.naive_bayes</code></td><td><code>GaussianNB</code></td></tr>
+<tr><td><code>sklearn.cluster</code></td><td><code>KMeans</code></td></tr>
+<tr><td><code>sklearn.metrics</code></td><td><code>accuracy_score</code>, <code>r2_score</code>, <code>mean_squared_error</code>, <code>confusion_matrix</code>, <code>roc_curve</code>, <code>roc_auc_score</code></td></tr>
+<tr><td><code>ortools.sat.python.cp_model</code></td><td>CSP solver: <code>CpModel</code>, <code>CpSolver</code>, <code>new_int_var</code>, <code>add</code>, <code>add_all_different</code>, <code>maximize</code></td></tr>
+<tr><td><code>pgmpy.models</code></td><td><code>DiscreteBayesianNetwork</code></td></tr>
+<tr><td><code>pgmpy.factors.discrete</code></td><td><code>TabularCPD</code></td></tr>
+<tr><td><code>pgmpy.inference</code></td><td><code>VariableElimination</code></td></tr>
+<tr><td><code>chess</code></td><td>Chess board: <code>Board()</code>, <code>legal_moves</code>, <code>push</code>, <code>pop</code>, <code>is_game_over</code></td></tr>
+<tr><td><code>math</code></td><td><code>math.inf</code> (= +∞), <code>-math.inf</code> (= −∞)</td></tr>
+</table>
+
+<!-- ============ COMMON ERRORS ============ -->
+<h2 id="errors">Common Mistakes & Tips</h2>
+<div class="warn">
+<ul>
+<li><strong>CPT columns wrong</strong>: column count = product of parents' cards. 2 binary parents → 4 columns. 3 binary parents → 8 columns. Each column sums to 1.</li>
+<li><strong>State indexing in pgmpy</strong>: by default 0 = "False/first", 1 = "True/second". So <code>JohnCalls=1</code> means John called.</li>
+<li><strong>Order of CPT columns</strong> for <code>evidence=['B','E']</code>: (B=0,E=0), (B=0,E=1), (B=1,E=0), (B=1,E=1).</li>
+<li><strong>Markov rows</strong> in transition matrix must sum to 1, not columns.</li>
+<li><strong>Always set <code>random_state=42</code></strong> in train_test_split / KFold / KMeans for reproducible answers.</li>
+<li><strong>SVM / Logistic Regression need scaling</strong> first; tree-based models don't.</li>
+<li><strong>K-Means: <code>n_init=10</code></strong> avoids the future-warning.</li>
+<li><strong>OR-Tools constraint forgotten</strong>: a CSP question is wrong if you forgot the global constraint (e.g. <code>add_all_different</code> in N-Queens / Sudoku).</li>
+<li><strong>α-β prune check</strong> = <code>if beta &lt;= alpha: break</code>. Same in both Max and Min branches.</li>
+<li><strong>Don't forget <code>plt.show()</code></strong> after plots.</li>
+<li><strong>X.iloc vs X[]</strong>: in K-Fold, if X is a NumPy array use <code>X[idx]</code>; if it's a DataFrame use <code>X.iloc[idx]</code>.</li>
+</ul>
+</div>
+
+<!-- ============ FINAL CHECKLIST ============ -->
+<h2>🎯 Last 5-Minute Sanity Check</h2>
+<div class="note">
+<ol>
+<li>Can I write the CSP 4-block scaffold from memory? (model → vars → constraints → solve)</li>
+<li>Can I write the BN 4-block scaffold? (network → CPDs → add+check → query)</li>
+<li>Can I write the α-β recursion? (base case, MAX block, MIN block, prune)</li>
+<li>Can I write the ML pipeline 9 steps? (load, EDA, clean, split, scale, model, fit, predict, evaluate)</li>
+<li>Do I know the swappable lines for each model? (one line each for Linear/Tree/SVM/NB/KMeans)</li>
+</ol>
+If yes to all 5 — you'll pass. Good luck.
+</div>
+
+<hr>
+<p style="text-align:center; color: var(--muted); font-size: 13px;">
+Memorize templates. Swap variables. Trust the scaffolding.
+</p>
+
+</main>
+</div>
+
+<script>
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.querySelector('.toggle');
+  if (body.dataset.theme === 'light') {
+    body.dataset.theme = 'dark';
+    btn.textContent = '☀️ Light';
+  } else {
+    body.dataset.theme = 'light';
+    btn.textContent = '🌙 Dark';
+  }
+  localStorage.setItem('theme', body.dataset.theme);
+}
+// Load saved theme
+const saved = localStorage.getItem('theme');
+if (saved) {
+  document.body.dataset.theme = saved;
+  document.querySelector('.toggle').textContent = saved === 'dark' ? '☀️ Light' : '🌙 Dark';
+}
+
+// Add copy buttons to all code blocks
+document.querySelectorAll('pre').forEach(pre => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.onclick = () => {
+    const code = pre.querySelector('code') || pre;
+    navigator.clipboard.writeText(code.innerText);
+    btn.textContent = '✓ Copied';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  };
+  pre.appendChild(btn);
+});
+</script>
+</body>
+</html>

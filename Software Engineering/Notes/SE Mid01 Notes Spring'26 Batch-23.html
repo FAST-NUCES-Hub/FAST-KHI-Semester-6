@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Engineering – Exam Ready Notes</title>
+<style>
+  :root {
+    --primary: #1a237e;
+    --secondary: #283593;
+    --accent: #e53935;
+    --highlight: #fff176;
+    --light: #e8eaf6;
+    --text: #1a1a2e;
+    --success: #1b5e20;
+    --card-bg: #ffffff;
+    --border: #c5cae9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f0f2ff;
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  /* HEADER */
+  .site-header {
+    background: linear-gradient(135deg, #1a237e 0%, #283593 60%, #3949ab 100%);
+    color: white;
+    padding: 36px 40px 28px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 18px rgba(26,35,126,0.4);
+  }
+  .site-header h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: 1px; }
+  .site-header p { font-size: 0.95rem; opacity: 0.88; margin-top: 4px; }
+  .badge {
+    display: inline-block;
+    background: #e53935;
+    color: white;
+    border-radius: 20px;
+    padding: 3px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--primary);
+    color: white;
+    padding: 28px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+  }
+  .toc a {
+    color: #c5cae9;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: var(--highlight); }
+  .toc-title { color: white; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 2px; width: 100%; margin-bottom: 4px; opacity: 0.7; }
+
+  /* LAYOUT */
+  .container { max-width: 960px; margin: 0 auto; padding: 36px 24px 80px; }
+
+  /* CHAPTER HEADER */
+  .chapter-header {
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: 14px 14px 0 0;
+    padding: 22px 30px;
+    margin-top: 48px;
+  }
+  .chapter-header h2 { font-size: 1.4rem; font-weight: 800; }
+  .chapter-header .ch-meta { font-size: 0.82rem; opacity: 0.8; margin-top: 2px; }
+
+  /* CARD */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 0 0 14px 14px;
+    padding: 28px 32px;
+    margin-bottom: 8px;
+    box-shadow: 0 2px 12px rgba(26,35,126,0.07);
+  }
+  .card + .chapter-header { margin-top: 56px; }
+
+  /* SECTION */
+  .section { margin-bottom: 30px; padding-bottom: 24px; border-bottom: 1px dashed var(--border); }
+  .section:last-child { border-bottom: none; margin-bottom: 0; }
+  .section h3 {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section h3::before {
+    content: '';
+    display: inline-block;
+    width: 4px; height: 20px;
+    background: var(--accent);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* TEXT */
+  p { margin-bottom: 10px; }
+  ul, ol { padding-left: 22px; margin-bottom: 10px; }
+  li { margin-bottom: 5px; }
+  strong { color: #1a237e; }
+
+  /* HIGHLIGHT BOX */
+  .highlight-box {
+    background: #fffde7;
+    border-left: 5px solid #f9a825;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.93rem;
+  }
+  .highlight-box .hb-title { font-weight: 800; color: #e65100; margin-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* EXAMPLE BOX */
+  .example-box {
+    background: #e8f5e9;
+    border-left: 5px solid #43a047;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.93rem;
+  }
+  .example-box .ex-title { font-weight: 800; color: #1b5e20; margin-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* IMPORTANT */
+  .important-box {
+    background: #fce4ec;
+    border-left: 5px solid #e91e63;
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 0.93rem;
+  }
+  .important-box .im-title { font-weight: 800; color: #880e4f; margin-bottom: 4px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x: auto; margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  thead th {
+    background: var(--primary);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 700;
+  }
+  tbody tr:nth-child(even) { background: #f3f4fc; }
+  tbody tr:hover { background: var(--light); }
+  td, th { padding: 9px 14px; border: 1px solid var(--border); }
+
+  /* COMPARISON GRID */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  .compare-col { border-radius: 8px; padding: 16px; }
+  .compare-col.green { background: #e8f5e9; border: 1.5px solid #a5d6a7; }
+  .compare-col.red   { background: #fce4ec; border: 1.5px solid #f48fb1; }
+  .compare-col.blue  { background: #e3f2fd; border: 1.5px solid #90caf9; }
+  .compare-col.amber { background: #fff8e1; border: 1.5px solid #ffe082; }
+  .compare-col h4 { font-size: 0.9rem; font-weight: 800; margin-bottom: 8px; }
+  .compare-col.green h4 { color: #1b5e20; }
+  .compare-col.red h4 { color: #880e4f; }
+  .compare-col.blue h4 { color: #0d47a1; }
+  .compare-col.amber h4 { color: #e65100; }
+
+  /* STEP FLOW */
+  .step-flow { margin: 16px 0; }
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .step-num {
+    background: var(--primary);
+    color: white;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-content strong { display: block; font-size: 0.95rem; }
+  .step-content span { font-size: 0.88rem; color: #555; }
+
+  /* CMM LEVELS */
+  .cmm-level {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .cmm-num {
+    font-size: 1.4rem;
+    font-weight: 900;
+    line-height: 1;
+    min-width: 32px;
+  }
+  .cmm-level.l1 { background: #ffebee; } .cmm-level.l1 .cmm-num { color: #c62828; }
+  .cmm-level.l2 { background: #fff3e0; } .cmm-level.l2 .cmm-num { color: #e65100; }
+  .cmm-level.l3 { background: #fffde7; } .cmm-level.l3 .cmm-num { color: #f9a825; }
+  .cmm-level.l4 { background: #e8f5e9; } .cmm-level.l4 .cmm-num { color: #2e7d32; }
+  .cmm-level.l5 { background: #e3f2fd; } .cmm-level.l5 .cmm-num { color: #1565c0; }
+  .cmm-content strong { display: block; font-size: 0.95rem; margin-bottom: 3px; }
+  .cmm-content span { font-size: 0.87rem; }
+
+  /* SCRUM CARDS */
+  .scrum-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 14px 0; }
+  .scrum-card {
+    background: var(--light);
+    border-radius: 10px;
+    padding: 14px;
+    border-top: 4px solid var(--primary);
+  }
+  .scrum-card strong { display: block; font-size: 0.9rem; margin-bottom: 5px; color: var(--primary); }
+  .scrum-card span { font-size: 0.83rem; color: #444; }
+
+  /* XP TABLE */
+  .xp-table { margin: 14px 0; }
+
+  /* PILL TAG */
+  .pill {
+    display: inline-block;
+    background: var(--light);
+    color: var(--primary);
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin: 2px;
+    border: 1px solid var(--border);
+  }
+
+  /* BACK TO TOP */
+  .back-top {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px; height: 44px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+    z-index: 999;
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .back-top:hover { background: var(--accent); }
+
+  /* PRINT */
+  @media print {
+    .site-header { position: static; }
+    .back-top { display: none; }
+    body { background: white; font-size: 12px; }
+    .container { padding: 10px; max-width: 100%; }
+  }
+
+  @media (max-width: 600px) {
+    .compare-grid { grid-template-columns: 1fr; }
+    .toc { padding: 18px 20px; }
+    .card { padding: 18px 16px; }
+    .site-header { padding: 22px 20px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>Software Engineering — Exam Ready Notes <span class="badge">MID EXAM</span></h1>
+  <p>Comprehensive notes covering all lecture slides · Chapters 1–4, WBS, Estimation &amp; Agile</p>
+</header>
+
+<nav class="toc">
+  <div class="toc-title">Jump to Topic</div>
+  <a href="#ch1">Ch 1: Introduction</a>
+  <a href="#ch2">Ch 2: Software Processes</a>
+  <a href="#ch3">Ch 3: Agile &amp; XP</a>
+  <a href="#ch4">Ch 4: Requirements Engineering</a>
+  <a href="#wbs">Work Breakdown Structure</a>
+  <a href="#est">Project Estimation (Wideband Delphi)</a>
+</nav>
+
+<div class="container">
+
+<!-- ===========================
+     CHAPTER 1
+     =========================== -->
+<div id="ch1" class="chapter-header">
+  <h2>📘 Chapter 1 — Introduction to Software Engineering</h2>
+  <div class="ch-meta">Lecture 1b &amp; Lecture 2 slides</div>
+</div>
+<div class="card">
+
+  <div class="section">
+    <h3>What is Software Engineering?</h3>
+    <p>An <strong>engineering discipline</strong> concerned with all aspects of software production — from early specification to maintaining systems after deployment. It covers technical processes, project management, and tool development.</p>
+    <div class="highlight-box">
+      <div class="hb-title">⚡ Key Distinction</div>
+      <strong>Computer Science</strong> → Theory &amp; fundamentals &nbsp;|&nbsp; <strong>Software Engineering</strong> → Practical development &amp; delivery of useful software &nbsp;|&nbsp; <strong>System Engineering</strong> → All computer-based systems including hardware
+    </div>
+    <p><strong>Software costs</strong>: ~60% development + 40% testing. For long-life systems, maintenance &gt;&gt; development cost.</p>
+  </div>
+
+  <div class="section">
+    <h3>Why Do Software Projects Fail?</h3>
+    <ul>
+      <li><strong>Increasing complexity</strong> — New demands arise faster than engineering methods evolve.</li>
+      <li><strong>Failure to use engineering methods</strong> — "Build it then fix it" approach leads to expensive, unreliable software.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Essential Attributes of Good Software</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Attribute</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Maintainability</strong></td><td>Software can evolve to meet changing customer needs</td></tr>
+        <tr><td><strong>Dependability &amp; Security</strong></td><td>Reliable, safe, and secure; no physical/economic damage on failure</td></tr>
+        <tr><td><strong>Efficiency</strong></td><td>No wasteful use of resources (memory, CPU, response time)</td></tr>
+        <tr><td><strong>Acceptability</strong></td><td>Understandable, usable, and compatible for its intended users</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>4 Core Software Process Activities</h3>
+    <div class="step-flow">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Specification</strong><span>Define what the system should do and constraints on its operation.</span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Development (Design + Implementation)</strong><span>Design structure and write code.</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Validation</strong><span>Ensure the software meets customer requirements (testing).</span></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Evolution</strong><span>Modify software as requirements change over time.</span></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Generic vs. Custom Software</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Aspect</th><th>Generic Products</th><th>Custom Software</th></tr></thead>
+      <tbody>
+        <tr><td>Market</td><td>Open market (e.g., MS Office, Firefox)</td><td>Specific client (e.g., CRM, traffic control)</td></tr>
+        <tr><td>Spec control</td><td>Developer decides changes</td><td>Customer decides changes</td></tr>
+        <tr><td>Cost</td><td>Lower (well-defined reqs)</td><td>Higher (evolving reqs)</td></tr>
+        <tr><td>Quality priority</td><td>Time-to-market matters most</td><td>Quality is utmost priority</td></tr>
+        <tr><td>Functionality</td><td>Wide variety, user-friendly</td><td>Limited to client's needs</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Application Types</h3>
+    <ul>
+      <li><strong>Stand-alone</strong> — Runs locally, no network needed (e.g., a desktop text editor)</li>
+      <li><strong>Interactive transaction-based</strong> — Remote server, user access via browser (e.g., e-commerce sites)</li>
+      <li><strong>Embedded control systems</strong> — Control hardware devices; most numerous type (e.g., car engine controller)</li>
+      <li><strong>Batch processing</strong> — Process large data sets (e.g., bank statements)</li>
+      <li><strong>Entertainment systems</strong> — Personal use, entertainment (e.g., games)</li>
+      <li><strong>Modelling &amp; simulation</strong> — Scientists model physical processes</li>
+      <li><strong>Data collection systems</strong> — Use sensors to collect data (e.g., weather stations)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Software Engineering Ethics</h3>
+    <p>Engineers must behave <strong>honestly and ethically</strong>, beyond just following laws.</p>
+    <ul>
+      <li><strong>Confidentiality</strong> — Respect employer/client confidentiality, even without a formal agreement</li>
+      <li><strong>Competence</strong> — Honestly quote skill level; never accept work beyond your competence</li>
+      <li><strong>Intellectual Property Rights</strong> — Respect patents, copyright; protect employer IP</li>
+      <li><strong>Computer Misuse</strong> — Never misuse technical skills (e.g., spreading viruses is wrong; even trivial misuse like playing games on an employer's machine)</li>
+    </ul>
+    <div class="important-box">
+      <div class="im-title">🔴 Ethical Dilemmas to Know</div>
+      Releasing a safety-critical system without completing testing &nbsp;|&nbsp; Developing military/nuclear weapons systems (ethically questionable but strategically considered) &nbsp;|&nbsp; Disagreeing with senior management policies
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Case Studies (Know these for context questions!)</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Case Study</th><th>Type</th><th>Key Points</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Insulin Pump</strong></td><td>Embedded / Safety-critical</td><td>Measures blood sugar → calculates insulin dose → delivers via micro-pump. Low sugar = brain malfunction/coma. High sugar = long-term organ damage. NFRs: Availability, Reliability, Correctness.</td></tr>
+        <tr><td><strong>Mentcare</strong></td><td>Medical Info System</td><td>Stores mental health patient records. Centralized DB, offline access possible. Key concern: Privacy vs. Availability (trade-off between NFRs). Warns about suicidal/dangerous patients.</td></tr>
+        <tr><td><strong>Wilderness Weather Station</strong></td><td>Data collection</td><td>Hundreds of remote stations collect temp, pressure, rainfall, wind. Three sub-systems: weather station, data management/archive, station maintenance (via satellite).</td></tr>
+        <tr><td><strong>iLearn (Digital Learning)</strong></td><td>Service-oriented</td><td>Framework for educational tools. Three service layers: Utility, Application, Configuration. Allows incremental update as new services become available.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Web Software Engineering</h3>
+    <ul>
+      <li><strong>Software reuse</strong> — Assemble from pre-existing components (preferred approach)</li>
+      <li><strong>Incremental &amp; Agile</strong> — Build and deliver incrementally (can't specify all requirements upfront)</li>
+      <li><strong>Service-oriented</strong> — Use independent web services (e.g., Google Maps, PayPal, Facebook login)</li>
+      <li><strong>Rich Interfaces</strong> — AJAX, HTML5 enable rich browser-based UIs</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>General Issues Affecting Software</h3>
+    <ul>
+      <li><strong>Heterogeneity</strong> — Systems must run on diverse networks and device types</li>
+      <li><strong>Business &amp; Social Change</strong> — Rapid change in business requires rapid software change</li>
+      <li><strong>Security &amp; Trust</strong> — Software is interwoven with daily life; must be trustworthy</li>
+      <li><strong>Scale</strong> — From tiny embedded systems to global cloud platforms</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ===========================
+     CHAPTER 2
+     =========================== -->
+<div id="ch2" class="chapter-header">
+  <h2>📗 Chapter 2 — Software Processes</h2>
+  <div class="ch-meta">chapter_2__1_.pptx</div>
+</div>
+<div class="card">
+
+  <div class="section">
+    <h3>What is a Software Process?</h3>
+    <p>A <strong>structured set of activities</strong> required to develop a software system. A <strong>process model</strong> is an abstract description of a process from a specific perspective.</p>
+    <p>Every process includes: <strong>Products</strong> (outcomes), <strong>Roles</strong> (responsibilities), <strong>Pre/Post conditions</strong> (what's true before/after an activity).</p>
+    <div class="compare-grid">
+      <div class="compare-col blue">
+        <h4>Plan-Driven</h4>
+        <p>All activities planned upfront. Progress measured against the plan. Suitable for stable requirements.</p>
+      </div>
+      <div class="compare-col amber">
+        <h4>Agile</h4>
+        <p>Planning is incremental. Adapt plans as customer requirements change. Less documentation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>The 3 Core Process Models</h3>
+
+    <div class="highlight-box">
+      <div class="hb-title">🌊 1. Waterfall Model (Plan-Driven)</div>
+      <p>Sequential phases — each must be <em>complete</em> before the next starts.</p>
+      <ol style="margin-top:8px">
+        <li>Requirements analysis &amp; definition</li>
+        <li>System &amp; software design</li>
+        <li>Implementation &amp; unit testing</li>
+        <li>Integration &amp; system testing</li>
+        <li>Operation &amp; maintenance</li>
+      </ol>
+      <p style="margin-top:8px"><strong>When to use:</strong> Large systems engineering projects; stable, well-defined requirements; multi-site development (plan-driven coordination is easy).</p>
+      <p><strong>Drawback:</strong> Inflexible to changing requirements. Stable requirements are very rare in practice.</p>
+    </div>
+
+    <div class="example-box">
+      <div class="ex-title">🔄 2. Incremental Development</div>
+      <p>Specification, development, and validation are <strong>interleaved</strong>. Deliver working software in increments.</p>
+      <div class="compare-grid">
+        <div class="compare-col green">
+          <h4>✅ Benefits</h4>
+          <ul>
+            <li>Reduced cost of change (less rework)</li>
+            <li>Easier customer feedback (demos of actual software)</li>
+            <li>Rapid delivery of useful software</li>
+          </ul>
+        </div>
+        <div class="compare-col red">
+          <h4>❌ Problems</h4>
+          <ul>
+            <li>Process not visible to managers (no deliverables to measure progress)</li>
+            <li>System structure degrades over time without refactoring</li>
+            <li>Poor documentation (skipped to reduce cost)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">♻️ 3. Integration &amp; Configuration (Reuse-Oriented)</div>
+      <p>Assemble systems from existing reusable/configurable components (COTS — Commercial Off-The-Shelf). Reuse is the <strong>standard approach</strong> for many business systems today.</p>
+      <p><strong>Key stages:</strong> Requirements spec → Software discovery &amp; evaluation → Requirements refinement → Configuration → Component adaptation &amp; integration</p>
+      <div class="compare-grid">
+        <div class="compare-col green"><h4>✅ Advantage</h4><p>Reduced cost and risk; faster delivery</p></div>
+        <div class="compare-col red"><h4>❌ Disadvantage</h4><p>Requirements compromises are inevitable; loss of control over evolution of reused elements</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Design Activities (Process Activities → Design)</h3>
+    <ul>
+      <li><strong>Architectural design</strong> — Identify overall structure, major components/subsystems</li>
+      <li><strong>Database design</strong> — Design data structures and representation in DB; new or reuse existing DB?</li>
+      <li><strong>Interface design</strong> — Define component interfaces; must be user-friendly and hide complexity</li>
+      <li><strong>Component selection &amp; design</strong> — Search for reusable components; if unavailable, design from scratch with UML diagrams</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Software Validation (Testing)</h3>
+    <p><strong>V&amp;V (Verification &amp; Validation)</strong> — Show system conforms to specification and meets customer requirements.</p>
+    <ul>
+      <li><strong>Component (Unit) Testing</strong> — Individual components tested independently by developers. Tools: JUnit (Java), VS Code plugins.</li>
+      <li><strong>System Testing</strong> — Test entire system after integrating modules. Tests interactions between components.</li>
+      <li><strong>Customer Testing (Beta)</strong> — Test with real customer data; reveals omissions and errors in requirements.</li>
+    </ul>
+    <div class="highlight-box">
+      <div class="hb-title">V-Model (Improvement of Waterfall)</div>
+      Each development phase has a corresponding testing phase. Plan-driven approach where testing is planned alongside development.
+    </div>
+    <p><strong>Alpha testing</strong> → by development staff &nbsp;|&nbsp; <strong>Beta testing</strong> → by real end users</p>
+  </div>
+
+  <div class="section">
+    <h3>Coping with Change</h3>
+    <p>Change is <strong>inevitable</strong> in all large projects. Cost of change = cost of rework (re-analyzing requirements) + cost of implementing new module.</p>
+    <div class="compare-grid">
+      <div class="compare-col blue">
+        <h4>Proactive: Change Anticipation</h4>
+        <p>Include activities to anticipate possible changes before significant rework. <br><em>Example: Prototyping</em></p>
+      </div>
+      <div class="compare-col amber">
+        <h4>Reactive: Change Tolerance</h4>
+        <p>Design the process so changes can be accommodated at low cost. <br><em>Example: Incremental Delivery</em></p>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <div class="ex-title">🔬 Software Prototyping</div>
+      <p>An <strong>initial version</strong> of a system used to demonstrate concepts and explore design options. Used to:</p>
+      <ul>
+        <li>Refine requirements elicitation and validation</li>
+        <li>Explore design options</li>
+        <li>Run back-to-back tests</li>
+      </ul>
+      <p><strong>Important:</strong> Only prototype unclear/risky parts. Skip error handling and NFRs (response time, memory) in prototypes.</p>
+      <p><strong>Throw-away prototypes:</strong> Must be discarded — they are undocumented, structure is degraded, won't meet quality standards, can't be tuned for NFRs.</p>
+      <p><strong>Benefits:</strong> Improved usability, closer match to real needs, improved design quality, reduced development effort, improved maintainability.</p>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">📦 Incremental Delivery</div>
+      Break development into increments; deliver each increment to the user. User prioritizes requirements — highest priority goes first. Requirements for current increment are <strong>frozen</strong> during development.
+      <p style="margin-top:8px"><strong>Advantages:</strong> Early increments act as prototypes; lower risk of project failure; highest-priority services get most testing.</p>
+      <p><strong>Problems:</strong> Hard to detect dependencies between increments; difficult to form a complete contract; may cause budgetary issues.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Software Process Improvement</h3>
+    <p>Goal: Deliver <strong>quality software</strong> with <strong>reduced cost</strong> and <strong>faster timelines</strong>.</p>
+    <p>Software Process Improvement = Understanding existing processes + changing them to increase quality and/or reduce costs.</p>
+    <div class="compare-grid">
+      <div class="compare-col blue">
+        <h4>Process Maturity Approach</h4>
+        <p>Focus on improving process management. Introduces good engineering practices. Higher maturity = better technical &amp; management practice. Generally for plan-driven approaches.</p>
+      </div>
+      <div class="compare-col amber">
+        <h4>Agile Approach</h4>
+        <p>Focus on iterative development and reducing overheads. Rapid delivery + responsiveness to change. Code-first with minimal documentation.</p>
+      </div>
+    </div>
+
+    <p><strong>Process Improvement Cycle:</strong> Measure process → Analyze weakness/strengths → Change process → Measure impact → Repeat</p>
+    <p><strong>Process Metrics:</strong> Time taken for activities | Resources required (person-days) | Number of defects discovered</p>
+  </div>
+
+  <div class="section">
+    <h3>SEI Capability Maturity Model (CMM) — 5 Levels</h3>
+    <div class="important-box">
+      <div class="im-title">🎯 Exam Favourite — Know All 5 Levels!</div>
+      CMM is NOT a software process model. It rates organizational maturity on a 5-point scale.
+    </div>
+
+    <div class="cmm-level l1">
+      <div class="cmm-num">1</div>
+      <div class="cmm-content">
+        <strong>Initial</strong>
+        <span>Unmanaged work. No documentation. No project management plans. No cost estimation. "Build and Fix" model. Most organizations are here. Challenges: Planning, SQA.</span>
+      </div>
+    </div>
+    <div class="cmm-level l2">
+      <div class="cmm-num">2</div>
+      <div class="cmm-content">
+        <strong>Managed</strong>
+        <span>Project goals satisfied. Defined organizational policies (which process to use). Documented project plan. Proper resource management. Usually same type of software.</span>
+      </div>
+    </div>
+    <div class="cmm-level l3">
+      <div class="cmm-num">3</div>
+      <div class="cmm-content">
+        <strong>Defined</strong>
+        <span>Process management procedures defined and used. Proper teamwork and hierarchy. Collaborative learning. Works on diverse application types.</span>
+      </div>
+    </div>
+    <div class="cmm-level l4">
+      <div class="cmm-num">4</div>
+      <div class="cmm-content">
+        <strong>Quantitatively Managed</strong>
+        <span>Assess organizational performance with metrics. Better project management. Risk analysis and proactive approaches (what if a project fails?).</span>
+      </div>
+    </div>
+    <div class="cmm-level l5">
+      <div class="cmm-num">5</div>
+      <div class="cmm-content">
+        <strong>Optimising</strong>
+        <span>Process improvement strategies defined and actively used. Increased adaptation to newer trends and technologies. Innovative solutions.</span>
+      </div>
+    </div>
+
+    <div class="example-box" style="margin-top:16px">
+      <div class="ex-title">📝 Case Study Examples (CMM Level ID)</div>
+      <ul>
+        <li><strong>Norton LifeLock</strong> → Level 5 (Optimising) — Innovative security solutions, proper team structure, prototyping, performance prediction</li>
+        <li><strong>Everyday Wear (e-commerce app)</strong> → Level 3 (Defined) — Diverse apps (desktop + mobile), managing diverse work</li>
+        <li><strong>ABC Co. (Smart Gadgets)</strong> → Level 4 (Quantitatively Managed) — Structured teams, risk assessment for modules</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     CHAPTER 3
+     =========================== -->
+<div id="ch3" class="chapter-header">
+  <h2>📙 Chapter 3 — Agile Software Development</h2>
+  <div class="ch-meta">chapter_3.pptx</div>
+</div>
+<div class="card">
+
+  <div class="section">
+    <h3>Why Agile?</h3>
+    <p>Business needs change rapidly → requirements are unstable → software must adapt quickly. Plan-driven approaches delay delivery and may produce <em>obsolete</em> software by delivery time.</p>
+    <p>Agile methods emerged in the <strong>late 1990s</strong> to radically reduce delivery time for working software.</p>
+    <div class="highlight-box">
+      <div class="hb-title">⚡ Agile Key Characteristics</div>
+      <ul>
+        <li>Specification, design, and implementation are <strong>interleaved</strong></li>
+        <li>Developed as a series of versions/increments (stakeholders evaluate each)</li>
+        <li>Frequent delivery every <strong>2–3 weeks</strong></li>
+        <li>Extensive tool support (e.g., Selenium for automated testing)</li>
+        <li>Minimize documentation overhead</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>5 Principles of Agile Methods</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Principle</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Customer Involvement</strong></td><td>Customers closely involved throughout. They provide/prioritize requirements and evaluate iterations.</td></tr>
+        <tr><td><strong>Incremental Delivery</strong></td><td>Software developed in increments; customer specifies what goes in each.</td></tr>
+        <tr><td><strong>People Not Process</strong></td><td>Recognize and exploit team skills. Let them develop their own working styles.</td></tr>
+        <tr><td><strong>Embrace Change</strong></td><td>Expect requirements to change; design to accommodate changes.</td></tr>
+        <tr><td><strong>Maintain Simplicity</strong></td><td>Focus on simplicity in software AND process. Actively eliminate complexity.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Extreme Programming (XP)</h3>
+    <p>Takes an <strong>"extreme" approach</strong> to iterative development. Requirements are expressed as <strong>user stories</strong>. All tests must pass for every build.</p>
+
+    <div class="example-box">
+      <div class="ex-title">📖 XP Concepts</div>
+      <ul>
+        <li><strong>User Stories</strong> — Simple, informal customer statements about needed functionality. Written on cards (Task Cards).</li>
+        <li><strong>Metaphors</strong> — Show how the system would work, proposed by the project team based on user stories.</li>
+        <li><strong>Spike</strong> — A very simple program built to explore suitability of a proposed solution (similar to prototype).</li>
+      </ul>
+      <p><strong>XP Activities:</strong> Listening → Designing → Coding → Testing → Feedback</p>
+      <p><strong>Best for:</strong> Small-scale projects; projects using new/research technology</p>
+    </div>
+
+    <h3 style="margin-top:20px">XP Practices — Part A</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Practice</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Incremental Planning</strong></td><td>Requirements on story cards. Stories prioritized, then broken into development tasks.</td></tr>
+        <tr><td><strong>Small Releases</strong></td><td>Minimal useful functionality first; frequent incremental releases.</td></tr>
+        <tr><td><strong>Simple Design</strong></td><td>Only enough design to meet current requirements — no over-engineering.</td></tr>
+        <tr><td><strong>Test-First Development</strong></td><td>Write automated unit tests BEFORE implementing functionality.</td></tr>
+        <tr><td><strong>Refactoring</strong></td><td>Continuously improve code as soon as improvements are found. Keep it simple and maintainable.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 style="margin-top:20px">XP Practices — Part B</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Practice</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Pair Programming</strong></td><td>Two developers work at one computer. Informal review as each line checked by 2 people. Spreads knowledge, reduces risk.</td></tr>
+        <tr><td><strong>Collective Ownership</strong></td><td>All developers work on all parts of the system. Anyone can change anything.</td></tr>
+        <tr><td><strong>Continuous Integration</strong></td><td>As soon as a task is done, integrate into the whole system. All unit tests must pass after integration.</td></tr>
+        <tr><td><strong>On-Site Customer</strong></td><td>Customer representative available full-time with the XP team. Responsible for bringing requirements and participating in acceptance tests.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Test-First Development (XP's Key Innovation)</h3>
+    <p>Write test cases <strong>before</strong> writing the implementation code.</p>
+    <div class="compare-grid">
+      <div class="compare-col blue">
+        <h4>Plan-Driven Order</h4>
+        <p>Specification → Implementation → Testing</p>
+      </div>
+      <div class="compare-col green">
+        <h4>XP Order</h4>
+        <p>Test Cases → Implementation (guided by tests) → Requirements validation</p>
+      </div>
+    </div>
+    <p><strong>XP Testing Advantages:</strong></p>
+    <ul>
+      <li>Reduces requirements misunderstanding (tests define expected behavior)</li>
+      <li>Avoids test-lag (developer pace matches tester pace)</li>
+      <li>Customer involvement in test development</li>
+      <li>Tests are programs (automated) — run whenever new functionality is added</li>
+    </ul>
+    <div class="important-box">
+      <div class="im-title">⚠️ Problems with Test-First Development</div>
+      <ul>
+        <li>Programmers prefer coding → may write incomplete tests or skip edge cases</li>
+        <li>Some tests are hard to write incrementally (complex UI display logic)</li>
+        <li>Difficult to judge completeness of test set</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Refactoring (XP Concept)</h3>
+    <p>XP <strong>does NOT</strong> follow "design for change" (anticipate future changes upfront) — requirements may change so drastically that anticipated design becomes useless.</p>
+    <p>Instead, XP proposes <strong>constant code improvement (refactoring)</strong> — improve code even when there's no immediate need.</p>
+    <div class="example-box">
+      <div class="ex-title">Examples of Refactoring</div>
+      <ul>
+        <li>Reorganizing class hierarchy to remove duplicate code</li>
+        <li>Renaming attributes and methods to improve clarity</li>
+        <li>Replacing inline code with calls to library methods</li>
+      </ul>
+      <p><strong>Note:</strong> When deadlines are hard and implementation is critical, refactoring may be delayed.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Pair Programming</h3>
+    <ul>
+      <li>Two programmers sit at <strong>one computer</strong></li>
+      <li>Pairs created dynamically — all members work with each other</li>
+      <li>Serves as an <strong>informal review process</strong> (each line seen by 2 people)</li>
+      <li>Spreads knowledge → reduces risk when team members leave</li>
+      <li>Evidence suggests a pair is <strong>more efficient</strong> than 2 programmers working separately</li>
+      <li>Common practice: Senior + Junior developer pairing for collaborative learning</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Scrum (Agile Project Management Framework)</h3>
+    <p>A framework providing structure for agile project management. Three phases:</p>
+    <div class="step-flow">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Outline Planning Phase</strong><span>Establish general objectives and design software architecture.</span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Sprint Cycles</strong><span>Series of sprints (2–4 weeks each), each developing an increment of the system.</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Project Closure Phase</strong><span>Complete required documentation (user manuals, help frames), assess lessons learned.</span></div></div>
+    </div>
+
+    <h3 style="margin-top: 18px">Scrum Terminology</h3>
+    <div class="scrum-grid">
+      <div class="scrum-card"><strong>Sprint</strong><span>2–4 week development iteration.</span></div>
+      <div class="scrum-card"><strong>Product Backlog</strong><span>To-do list for the team (user stories, tasks, architecture definitions).</span></div>
+      <div class="scrum-card"><strong>Product Owner</strong><span>Identifies and prioritizes requirements. Could be customer, product manager, or stakeholder rep.</span></div>
+      <div class="scrum-card"><strong>Scrum Master</strong><span>Guides team, arranges daily meetings, tracks backlog, protects team from distractions. Similar to project manager.</span></div>
+      <div class="scrum-card"><strong>Development Team</strong><span>Self-organizing group, max 7 people. Responsible for software and project documents.</span></div>
+      <div class="scrum-card"><strong>Potentially Shippable Increment</strong><span>Software delivered from a sprint; finished state, ready to add to final product.</span></div>
+      <div class="scrum-card"><strong>Scrum (Daily Meeting)</strong><span>Short daily meeting reviewing progress and planning the day's work.</span></div>
+      <div class="scrum-card"><strong>Sprint Velocity</strong><span>Estimate of product backlog effort a team can cover in one sprint. Helps in planning.</span></div>
+    </div>
+
+    <div class="example-box" style="margin-top:14px">
+      <div class="ex-title">📅 Scrum Sprint Cycle (How it works)</div>
+      <ol>
+        <li>Start from <strong>Product Backlog</strong></li>
+        <li>Team selects features for the sprint</li>
+        <li>Team organizes themselves to develop the sprint software</li>
+        <li>During sprint: team is <strong>isolated from customer</strong> — all communication via Scrum Master</li>
+        <li>At end of sprint: work reviewed and presented to stakeholders</li>
+        <li>Next sprint cycle begins</li>
+      </ol>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">Scrum Benefits</div>
+      <ul>
+        <li>Product broken into manageable chunks</li>
+        <li>Full team visibility → improved communication</li>
+        <li>Customers see on-time increment delivery → feedback loop</li>
+        <li>Trust between customers and developers built over time</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Scaling Agile Methods</h3>
+    <div class="compare-grid">
+      <div class="compare-col blue">
+        <h4>Scaling Up</h4>
+        <p>Using agile for large software systems that can't be developed by one small team.</p>
+      </div>
+      <div class="compare-col amber">
+        <h4>Scaling Out</h4>
+        <p>Introducing agile across a large organization with years of existing SW experience.</p>
+      </div>
+    </div>
+
+    <p><strong>Agile works best for:</strong> Small to medium projects with co-located teams.</p>
+
+    <div class="important-box">
+      <div class="im-title">⚠️ Practical Problems with Agile</div>
+      <ul>
+        <li><strong>Contract issues</strong> — Most contracts need a fixed specification, but agile interleaves spec and development. Solution: Pay for developer time rather than functionality.</li>
+        <li><strong>Maintenance issues</strong> — Lack of documentation makes maintenance hard. Need to keep customers involved and maintain team continuity.</li>
+        <li><strong>Large systems</strong> — Distributed teams, diverse stakeholders, regulatory constraints, procurement complexity.</li>
+      </ul>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">Multi-Team Scrum (For Large Systems)</div>
+      <ul>
+        <li><strong>Role Replication</strong> — Each team has own Product Owner and Scrum Master</li>
+        <li><strong>Product Architects</strong> — Each team has an architect; they collaborate on overall architecture</li>
+        <li><strong>Release Alignment</strong> — All teams align release dates for complete system demo</li>
+        <li><strong>Scrum of Scrums</strong> — Daily meeting where representatives from all teams meet to discuss progress</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Agile vs Plan-Driven: When to Use Which?</h3>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Factor</th><th>Prefer Agile</th><th>Prefer Plan-Driven</th></tr></thead>
+      <tbody>
+        <tr><td>System size</td><td>Small, co-located team</td><td>Large, distributed team</td></tr>
+        <tr><td>System type</td><td>Rapid-change requirements</td><td>Safety-critical, stable requirements</td></tr>
+        <tr><td>Expected lifetime</td><td>Short-to-medium</td><td>Long-lifetime (documentation critical)</td></tr>
+        <tr><td>External regulation</td><td>Unregulated domains</td><td>Regulated systems (need detailed docs)</td></tr>
+        <tr><td>Team skills</td><td>High-skill developers (agile needs more skill)</td><td>Mixed skill levels</td></tr>
+        <tr><td>Customer availability</td><td>Customer available for feedback</td><td>Customer not easily available</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     CHAPTER 4
+     =========================== -->
+<div id="ch4" class="chapter-header">
+  <h2>📕 Chapter 4 — Requirements Engineering</h2>
+  <div class="ch-meta">chapter_4.pptx</div>
+</div>
+<div class="card">
+
+  <div class="section">
+    <h3>What are Requirements?</h3>
+    <p><strong>Requirements</strong> = the services a customer needs from a system + constraints under which it operates.</p>
+    <p><strong>Requirements Engineering</strong> = the process of finding out, analyzing, documenting, and checking constraints on the system. Used to create project bids, contracts.</p>
+  </div>
+
+  <div class="section">
+    <h3>Types of Requirements</h3>
+    <div class="compare-grid">
+      <div class="compare-col blue">
+        <h4>User Requirements</h4>
+        <ul>
+          <li>Written in <strong>natural language</strong> (non-technical)</li>
+          <li>High-level view of services and constraints</li>
+          <li>Audience: Stakeholders, managers, non-technical end users</li>
+          <li>Example: "A user shall be able to search doctor appointments"</li>
+        </ul>
+      </div>
+      <div class="compare-col amber">
+        <h4>System Requirements</h4>
+        <ul>
+          <li>Structured document with <strong>detailed descriptions</strong></li>
+          <li>Functions, services, and operational constraints</li>
+          <li>Defines what to implement; may form part of a contract</li>
+          <li>Example: "3.1 The system shall check username and password and login the system"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Functional vs Non-Functional Requirements</h3>
+    <div class="compare-grid">
+      <div class="compare-col green">
+        <h4>Functional Requirements (FR)</h4>
+        <p>What the system <strong>must do</strong> — specific functions and behaviors.</p>
+        <p><strong>Example (Hospital System):</strong></p>
+        <ul>
+          <li>Sign up / Sign in for employees/doctors/patients</li>
+          <li>Unique 8-digit User ID for each person</li>
+          <li>Search appointments by doctor</li>
+          <li>Generate list of expected patients per day</li>
+          <li>Search specialists by domain</li>
+          <li>View patient history, diagnosis, medications</li>
+        </ul>
+      </div>
+      <div class="compare-col blue">
+        <h4>Non-Functional Requirements (NFR)</h4>
+        <p>Constraints on services or functions — system qualities, not specific behaviors.</p>
+        <p><strong>Example (Hospital System):</strong></p>
+        <ul>
+          <li><em>Product:</em> System available Mon–Fri 08:30–17:30; downtime &lt; 5 sec/day</li>
+          <li><em>Organizational:</em> Users authenticate with ID cards</li>
+          <li><em>External:</em> System must respect patient privacy per code of ethics</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="important-box">
+      <div class="im-title">🔗 Requirements Dependency</div>
+      Requirements are not independent! One requirement often constrains another.
+      <br><strong>Example:</strong> Security (NFR) → Creates a functional requirement for user authentication. An organizational NFR (ID card auth) may lead to another NFR (card reader hardware) or alternative FR (SMS/email auth).
+    </div>
+
+    <h3 style="margin-top:18px">NFR Classification</h3>
+    <ul>
+      <li><strong>Product Requirements</strong> — Constraints on runtime behavior (availability, performance)</li>
+      <li><strong>Organizational Requirements</strong> — From policies/procedures of customer or developer org (platform, programming language to use)</li>
+      <li><strong>External Requirements</strong> — From regulatory bodies; must be met for software approval; no data leakage or ethical misuse</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Stakeholders</h3>
+    <p>Any person/organization with a legitimate interest in the system who is directly affected by it.</p>
+    <div class="example-box">
+      <div class="ex-title">Hospital System Stakeholders</div>
+      Patients | Doctors | Nurses | Medical Receptionists | IT Staff | Healthcare Managers
+    </div>
+    <p><strong>Types:</strong> End users | System managers | System owners | External stakeholders (regulatory bodies)</p>
+  </div>
+
+  <div class="section">
+    <h3>Requirements Engineering Process</h3>
+    <div class="step-flow">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Requirements Feasibility</strong><span>Is the system feasible given current technology and budget?</span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Requirements Elicitation &amp; Analysis</strong><span>Gather requirements from stakeholders using interviews, ethnography, scenarios.</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Requirements Specification</strong><span>Document user and system requirements formally.</span></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Requirements Validation</strong><span>Check that requirements define the system the customer actually wants.</span></div></div>
+    </div>
+    <p>In practice, RE is <strong>iterative</strong> — these processes are interleaved (shown as a spiral).</p>
+  </div>
+
+  <div class="section">
+    <h3>Requirements Elicitation Techniques</h3>
+
+    <div class="highlight-box">
+      <div class="hb-title">🗣️ Interviewing</div>
+      <p>Formal or informal interviews with stakeholders.</p>
+      <ul>
+        <li><strong>Closed interviews</strong> — Pre-determined questions</li>
+        <li><strong>Open interviews</strong> — No fixed questionnaire; explore and refine requirements</li>
+        <li>Best: Mix of both types</li>
+      </ul>
+      <p><strong>Tips:</strong> Be open-minded; prompt users to talk by suggesting requirements; listen actively.</p>
+      <p><strong>Problem:</strong> Communication gap; domain knowledge prerequisite needed. E.g., building e-commerce site must include transaction processing knowledge.</p>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">👁️ Ethnography</div>
+      <p>A person <strong>observes and analyzes</strong> how people actually work (rather than how they say they work).</p>
+      <ul>
+        <li>People don't have to explain; observer captures real behavior</li>
+        <li>Social and organizational factors observed</li>
+        <li>Work is often richer and more complex than simple system models suggest</li>
+      </ul>
+      <p><strong>Scope:</strong> Requirements derived from actual work; good for fine-tuning design. But <strong>cannot suggest innovation</strong> to a system.</p>
+      <p><strong>Focused Ethnography:</strong> Combines ethnography with prototyping. Prototype raises unanswered questions → focuses ethnographic analysis. Issue: Studies existing practices which may be historically outdated.</p>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">📖 Stories &amp; Scenarios</div>
+      Real-life examples of how a system can be used for a task. Stakeholders can relate and comment because they're practical.
+      <p><strong>Scenario structure:</strong> Starting situation → Normal flow of events → What can go wrong → Concurrent activities → Finished state</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Common Problems in Requirements Elicitation</h3>
+    <ul>
+      <li>Stakeholders don't know what they really want</li>
+      <li>Stakeholders express requirements in their own terms (domain jargon)</li>
+      <li><strong>Conflicting requirements</strong> from different stakeholders (e.g., HR wants employee age captured; Data Privacy team says no)</li>
+      <li>Organizational constraints influence requirements</li>
+      <li>Requirements change during the analysis process</li>
+      <li>New stakeholders emerge; business environment changes</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Requirements Specification</h3>
+    <p>Process of writing user and system requirements in a <strong>requirements document</strong>.</p>
+    <ul>
+      <li>User requirements → natural language</li>
+      <li>System requirements → natural language + graphical notations + mathematical models</li>
+      <li>Use tables, forms, diagrams</li>
+    </ul>
+
+    <div class="highlight-box">
+      <div class="hb-title">🔗 Requirements and Design</div>
+      Requirements = what the system should do. Design = how it does it. In practice, they are <strong>inseparable</strong> — system architecture may structure requirements; subsystems may generate new requirements; NFRs may dictate design choices (e.g., use Python for financial calculations to ensure reliability).
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">Problems with Natural Language</div>
+      Ambiguous requirements lead to misunderstanding, system delay, and increased costs.
+      <br><strong>Bad example:</strong> "A user shall be able to search the appointments."
+      <br>→ User means: search across ALL clinics &nbsp;|&nbsp; Developer interprets: choose clinic first, then search
+    </div>
+
+    <h3 style="margin-top:18px">Ways to Specify Requirements</h3>
+    <ul>
+      <li><strong>Natural Language</strong> — Simple but ambiguous</li>
+      <li><strong>Structured Specifications</strong> — Forms with defined fields (function description, inputs, outputs, pre/post conditions)</li>
+      <li><strong>Tabular Specification</strong> — Supplement natural language; useful for multiple conditions/actions</li>
+      <li><strong>Use Cases (UML)</strong> — Identify actors and interactions; high-level graphical model</li>
+    </ul>
+
+    <div class="example-box">
+      <div class="ex-title">Example: Tabular Specification (Login Module)</div>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Condition</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Username correct, password wrong</td><td>Login fail</td></tr>
+          <tr><td>Username wrong, password wrong</td><td>Login fail</td></tr>
+          <tr><td>Username correct, password correct</td><td>Login success</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Software Requirements Document (SRD)</h3>
+    <p>The <strong>official statement</strong> of what the system developers must build. NOT a design document — it defines <em>what</em>, not <em>how</em>.</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Chapter</th><th>Content</th></tr></thead>
+      <tbody>
+        <tr><td>Preface</td><td>Expected readership, version history, rationale for new version</td></tr>
+        <tr><td>Introduction</td><td>Need for the system, functions overview, fit with business objectives</td></tr>
+        <tr><td>Glossary</td><td>Technical terms defined; no assumptions about reader expertise</td></tr>
+        <tr><td>User Requirements Definition</td><td>Services for users, NFRs, standards to follow; in natural language/diagrams</td></tr>
+        <tr><td>System Architecture</td><td>High-level architecture, distribution of functions, reused components</td></tr>
+        <tr><td>System Requirements Specification</td><td>Detailed functional &amp; non-functional requirements</td></tr>
+        <tr><td>System Models</td><td>Object models, data-flow models, semantic data models</td></tr>
+        <tr><td>System Evolution</td><td>Fundamental assumptions; anticipated changes (helps designers avoid constrained decisions)</td></tr>
+        <tr><td>Appendices</td><td>Hardware/database descriptions; min/optimal system configurations</td></tr>
+        <tr><td>Index</td><td>Alphabetic index, diagram index, function index</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Requirements Validation</h3>
+    <p>Checking that requirements define the system the <strong>customer actually wants</strong>. Overlaps with elicitation and analysis. <strong>Critical step</strong> because fixing errors later is extremely expensive.</p>
+    <div class="important-box">
+      <div class="im-title">💰 Why Validation Matters</div>
+      Fixing a requirements error AFTER delivery can cost <strong>up to 100× more</strong> than fixing an implementation error. A requirements change leads to changes in design, implementation, AND testing.
+    </div>
+
+    <p><strong>Validation techniques:</strong></p>
+    <ul>
+      <li><strong>Requirements Review</strong> — Customer and developers read the whole SRD, check for errors, anomalies, inconsistencies, then negotiate fixes.</li>
+      <li><strong>Prototyping</strong> — Build a quick prototype to validate understanding.</li>
+      <li><strong>Test-Case Generation</strong> — Develop test cases from requirements; if a test case is hard to write, the requirement may be unclear.</li>
+    </ul>
+
+    <p><strong>Types of checks:</strong> Validity, Consistency, Completeness, Realism, Verifiability</p>
+  </div>
+
+  <div class="section">
+    <h3>Requirements Change — Why Requirements Evolve</h3>
+    <ul>
+      <li><strong>Reason 1:</strong> Business/technical environment changes after installation (new hardware, changing priorities). E.g., installing RFID attendance and integrating with employee portal.</li>
+      <li><strong>Reason 2:</strong> People who pay ≠ people who use. Customer imposes constraints from budget; after delivery, users need more features. E.g., EMS adding APR forms and PF statements.</li>
+      <li><strong>Reason 3:</strong> Large systems have diverse user communities with conflicting priorities. Final requirements are always a compromise.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Requirements Management</h3>
+    <p>Managing <strong>changing requirements</strong> throughout development. New requirements always emerge during development and after deployment.</p>
+    <div class="highlight-box">
+      <div class="hb-title">Requirements Management Planning</div>
+      <ul>
+        <li><strong>Requirements Identification</strong> — Each requirement gets a unique ID for cross-referencing</li>
+        <li><strong>Change Management Process</strong> — Activities to assess impact and cost of changes</li>
+        <li><strong>Traceability Policies</strong> — Define relationships between requirements and design decisions</li>
+        <li><strong>Tool Support</strong> — Spreadsheets, databases, dedicated requirements management tools</li>
+      </ul>
+    </div>
+
+    <div class="example-box">
+      <div class="ex-title">Requirements Change Management Process</div>
+      <ol>
+        <li>Identify the proposed change</li>
+        <li>Assess the impact of the change (what does it affect?)</li>
+        <li>Estimate cost of the change</li>
+        <li>Decide whether to accept or reject the change</li>
+        <li>If accepted: update requirements and notify stakeholders</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Agile's Take on Requirements Engineering</h3>
+    <p>In agile, detailed system requirements are considered <strong>waste of time</strong>.</p>
+    <ul>
+      <li>Concurrent requirement elicitation</li>
+      <li>No formal requirement document</li>
+      <li>Requirements expressed as <strong>user stories</strong></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ===========================
+     WBS
+     =========================== -->
+<div id="wbs" class="chapter-header">
+  <h2>🗂️ Work Breakdown Structure (WBS)</h2>
+  <div class="ch-meta">WBS.pptx</div>
+</div>
+<div class="card">
+
+  <div class="section">
+    <h3>What is WBS?</h3>
+    <p>A <strong>hierarchical decomposition of the total scope of work</strong> to be carried out by the project team to accomplish project objectives and create required deliverables.</p>
+    <p><strong>Scope and Planning</strong> = defining a project's deliverables, goals, tasks, deadlines, costs, and how to develop the software.</p>
+  </div>
+
+  <div class="section">
+    <h3>Why is WBS Needed?</h3>
+    <ul>
+      <li>Activity identification</li>
+      <li>Correct estimation of effort and cost</li>
+      <li>Identify related activities using PERT</li>
+      <li>Creating schedules</li>
+      <li>Minimizes risk of project failure</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>When to Develop WBS?</h3>
+    <div class="highlight-box">
+      <div class="hb-title">⏰ Timing</div>
+      <strong>After finalizing project scope</strong> and <strong>before project estimation</strong>. (Scope → WBS → Estimation)
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Levels in WBS</h3>
+    <div class="step-flow">
+      <div class="step"><div class="step-num">0</div><div class="step-content"><strong>Level 0 — Project Title</strong><span>The root node; the entire project.</span></div></div>
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Level 1 — Control Accounts</strong><span>Highest-level breakdown into 4–7 nodes (major phases/deliverables).</span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Level 2 — Work Packages</strong><span>Sub-divisions of control accounts; manageable units of work.</span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Level 3 — Tasks/Activities</strong><span>Specific activities to be performed; small enough for accurate estimation.</span></div></div>
+    </div>
+    <p>Follow a <strong>standard numbering scheme</strong> (e.g., 1.0, 1.1, 1.1.1).</p>
+  </div>
+
+  <div class="section">
+    <h3>WBS Guidelines</h3>
+    <ul>
+      <li>Must be <strong>easy to understand</strong></li>
+      <li>Covers <strong>all objectives</strong></li>
+      <li>Each element corresponds to a <strong>deliverable</strong></li>
+      <li>Break down until you get <strong>accurate time and cost estimates</strong></li>
+      <li>Should NOT be as detailed as a project plan</li>
+      <li>Can evolve over time</li>
+      <li>Each level should have <strong>no more than 7 items</strong></li>
+      <li>Tools: GanttPro, Word, Excel, MS Project, Visio, Jira, ProjectManager.com</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Example WBS — Redecorate Room</h3>
+    <div class="example-box">
+      <div class="ex-title">🏠 Sample WBS</div>
+      <strong>0. Redecorate Room</strong>
+      <ul>
+        <li><strong>1. Prepare materials</strong>
+          <ul>
+            <li>1.1 Buy paint</li>
+            <li>1.2 Buy a ladder</li>
+            <li>1.3 Buy brushes/rollers</li>
+            <li>1.4 Buy wallpaper remover</li>
+          </ul>
+        </li>
+        <li><strong>2. Prepare room</strong>
+          <ul>
+            <li>2.1 Remove old wallpaper</li>
+            <li>2.2 Remove detachable decorations</li>
+            <li>2.3 Cover floor with old newspapers</li>
+            <li>2.4 Cover electrical outlets with tape</li>
+            <li>2.5 Cover furniture with sheets</li>
+          </ul>
+        </li>
+        <li><strong>3. Paint the room</strong></li>
+        <li><strong>4. Clean up the room</strong>
+          <ul>
+            <li>4.1 Dispose/store leftover paint</li>
+            <li>4.2 Clean brushes/rollers</li>
+            <li>4.3 Dispose of old newspapers</li>
+            <li>4.4 Remove covers</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>WBS Formats</h3>
+    <ul>
+      <li><strong>Outlined (Indented) WBS</strong> — Hierarchical bullet list format (as shown above)</li>
+      <li><strong>Graphical Tree WBS</strong> — Tree diagram like an org chart, visually shows hierarchy</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ===========================
+     ESTIMATION
+     =========================== -->
+<div id="est" class="chapter-header">
+  <h2>📊 Software Project Estimation (Wideband Delphi)</h2>
+  <div class="ch-meta">Estimation_.pptx</div>
+</div>
+<div class="card">
+
+  <div class="section">
+    <h3>What is Project Estimation?</h3>
+    <p>Determining how much a project will take in terms of <strong>time, cost, money, and manpower</strong>.</p>
+    <div class="example-box">
+      <div class="ex-title">Example: LMS Estimation</div>
+      Without estimation: unrealistic deadlines, budget overruns, insufficient team.
+      <br>With estimation:
+      <ul>
+        <li>Effort = 1,200 person-hours</li>
+        <li>Duration = 4 months</li>
+        <li>Cost = PKR 1,200,000</li>
+        <li>Team = 4 developers + 1 tester</li>
+      </ul>
+      → Planning is now structured and controlled!
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Why Estimation is Needed</h3>
+    <ul>
+      <li>Budget planning</li>
+      <li>Time scheduling</li>
+      <li>Resource allocation</li>
+      <li>Risk management</li>
+      <li>Stakeholder communication</li>
+      <li>Project feasibility analysis</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>Estimation Techniques (Overview)</h3>
+    <ul>
+      <li><strong>COCOMO</strong> — Algorithmic model using lines of code</li>
+      <li><strong>Wideband Delphi</strong> — Expert consensus-based estimation</li>
+      <li><strong>Function Points Estimation</strong> — Based on functional complexity</li>
+      <li><strong>LOC (Lines of Code) Estimation</strong> — Count anticipated code lines</li>
+    </ul>
+    <p><strong>For good estimation, you need:</strong> WBS | Deliverables | Clear effort estimate per task | List of assumptions | Team consensus that estimate is accurate</p>
+  </div>
+
+  <div class="section">
+    <h3>Assumptions in Estimation</h3>
+    <p>Team members make assumptions to deal with <strong>incomplete information</strong>. Assumptions must be <strong>written down</strong>. If an assumption proves incorrect, it must be tracked back and corrected.</p>
+  </div>
+
+  <div class="section">
+    <h3>Delphi Technique (Foundation)</h3>
+    <p>Gather input from multiple stakeholders, then create a final estimate.</p>
+    <div class="step-flow">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Have a facilitator/coordinator</strong><span></span></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Create list of experts</strong><span></span></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Create 3–5 questions</strong><span>E.g., "What's better for this project — Azure or AWS?"</span></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Reach out for answers</strong><span></span></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Analyze &amp; iterate</strong><span>Repeat until consensus</span></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Wideband Delphi Process (6 Steps)</h3>
+    <p>A <strong>repeatable</strong> estimation process using a team to generate and reach consensus on estimates. Team size: 3–7 project members + 1 moderator.</p>
+
+    <div class="step-flow">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>Choose the Team</strong>
+          <span>Project manager selects 3–7 team members and a moderator. Moderator should know the Delphi process but have NO stake in the outcome. Ideally, PM is part of estimation team (not moderator).</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>Kickoff Meeting</strong>
+          <span>Ensure everyone understands the Delphi process and has read the vision/scope document. Team brainstorms and writes assumptions. Team reviews the WBS. Team agrees on a unit of estimation (hours, days, etc.).</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>Individual Preparation</strong>
+          <span>Each team member independently estimates effort for each WBS task and notes any assumptions they needed to make.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>Estimation Session</strong>
+          <span>Team comes together to reach consensus. Each member fills an estimation form. Moderator plots sum of effort from each form on a line. Multiple rounds of discussion and revision — individual numbers NOT discussed directly. Disagreements resolved by adding assumptions. Goal: Maximum convergence. Delta sheet shows variation between rounds.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <strong>Assemble Tasks</strong>
+          <span>PM collects final estimates and compiles the final task list, estimates, and assumptions.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <strong>Review Results</strong>
+          <span>PM reviews final task list with the estimation team.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <div class="hb-title">🎯 Key Rules of Wideband Delphi</div>
+      <ul>
+        <li>Individual estimate numbers are NEVER discussed directly — only tasks/assumptions are discussed</li>
+        <li>Session continues until estimates converge or team is unwilling to revise further</li>
+        <li>Moderator plots estimates on a line to show convergence visually</li>
+        <li>A "Delta Sheet" shows how much estimates vary after each round</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===========================
+     QUICK REVIEW
+     =========================== -->
+<div class="chapter-header" style="margin-top:56px">
+  <h2>⚡ Quick Review — Key Terms Glossary</h2>
+  <div class="ch-meta">Most likely exam terms</div>
+</div>
+<div class="card">
+  <div class="section">
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Software Process</strong></td><td>Structured set of activities required to develop software</td></tr>
+        <tr><td><strong>COTS</strong></td><td>Commercial Off-The-Shelf — existing software you can configure and reuse</td></tr>
+        <tr><td><strong>V&amp;V</strong></td><td>Verification &amp; Validation — ensuring software conforms to spec and meets customer needs</td></tr>
+        <tr><td><strong>CMM</strong></td><td>Capability Maturity Model — 5-level scale measuring organizational software process maturity</td></tr>
+        <tr><td><strong>User Story</strong></td><td>Simple, informal statement of customer about needed functionality (used in XP/Agile)</td></tr>
+        <tr><td><strong>Spike (XP)</strong></td><td>Simple program built to explore suitability of a proposed solution (like a prototype)</td></tr>
+        <tr><td><strong>Refactoring</strong></td><td>Continuous code improvement without changing external behavior; keeps code clean and maintainable</td></tr>
+        <tr><td><strong>Sprint</strong></td><td>2–4 week Scrum development iteration producing a shippable increment</td></tr>
+        <tr><td><strong>Product Backlog</strong></td><td>To-do list of all work to be done in Scrum; prioritized by Product Owner</td></tr>
+        <tr><td><strong>Scrum Master</strong></td><td>Guides team, tracks backlog, protects team from external distractions</td></tr>
+        <tr><td><strong>WBS</strong></td><td>Work Breakdown Structure — hierarchical decomposition of project scope</td></tr>
+        <tr><td><strong>Person-hour</strong></td><td>1 person working for 1 hour — unit of effort</td></tr>
+        <tr><td><strong>Wideband Delphi</strong></td><td>Team-based estimation technique using iterative anonymous rounds until consensus</td></tr>
+        <tr><td><strong>Ethnography</strong></td><td>Requirements elicitation by observing how people actually work in their environment</td></tr>
+        <tr><td><strong>SRD</strong></td><td>Software Requirements Document — official statement of what developers must build</td></tr>
+        <tr><td><strong>NFR</strong></td><td>Non-Functional Requirement — quality/constraint requirement (performance, security, usability)</td></tr>
+        <tr><td><strong>FR</strong></td><td>Functional Requirement — specific function or behavior the system must provide</td></tr>
+        <tr><td><strong>Incremental Delivery</strong></td><td>Breaking development into increments deployed to users; each increment adds functionality</td></tr>
+        <tr><td><strong>Test-First Development</strong></td><td>XP practice of writing automated tests before implementing the functionality</td></tr>
+        <tr><td><strong>Pair Programming</strong></td><td>Two developers working at one computer; improves quality and spreads knowledge</td></tr>
+        <tr><td><strong>Brownfield System</strong></td><td>New system derived from/constrained by an existing system</td></tr>
+        <tr><td><strong>Sprint Velocity</strong></td><td>How much product backlog a team can complete in one sprint</td></tr>
+        <tr><td><strong>Scrum of Scrums</strong></td><td>Daily cross-team coordination meeting for large multi-team Scrum projects</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Most Likely Exam Questions — Be Ready For These!</h3>
+    <div class="important-box">
+      <div class="im-title">🔴 High Priority Topics</div>
+      <ol>
+        <li>Identify the CMM level of a given company scenario (with justification)</li>
+        <li>Identify the software process model used in a given scenario (Waterfall / Incremental / Reuse-Oriented / Prototyping)</li>
+        <li>List and explain advantages/disadvantages of Waterfall, Incremental Development, or Reuse-Oriented</li>
+        <li>Explain the Wideband Delphi estimation process steps</li>
+        <li>List stakeholders for a given system (e.g., hospital, bank)</li>
+        <li>Distinguish between FRs and NFRs with examples</li>
+        <li>Explain the difference between Incremental Development vs. Incremental Delivery</li>
+        <li>Describe WBS levels with an example</li>
+        <li>Explain XP practices (Test-First Development, Pair Programming, Refactoring)</li>
+        <li>Describe Scrum terminology and the Sprint Cycle</li>
+        <li>What are throw-away prototypes and why must they be discarded?</li>
+        <li>Explain the difference between Generic and Custom software products</li>
+        <li>Write requirements (FR and NFR) for a given system scenario</li>
+        <li>Why is requirements validation critical? What does it cost if delayed?</li>
+        <li>Compare Agile vs Plan-Driven — which to use and when?</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<a href="#" class="back-top" title="Back to top">↑</a>
+
+<script>
+// Smooth scroll for TOC links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Lab Midterm — Complete Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --accent3: #a8ff78;
+    --accent4: #ffd700;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --code-bg: #0d1117;
+    --q1: #00d4ff;
+    --q2: #ff6b35;
+    --q3: #a8ff78;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Lora', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    font-size: 15px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #111827 50%, #0a1628 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(0,212,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 50%, rgba(255,107,53,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  header .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    padding: 4px 14px;
+    margin-bottom: 1.2rem;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+  }
+  header h1 span { color: var(--accent); }
+  header .sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+  .meta-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .meta-item span { color: var(--accent4); font-weight: 700; }
+
+  /* ── TOC ── */
+  .toc {
+    max-width: 900px; margin: 2rem auto; padding: 0 1.5rem;
+  }
+  .toc-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+  }
+  .toc-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .toc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.4rem; }
+  .toc-grid a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .toc-grid a:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── MAIN LAYOUT ── */
+  main { max-width: 960px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--accent);
+    color: #000;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .section-num.q2 { background: var(--q2); }
+  .section-num.q3 { background: var(--q3); }
+  .section-num.pa { background: var(--accent4); color: #000; }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .card.accent-q1 { border-left: 3px solid var(--q1); }
+  .card.accent-q2 { border-left: 3px solid var(--q2); }
+  .card.accent-q3 { border-left: 3px solid var(--q3); }
+  .card.accent-gold { border-left: 3px solid var(--accent4); }
+  .card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  .card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 1rem 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .card h4.o { color: var(--q2); }
+  .card h4.g { color: var(--q3); }
+  .card h4.y { color: var(--accent4); }
+  .card p { color: var(--text-dim); margin-bottom: 0.5rem; }
+  .card ul, .card ol { color: var(--text-dim); padding-left: 1.5rem; margin-bottom: 0.5rem; }
+  .card li { margin-bottom: 0.3rem; }
+
+  /* ── CODE BLOCKS ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    overflow-x: auto;
+    margin: 0.75rem 0;
+    position: relative;
+  }
+  pre code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: #e2e8f0;
+    white-space: pre;
+  }
+  .code-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.3rem;
+  }
+
+  /* syntax colours */
+  .kw { color: #ff79c6; }
+  .fn { color: #50fa7b; }
+  .st { color: #f1fa8c; }
+  .cm { color: #6272a4; font-style: italic; }
+  .nb { color: #8be9fd; }
+  .op { color: #ff79c6; }
+  .nm { color: #bd93f9; }
+
+  /* ── GRID TABLE ── */
+  .grid-table { border-collapse: collapse; width: 100%; margin: 0.75rem 0; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .grid-table th, .grid-table td { border: 1px solid var(--border); padding: 8px 14px; text-align: center; }
+  .grid-table th { background: var(--surface2); color: var(--accent); }
+  .grid-table td { color: var(--text); }
+  .grid-table .obs { color: var(--q2); font-weight: 700; }
+  .grid-table .start { color: var(--accent); font-weight: 700; }
+  .grid-table .goal { color: var(--q3); font-weight: 700; }
+
+  /* ── COMPARISON TABLE ── */
+  .cmp-table { border-collapse: collapse; width: 100%; margin: 0.75rem 0; font-size: 13px; }
+  .cmp-table th { background: var(--surface2); color: var(--accent4); font-family: 'Syne', sans-serif; font-size: 12px; letter-spacing: 1px; padding: 10px 14px; text-align: left; border: 1px solid var(--border); }
+  .cmp-table td { border: 1px solid var(--border); padding: 9px 14px; color: var(--text-dim); vertical-align: top; }
+  .cmp-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 6px;
+    padding: 1rem 1.2rem;
+    margin: 0.75rem 0;
+    font-size: 13.5px;
+  }
+  .callout.tip { background: rgba(0,212,255,0.07); border-left: 3px solid var(--q1); color: var(--text); }
+  .callout.warn { background: rgba(255,107,53,0.07); border-left: 3px solid var(--q2); color: var(--text); }
+  .callout.ok { background: rgba(168,255,120,0.07); border-left: 3px solid var(--q3); color: var(--text); }
+  .callout strong { font-family: 'Syne', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── STEP LIST ── */
+  .steps { list-style: none; padding: 0; counter-reset: steps; }
+  .steps li {
+    counter-increment: steps;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .steps li::before {
+    content: counter(steps);
+    min-width: 26px; height: 26px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── PILL TAGS ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid;
+  }
+  .tag.blue { color: var(--q1); border-color: var(--q1); }
+  .tag.orange { color: var(--q2); border-color: var(--q2); }
+  .tag.green { color: var(--q3); border-color: var(--q3); }
+  .tag.gold { color: var(--accent4); border-color: var(--accent4); }
+
+  /* ── DIVIDER ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* ── ANSWER BLOCK ── */
+  .ans-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+  .ans-block .hl { color: var(--accent4); font-weight: 700; }
+  .ans-block .path { color: var(--q3); }
+  .ans-block .cost { color: var(--q2); }
+
+  /* scroll offset for anchor links */
+  [id] { scroll-margin-top: 80px; }
+
+  /* sticky nav */
+  .sticky-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,26,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 1.5rem;
+    display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;
+  }
+  .sticky-nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .sticky-nav a:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">AI-1002 · Karachi Campus · Spring 2026</div>
+  <h1>Artificial Intelligence Lab<br><span>Midterm Study Guide</span></h1>
+  <p class="sub">BFS · DFS · UCS · Greedy · A* · Genetic Algorithms</p>
+  <div class="meta-bar">
+    <div class="meta-item">Duration: <span>90–100 min</span></div>
+    <div class="meta-item">Total Marks: <span>50</span></div>
+    <div class="meta-item">Questions: <span>3</span></div>
+    <div class="meta-item">Date: <span>April 1, 2026</span></div>
+  </div>
+</header>
+
+<nav class="sticky-nav">
+  <a href="#q1-theory">Q1 — BFS/DFS/UCS</a>
+  <a href="#q2-theory">Q2 — A*/Greedy</a>
+  <a href="#q3-theory">Q3 — Genetic Algo</a>
+  <a href="#practice">Practice Solutions</a>
+  <a href="#past1">Past Paper A (2025)</a>
+  <a href="#past2">Past Paper B (2026)</a>
+</nav>
+
+<div class="toc">
+  <div class="toc-box">
+    <h2>📋 Table of Contents</h2>
+    <div class="toc-grid">
+      <a href="#q1-theory">① BFS Algorithm</a>
+      <a href="#q1-theory">① DFS Algorithm</a>
+      <a href="#q1-theory">① UCS Algorithm</a>
+      <a href="#q2-theory">② Greedy Best-First</a>
+      <a href="#q2-theory">② A* Search</a>
+      <a href="#q3-theory">③ GA Overview</a>
+      <a href="#q3-theory">③ Selection Methods</a>
+      <a href="#q3-theory">③ Crossover Types</a>
+      <a href="#q3-theory">③ Mutation Types</a>
+      <a href="#q3-theory">③ Fitness Functions</a>
+      <a href="#practice">Practice Q1 Solution</a>
+      <a href="#practice2">Practice Q2 Solution</a>
+      <a href="#past1">Past Paper 2025 — Q1</a>
+      <a href="#past1b">Past Paper 2025 — Q2</a>
+      <a href="#past1c">Past Paper 2025 — Q3</a>
+      <a href="#past2">Past Paper 2026 — Q1</a>
+      <a href="#past2b">Past Paper 2026 — Q2</a>
+      <a href="#past2c">Past Paper 2026 — Q3</a>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- QUESTION 1: UNINFORMED SEARCH -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="q1-theory">
+  <div class="section-header">
+    <span class="section-num">Q1 TOPIC</span>
+    <span class="section-title">Uninformed Search — BFS, DFS, UCS</span>
+  </div>
+</div>
+
+<!-- BFS -->
+<div class="card accent-q1">
+  <h3>🔵 Breadth-First Search (BFS)</h3>
+  <p>Explores all nodes at the current depth before going deeper. Uses a <strong>queue (FIFO)</strong>. Guaranteed to find the <em>shortest path</em> (in terms of number of steps, not cost).</p>
+  <h4>Key Properties</h4>
+  <ul>
+    <li><strong>Complete:</strong> Yes — will always find a solution if one exists</li>
+    <li><strong>Optimal:</strong> Yes — for uniform-cost edges (finds fewest hops)</li>
+    <li><strong>Data structure:</strong> Queue (FIFO)</li>
+    <li><strong>Time/Space:</strong> O(b^d) where b = branching factor, d = depth</li>
+  </ul>
+  <h4>Algorithm Steps</h4>
+  <ol class="steps">
+    <li>Put the start node in the queue; mark it visited.</li>
+    <li>Dequeue the front node. If it's the goal, reconstruct path and stop.</li>
+    <li>For each unvisited neighbor, enqueue it and mark visited.</li>
+    <li>Repeat until queue is empty (no solution) or goal found.</li>
+  </ol>
+  <div class="code-label">Python — BFS on a 2D Grid</div>
+<pre><code><span class="kw">from</span> collections <span class="kw">import</span> deque
+
+<span class="kw">def</span> <span class="fn">bfs</span>(grid, start, goal):
+    rows, cols = len(grid), len(grid[<span class="nm">0</span>])
+    queue = deque([(start, [start])])   <span class="cm"># (current_pos, path_so_far)</span>
+    visited = {start}
+
+    <span class="kw">while</span> queue:
+        (r, c), path = queue.popleft()
+        <span class="kw">if</span> (r, c) == goal:
+            <span class="kw">return</span> path            <span class="cm"># Found!</span>
+        <span class="kw">for</span> dr, dc <span class="kw">in</span> [(-<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">0</span>,-<span class="nm">1</span>),(<span class="nm">0</span>,<span class="nm">1</span>)]:   <span class="cm"># Up Down Left Right</span>
+            nr, nc = r+dr, c+dc
+            <span class="kw">if</span> <span class="nm">0</span> <= nr < rows <span class="kw">and</span> <span class="nm">0</span> <= nc < cols \
+               <span class="kw">and</span> (nr, nc) <span class="kw">not in</span> visited \
+               <span class="kw">and</span> grid[nr][nc] != <span class="st">'#'</span>:
+                visited.add((nr, nc))
+                queue.append(((nr, nc), path + [(nr, nc)]))
+    <span class="kw">return None</span>   <span class="cm"># No path found</span>
+
+<span class="cm"># BFS on a graph (adjacency list)</span>
+<span class="kw">def</span> <span class="fn">bfs_graph</span>(graph, start, goal):
+    queue = deque([(start, [start])])
+    visited = {start}
+    <span class="kw">while</span> queue:
+        node, path = queue.popleft()
+        <span class="kw">if</span> node == goal: <span class="kw">return</span> path
+        <span class="kw">for</span> neighbor <span class="kw">in</span> graph.get(node, []):
+            <span class="kw">if</span> neighbor <span class="kw">not in</span> visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    <span class="kw">return None</span>
+</code></pre>
+</div>
+
+<!-- DFS -->
+<div class="card accent-q1">
+  <h3>🔵 Depth-First Search (DFS)</h3>
+  <p>Explores as deep as possible along each branch before backtracking. Uses a <strong>stack (LIFO)</strong> or recursion. Not guaranteed to find the shortest path.</p>
+  <h4>Key Properties</h4>
+  <ul>
+    <li><strong>Complete:</strong> No — can get stuck in infinite loops (use visited set)</li>
+    <li><strong>Optimal:</strong> No — may find a longer path first</li>
+    <li><strong>Data structure:</strong> Stack (LIFO)</li>
+    <li><strong>Space:</strong> O(b·m) — better than BFS for deep solutions</li>
+  </ul>
+  <div class="code-label">Python — DFS on a 2D Grid</div>
+<pre><code><span class="kw">def</span> <span class="fn">dfs</span>(grid, start, goal):
+    rows, cols = len(grid), len(grid[<span class="nm">0</span>])
+    stack = [(start, [start])]
+    visited = {start}
+
+    <span class="kw">while</span> stack:
+        (r, c), path = stack.pop()   <span class="cm"># LIFO — use stack.pop()</span>
+        <span class="kw">if</span> (r, c) == goal:
+            <span class="kw">return</span> path
+        <span class="kw">for</span> dr, dc <span class="kw">in</span> [(-<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">0</span>,-<span class="nm">1</span>),(<span class="nm">0</span>,<span class="nm">1</span>)]:
+            nr, nc = r+dr, c+dc
+            <span class="kw">if</span> <span class="nm">0</span> <= nr < rows <span class="kw">and</span> <span class="nm">0</span> <= nc < cols \
+               <span class="kw">and</span> (nr, nc) <span class="kw">not in</span> visited \
+               <span class="kw">and</span> grid[nr][nc] != <span class="st">'#'</span>:
+                visited.add((nr, nc))
+                stack.append(((nr, nc), path + [(nr, nc)]))
+    <span class="kw">return None</span>
+</code></pre>
+</div>
+
+<!-- UCS -->
+<div class="card accent-q1">
+  <h3>🔵 Uniform Cost Search (UCS)</h3>
+  <p>Like BFS but uses a <strong>priority queue (min-heap)</strong> ordered by cumulative path cost. Finds the truly optimal (lowest-cost) path even when edge costs differ.</p>
+  <h4>Key Properties</h4>
+  <ul>
+    <li><strong>Complete:</strong> Yes (if costs > 0)</li>
+    <li><strong>Optimal:</strong> Yes — always finds minimum-cost path</li>
+    <li><strong>Data structure:</strong> Priority queue (heapq)</li>
+  </ul>
+  <div class="code-label">Python — UCS on a Cost Grid</div>
+<pre><code><span class="kw">import</span> heapq
+
+<span class="kw">def</span> <span class="fn">ucs</span>(grid, start, goal):
+    <span class="cm"># grid[r][c] = cost to enter that cell (int), '#' = obstacle</span>
+    rows, cols = len(grid), len(grid[<span class="nm">0</span>])
+    <span class="cm"># heap: (total_cost, current_pos, path)</span>
+    heap = [(<span class="nm">0</span>, start, [start])]
+    visited = {}   <span class="cm"># pos -> best cost seen</span>
+
+    <span class="kw">while</span> heap:
+        cost, (r, c), path = heapq.heappop(heap)
+        <span class="kw">if</span> (r, c) == goal:
+            <span class="kw">return</span> path, cost
+        <span class="kw">if</span> (r, c) <span class="kw">in</span> visited <span class="kw">and</span> visited[(r,c)] <= cost:
+            <span class="kw">continue</span>
+        visited[(r, c)] = cost
+        <span class="kw">for</span> dr, dc <span class="kw">in</span> [(-<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">0</span>,-<span class="nm">1</span>),(<span class="nm">0</span>,<span class="nm">1</span>)]:
+            nr, nc = r+dr, c+dc
+            <span class="kw">if</span> <span class="nm">0</span> <= nr < rows <span class="kw">and</span> <span class="nm">0</span> <= nc < cols \
+               <span class="kw">and</span> grid[nr][nc] != <span class="st">'#'</span>:
+                new_cost = cost + <span class="nb">int</span>(grid[nr][nc])
+                heapq.heappush(heap, (new_cost, (nr, nc), path+[(nr,nc)]))
+    <span class="kw">return None</span>, <span class="nb">float</span>(<span class="st">'inf'</span>)
+</code></pre>
+  <div class="callout tip"><strong>📌 Tip:</strong> BFS = queue, DFS = stack, UCS = min-heap. The only difference between BFS and UCS in code is the data structure used.</div>
+</div>
+
+<!-- Comparison -->
+<div class="card">
+  <h3>📊 Comparison: BFS vs DFS vs UCS</h3>
+  <table class="cmp-table">
+    <tr><th>Property</th><th>BFS</th><th>DFS</th><th>UCS</th></tr>
+    <tr><td>Data structure</td><td>Queue (FIFO)</td><td>Stack (LIFO)</td><td>Priority Queue</td></tr>
+    <tr><td>Optimal?</td><td>Yes (uniform cost)</td><td>No</td><td>Yes (any cost)</td></tr>
+    <tr><td>Complete?</td><td>Yes</td><td>No (infinite loops)</td><td>Yes</td></tr>
+    <tr><td>Finds</td><td>Shortest path (hops)</td><td>A path (any)</td><td>Cheapest path</td></tr>
+    <tr><td>Space</td><td>O(b^d)</td><td>O(b·m)</td><td>O(b^d)</td></tr>
+    <tr><td>Use when</td><td>Equal-cost edges</td><td>Memory limited</td><td>Different-cost edges</td></tr>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- QUESTION 2: INFORMED SEARCH -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="q2-theory">
+  <div class="section-header">
+    <span class="section-num q2">Q2 TOPIC</span>
+    <span class="section-title">Informed Search — Greedy Best-First & A*</span>
+  </div>
+</div>
+
+<div class="card accent-q2">
+  <h3>🟠 Greedy Best-First Search (GBFS)</h3>
+  <p>Uses a heuristic <strong>h(n)</strong> to always expand the node that appears closest to the goal. Fast but not optimal — it ignores the cost already paid.</p>
+  <h4>Formula</h4>
+  <p>Priority = <strong>h(n)</strong> only</p>
+  <h4>Key Properties</h4>
+  <ul>
+    <li><strong>Complete:</strong> No (can get trapped in loops)</li>
+    <li><strong>Optimal:</strong> No</li>
+    <li><strong>Speed:</strong> Very fast when heuristic is good</li>
+  </ul>
+  <div class="code-label">Python — GBFS on a 2D Grid</div>
+<pre><code><span class="kw">import</span> heapq
+
+<span class="kw">def</span> <span class="fn">manhattan</span>(a, b):
+    <span class="kw">return</span> <span class="nb">abs</span>(a[<span class="nm">0</span>]-b[<span class="nm">0</span>]) + <span class="nb">abs</span>(a[<span class="nm">1</span>]-b[<span class="nm">1</span>])
+
+<span class="kw">def</span> <span class="fn">gbfs</span>(grid, heuristic, start, goal):
+    <span class="cm"># heuristic[r][c] = h value given in the problem</span>
+    rows, cols = len(grid), len(grid[<span class="nm">0</span>])
+    heap = [(heuristic[start[<span class="nm">0</span>]][start[<span class="nm">1</span>]], start, [start])]
+    visited = set()
+
+    <span class="kw">while</span> heap:
+        h, (r, c), path = heapq.heappop(heap)
+        <span class="kw">if</span> (r, c) == goal: <span class="kw">return</span> path
+        <span class="kw">if</span> (r, c) <span class="kw">in</span> visited: <span class="kw">continue</span>
+        visited.add((r, c))
+        <span class="kw">for</span> dr, dc <span class="kw">in</span> [(-<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">0</span>,-<span class="nm">1</span>),(<span class="nm">0</span>,<span class="nm">1</span>)]:
+            nr, nc = r+dr, c+dc
+            <span class="kw">if</span> <span class="nm">0</span> <= nr < rows <span class="kw">and</span> <span class="nm">0</span> <= nc < cols \
+               <span class="kw">and</span> (nr,nc) <span class="kw">not in</span> visited \
+               <span class="kw">and</span> grid[nr][nc] != <span class="st">'#'</span>:
+                heapq.heappush(heap,
+                    (heuristic[nr][nc], (nr,nc), path+[(nr,nc)]))
+    <span class="kw">return None</span>
+</code></pre>
+</div>
+
+<div class="card accent-q2">
+  <h3>🟠 A* Search</h3>
+  <p>Combines actual cost so far <strong>g(n)</strong> and heuristic estimate <strong>h(n)</strong>. Optimal and complete when the heuristic is <em>admissible</em> (never overestimates).</p>
+  <h4>Formula</h4>
+  <p>Priority = <strong>f(n) = g(n) + h(n)</strong></p>
+  <ul>
+    <li><strong>g(n)</strong> = actual cost from start to n</li>
+    <li><strong>h(n)</strong> = heuristic estimate from n to goal</li>
+  </ul>
+  <h4>Common Heuristics</h4>
+  <ul>
+    <li><strong>Manhattan distance</strong> (grid, no diagonal): |Δrow| + |Δcol|</li>
+    <li><strong>Euclidean distance</strong> (any direction): √(Δrow² + Δcol²)</li>
+  </ul>
+  <div class="code-label">Python — A* on a 2D Grid</div>
+<pre><code><span class="kw">import</span> heapq
+
+<span class="kw">def</span> <span class="fn">astar</span>(grid, start, goal, cost_grid=<span class="kw">None</span>):
+    <span class="cm">"""
+    grid[r][c]: '#' = wall, else passable
+    cost_grid[r][c]: cost to enter cell (default 1 if None)
+    """</span>
+    rows, cols = len(grid), len(grid[<span class="nm">0</span>])
+    <span class="kw">def</span> <span class="fn">h</span>(r, c):   <span class="cm"># Manhattan heuristic</span>
+        <span class="kw">return</span> <span class="nb">abs</span>(r - goal[<span class="nm">0</span>]) + <span class="nb">abs</span>(c - goal[<span class="nm">1</span>])
+    <span class="kw">def</span> <span class="fn">step_cost</span>(r, c):
+        <span class="kw">if</span> cost_grid: <span class="kw">return</span> cost_grid[r][c]
+        <span class="kw">return</span> <span class="nm">1</span>
+
+    <span class="cm"># heap: (f, g, pos, path)</span>
+    heap = [(h(*start), <span class="nm">0</span>, start, [start])]
+    best_g = {}   <span class="cm"># pos -> best g seen</span>
+
+    <span class="kw">while</span> heap:
+        f, g, (r, c), path = heapq.heappop(heap)
+        <span class="kw">if</span> (r, c) == goal: <span class="kw">return</span> path, g
+        <span class="kw">if</span> best_g.get((r,c), <span class="nb">float</span>(<span class="st">'inf'</span>)) <= g: <span class="kw">continue</span>
+        best_g[(r, c)] = g
+        <span class="kw">for</span> dr, dc <span class="kw">in</span> [(-<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">0</span>,-<span class="nm">1</span>),(<span class="nm">0</span>,<span class="nm">1</span>)]:
+            nr, nc = r+dr, c+dc
+            <span class="kw">if</span> <span class="nm">0</span> <= nr < rows <span class="kw">and</span> <span class="nm">0</span> <= nc < cols \
+               <span class="kw">and</span> grid[nr][nc] != <span class="st">'#'</span>:
+                ng = g + step_cost(nr, nc)
+                nf = ng + h(nr, nc)
+                heapq.heappush(heap, (nf, ng, (nr,nc), path+[(nr,nc)]))
+    <span class="kw">return None</span>, <span class="nb">float</span>(<span class="st">'inf'</span>)
+</code></pre>
+  <div class="callout tip"><strong>📌 Key Insight:</strong> A* with h=0 becomes UCS. A* with g=0 becomes GBFS. A* is the sweet spot between the two.</div>
+</div>
+
+<div class="card">
+  <h3>📊 Comparison: GBFS vs A*</h3>
+  <table class="cmp-table">
+    <tr><th>Property</th><th>Greedy Best-First</th><th>A*</th></tr>
+    <tr><td>Priority formula</td><td>f = h(n)</td><td>f = g(n) + h(n)</td></tr>
+    <tr><td>Considers past cost?</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Optimal?</td><td>No</td><td>Yes (admissible h)</td></tr>
+    <tr><td>Complete?</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Speed</td><td>Faster</td><td>Slower but smarter</td></tr>
+  </table>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- QUESTION 3: GENETIC ALGORITHMS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="q3-theory">
+  <div class="section-header">
+    <span class="section-num q3">Q3 TOPIC</span>
+    <span class="section-title">Genetic Algorithms — Complete Reference</span>
+  </div>
+</div>
+
+<div class="card accent-q3">
+  <h3>🟢 GA Overview & Lifecycle</h3>
+  <p>Genetic Algorithms mimic natural selection to optimize solutions. Each individual (chromosome) represents a candidate solution.</p>
+  <ol class="steps">
+    <li><strong>Initialize Population</strong> — Create random individuals.</li>
+    <li><strong>Evaluate Fitness</strong> — Score each individual.</li>
+    <li><strong>Selection</strong> — Choose parents based on fitness.</li>
+    <li><strong>Crossover</strong> — Combine parent genes to make offspring.</li>
+    <li><strong>Mutation</strong> — Randomly alter some genes.</li>
+    <li><strong>Replacement</strong> — Form next generation.</li>
+    <li><strong>Repeat</strong> until termination condition met.</li>
+  </ol>
+</div>
+
+<!-- SELECTION METHODS -->
+<div class="card accent-q3">
+  <h3>🟢 Selection Methods</h3>
+
+  <h4 class="g">1. Tournament Selection ⭐ (Exam Focus)</h4>
+  <p>Pick k random individuals; the best one is the winner (parent). Repeat for second parent.</p>
+<pre><code><span class="kw">import</span> random
+
+<span class="kw">def</span> <span class="fn">tournament_selection</span>(population, fitnesses, k=<span class="nm">3</span>):
+    <span class="cm">"""Select one parent via tournament of size k."""</span>
+    tournament = random.sample(<span class="nb">list</span>(<span class="nb">zip</span>(population, fitnesses)), k)
+    winner = <span class="nb">max</span>(tournament, key=<span class="kw">lambda</span> x: x[<span class="nm">1</span>])
+    <span class="kw">return</span> winner[<span class="nm">0</span>]   <span class="cm"># return the individual</span>
+</code></pre>
+
+  <h4 class="g">2. Roulette Wheel (Fitness-Proportionate) Selection</h4>
+  <p>Each individual's probability of selection = fitness / total_fitness. Spin the wheel.</p>
+<pre><code><span class="kw">def</span> <span class="fn">roulette_selection</span>(population, fitnesses):
+    total = <span class="nb">sum</span>(fitnesses)
+    pick = random.uniform(<span class="nm">0</span>, total)
+    current = <span class="nm">0</span>
+    <span class="kw">for</span> ind, fit <span class="kw">in</span> <span class="nb">zip</span>(population, fitnesses):
+        current += fit
+        <span class="kw">if</span> current >= pick:
+            <span class="kw">return</span> ind
+</code></pre>
+
+  <h4 class="g">3. Rank-Based Selection</h4>
+  <p>Sort by fitness; assign selection probability based on rank, not raw fitness value.</p>
+<pre><code><span class="kw">def</span> <span class="fn">rank_selection</span>(population, fitnesses):
+    ranked = <span class="nb">sorted</span>(<span class="nb">zip</span>(population, fitnesses), key=<span class="kw">lambda</span> x: x[<span class="nm">1</span>])
+    ranks = [i+<span class="nm">1</span> <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(<span class="nb">len</span>(ranked))]
+    total = <span class="nb">sum</span>(ranks)
+    pick = random.uniform(<span class="nm">0</span>, total)
+    current = <span class="nm">0</span>
+    <span class="kw">for</span> (ind, _), rank <span class="kw">in</span> <span class="nb">zip</span>(ranked, ranks):
+        current += rank
+        <span class="kw">if</span> current >= pick: <span class="kw">return</span> ind
+</code></pre>
+</div>
+
+<!-- CROSSOVER METHODS -->
+<div class="card accent-q3">
+  <h3>🟢 Crossover Techniques</h3>
+
+  <h4 class="g">1. Single-Point Crossover</h4>
+  <p>Pick one random cut point; swap tails of both parents.</p>
+<pre><code><span class="kw">def</span> <span class="fn">single_point_crossover</span>(p1, p2):
+    pt = random.randint(<span class="nm">1</span>, <span class="nb">len</span>(p1)-<span class="nm">1</span>)
+    child1 = p1[:pt] + p2[pt:]
+    child2 = p2[:pt] + p1[pt:]
+    <span class="kw">return</span> child1, child2
+</code></pre>
+
+  <h4 class="g">2. Two-Point Crossover ⭐ (Exam Focus)</h4>
+  <p>Pick two cut points; swap the middle segment.</p>
+<pre><code><span class="kw">def</span> <span class="fn">two_point_crossover</span>(p1, p2):
+    size = <span class="nb">len</span>(p1)
+    pt1, pt2 = <span class="nb">sorted</span>(random.sample(<span class="nb">range</span>(<span class="nm">1</span>, size), <span class="nm">2</span>))
+    child1 = p1[:pt1] + p2[pt1:pt2] + p1[pt2:]
+    child2 = p2[:pt1] + p1[pt1:pt2] + p2[pt2:]
+    <span class="kw">return</span> child1, child2
+</code></pre>
+
+  <h4 class="g">3. Uniform Crossover</h4>
+  <p>For each gene, flip a coin — take from parent 1 or parent 2.</p>
+<pre><code><span class="kw">def</span> <span class="fn">uniform_crossover</span>(p1, p2, prob=<span class="nm">0.5</span>):
+    child1, child2 = [], []
+    <span class="kw">for</span> g1, g2 <span class="kw">in</span> <span class="nb">zip</span>(p1, p2):
+        <span class="kw">if</span> random.random() < prob:
+            child1.append(g1); child2.append(g2)
+        <span class="kw">else</span>:
+            child1.append(g2); child2.append(g1)
+    <span class="kw">return</span> child1, child2
+</code></pre>
+
+  <h4 class="g">4. Order Crossover (OX) ⭐ — For Permutation Problems (TSP)</h4>
+  <p>Preserve relative order of genes. Used for Travelling Salesman Problem.</p>
+<pre><code><span class="kw">def</span> <span class="fn">order_crossover</span>(p1, p2):
+    size = <span class="nb">len</span>(p1)
+    pt1, pt2 = <span class="nb">sorted</span>(random.sample(<span class="nb">range</span>(size), <span class="nm">2</span>))
+    child = [<span class="kw">None</span>] * size
+    child[pt1:pt2] = p1[pt1:pt2]              <span class="cm"># copy segment from p1</span>
+    remaining = [x <span class="kw">for</span> x <span class="kw">in</span> p2 <span class="kw">if</span> x <span class="kw">not in</span> child]
+    idx = <span class="nm">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(size):
+        <span class="kw">if</span> child[i] <span class="kw">is None</span>:
+            child[i] = remaining[idx]; idx += <span class="nm">1</span>
+    <span class="kw">return</span> child
+</code></pre>
+
+  <h4 class="g">5. Partially Mapped Crossover (PMX)</h4>
+  <p>Similar to OX but uses a mapping to resolve conflicts in permutations.</p>
+<pre><code><span class="kw">def</span> <span class="fn">pmx</span>(p1, p2):
+    size = <span class="nb">len</span>(p1)
+    pt1, pt2 = <span class="nb">sorted</span>(random.sample(<span class="nb">range</span>(size), <span class="nm">2</span>))
+    child = [<span class="kw">None</span>] * size
+    child[pt1:pt2] = p1[pt1:pt2]
+    mapping = {p1[i]: p2[i] <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(pt1, pt2)}
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(size):
+        <span class="kw">if</span> child[i] <span class="kw">is None</span>:
+            val = p2[i]
+            <span class="kw">while</span> val <span class="kw">in</span> mapping: val = mapping[val]
+            child[i] = val
+    <span class="kw">return</span> child
+</code></pre>
+
+  <h4 class="g">6. Cyclic Crossover (CX)</h4>
+  <p>Preserves absolute positions of genes from parents via cycle detection.</p>
+<pre><code><span class="kw">def</span> <span class="fn">cyclic_crossover</span>(p1, p2):
+    size = <span class="nb">len</span>(p1)
+    child = [<span class="kw">None</span>] * size
+    idx, cycle = <span class="nm">0</span>, <span class="nm">0</span>
+    <span class="kw">while None in</span> child:
+        <span class="kw">if</span> child[idx] <span class="kw">is not None</span>: idx = child.index(<span class="kw">None</span>)
+        start = idx
+        <span class="kw">while True</span>:
+            <span class="kw">if</span> cycle % <span class="nm">2</span> == <span class="nm">0</span>: child[idx] = p1[idx]
+            <span class="kw">else</span>: child[idx] = p2[idx]
+            idx = p1.index(p2[idx])
+            <span class="kw">if</span> idx == start: <span class="kw">break</span>
+        cycle += <span class="nm">1</span>
+    <span class="kw">return</span> child
+</code></pre>
+</div>
+
+<!-- MUTATION -->
+<div class="card accent-q3">
+  <h3>🟢 Mutation Techniques</h3>
+
+  <h4 class="g">1. Uniform Mutation ⭐ (Exam Focus)</h4>
+  <p>Each gene independently has a chance to be replaced by a random value.</p>
+<pre><code><span class="kw">def</span> <span class="fn">uniform_mutation</span>(individual, gene_pool, mutation_rate=<span class="nm">0.1</span>):
+    <span class="kw">return</span> [random.choice(gene_pool) <span class="kw">if</span> random.random() < mutation_rate <span class="kw">else</span> g
+            <span class="kw">for</span> g <span class="kw">in</span> individual]
+</code></pre>
+
+  <h4 class="g">2. Swap Mutation (for TSP/Permutation)</h4>
+  <p>Pick two random positions and swap their genes.</p>
+<pre><code><span class="kw">def</span> <span class="fn">swap_mutation</span>(individual):
+    a, b = random.sample(<span class="nb">range</span>(<span class="nb">len</span>(individual)), <span class="nm">2</span>)
+    individual = individual[:]
+    individual[a], individual[b] = individual[b], individual[a]
+    <span class="kw">return</span> individual
+</code></pre>
+
+  <h4 class="g">3. Bit-Flip Mutation (Binary Chromosomes)</h4>
+<pre><code><span class="kw">def</span> <span class="fn">bit_flip_mutation</span>(individual, mutation_rate=<span class="nm">0.05</span>):
+    <span class="kw">return</span> [<span class="nm">1</span>-g <span class="kw">if</span> random.random() < mutation_rate <span class="kw">else</span> g
+            <span class="kw">for</span> g <span class="kw">in</span> individual]
+</code></pre>
+</div>
+
+<!-- FITNESS FUNCTIONS -->
+<div class="card accent-q3">
+  <h3>🟢 Fitness Functions for Common Problems</h3>
+
+  <h4 class="g">TSP — Minimize Distance</h4>
+<pre><code><span class="kw">import</span> math
+
+<span class="kw">def</span> <span class="fn">tsp_distance</span>(route, cities):
+    <span class="cm">"""Total distance for a route (list of city indices)."""</span>
+    total = <span class="nm">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(<span class="nb">len</span>(route)):
+        c1, c2 = cities[route[i]], cities[route[(i+<span class="nm">1</span>) % <span class="nb">len</span>(route)]]
+        total += math.dist(c1, c2)
+    <span class="kw">return</span> total
+
+<span class="kw">def</span> <span class="fn">tsp_fitness</span>(route, cities):
+    <span class="kw">return</span> <span class="nm">1</span> / tsp_distance(route, cities)   <span class="cm"># higher is better</span>
+</code></pre>
+
+  <h4 class="g">N-Queens — Minimize Conflicts</h4>
+<pre><code><span class="kw">def</span> <span class="fn">nqueens_fitness</span>(board):
+    <span class="cm">"""board[i] = row of queen in column i"""</span>
+    n = <span class="nb">len</span>(board)
+    conflicts = <span class="nm">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(n):
+        <span class="kw">for</span> j <span class="kw">in</span> <span class="nb">range</span>(i+<span class="nm">1</span>, n):
+            <span class="kw">if</span> board[i] == board[j] <span class="kw">or</span> <span class="nb">abs</span>(board[i]-board[j]) == j-i:
+                conflicts += <span class="nm">1</span>
+    <span class="kw">return</span> -conflicts   <span class="cm"># 0 conflicts = perfect solution</span>
+</code></pre>
+
+  <h4 class="g">Complete GA Template (TSP)</h4>
+<pre><code><span class="kw">import</span> random, math
+
+<span class="kw">def</span> <span class="fn">distance</span>(c1, c2): <span class="kw">return</span> math.dist(c1, c2)
+
+<span class="kw">def</span> <span class="fn">total_distance</span>(route, cities):
+    <span class="kw">return</span> <span class="nb">sum</span>(distance(cities[route[i]], cities[route[(i+<span class="nm">1</span>)%<span class="nb">len</span>(route)]])
+                <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(<span class="nb">len</span>(route)))
+
+<span class="kw">def</span> <span class="fn">fitness</span>(route, cities):
+    <span class="kw">return</span> <span class="nm">1</span> / total_distance(route, cities)
+
+<span class="kw">def</span> <span class="fn">tournament_select</span>(pop, fits, k=<span class="nm">3</span>):
+    t = random.sample(<span class="nb">list</span>(<span class="nb">zip</span>(pop, fits)), k)
+    <span class="kw">return</span> <span class="nb">max</span>(t, key=<span class="kw">lambda</span> x: x[<span class="nm">1</span>])[<span class="nm">0</span>]
+
+<span class="kw">def</span> <span class="fn">order_crossover</span>(p1, p2):
+    size = <span class="nb">len</span>(p1)
+    a, b = <span class="nb">sorted</span>(random.sample(<span class="nb">range</span>(size), <span class="nm">2</span>))
+    child = [<span class="kw">None</span>]*size; child[a:b] = p1[a:b]
+    rem = [x <span class="kw">for</span> x <span class="kw">in</span> p2 <span class="kw">if</span> x <span class="kw">not in</span> child]
+    idx = <span class="nm">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(size):
+        <span class="kw">if</span> child[i] <span class="kw">is None</span>: child[i]=rem[idx]; idx+=<span class="nm">1</span>
+    <span class="kw">return</span> child
+
+<span class="kw">def</span> <span class="fn">mutate</span>(route, rate=<span class="nm">0.1</span>):
+    route = route[:]
+    <span class="kw">if</span> random.random() < rate:
+        a, b = random.sample(<span class="nb">range</span>(<span class="nb">len</span>(route)), <span class="nm">2</span>)
+        route[a], route[b] = route[b], route[a]
+    <span class="kw">return</span> route
+
+<span class="kw">def</span> <span class="fn">genetic_algorithm</span>(cities, pop_size=<span class="nm">50</span>, generations=<span class="nm">500</span>):
+    n = <span class="nb">len</span>(cities)
+    pop = [random.sample(<span class="nb">range</span>(n), n) <span class="kw">for</span> _ <span class="kw">in</span> <span class="nb">range</span>(pop_size)]
+
+    <span class="kw">for</span> gen <span class="kw">in</span> <span class="nb">range</span>(generations):
+        fits = [fitness(ind, cities) <span class="kw">for</span> ind <span class="kw">in</span> pop]
+        best = pop[fits.index(<span class="nb">max</span>(fits))]
+
+        new_pop = [best]   <span class="cm"># Elitism: keep best</span>
+        <span class="kw">while</span> <span class="nb">len</span>(new_pop) < pop_size:
+            p1 = tournament_select(pop, fits)
+            p2 = tournament_select(pop, fits)
+            child = order_crossover(p1, p2)
+            child = mutate(child)
+            new_pop.append(child)
+        pop = new_pop
+
+    fits = [fitness(ind, cities) <span class="kw">for</span> ind <span class="kw">in</span> pop]
+    best = pop[fits.index(<span class="nb">max</span>(fits))]
+    <span class="kw">return</span> best, total_distance(best, cities)
+
+<span class="cm"># Example usage:</span>
+cities = [(<span class="nm">2</span>,<span class="nm">3</span>), (<span class="nm">5</span>,<span class="nm">7</span>), (<span class="nm">1</span>,<span class="nm">9</span>), (<span class="nm">8</span>,<span class="nm">2</span>), (<span class="nm">4</span>,<span class="nm">5</span>)]
+route, dist = genetic_algorithm(cities)
+<span class="nb">print</span>(<span class="st">f"Best Route: {route}"</span>)
+<span class="nb">print</span>(<span class="st">f"Total Distance: {dist:.2f} units"</span>)
+</code></pre>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PRACTICE QUESTIONS — SOLVED -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="practice">
+  <div class="section-header">
+    <span class="section-num pa">PRACTICE Q1</span>
+    <span class="section-title">Practice Paper — BFS, DFS, UCS Solution</span>
+  </div>
+</div>
+
+<div class="card">
+  <h3>The Grid (from Practice PDF)</h3>
+  <table class="grid-table">
+    <tr><th></th><th>Col 1</th><th>Col 2</th><th>Col 3</th><th>Col 4</th><th>Col 5</th></tr>
+    <tr><th>Row A</th><td class="start">S</td><td>1</td><td class="obs">#</td><td>2</td><td>3</td></tr>
+    <tr><th>Row B</th><td>2</td><td class="obs">#</td><td>2</td><td class="obs">#</td><td>1</td></tr>
+    <tr><th>Row C</th><td>3</td><td>2</td><td>1</td><td>2</td><td>2</td></tr>
+    <tr><th>Row D</th><td class="obs">#</td><td>2</td><td class="obs">#</td><td>1</td><td>3</td></tr>
+    <tr><th>Row E</th><td>2</td><td>1</td><td>2</td><td>2</td><td class="goal">G</td></tr>
+  </table>
+  <p style="margin-top:0.5rem; font-size:13px; color:var(--text-dim)">S = (A,1), G = (E,5). # = walls. Numbers = move cost.</p>
+</div>
+
+<div class="card accent-gold">
+  <h3>① BFS Solution</h3>
+  <p>BFS ignores costs; it finds the path with fewest steps.</p>
+  <h4 class="y">Expansion Order</h4>
+  <div class="ans-block">
+Start: <span class="hl">(A,1)=S</span><br>
+Queue after start: [(A,2), (B,1)]<br><br>
+Expand (A,2): neighbors = (A,1)visited, (A,3)=#SKIP, (B,2)=#SKIP → add nothing new except path continues<br>
+Expand (B,1): neighbors = (A,1)visited, (C,1) → add (C,1)<br>
+Expand (C,1): neighbors = (B,1)v, (D,1)=#, (C,2) → add (C,2)<br>
+Expand (C,2): neighbors = (C,1)v, (C,3), (D,2), (B,2)=# → add (C,3),(D,2)<br>
+Expand (C,3): neighbors = (C,2)v,(C,4),(B,3),(D,3)=# → add (C,4),(B,3)<br>
+Expand (D,2): neighbors = (C,2)v,(D,1)=#,(D,3)=#,(E,2) → add (E,2)<br>
+Expand (C,4): neighbors = (C,3)v,(C,5),(D,4),(B,4)=# → add (C,5),(D,4)<br>
+Expand (B,3): neighbors = (A,3)=#,(B,4)=#,(B,2)=#,(C,3)v → nothing<br>
+Expand (E,2): neighbors = (D,2)v,(E,1),(E,3) → add (E,1),(E,3)<br>
+Expand (C,5): neighbors = (C,4)v,(D,5),(B,5) → add (D,5),(B,5)<br>
+Expand (D,4): neighbors = (C,4)v,(D,3)=#,(D,5),(E,4) → add (E,4)<br>
+Expand (E,3): neighbors = (E,2)v,(E,4),(D,3)=# → add (E,4) if not added<br>
+Expand (D,5): neighbors = (C,5)v,(D,4)v,(E,5)=<span class="hl">GOAL!</span>
+  </div>
+  <div class="ans-block">
+<span class="hl">BFS Path (one of the shortest-hop paths):</span><br>
+<span class="path">S(A1) → B1 → C1 → C2 → C3 → C4 → C5 → D5 → E5(G)</span><br>
+<span class="cost">Total hops: 8</span>
+  </div>
+</div>
+
+<div class="card accent-gold">
+  <h3>② DFS Solution</h3>
+  <p>DFS uses a stack; goes deep first. Path may not be shortest.</p>
+  <div class="ans-block">
+<span class="hl">DFS Expansion (going Down first priority):</span><br>
+S(A1) → B1 → C1 → C2 → C3 → B3 → [backtrack] → C4 → C5 → B5 → [backtrack] → D5 → E5(G)<br>
+<br>
+<span class="hl">DFS Path:</span><br>
+<span class="path">S(A1) → B1 → C1 → C2 → C3 → C4 → C5 → D5 → E5(G)</span><br>
+<span class="cost">Total hops: 8</span>
+  </div>
+  <div class="callout warn"><strong>⚠ Note:</strong> DFS path depends on neighbor ordering. Different orderings give different paths. In an exam, show the visited order and any backtracking.</div>
+</div>
+
+<div class="card accent-gold">
+  <h3>③ UCS Solution</h3>
+  <p>UCS picks the path with minimum <em>accumulated cost</em>. Uses a priority queue.</p>
+  <div class="ans-block">
+<span class="hl">UCS Trace (cost to reach each node):</span><br>
+Start S(A1), cost=0<br>
+→ A2 (cost=1), B1 (cost=2)<br>
+<br>
+Expand A2 (cost 1): → B2=# SKIP<br>
+Expand B1 (cost 2): → C1 (cost=2+3=5)<br>
+Expand C1 (cost 5): → C2 (cost=5+2=7)<br>
+Expand C2 (cost 7): → C3 (cost=7+1=8), D2 (cost=7+2=9)<br>
+Expand C3 (cost 8): → B3 (cost=8+2=10), C4 (cost=8+2=10)<br>
+Expand D2 (cost 9): → E2 (cost=9+1=10)<br>
+Expand C4 (cost 10): → C5 (cost=10+2=12), D4 (cost=10+1=11)<br>
+Expand E2 (cost 10): → E1 (cost=10+2=12), E3 (cost=10+2=12)<br>
+Expand D4 (cost 11): → D5 (cost=11+3=14), E4 (cost=11+2=13)<br>
+Expand C5 (cost 12): → B5 (cost=12+1=13), D5 (cost=12+3=15)<br>
+Expand E4 (cost 13): → E5=GOAL! cost = 13+<span class="hl">G_cost</span><br>
+<br>
+<span class="hl">Actually trace the optimal path:</span><br>
+S(A1,0)→B1(2)→C1(5)→C2(7)→C3(8)→C4(10)→D4(11)→E4(13)→E5(G)<br>
+<span class="cost">Minimum Total Cost: 13 + cost_of_E5</span><br>
+<span class="path">Path: A1 → B1 → C1 → C2 → C3 → C4 → D4 → E4 → E5(G)</span>
+  </div>
+  <div class="callout ok"><strong>✅ UCS always finds minimum cost.</strong> The path above is the cheapest route through the grid.</div>
+</div>
+
+<!-- Practice Q2 -->
+<div id="practice2">
+  <div class="section-header">
+    <span class="section-num pa">PRACTICE Q2</span>
+    <span class="section-title">Practice Paper — Greedy & A* Solution</span>
+  </div>
+</div>
+
+<div class="card">
+  <h3>The Heuristic Grid (from Practice PDF)</h3>
+  <table class="grid-table">
+    <tr><th></th><th>Col 1</th><th>Col 2</th><th>Col 3</th><th>Col 4</th><th>Col 5</th></tr>
+    <tr><th>Row A</th><td class="start">S (h=4)</td><td>4</td><td class="obs">#</td><td>2</td><td>0</td></tr>
+    <tr><th>Row B</th><td>3</td><td class="obs">#</td><td>3</td><td class="obs">#</td><td>1</td></tr>
+    <tr><th>Row C</th><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td></tr>
+    <tr><th>Row D</th><td class="obs">#</td><td>3</td><td class="obs">#</td><td>1</td><td>2</td></tr>
+    <tr><th>Row E</th><td>3</td><td>2</td><td>3</td><td>2</td><td class="goal">G (h=0)</td></tr>
+  </table>
+  <p style="font-size:13px; color:var(--text-dim); margin-top:0.5rem">Numbers = h(n) heuristic values. Step cost = 1 for each move.</p>
+</div>
+
+<div class="card accent-gold">
+  <h3>① Greedy Best-First Solution</h3>
+  <p>Always expand the node with the <strong>smallest h value</strong>.</p>
+  <div class="ans-block">
+<span class="hl">GBFS Trace:</span><br>
+Expand S(A1, h=4): neighbors A2(h=4), B1(h=3)<br>
+→ Heap: [B1(h=3), A2(h=4)]<br><br>
+Expand B1(h=3): neighbors A1=v, C1(h=2)<br>
+→ Heap: [C1(h=2), A2(h=4)]<br><br>
+Expand C1(h=2): neighbors B1=v, C2(h=2), D1=#<br>
+→ Heap: [C2(h=2), A2(h=4)]<br><br>
+Expand C2(h=2): neighbors C1=v, C3(h=2), D2(h=3), B2=#<br>
+→ Heap: [C3(h=2), C4→via C3, D2(h=3), A2(h=4)]<br><br>
+Expand C3(h=2): neighbors C2=v, C4(h=2), B3(h=3), D3=#<br>
+→ Heap: [C4(h=2), D2(3), B3(3), A2(4)]<br><br>
+Expand C4(h=2): neighbors C3=v, C5(h=1), D4(h=1), B4=#<br>
+→ Heap: [C5(h=1), D4(h=1), D2, B3, A2]<br><br>
+Expand C5(h=1): neighbors C4=v, D5(h=2), B5(h=1)<br>
+→ Heap: [B5(h=1), D4(1), D2(3)...]<br><br>
+Expand B5(h=1): neighbors A5(h=0!), C5=v, B4=#<br>
+→ Heap: [A5(h=0), D4(1)...]<br><br>
+Expand A5(h=0): This is NOT the goal (goal is E5).<br>
+h=0 was given to A5... continue exploring.<br><br>
+<span class="hl">Continuing from D4(h=1):</span><br>
+Expand D4(h=1): neighbors C4=v, D3=#, D5(h=2), E4(h=2)<br>
+...eventually reach E5 via E4 or D5.<br><br>
+<span class="hl">GBFS Path found:</span><br>
+<span class="path">S(A1)→B1→C1→C2→C3→C4→D4→E4→E5(G)</span>
+  </div>
+</div>
+
+<div class="card accent-gold">
+  <h3>② A* Solution</h3>
+  <p>f(n) = g(n) + h(n). Step cost = 1. Expand lowest f first.</p>
+  <div class="ans-block">
+<span class="hl">A* Trace:</span><br>
+S(A1): g=0, h=4, f=4<br>
+Neighbors: A2(g=1,h=4,f=5), B1(g=1,h=3,f=4)<br>
+Expand B1(f=4): C1(g=2,h=2,f=4)<br>
+Expand C1(f=4): C2(g=3,h=2,f=5), D1=# SKIP<br>
+Expand C2(f=5): C3(g=4,h=2,f=6), D2(g=4,h=3,f=7)<br>
+Expand A2(f=5): B2=# — nothing useful<br>
+Expand C3(f=6): B3(g=5,h=3,f=8), C4(g=5,h=2,f=7)<br>
+Expand C4(f=7): C5(g=6,h=1,f=7), D4(g=6,h=1,f=7)<br>
+Expand C5(f=7): B5(g=7,h=1,f=8), D5(g=7,h=2,f=9)<br>
+Expand D4(f=7): E4(g=7,h=2,f=9), D5(g=7,h=2,f=9)<br>
+Expand B5(f=8): A5(g=8,h=0,f=8) — h=0 but not goal<br>
+Expand E4(f=9): E5=GOAL! g=8<br><br>
+<span class="hl">A* Optimal Path:</span><br>
+<span class="path">S(A1)→B1→C1→C2→C3→C4→D4→E4→E5(G)</span><br>
+<span class="cost">Total path cost (steps): 8</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PAST PAPER 2025 (PHYSICAL PAPER) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="past1">
+  <div class="section-header">
+    <span class="section-num">PAST PAPER</span>
+    <span class="section-title">Lab Mid Exam A — March 2025 (3 Questions)</span>
+  </div>
+</div>
+
+<div class="card accent-q1">
+  <h3>Q1 — BFS for Logistics Route Planning (18 pts)</h3>
+  <p><strong>Problem:</strong> Undirected graph; nodes = delivery locations; find path from W (warehouse) to N (destination) using BFS. Graph visible in Image 2.</p>
+  <h4>Complete Solution Code</h4>
+<pre><code><span class="kw">from</span> collections <span class="kw">import</span> deque
+
+<span class="cm"># Graph from the exam diagram (nodes A-M visible in image)</span>
+graph = {
+    <span class="st">'W'</span>: [<span class="st">'A'</span>, <span class="st">'C'</span>],
+    <span class="st">'A'</span>: [<span class="st">'W'</span>, <span class="st">'B'</span>, <span class="st">'D'</span>],
+    <span class="st">'B'</span>: [<span class="st">'A'</span>, <span class="st">'E'</span>],
+    <span class="st">'C'</span>: [<span class="st">'W'</span>, <span class="st">'F'</span>, <span class="st">'D'</span>],
+    <span class="st">'D'</span>: [<span class="st">'A'</span>, <span class="st">'C'</span>, <span class="st">'G'</span>, <span class="st">'F'</span>],
+    <span class="st">'E'</span>: [<span class="st">'B'</span>, <span class="st">'H'</span>, <span class="st">'G'</span>],
+    <span class="st">'F'</span>: [<span class="st">'C'</span>, <span class="st">'D'</span>, <span class="st">'G'</span>, <span class="st">'I'</span>],
+    <span class="st">'G'</span>: [<span class="st">'D'</span>, <span class="st">'E'</span>, <span class="st">'F'</span>, <span class="st">'J'</span>],
+    <span class="st">'H'</span>: [<span class="st">'E'</span>, <span class="st">'K'</span>],
+    <span class="st">'I'</span>: [<span class="st">'F'</span>, <span class="st">'L'</span>, <span class="st">'J'</span>],
+    <span class="st">'J'</span>: [<span class="st">'G'</span>, <span class="st">'I'</span>, <span class="st">'K'</span>],
+    <span class="st">'K'</span>: [<span class="st">'H'</span>, <span class="st">'J'</span>, <span class="st">'M'</span>],
+    <span class="st">'L'</span>: [<span class="st">'I'</span>, <span class="st">'M'</span>],
+    <span class="st">'M'</span>: [<span class="st">'K'</span>, <span class="st">'L'</span>],
+    <span class="st">'N'</span>: []   <span class="cm"># destination — connect based on actual graph</span>
+}
+
+<span class="kw">def</span> <span class="fn">bfs_path</span>(graph, start, goal):
+    queue = deque([(start, [start])])
+    visited = {start}
+    expanded = []
+
+    <span class="kw">while</span> queue:
+        node, path = queue.popleft()
+        expanded.append(node)
+        <span class="nb">print</span>(<span class="st">f"Expanding: {node} | Path so far: {' -> '.join(path)}"</span>)
+
+        <span class="kw">if</span> node == goal:
+            <span class="nb">print</span>(<span class="st">f"\n✅ GOAL FOUND!"</span>)
+            <span class="nb">print</span>(<span class="st">f"Path: {' -> '.join(path)}"</span>)
+            <span class="nb">print</span>(<span class="st">f"Expansion order: {expanded}"</span>)
+            <span class="kw">return</span> path
+
+        <span class="kw">for</span> neighbor <span class="kw">in</span> graph.get(node, []):
+            <span class="kw">if</span> neighbor <span class="kw">not in</span> visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+    <span class="kw">return None</span>
+
+bfs_path(graph, <span class="st">'W'</span>, <span class="st">'N'</span>)
+</code></pre>
+</div>
+
+<div id="past1b" class="card accent-q2">
+  <h3>Q2 — GBFS in a 6×6 Maze (18 pts)</h3>
+  <p><strong>Problem:</strong> Robot navigates from (0,0) to (4,3) in a 6×6 grid using Greedy Best-First with Manhattan heuristic. 1s = obstacles.</p>
+<pre><code><span class="kw">import</span> heapq
+
+grid = [
+    [<span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>],
+    [<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>],
+    [<span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>],
+    [<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>],
+    [<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>],
+    [<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>, <span class="nm">0</span>],
+]
+start = (<span class="nm">0</span>, <span class="nm">0</span>)
+goal  = (<span class="nm">4</span>, <span class="nm">3</span>)
+
+<span class="kw">def</span> <span class="fn">manhattan</span>(pos, goal):
+    <span class="kw">return</span> <span class="nb">abs</span>(pos[<span class="nm">0</span>]-goal[<span class="nm">0</span>]) + <span class="nb">abs</span>(pos[<span class="nm">1</span>]-goal[<span class="nm">1</span>])
+
+<span class="kw">def</span> <span class="fn">gbfs_maze</span>(grid, start, goal):
+    rows, cols = len(grid), len(grid[<span class="nm">0</span>])
+    heap = [(manhattan(start, goal), start, [start])]
+    visited = set()
+
+    <span class="kw">while</span> heap:
+        h, pos, path = heapq.heappop(heap)
+        <span class="kw">if</span> pos <span class="kw">in</span> visited: <span class="kw">continue</span>
+        visited.add(pos)
+        <span class="nb">print</span>(<span class="st">f"Expanding {pos} h={h}"</span>)
+
+        <span class="kw">if</span> pos == goal:
+            <span class="nb">print</span>(<span class="st">f"Path: {path}"</span>)
+            <span class="nb">print</span>(<span class="st">f"Length: {len(path)-1} moves"</span>)
+            <span class="kw">return</span> path
+
+        r, c = pos
+        <span class="kw">for</span> dr, dc <span class="kw">in</span> [(-<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">0</span>,-<span class="nm">1</span>),(<span class="nm">0</span>,<span class="nm">1</span>)]:
+            nr, nc = r+dr, c+dc
+            <span class="kw">if</span> <span class="nm">0</span><=nr<rows <span class="kw">and</span> <span class="nm">0</span><=nc<cols \
+               <span class="kw">and</span> grid[nr][nc]==<span class="nm">0</span> <span class="kw">and</span> (nr,nc) <span class="kw">not in</span> visited:
+                heapq.heappush(heap, (manhattan((nr,nc),goal),(nr,nc),path+[(nr,nc)]))
+    <span class="kw">return None</span>
+
+gbfs_maze(grid, start, goal)
+</code></pre>
+</div>
+
+<div id="past1c" class="card accent-q3">
+  <h3>Q3 — Genetic Algorithm for Vehicle Routing (14 pts)</h3>
+  <p><strong>Tasks:</strong> (1) Tournament Selection, (2) Two-Point Crossover, (3) Uniform Mutation, (4) Run and output best solution</p>
+<pre><code><span class="kw">import</span> random, numpy <span class="kw">as</span> np
+
+<span class="cm"># ── Problem Setup ──────────────────────────────────────────</span>
+num_locations = <span class="nm">5</span>
+truck_capacity = <span class="nm">15</span>
+demands = [<span class="nm">0</span>, <span class="nm">4</span>, <span class="nm">3</span>, <span class="nm">5</span>, <span class="nm">2</span>]   <span class="cm"># depot=0</span>
+distance_matrix = np.array([
+    [<span class="nm">0</span>, <span class="nm">2</span>, <span class="nm">9</span>, <span class="nm">10</span>, <span class="nm">4</span>],
+    [<span class="nm">2</span>, <span class="nm">0</span>, <span class="nm">6</span>, <span class="nm">4</span>,  <span class="nm">3</span>],
+    [<span class="nm">9</span>, <span class="nm">6</span>, <span class="nm">0</span>, <span class="nm">8</span>,  <span class="nm">7</span>],
+    [<span class="nm">10</span>,<span class="nm">4</span>, <span class="nm">8</span>, <span class="nm">0</span>,  <span class="nm">5</span>],
+    [<span class="nm">4</span>, <span class="nm">3</span>, <span class="nm">7</span>, <span class="nm">5</span>,  <span class="nm">0</span>]
+])
+
+<span class="cm"># ── Chromosome: permutation of delivery points [1..n-1] ────</span>
+<span class="kw">def</span> <span class="fn">random_individual</span>():
+    locs = <span class="nb">list</span>(<span class="nb">range</span>(<span class="nm">1</span>, num_locations))
+    random.shuffle(locs)
+    <span class="kw">return</span> locs
+
+<span class="cm"># ── Fitness: total distance (lower = better) ───────────────</span>
+<span class="kw">def</span> <span class="fn">fitness</span>(route):
+    total_dist = <span class="nm">0</span>
+    load = <span class="nm">0</span>
+    prev = <span class="nm">0</span>   <span class="cm"># start at depot</span>
+    <span class="kw">for</span> loc <span class="kw">in</span> route:
+        <span class="kw">if</span> load + demands[loc] > truck_capacity:
+            total_dist += distance_matrix[prev][<span class="nm">0</span>]   <span class="cm"># return to depot</span>
+            prev = <span class="nm">0</span>; load = <span class="nm">0</span>
+        total_dist += distance_matrix[prev][loc]
+        prev = loc; load += demands[loc]
+    total_dist += distance_matrix[prev][<span class="nm">0</span>]   <span class="cm"># return to depot</span>
+    <span class="kw">return</span> <span class="nm">1</span> / total_dist   <span class="cm"># higher fitness = shorter route</span>
+
+<span class="cm"># ── 1. Tournament Selection ────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">tournament_selection</span>(population, fitnesses, k=<span class="nm">3</span>):
+    <span class="cm">"""Pick k random individuals; return the best one."""</span>
+    tournament = random.sample(<span class="nb">list</span>(<span class="nb">zip</span>(population, fitnesses)), k)
+    winner = <span class="nb">max</span>(tournament, key=<span class="kw">lambda</span> x: x[<span class="nm">1</span>])
+    <span class="kw">return</span> winner[<span class="nm">0</span>]
+
+<span class="cm"># ── 2. Two-Point Crossover ─────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">two_point_crossover</span>(parent1, parent2):
+    size = <span class="nb">len</span>(parent1)
+    pt1, pt2 = <span class="nb">sorted</span>(random.sample(<span class="nb">range</span>(<span class="nm">1</span>, size), <span class="nm">2</span>))
+    child1 = parent1[:pt1] + parent2[pt1:pt2] + parent1[pt2:]
+    child2 = parent2[:pt1] + parent1[pt1:pt2] + parent2[pt2:]
+    <span class="kw">return</span> child1, child2
+
+<span class="cm"># ── 3. Uniform Mutation ────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">uniform_mutation</span>(individual, mutation_rate=<span class="nm">0.2</span>):
+    <span class="cm">"""Each gene has equal probability of being randomly replaced."""</span>
+    mutated = individual[:]
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(<span class="nb">len</span>(mutated)):
+        <span class="kw">if</span> random.random() < mutation_rate:
+            mutated[i] = random.randint(<span class="nm">1</span>, num_locations-<span class="nm">1</span>)
+    <span class="kw">return</span> mutated
+
+<span class="cm"># ── 4. Main GA Loop ────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">run_ga</span>(pop_size=<span class="nm">20</span>, generations=<span class="nm">100</span>):
+    population = [random_individual() <span class="kw">for</span> _ <span class="kw">in</span> <span class="nb">range</span>(pop_size)]
+
+    <span class="kw">for</span> gen <span class="kw">in</span> <span class="nb">range</span>(generations):
+        fitnesses = [fitness(ind) <span class="kw">for</span> ind <span class="kw">in</span> population]
+        best_idx = fitnesses.index(<span class="nb">max</span>(fitnesses))
+        best_ind = population[best_idx]
+
+        new_pop = [best_ind]   <span class="cm"># elitism</span>
+        <span class="kw">while</span> <span class="nb">len</span>(new_pop) < pop_size:
+            p1 = tournament_selection(population, fitnesses)
+            p2 = tournament_selection(population, fitnesses)
+            c1, c2 = two_point_crossover(p1, p2)
+            new_pop.append(uniform_mutation(c1))
+            <span class="kw">if</span> <span class="nb">len</span>(new_pop) < pop_size:
+                new_pop.append(uniform_mutation(c2))
+        population = new_pop
+
+    fitnesses = [fitness(ind) <span class="kw">for</span> ind <span class="kw">in</span> population]
+    best_idx = fitnesses.index(<span class="nb">max</span>(fitnesses))
+    best = population[best_idx]
+    best_dist = <span class="nm">1</span> / fitnesses[best_idx]
+    <span class="nb">print</span>(<span class="st">f"Best Route: {best}"</span>)
+    <span class="nb">print</span>(<span class="st">f"Total Distance: {best_dist:.2f}"</span>)
+    <span class="kw">return</span> best, best_dist
+
+run_ga()
+</code></pre>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PAST PAPER 2026 (MONITOR PHOTOS) -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="past2">
+  <div class="section-header">
+    <span class="section-num">PAST PAPER</span>
+    <span class="section-title">Mid Term Lab Exam A — April 2026 (3 Questions)</span>
+  </div>
+</div>
+
+<div class="card accent-q1">
+  <h3>Q1 — Medical Drone BFS with Utility Agent (14 pts)</h3>
+  <p><strong>Problem:</strong> Hospital graph of wards. Drone delivers medicine to critical patients using BFS. Utility = 10×critical_treated − moves.</p>
+<pre><code><span class="kw">from</span> collections <span class="kw">import</span> deque
+
+hospital = {
+    <span class="st">"WardA"</span>: {<span class="st">"status"</span>: <span class="st">"Critical"</span>, <span class="st">"adjacent"</span>: [<span class="st">"WardB"</span>, <span class="st">"WardC"</span>]},
+    <span class="st">"WardB"</span>: {<span class="st">"status"</span>: <span class="st">"Normal"</span>,   <span class="st">"adjacent"</span>: [<span class="st">"WardA"</span>, <span class="st">"WardD"</span>]},
+    <span class="st">"WardC"</span>: {<span class="st">"status"</span>: <span class="st">"Critical"</span>, <span class="st">"adjacent"</span>: [<span class="st">"WardA"</span>, <span class="st">"WardD"</span>]},
+    <span class="st">"WardD"</span>: {<span class="st">"status"</span>: <span class="st">"Empty"</span>,    <span class="st">"adjacent"</span>: [<span class="st">"WardB"</span>, <span class="st">"WardC"</span>]},
+}
+
+<span class="cm"># ── Task 1: UtilityBasedAgent class ────────────────────────</span>
+<span class="kw">class</span> <span class="fn">UtilityBasedAgent</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, hospital, start):
+        self.hospital = hospital
+        self.current_ward = start
+        self.moves = <span class="nm">0</span>
+        self.critical_treated = <span class="nm">0</span>
+
+    <span class="kw">def</span> <span class="fn">utility</span>(self):
+        <span class="kw">return</span> <span class="nm">10</span> * self.critical_treated - self.moves
+
+    <span class="cm"># ── Task 2: BFS to nearest critical ward ───────────────</span>
+    <span class="kw">def</span> <span class="fn">bfs_to_critical</span>(self):
+        queue = deque([(self.current_ward, [self.current_ward])])
+        visited = {self.current_ward}
+        <span class="kw">while</span> queue:
+            ward, path = queue.popleft()
+            <span class="kw">if</span> ward != self.current_ward <span class="kw">and</span> \
+               self.hospital[ward][<span class="st">"status"</span>] == <span class="st">"Critical"</span>:
+                <span class="kw">return</span> path   <span class="cm"># path[0]=current, path[-1]=target</span>
+            <span class="kw">for</span> neighbor <span class="kw">in</span> self.hospital[ward][<span class="st">"adjacent"</span>]:
+                <span class="kw">if</span> neighbor <span class="kw">not in</span> visited:
+                    visited.add(neighbor)
+                    queue.append((neighbor, path+[neighbor]))
+        <span class="kw">return None</span>
+
+    <span class="cm"># ── Task 3: Define agent actions ───────────────────────</span>
+    <span class="kw">def</span> <span class="fn">act</span>(self):
+        ward_info = self.hospital[self.current_ward]
+        <span class="kw">if</span> ward_info[<span class="st">"status"</span>] == <span class="st">"Critical"</span>:
+            <span class="nb">print</span>(<span class="st">f"[{self.current_ward}] → DELIVER medicine 💊"</span>)
+            self.hospital[self.current_ward][<span class="st">"status"</span>] = <span class="st">"Treated"</span>
+            self.critical_treated += <span class="nm">1</span>
+        <span class="kw">else</span>:
+            path = self.bfs_to_critical()
+            <span class="kw">if</span> path <span class="kw">and</span> <span class="nb">len</span>(path) > <span class="nm">1</span>:
+                next_ward = path[<span class="nm">1</span>]
+                <span class="nb">print</span>(<span class="st">f"[{self.current_ward}] → MOVE to {next_ward}"</span>)
+                self.current_ward = next_ward
+                self.moves += <span class="nm">1</span>
+            <span class="kw">else</span>:
+                <span class="nb">print</span>(<span class="st">"No critical patients remaining."</span>)
+                <span class="kw">return False</span>
+        <span class="kw">return True</span>
+
+    <span class="cm"># ── Task 4: Simulation ─────────────────────────────────</span>
+    <span class="kw">def</span> <span class="fn">run_simulation</span>(self):
+        step = <span class="nm">0</span>
+        <span class="kw">while True</span>:
+            step += <span class="nm">1</span>
+            critical_remaining = <span class="nb">any</span>(
+                v[<span class="st">"status"</span>]==<span class="st">"Critical"</span> <span class="kw">for</span> v <span class="kw">in</span> self.hospital.values()
+            )
+            <span class="kw">if not</span> critical_remaining:
+                <span class="nb">print</span>(<span class="st">f"\n✅ All critical patients treated!"</span>)
+                <span class="kw">break</span>
+            result = self.act()
+            <span class="nb">print</span>(<span class="st">f"   Utility after step {step}: {self.utility()}"</span>)
+            <span class="kw">if not</span> result: <span class="kw">break</span>
+        <span class="nb">print</span>(<span class="st">f"\nFinal Utility: {self.utility()}"</span>)
+        <span class="nb">print</span>(<span class="st">f"Treated: {self.critical_treated} | Moves: {self.moves}"</span>)
+
+agent = UtilityBasedAgent(hospital, <span class="st">"WardB"</span>)
+agent.run_simulation()
+</code></pre>
+</div>
+
+<div id="past2b" class="card accent-q2">
+  <h3>Q2 — A* Rescue Drone in Grid (18 pts)</h3>
+  <p><strong>Problem:</strong> 5×5 grid. S=start, G=goal. Terrain costs: .=1, W=3, F=5, #=blocked. Use A* with Manhattan heuristic.</p>
+  <div class="callout tip"><strong>Grid from exam:</strong> Row0:[S,.,.,W,.] Row1:[.,.#,.,#] Row2:[.,#,.,.,. ] Row3:[.,.,F,#,.] Row4:[.,.,.,.,G]</div>
+<pre><code><span class="kw">import</span> heapq
+
+<span class="cm"># Grid: '.' safe(1), 'W' water(3), 'F' fire(5), '#' blocked, 'S' start, 'G' goal</span>
+raw_grid = [
+    [<span class="st">'S'</span>, <span class="st">'.'</span>, <span class="st">'.'</span>, <span class="st">'W'</span>, <span class="st">'.'</span>],
+    [<span class="st">'.'</span>, <span class="st">'.'</span>, <span class="st">'#'</span>, <span class="st">'.'</span>, <span class="st">'#'</span>],  <span class="cm"># W(row1,col3) from image</span>
+    [<span class="st">'.'</span>, <span class="st">'#'</span>, <span class="st">'.'</span>, <span class="st">'#'</span>, <span class="st">'.'</span>],
+    [<span class="st">'.'</span>, <span class="st">'.'</span>, <span class="st">'F'</span>, <span class="st">'#'</span>, <span class="st">'.'</span>],
+    [<span class="st">'.'</span>, <span class="st">'.'</span>, <span class="st">'.'</span>, <span class="st">'.'</span>, <span class="st">'G'</span>],
+]
+COST = {<span class="st">'.'</span>:<span class="nm">1</span>, <span class="st">'S'</span>:<span class="nm">1</span>, <span class="st">'G'</span>:<span class="nm">1</span>, <span class="st">'W'</span>:<span class="nm">3</span>, <span class="st">'F'</span>:<span class="nm">5</span>}
+
+rows, cols = len(raw_grid), len(raw_grid[<span class="nm">0</span>])
+start = goal = <span class="kw">None</span>
+<span class="kw">for</span> r <span class="kw">in</span> <span class="nb">range</span>(rows):
+    <span class="kw">for</span> c <span class="kw">in</span> <span class="nb">range</span>(cols):
+        <span class="kw">if</span> raw_grid[r][c] == <span class="st">'S'</span>: start = (r,c)
+        <span class="kw">if</span> raw_grid[r][c] == <span class="st">'G'</span>: goal  = (r,c)
+
+<span class="kw">def</span> <span class="fn">h</span>(pos): <span class="kw">return</span> <span class="nb">abs</span>(pos[<span class="nm">0</span>]-goal[<span class="nm">0</span>]) + <span class="nb">abs</span>(pos[<span class="nm">1</span>]-goal[<span class="nm">1</span>])
+
+<span class="kw">def</span> <span class="fn">astar_rescue</span>():
+    heap = [(h(start), <span class="nm">0</span>, start, [start])]
+    best = {}
+    expanded = []
+
+    <span class="kw">while</span> heap:
+        f, g, pos, path = heapq.heappop(heap)
+        <span class="kw">if</span> best.get(pos, <span class="nb">float</span>(<span class="st">'inf'</span>)) <= g: <span class="kw">continue</span>
+        best[pos] = g
+        expanded.append(pos)
+        <span class="nb">print</span>(<span class="st">f"Expand {pos} | g={g} h={h(pos)} f={f}"</span>)
+
+        <span class="kw">if</span> pos == goal:
+            <span class="nb">print</span>(<span class="st">f"\n✅ Path: {path}"</span>)
+            <span class="nb">print</span>(<span class="st">f"Total cost: {g}"</span>)
+            <span class="nb">print</span>(<span class="st">f"Expansion order: {expanded}"</span>)
+            <span class="kw">return</span> path, g
+
+        r, c = pos
+        <span class="kw">for</span> dr, dc <span class="kw">in</span> [(-<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">1</span>,<span class="nm">0</span>),(<span class="nm">0</span>,-<span class="nm">1</span>),(<span class="nm">0</span>,<span class="nm">1</span>)]:
+            nr, nc = r+dr, c+dc
+            <span class="kw">if</span> <span class="nm">0</span><=nr<rows <span class="kw">and</span> <span class="nm">0</span><=nc<cols <span class="kw">and</span> raw_grid[nr][nc] != <span class="st">'#'</span>:
+                ng = g + COST[raw_grid[nr][nc]]
+                nf = ng + h((nr,nc))
+                heapq.heappush(heap, (nf, ng, (nr,nc), path+[(nr,nc)]))
+    <span class="kw">return None</span>, <span class="nb">float</span>(<span class="st">'inf'</span>)
+
+astar_rescue()
+</code></pre>
+</div>
+
+<div id="past2c" class="card accent-q3">
+  <h3>Q3 — TSP with Genetic Algorithm (18 pts)</h3>
+  <p><strong>Problem:</strong> N cities, minimize total tour distance. Tasks: fitness, tournament selection, Order Crossover (OX), swap mutation, stop after max generations or target distance.</p>
+<pre><code><span class="kw">import</span> random, math
+
+<span class="cm"># ── City coordinates (example from exam) ──────────────────</span>
+cities = [(<span class="nm">2</span>,<span class="nm">3</span>), (<span class="nm">5</span>,<span class="nm">7</span>), (<span class="nm">1</span>,<span class="nm">9</span>), (<span class="nm">8</span>,<span class="nm">2</span>), (<span class="nm">4</span>,<span class="nm">5</span>)]
+N = len(cities)
+
+<span class="cm"># ── 1. Total distance ─────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">total_distance</span>(route):
+    dist = <span class="nm">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(N):
+        c1, c2 = cities[route[i]], cities[route[(i+<span class="nm">1</span>)%N]]
+        dist += math.sqrt((c1[<span class="nm">0</span>]-c2[<span class="nm">0</span>])**<span class="nm">2</span> + (c1[<span class="nm">1</span>]-c2[<span class="nm">1</span>])**<span class="nm">2</span>)
+    <span class="kw">return</span> dist
+
+<span class="cm"># ── 2. Tournament Selection ───────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">tournament_select</span>(pop, fitnesses, k=<span class="nm">3</span>):
+    t = random.sample(<span class="nb">list</span>(<span class="nb">zip</span>(pop, fitnesses)), k)
+    <span class="kw">return</span> <span class="nb">max</span>(t, key=<span class="kw">lambda</span> x: x[<span class="nm">1</span>])[<span class="nm">0</span>]
+
+<span class="cm"># ── 3. Order Crossover (OX) ───────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">order_crossover</span>(p1, p2):
+    a, b = <span class="nb">sorted</span>(random.sample(<span class="nb">range</span>(N), <span class="nm">2</span>))
+    child = [<span class="kw">None</span>] * N
+    child[a:b] = p1[a:b]
+    remaining = [x <span class="kw">for</span> x <span class="kw">in</span> p2 <span class="kw">if</span> x <span class="kw">not in</span> child]
+    idx = <span class="nm">0</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="nb">range</span>(N):
+        <span class="kw">if</span> child[i] <span class="kw">is None</span>:
+            child[i] = remaining[idx]; idx += <span class="nm">1</span>
+    <span class="kw">return</span> child
+
+<span class="cm"># ── 4. Swap Mutation ──────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">swap_mutate</span>(route, rate=<span class="nm">0.1</span>):
+    route = route[:]
+    <span class="kw">if</span> random.random() < rate:
+        a, b = random.sample(<span class="nb">range</span>(N), <span class="nm">2</span>)
+        route[a], route[b] = route[b], route[a]
+    <span class="kw">return</span> route
+
+<span class="cm"># ── 5. Main GA ────────────────────────────────────────────</span>
+<span class="kw">def</span> <span class="fn">ga_tsp</span>(pop_size=<span class="nm">50</span>, max_gen=<span class="nm">500</span>, target_dist=<span class="nm">24</span>):
+    pop = [random.sample(<span class="nb">range</span>(N), N) <span class="kw">for</span> _ <span class="kw">in</span> <span class="nb">range</span>(pop_size)]
+    best_route = <span class="kw">None</span>; best_dist = <span class="nb">float</span>(<span class="st">'inf'</span>)
+
+    <span class="kw">for</span> gen <span class="kw">in</span> <span class="nb">range</span>(max_gen):
+        dists = [total_distance(ind) <span class="kw">for</span> ind <span class="kw">in</span> pop]
+        fits  = [<span class="nm">1</span>/d <span class="kw">for</span> d <span class="kw">in</span> dists]
+
+        idx = dists.index(<span class="nb">min</span>(dists))
+        <span class="kw">if</span> dists[idx] < best_dist:
+            best_dist = dists[idx]
+            best_route = pop[idx]
+            <span class="nb">print</span>(<span class="st">f"Gen {gen}: Best Distance = {best_dist:.2f}"</span>)
+
+        <span class="cm"># Termination condition</span>
+        <span class="kw">if</span> best_dist <= target_dist:
+            <span class="nb">print</span>(<span class="st">f"Target reached at generation {gen}!"</span>)
+            <span class="kw">break</span>
+
+        new_pop = [best_route]   <span class="cm"># elitism</span>
+        <span class="kw">while</span> <span class="nb">len</span>(new_pop) < pop_size:
+            p1 = tournament_select(pop, fits)
+            p2 = tournament_select(pop, fits)
+            child = order_crossover(p1, p2)
+            child = swap_mutate(child)
+            new_pop.append(child)
+        pop = new_pop
+
+    <span class="nb">print</span>(<span class="st">f"\nBest Route: {best_route}"</span>)
+    <span class="nb">print</span>(<span class="st">f"Total Distance: {best_dist:.2f} units"</span>)
+    <span class="kw">return</span> best_route, best_dist
+
+ga_tsp()
+</code></pre>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- QUICK CHEAT SHEET -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-header">
+  <span class="section-num pa">CHEAT SHEET</span>
+  <span class="section-title">Quick Reference — Exam Day</span>
+</div>
+
+<div class="card">
+  <h3>🗂 Algorithm Quick Reference</h3>
+  <table class="cmp-table">
+    <tr><th>Algorithm</th><th>Import</th><th>Data Structure</th><th>Optimal?</th><th>When to use</th></tr>
+    <tr><td>BFS</td><td>from collections import deque</td><td>deque (queue)</td><td>✅ uniform cost</td><td>Shortest path (hops)</td></tr>
+    <tr><td>DFS</td><td>—</td><td>list as stack</td><td>❌</td><td>Memory limited, any path</td></tr>
+    <tr><td>UCS</td><td>import heapq</td><td>heapq (min-heap)</td><td>✅ always</td><td>Weighted edges</td></tr>
+    <tr><td>GBFS</td><td>import heapq</td><td>heapq by h(n)</td><td>❌</td><td>Fast approximate</td></tr>
+    <tr><td>A*</td><td>import heapq</td><td>heapq by f=g+h</td><td>✅ admissible h</td><td>Best of all worlds</td></tr>
+    <tr><td>GA</td><td>import random</td><td>list of lists</td><td>approximate</td><td>Optimization problems</td></tr>
+  </table>
+</div>
+
+<div class="card">
+  <h3>🗂 GA Quick Reference</h3>
+  <table class="cmp-table">
+    <tr><th>Component</th><th>Method</th><th>Key Idea</th></tr>
+    <tr><td rowspan="3">Selection</td><td>Tournament</td><td>Pick k random → best wins</td></tr>
+    <tr><td>Roulette</td><td>Probability ∝ fitness</td></tr>
+    <tr><td>Rank-Based</td><td>Probability ∝ rank</td></tr>
+    <tr><td rowspan="5">Crossover</td><td>Single-Point</td><td>1 cut → swap tails</td></tr>
+    <tr><td>Two-Point</td><td>2 cuts → swap middle</td></tr>
+    <tr><td>Uniform</td><td>Per-gene coin flip</td></tr>
+    <tr><td>Order (OX)</td><td>Preserve order — for TSP</td></tr>
+    <tr><td>PMX</td><td>Mapping-based — for TSP</td></tr>
+    <tr><td rowspan="3">Mutation</td><td>Uniform</td><td>Each gene: random chance to change</td></tr>
+    <tr><td>Swap</td><td>Swap 2 random genes</td></tr>
+    <tr><td>Bit-Flip</td><td>Binary: 0↔1</td></tr>
+  </table>
+</div>
+
+<div class="callout ok" style="margin-top:2rem">
+  <strong>🎯 EXAM TIPS:</strong><br>
+  1. Always import <code>heapq</code> for A*/UCS/GBFS and <code>deque</code> for BFS.<br>
+  2. For grid problems: use (row, col) tuples as states.<br>
+  3. Always maintain a <code>visited</code> set to avoid infinite loops.<br>
+  4. For GA: remember Tournament Selection = max of random sample; OX crossover for permutations.<br>
+  5. Manhattan distance h(n) = |r1-r2| + |c1-c2| — never overestimates on grids (admissible).
+</div>
+
+<div style="text-align:center; margin-top:3rem; padding: 2rem; border-top: 1px solid var(--border)">
+  <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-dim)">
+    AI Lab (AI-1002) · NUCES Karachi · Spring 2026 · Good Luck! 🚀
+  </p>
+</div>
+
+</main>
+</body>
+</html>

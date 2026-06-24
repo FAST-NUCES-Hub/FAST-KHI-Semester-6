@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AHCI Mid-2 Exam Notes (Ch 3–7)</title>
+    <style>
+      :root{
+        --bg:#0b1220; --panel:#0f1a2e; --panel2:#0c1629;
+        --text:#e9eefc; --muted:#a8b3d4; --faint:#6f7aa3;
+        --border:rgba(255,255,255,.10); --shadow: 0 10px 30px rgba(0,0,0,.35);
+        --accent:#7c5cff; --accent2:#2dd4bf; --danger:#ff4d6d; --warn:#ffd166; --ok:#22c55e;
+        --radius:16px; --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+        color-scheme: dark;
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%}
+      html{scroll-behavior:smooth}
+      @media (prefers-reduced-motion: reduce){
+        html{scroll-behavior:auto}
+        *{transition:none !important; animation:none !important;}
+      }
+      body{
+        margin:0; font-family:var(--sans); color:var(--text); line-height:1.55;
+        background: linear-gradient(180deg, #0b1220 0%, #091021 45%, #070d1a 100%);
+      }
+      a{color:inherit}
+      .wrap{display:grid; grid-template-columns:340px 1fr; gap:18px; max-width:1320px; margin:0 auto; padding:18px;}
+      @media (max-width:980px){
+        .wrap{grid-template-columns:1fr; padding:14px; gap:14px;}
+      }
+      @media (max-width:640px){
+        .wrap{padding:12px; gap:12px;}
+      }
+      .sidebar{
+        position:sticky; top:18px; align-self:start;
+        background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+        border:1px solid rgba(124,92,255,.22);
+        border-radius:var(--radius);
+        box-shadow: 0 18px 45px rgba(0,0,0,.45);
+        overflow:hidden;
+      }
+      @media (max-width:980px){
+        .sidebar{position:relative; top:auto; box-shadow:none;}
+      }
+      .side-head{
+        padding:16px 16px 10px;
+        border-bottom:1px solid var(--border);
+        background:
+          radial-gradient(520px 160px at 15% 0%, rgba(124,92,255,.22), transparent 60%),
+          radial-gradient(520px 180px at 105% 10%, rgba(45,212,191,.14), transparent 62%),
+          var(--panel2);
+      }
+      .title{font-weight:800; letter-spacing:.2px; font-size:16px; margin:0 0 6px;}
+      .subtitle{margin:0; color:var(--muted); font-size:12.5px;}
+      .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+      .pill{
+        font-size:12px;
+        padding:6px 10px;
+        border:1px solid rgba(255,255,255,.10);
+        border-radius:999px;
+        background: rgba(255,255,255,.04);
+        color:var(--muted);
+        white-space:nowrap;
+      }
+      .controls{padding:12px 16px 14px;border-bottom:1px solid var(--border);display:grid;gap:10px;background: var(--panel);}
+      .search{
+        display:flex;
+        gap:10px;
+        align-items:center;
+        background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+        border:1px solid rgba(255,255,255,.10);
+        border-radius:14px;
+        padding:10px 12px;
+      }
+      .search input{width:100%;background:transparent;border:0;outline:none;color:var(--text);font-size:13.5px;}
+      .search:focus-within{
+        border-color: rgba(124,92,255,.45);
+        box-shadow: 0 0 0 4px rgba(124,92,255,.12);
+      }
+      .search kbd{font-family:var(--mono);font-size:11px;padding:2px 6px;border-radius:7px;border:1px solid rgba(255,255,255,.18);color:var(--muted);background:rgba(255,255,255,.06);}
+      .btnrow{display:flex;gap:10px;flex-wrap:wrap}
+      .btn{
+        flex:1; cursor:pointer; user-select:none;
+        border-radius:14px;
+        border:1px solid rgba(255,255,255,.10);
+        background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+        color:var(--text);
+        padding:9px 10px;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:8px;
+      }
+      @media (max-width:640px){
+        .side-head{padding:14px 14px 10px;}
+        .controls{padding:10px 14px 12px;}
+        .pill{font-size:11.5px;padding:5px 9px}
+        .btnrow{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+        .btn{padding:10px 10px; font-size:12.5px;}
+      }
+      .btn:hover{border-color: rgba(124,92,255,.45); transform: translateY(-1px)}
+      .btn:active{transform: translateY(1px)}
+      .toc{max-height: calc(100vh - 240px); overflow:auto; padding:10px 10px 14px; background: var(--panel);}
+      .toc::before{
+        content:"Contents";
+        display:block;
+        padding: 10px 10px 6px;
+        color: var(--faint);
+        font-size: 11.5px;
+        letter-spacing: .18em;
+        text-transform: uppercase;
+      }
+      @media (max-width:980px){
+        .toc{max-height: 260px;}
+      }
+      @media (max-width:640px){
+        .toc{max-height: 240px; padding: 8px 8px 12px;}
+        .toc a{padding:8px 9px;}
+      }
+      .toc a{text-decoration:none;display:block;padding:8px 10px;border-radius:10px;color:var(--muted);border:1px solid transparent;}
+      .toc a:hover{background:rgba(124,92,255,.10);border-color:rgba(124,92,255,.20);color:var(--text);}
+      .toc .lvl2{padding-left:18px}
+      .toc .lvl3{padding-left:28px;font-size:12.5px}
+      .toc .active{background:rgba(45,212,191,.10);border-color:rgba(45,212,191,.22);color:var(--text)}
+      .toc a:focus-visible{
+        outline:none;
+        box-shadow: 0 0 0 4px rgba(45,212,191,.14);
+        border-color: rgba(45,212,191,.32);
+      }
+
+      /* Sleek scrollbars in TOC */
+      .toc{scrollbar-width: thin; scrollbar-color: rgba(124,92,255,.55) rgba(255,255,255,.04);}
+      .toc::-webkit-scrollbar{width:10px}
+      .toc::-webkit-scrollbar-track{background: rgba(255,255,255,.04); border-radius: 999px}
+      .toc::-webkit-scrollbar-thumb{
+        background: linear-gradient(180deg, rgba(124,92,255,.70), rgba(45,212,191,.45));
+        border: 2px solid rgba(15,26,46,.90);
+        border-radius: 999px;
+      }
+      .toc::-webkit-scrollbar-thumb:hover{
+        background: linear-gradient(180deg, rgba(124,92,255,.85), rgba(45,212,191,.60));
+      }
+
+      .main{min-width:0;display:grid;gap:14px;}
+      .hero,details.section,.footer{
+        border:1px solid var(--border); border-radius:var(--radius);
+        background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+        box-shadow:var(--shadow); overflow:hidden;
+      }
+      .hero-inner{padding:18px 18px 16px;background:
+        radial-gradient(800px 220px at 10% 0%, rgba(124,92,255,.20), transparent 60%),
+        radial-gradient(700px 260px at 100% 0%, rgba(45,212,191,.16), transparent 60%);
+      }
+      .h1{margin:0;font-size:22px;letter-spacing:.2px;}
+      .meta{margin-top:8px;color:var(--muted);font-size:13px;}
+      .meta b{color:var(--text)}
+      .warnbox{
+        margin-top:12px;
+        padding:12px;
+        border-radius:14px;
+        border:1px solid rgba(124,92,255,.22);
+        background: rgba(124,92,255,.08);
+        color:var(--muted);
+        font-size:13px;
+      }
+
+      details.section{background:rgba(15,26,46,.55); box-shadow: 0 12px 24px rgba(0,0,0,.25);}
+      details.section[open]{background:rgba(15,26,46,.62)}
+      details.section > summary{
+        list-style:none; cursor:pointer; user-select:none;
+        padding:14px 16px; display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+        border-bottom:1px solid var(--border); background:rgba(12,22,41,.55);
+      }
+      details.section > summary::-webkit-details-marker{display:none}
+      .sumleft{display:flex;flex-direction:column;gap:2px;}
+      .sumtitle{font-weight:780;font-size:15.8px;letter-spacing:.2px;}
+      .sumsub{color:var(--muted);font-size:12.5px;}
+      .chev{margin-top:2px;width:28px;height:28px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.04);display:grid;place-items:center;color:var(--muted);flex:0 0 auto;}
+      details.section[open] .chev{transform:rotate(180deg)}
+      .content{padding:14px 16px 18px;}
+      h3,h4{margin:14px 0 8px}
+      h3{font-size:15px}
+      h4{font-size:13.5px;color:var(--muted);font-weight:700;letter-spacing:.2px}
+      .content p{margin:0 0 10px}
+      .content p.muted{color:var(--muted)}
+      .content ul{margin:8px 0 12px 18px;padding:0}
+      .content li{margin:4px 0}
+      .divider{height:1px;background:var(--border);margin:16px 0}
+      .k{font-family:var(--mono);font-size:12.2px;color:var(--muted);background:rgba(255,255,255,.06);border:1px solid var(--border);padding:2px 8px;border-radius:999px;display:inline-block;margin:2px 6px 2px 0}
+      .callout{border:1px solid rgba(124,92,255,.22);background:rgba(124,92,255,.08);border-radius:14px;padding:12px;margin:12px 0;color:var(--muted)}
+      .callout b{color:var(--text)}
+      .callout.good{border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.08)}
+      .callout.warn{border-color:rgba(124,92,255,.22);background:rgba(124,92,255,.06)}
+      .callout.bad{border-color:rgba(255,77,109,.25);background:rgba(255,77,109,.07)}
+      .table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:10px 0 14px}
+      .table th,.table td{padding:10px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13.5px}
+      .table th{background:rgba(255,255,255,.06);color:var(--text);text-align:left;font-weight:750}
+      .table tr:last-child td{border-bottom:0}
+      .table td{color:var(--muted)}
+      .table td b{color:var(--text)}
+      .qset{display:grid;gap:12px}
+      .q{border:1px solid var(--border);border-radius:14px;background:rgba(12,22,41,.55);padding:12px}
+      .q .qt{font-weight:800;margin:0 0 6px;font-size:14px}
+      .q .qa{margin:0;color:var(--muted);font-size:13.5px}
+      .q .qa b{color:var(--text)}
+      .mark{background:rgba(45,212,191,.18);border:1px solid rgba(45,212,191,.22);padding:0 3px;border-radius:6px;color:var(--text)}
+      .footer{padding:16px 18px;background:rgba(15,26,46,.45);color:var(--muted);font-size:12.8px;box-shadow:none}
+      @media (max-width:640px){
+        .hero-inner{padding:14px 14px 14px}
+        .h1{font-size:20px}
+        .meta{font-size:12.8px}
+        .warnbox{margin-top:10px}
+        details.section > summary{padding:12px 14px}
+        .content{padding:12px 14px 16px}
+        .sumtitle{font-size:15.2px}
+        .sumsub{font-size:12.2px}
+        .k{font-size:11.5px; padding:2px 7px}
+        .q{padding:11px}
+        .q .qt{font-size:13.6px}
+        .q .qa{font-size:13.2px}
+      }
+
+      /* Make wide tables safe on phones */
+      @media (max-width:640px){
+        .table{
+          display:block;
+          overflow-x:auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .table{min-width: 720px}
+        .table th, .table td{white-space:normal}
+      }
+
+      /* Prevent long tokens/links from breaking layout */
+      .content, .q, .toc a{overflow-wrap:anywhere; word-break:break-word}
+      @media print{
+        :root{color-scheme: light;}
+        body{background:#fff;color:#111}
+        .wrap{grid-template-columns:1fr}
+        .sidebar{display:none}
+        .hero, .card, details.section, .footer{box-shadow:none}
+        details.section{break-inside: avoid}
+        details.section > summary{background:#f5f5f5}
+        a{color:#111}
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <aside class="sidebar" aria-label="Navigation">
+        <div class="side-head">
+          <p class="title">AHCI Mid-2 Exam Notes</p>
+          <p class="subtitle">Ch 3–7 (from your uploaded slides only)</p>
+          <div class="pillrow">
+            <span class="pill">Exam-ready</span>
+            <span class="pill">Scenario practice</span>
+            <span class="pill">Search</span>
+          </div>
+        </div>
+        <div class="controls">
+          <div class="search" title="Search headings and key text">
+            <input id="search" type="search" placeholder="Search topics (e.g., gulfs, WIMP, QOC, learnability)..." />
+            <kbd>Ctrl</kbd><kbd>K</kbd>
+          </div>
+          <div class="btnrow">
+            <button class="btn" id="openAll" type="button">Open all</button>
+            <button class="btn" id="closeAll" type="button">Close all</button>
+          </div>
+        </div>
+        <nav class="toc" id="toc" aria-label="Table of contents"></nav>
+      </aside>
+      <main class="main">
+        <section class="hero" id="top">
+          <div class="hero-inner">
+            <h1 class="h1">Applied HCI (AHCI) — Mid-2 Exam Ready Notes</h1>
+            <div class="meta">
+              Syllabus covered: <b>Chapter 3</b> (The Interaction), <b>Chapter 4</b> (Paradigms), <b>Chapter 5</b> (Interaction Design Basics), <b>Chapter 6</b> (HCI in the Software Process), <b>Chapter 7</b> (Design Rules — Principles focus).
+            </div>
+            <div class="warnbox">
+              <b>How to use:</b> Use the TOC to jump quickly, press <span class="k">Ctrl</span><span class="k">K</span> to search, and expand sections as you revise.
+            </div>
+          </div>
+        </section>
+        <div id="notesRoot"></div>
+        <section class="footer">
+          <b>Source rule:</b> All content here is compiled from your uploaded Chapter 3–7 slide PDFs only (no web sources).
+        </section>
+      </main>
+    </div>
+    <template id="tpl-section">
+      <details class="section" data-chapter="">
+        <summary>
+          <div class="sumleft">
+            <div class="sumtitle"></div>
+            <div class="sumsub"></div>
+          </div>
+          <div class="chev">⌄</div>
+        </summary>
+        <div class="content"></div>
+      </details>
+    </template>
+    <script>
+      const notes = [];
+      function addSection({ id, chapter, title, subtitle, open = false, html }) {
+        notes.push({ id, chapter, title, subtitle, open, html });
+      }
+      function render() {
+        const root = document.getElementById("notesRoot");
+        const tpl = document.getElementById("tpl-section");
+        root.innerHTML = "";
+        for (const s of notes) {
+          const node = tpl.content.firstElementChild.cloneNode(true);
+          node.id = s.id;
+          node.dataset.chapter = String(s.chapter);
+          if (s.open) node.setAttribute("open", "");
+          node.querySelector(".sumtitle").textContent = s.title;
+          node.querySelector(".sumsub").textContent = s.subtitle;
+          node.querySelector(".content").innerHTML = s.html;
+          root.appendChild(node);
+        }
+      }
+      function buildTOC() {
+        const toc = document.getElementById("toc");
+        toc.innerHTML = "";
+        const sections = Array.from(document.querySelectorAll("details.section"));
+        for (const d of sections) {
+          const t = d.querySelector(".sumtitle")?.textContent?.trim() || "Section";
+          const a = document.createElement("a");
+          a.href = "#" + d.id;
+          a.textContent = t;
+          toc.appendChild(a);
+          const hs = Array.from(d.querySelectorAll(".content h3[id]"));
+          for (const h of hs) {
+            const b = document.createElement("a");
+            b.href = "#" + h.id;
+            b.textContent = h.textContent.trim();
+            b.className = "lvl2";
+            toc.appendChild(b);
+          }
+        }
+      }
+      function setActiveTOC() {
+        const links = Array.from(document.querySelectorAll("#toc a"));
+        const hash = decodeURIComponent(location.hash || "");
+        links.forEach(l => l.classList.toggle("active", l.getAttribute("href") === hash));
+      }
+      function openAll(open) {
+        document.querySelectorAll("details.section").forEach(d => open ? d.setAttribute("open","") : d.removeAttribute("open"));
+      }
+      function installControls() {
+        document.getElementById("openAll").addEventListener("click", () => openAll(true));
+        document.getElementById("closeAll").addEventListener("click", () => openAll(false));
+        const search = document.getElementById("search");
+        const focusSearch = () => { search.focus(); search.select(); };
+        window.addEventListener("keydown", (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); focusSearch(); }
+        });
+        search.addEventListener("input", () => {
+          const q = search.value.trim().toLowerCase();
+          const secs = Array.from(document.querySelectorAll("details.section"));
+          for (const s of secs) {
+            if (!q) { s.style.display = ""; continue; }
+            const txt = s.textContent.toLowerCase();
+            s.style.display = txt.includes(q) ? "" : "none";
+          }
+        });
+        window.addEventListener("hashchange", setActiveTOC);
+      }
+      // =========================
+      // Chapter 3 — The Interaction (from your slides)
+      // =========================
+      addSection({
+        id: "ch3",
+        chapter: 3,
+        open: true,
+        title: "Chapter 3 — The Interaction",
+        subtitle: "Communication, models (Norman; Abowd & Beale), ergonomics, interaction styles, context, mapping, entropy",
+        html: `
+          <h3 id="ch3-1">3.1 User–Computer Communication (why interaction matters)</h3>
+          <p class="muted">Interaction is the communication between the user and the system. Users communicate requirements; the computer responds appropriately. This communication happens through <b>input</b> (clicks, taps, typing, voice) and <b>output</b> (screen, sound, vibration, animations).</p>
+          <ul>
+            <li><b>Input examples (slides):</b> tapping reactions, typing text, voice notes.</li>
+            <li><b>Output examples (slides):</b> screen updates, “sent” indicators, sound, haptics.</li>
+          </ul>
+
+          <h3 id="ch3-2">3.2 Low Interaction (Batch Input) vs High Interaction (Interactive Systems)</h3>
+          <table class="table">
+            <tr><th>Aspect</th><th>Batch input (low interaction)</th><th>Highly interactive systems</th></tr>
+            <tr><td><b>User involvement</b></td><td>User provides all input at once</td><td>User gives instructions continuously</td></tr>
+            <tr><td><b>Feedback</b></td><td>No immediate feedback → user waits</td><td>Instant feedback → dynamic, responsive</td></tr>
+            <tr><td><b>Typical problems</b></td><td>Poor support for modern tasks; hard to correct quickly</td><td>Supports exploration, control, quick correction</td></tr>
+            <tr><td><b>Slide examples</b></td><td>Submitting a form/portal with no status update</td><td>Dragging files, pinch-to-zoom, VR games</td></tr>
+          </table>
+
+          <h3 id="ch3-3">3.3 Key terms (Domain, Goal, Task)</h3>
+          <ul>
+            <li><b>Domain:</b> area of work under study (e.g., graphic design).</li>
+            <li><b>Goal:</b> what you want to achieve (e.g., “create a solid red triangle”).</li>
+            <li><b>Task:</b> how you do it (operations/actions, e.g., select fill tool, click over triangle).</li>
+          </ul>
+          <div class="callout warn"><b>Exam clarity:</b> Always separate <b>goal</b> (what) from <b>task/actions</b> (how). The slides warn that “task vs goal” wording can differ, so define your usage in your answer.</div>
+
+          <h3 id="ch3-4">3.4 Norman’s Model of Interaction (interaction as a cycle)</h3>
+          <p class="muted">Norman’s model matches intuitive interaction: user and computer form a cycle. In exams, write all steps in order, then map them to a scenario.</p>
+          <table class="table">
+            <tr><th>Step</th><th>Meaning</th><th>Slide example (Sending an email)</th></tr>
+            <tr><td><b>1. Establishing the goal</b></td><td>Decide what needs to be achieved</td><td>Send an email to the teacher</td></tr>
+            <tr><td><b>2. Forming the intention</b></td><td>Decide how to achieve the goal</td><td>Use the email app to send the message</td></tr>
+            <tr><td><b>3. Specifying the action sequence</b></td><td>Plan exact actions</td><td>Open app → Compose → address → type → Send</td></tr>
+            <tr><td><b>4. Executing the action</b></td><td>Carry out actions at the interface</td><td>User performs steps</td></tr>
+            <tr><td><b>5. Perceiving system state</b></td><td>Observe what the system shows</td><td>“Email sent” appears</td></tr>
+            <tr><td><b>6. Interpreting system state</b></td><td>Understand what the state means</td><td>Email delivered successfully</td></tr>
+            <tr><td><b>7. Evaluating system state</b></td><td>Compare outcome with goal</td><td>Goal achieved</td></tr>
+          </table>
+          <div class="callout"><b>If the goal is not achieved:</b> user interprets error message/state, forms a new goal or intention, and repeats the cycle.</div>
+
+          <h3 id="ch3-5">3.5 Goal ≠ Intention ≠ Action (light example)</h3>
+          <p class="muted">Slides show the same goal can lead to different intentions and different action sequences.</p>
+          <ul>
+            <li><b>Goal:</b> get more light.</li>
+            <li><b>Different intentions (same goal):</b> switch on desk lamp; switch on ceiling light; ask someone else; open curtains.</li>
+            <li><b>Actions depend on intention:</b> reach and press lamp switch; walk and flip wall switch; call out; pull curtains.</li>
+          </ul>
+          <div class="callout good"><b>Exam line:</b> “This shows goal ≠ intention ≠ action, and multiple interaction paths can exist for the same goal.”</div>
+
+          <h3 id="ch3-6">3.6 Gulf of Execution vs Gulf of Evaluation</h3>
+          <table class="table">
+            <tr><th>Concept</th><th>Meaning</th><th>Slide symptom (light)</th><th>Reduce the gulf by…</th></tr>
+            <tr>
+              <td><b>Gulf of Execution</b></td>
+              <td>Gap between what the user wants and what actions the system allows (“How do I do what I want?”)</td>
+              <td>Switch is hidden/unclear; user doesn’t know which switch controls the lamp</td>
+              <td>Make controls visible, labeled, easy to press; make actions obvious</td>
+            </tr>
+            <tr>
+              <td><b>Gulf of Evaluation</b></td>
+              <td>Gap between what the system shows and what the user expects/understands (“Did it work? What happened?”)</td>
+              <td>Light doesn’t turn on; no indication why; user can’t interpret state</td>
+              <td>Immediate clear feedback or clear indicators explaining what went wrong</td>
+            </tr>
+          </table>
+          <div class="callout good"><b>Conclusion (slides):</b> good interface design reduces both gulfs so users can easily act and easily understand results.</div>
+
+          <h3 id="ch3-7">3.7 Abowd &amp; Beale Framework (explicit translation)</h3>
+          <p class="muted">Abowd &amp; Beale extend Norman by showing where translation happens. Interaction is divided into four components, each with a different “language”.</p>
+          <table class="table">
+            <tr><th>Component</th><th>Language</th><th>What it captures</th><th>Slide examples</th></tr>
+            <tr><td><b>User</b></td><td>Task language</td><td>Goals and intentions</td><td>“I want to send a message”</td></tr>
+            <tr><td><b>Input</b></td><td>Input language</td><td>How user expresses intention (physical actions)</td><td>Typing, clicking, pressing a switch</td></tr>
+            <tr><td><b>System</b></td><td>Core language</td><td>Internal representation/state</td><td>message_status = sent; light_state = ON</td></tr>
+            <tr><td><b>Output</b></td><td>Output language</td><td>What user sees/hears/feels</td><td>“Message sent”; light turning on; status icon</td></tr>
+          </table>
+          <div class="callout"><b>How to use in exam:</b> user intentions → translated into input actions → change system state → reflected in output → interpreted by user.</div>
+
+          <h3 id="ch3-8">3.8 Ergonomics</h3>
+          <p class="muted">Ergonomics studies the <b>physical characteristics</b> of interaction between users and systems (controls, environment, screen layout/qualities). Main focus is <b>user performance</b>—how the interface enhances or detracts from performance.</p>
+          <ul>
+            <li><b>Arrangement of controls and displays:</b> placement, grouping, spacing (frequently used controls should be easy to reach).</li>
+            <li><b>Physical environment:</b> lighting, noise, temperature, workspace setup.</li>
+            <li><b>Health issues:</b> repetitive strain injuries, eye strain, posture problems.</li>
+            <li><b>Use of color:</b> visibility/readability; avoid low-contrast text and strain.</li>
+          </ul>
+
+          <h3 id="ch3-9">3.9 Glass interfaces vs physical dials/knobs</h3>
+          <p class="muted">Slides contrast physical controls (dials/knobs) with “glass” interfaces (screens) used to monitor/control equipment.</p>
+          <table class="table">
+            <tr><th>Traditional (dials/knobs)</th><th>Glass interfaces (screens)</th></tr>
+            <tr>
+              <td>
+                <b>Physical controls</b>, wired/piped to equipment.<br/>
+                Information is physically located, continuously visible, easy to read at a glance, and provides strong context cues (position/grouping/location).
+              </td>
+              <td>
+                <b>Computer-based displays</b> replacing some/all physical controls.<br/>
+                Common in control rooms, aircraft cockpits, power plants.
+              </td>
+            </tr>
+          </table>
+
+          <h3 id="ch3-10">3.10 Direct vs Indirect manipulation</h3>
+          <p><b>Direct manipulation (slides):</b> user directly manipulates objects in the computer (dragging files, resizing windows, editing text). Characteristics: the computer world is the world user acts on; immediate visible effects; user in primary control; instant unambiguous feedback.</p>
+          <p><b>Indirect manipulation (slides):</b> interface mediates between operator and the real system (e.g., SCADA/power grid control). Commands travel through networks; feedback can be delayed/sampled; screen state may update before physical mechanism completes.</p>
+
+          <h3 id="ch3-11">3.11 Common interaction styles (what they are + exam points)</h3>
+          <ul>
+            <li><b>Command Line Interface (CLI):</b> user types commands (words/abbreviations/function keys). Powerful and flexible; fast for experts; lacks visual cues so commands must be memorized; differs across systems → high learning effort.</li>
+            <li><b>Menu-driven interface:</b> user selects visible options. Uses recognition over recall; options must be clearly named and logically grouped; often hierarchical. Easier for beginners than CLI.</li>
+            <li><b>Natural language interface:</b> users interact in everyday language (text or speech). Feels natural, but ambiguity is a major challenge; computers struggle with context, pronouns, vague terms.</li>
+            <li><b>Query interfaces:</b> used to search databases; looks like natural language but needs specific syntax; complexity grows with multiple conditions; requires experience.</li>
+            <li><b>Form-fills:</b> screen resembles paper form; users fill slots; easy to learn; supports editing/skipping/corrections; good for data entry and novices.</li>
+            <li><b>Spreadsheets:</b> grid of values/formulae; automatic updates; user can experiment; input and output are mixed (flexible).</li>
+            <li><b>WIMP:</b> Windows, Icons, Menus, Pointers (windowing systems like Windows/Mac/X).</li>
+            <li><b>Point-and-click:</b> user points and clicks/taps icons/buttons/links; simple; linked to hypertext navigation; common in web apps and touch kiosks.</li>
+            <li><b>Three-dimensional interfaces:</b> (listed in slides as an interaction style).</li>
+          </ul>
+
+          <h3 id="ch3-12">3.12 WIMP interface elements (key notes)</h3>
+          <ul>
+            <li><b>Windows:</b> independent work areas; support move/resize/minimize/maximize; enable multitasking. Types: overlapping, tiled, cascaded. Importance: supports multitasking, reduces cognitive load, supports visibility/user control/efficiency.</li>
+            <li><b>Icons:</b> small pictures representing apps/files/actions; support recognition over recall; help pause/resume tasks; allow many items available at once; rely on visual metaphors.</li>
+            <li><b>Menus:</b> list of available actions; recognition rather than recall; avoid too many items; group by function; keep frequent actions prominent; separate dangerous actions; maintain consistency; too-large menus reduce efficiency → cascading sub-menus.</li>
+            <li><b>Pointer:</b> enables pointing/selecting/dragging (mouse/trackpad/etc.); cursor shape indicates mode/status (arrow, crosshair, spinner). Important for direct manipulation; affects speed/accuracy/satisfaction; poor pointer design increases errors.</li>
+            <li><b>Buttons:</b> isolated regions invoking actions; special kinds include radio buttons (mutually exclusive) and check boxes (non-exclusive).</li>
+            <li><b>Toolbars:</b> lines of icons giving fast access to common actions; often customizable.</li>
+            <li><b>Dialog boxes:</b> pop-up information windows to inform important events or request input (e.g., save filename/location).</li>
+          </ul>
+
+          <h3 id="ch3-13">3.13 Interactivity &amp; Errors</h3>
+          <ul>
+            <li><b>Errors are unavoidable.</b></li>
+            <li><b>Good interaction helps:</b> users detect errors and correct them easily.</li>
+            <li><b>Success = recoverability:</b> not “zero errors,” but ability to recover and continue.</li>
+          </ul>
+          <div class="callout"><b>Slide definition:</b> Interactivity is how a system responds to user actions through feedback, confirmation, and error recovery—making interaction successful even when errors occur.</div>
+
+          <h3 id="ch3-14">3.14 Context of interaction</h3>
+          <p class="muted">Interaction happens within context: physical environment, social factors, organizational factors. These influence motivation, performance, satisfaction (e.g., peers/managers; fear of failure; competition; inadequate systems causing frustration).</p>
+          <ul>
+            <li><b>Physical:</b> where and how the interaction occurs.</li>
+            <li><b>Social:</b> group chats, shared docs, co-experience.</li>
+            <li><b>Organizational:</b> policies/work culture/portals/LMS.</li>
+          </ul>
+
+          <h3 id="ch3-15">3.15 Experience, engagement &amp; fun</h3>
+          <ul>
+            <li><b>Traditional usability:</b> effectiveness, efficiency, satisfaction.</li>
+            <li><b>Modern HCI:</b> goes beyond usability—<b>experience</b> matters (emotion, engagement, social interaction).</li>
+            <li><b>Deep engagement:</b> occurs between boredom (too easy) and anxiety (too hard); best interaction when users are challenged but capable.</li>
+          </ul>
+
+          <h3 id="ch3-16">3.16 Experience deconstruction (virtual Christmas crackers)</h3>
+          <p class="muted">Slides show designers didn’t copy a real cracker exactly—they redesigned the experience by deconstructing what makes it “fun”.</p>
+          <ul>
+            <li><b>Deconstruction questions:</b> what makes it fun? emotions? social elements? surprise? suspense?</li>
+            <li><b>Break down:</b> surface elements, emotional effects, social interaction, anticipation &amp; suspense.</li>
+          </ul>
+          <table class="table">
+            <tr><th>Experience aspect</th><th>Real cracker</th><th>Virtual cracker (slides)</th></tr>
+            <tr><td><b>Hidden content</b></td><td>Inside cracker</td><td>Hidden until click</td></tr>
+            <tr><td><b>Suspense</b></td><td>Pulling tension</td><td>Slow page animation builds suspense</td></tr>
+            <tr><td><b>Surprise</b></td><td>Bang!</td><td>Sound file (WAV)</td></tr>
+            <tr><td><b>Shared experience</b></td><td>Co-located</td><td>Sent by email/message; progress feedback creates co-experience</td></tr>
+          </table>
+          <div class="callout"><b>HCI lesson (slides):</b> interaction design often replaces physical sensations with digital equivalents (e.g., bang → sound; pulling tension → animation).</div>
+
+          <h3 id="ch3-17">3.17 Physical design, constraints, and mapping (fluidity)</h3>
+          <p class="muted">Even digital interactions begin with physical manipulation (touch, press, swipe, rotate). Designers face constraints and must map physical actions to logical outcomes.</p>
+          <ul>
+            <li><b>Constraints (slides):</b> ergonomic (button size/spacing), physical (device size, high-voltage switches), legal/safety (controls away from heat, out of children’s reach), context/environment (cleaning), aesthetic (attractive), economic (affordable).</li>
+            <li><b>Smartphone trade-offs (slides):</b> thin body → less space for buttons; removing headphone jack → aesthetic + space trade-off; small side buttons → ergonomic compromise.</li>
+            <li><b>Fluidity (slides):</b> how naturally physical movement matches logical function. Example: turn right → next track; turn left → previous track (opposite physical actions → opposite logical outcomes feels natural).</li>
+            <li><b>Bad mapping example (slides):</b> volume up = rotate left; volume down = rotate right → violates expectations → frustration, cognitive load, loss of control.</li>
+          </ul>
+
+          <h3 id="ch3-18">3.18 Shannon entropy (uncertainty in user decisions)</h3>
+          <p class="muted">Slides introduce Shannon entropy as a measure of uncertainty/unpredictability. In HCI, it helps evaluate how predictable user choices are and how quickly users can make decisions.</p>
+          <ul>
+            <li><b>High entropy:</b> many equally likely choices → high uncertainty → slower decisions (e.g., ATM with “Service 1, 2, 3, 4”).</li>
+            <li><b>Low entropy:</b> one obvious choice or clear labels → lower uncertainty → faster interaction (e.g., “Withdraw Cash, Check Balance, Deposit Money”).</li>
+            <li><b>Menu design link:</b> long unstructured list (high entropy) vs categorized menu + best sellers highlighted (low entropy).</li>
+            <li><b>Predictive interfaces:</b> systems reduce entropy by predicting likely choices (keyboard suggestions; recommendations).</li>
+          </ul>
+          <div class="callout warn"><b>Formula note (slides):</b> Entropy depends on probabilities of choices. Equal probabilities → maximum entropy; unequal probabilities → lower entropy.</div>
+          <table class="table">
+            <tr><th>Slide numeric example</th><th>Probabilities</th><th>Entropy (result)</th><th>Interpretation</th></tr>
+            <tr>
+              <td><b>Equal probabilities</b></td>
+              <td>A=0.25, B=0.25, C=0.25, D=0.25</td>
+              <td><b>H = 2 bits</b></td>
+              <td>High uncertainty, slower decision-making</td>
+            </tr>
+            <tr>
+              <td><b>Unequal probabilities</b></td>
+              <td>A=0.70, B=0.10, C=0.10, D=0.10</td>
+              <td><b>H ≈ 1.36 bits</b></td>
+              <td>Lower uncertainty, faster interaction</td>
+            </tr>
+          </table>
+        `
+      });
+
+      // (More chapters appended below in additional updates.)
+      // =========================
+      // Chapter 4 — Paradigms (from your slides)
+      // =========================
+      addSection({
+        id: "ch4",
+        chapter: 4,
+        open: false,
+        title: "Chapter 4 — Paradigms",
+        subtitle: "What paradigms are, why they matter, key historical paradigms (time-sharing, VDUs, toolkits, personal computing, windows), metaphors, direct manipulation, hypertext, multimodality, CSCW, web, agents, ubiquitous computing",
+        html: `
+          <h3 id="ch4-1">4.1 What is a paradigm?</h3>
+          <p class="muted"><b>Paradigm:</b> a widely accepted example/model that shapes future designs. In the slides: TikTok’s vertical swipe feed influenced Reels/Shorts; iPhone touch gestures became an industry standard.</p>
+
+          <h3 id="ch4-2">4.2 Human-centered innovation (technology + creativity)</h3>
+          <ul>
+            <li><b>Key idea (slides):</b> great usability comes from enhancing human ability, not just machine power.</li>
+            <li><b>Paradigms arise from:</b> technological breakthrough + creative design exploration + user adoption + industry imitation.</li>
+            <li><b>Often recognized after success:</b> many are only labeled “paradigms” once they dominate.</li>
+            <li><b>Not mutually exclusive:</b> one system may combine multiple paradigms (smartphone = GUI + touch + voice + AI + cloud).</li>
+          </ul>
+
+          <h3 id="ch4-3">4.3 Why study paradigms?</h3>
+          <ul>
+            <li><b>Understand evolution</b> of interaction.</li>
+            <li><b>Recognize innovation</b> and design patterns.</li>
+            <li><b>Predict trends</b> and design better systems.</li>
+          </ul>
+
+          <h3 id="ch4-4">4.4 Paradigm: Time-sharing (vs batch processing)</h3>
+          <p class="muted"><b>Time-sharing:</b> multiple users use one computer simultaneously (illusion of dedicated access because the computer switches rapidly between users).</p>
+          <table class="table">
+            <tr><th>Before (batch processing)</th><th>After (time-sharing)</th></tr>
+            <tr>
+              <td>
+                One user at a time; write program → punch cards → submit to operator → wait hours/days → receive output.<br/>
+                <b>No immediate feedback</b>, no real-time correction.
+              </td>
+              <td>
+                Many users connected at once; real-time feedback; interactive programming; continuous human–computer dialogue.<br/>
+                Slides call this the beginning of “true HCI”.
+              </td>
+            </tr>
+          </table>
+          <div class="callout"><b>Contemporary analogy (slides):</b> imagine Google Docs working only once per day (batch). Now compare to real-time comments/live multiplayer/instant compilation (time-sharing).</div>
+
+          <h3 id="ch4-5">4.5 Paradigm: Video Display Units (VDUs) and Sketchpad</h3>
+          <ul>
+            <li><b>VDU:</b> a screen used to display/manipulate information visually. Before VDUs: output printed on paper; interaction mostly text-based.</li>
+            <li><b>Military early use (SAGE):</b> radar data displayed for rapid decision-making (paper too slow).</li>
+            <li><b>Breakthrough (1962):</b> Ivan Sutherland’s <b>Sketchpad</b> enabled drawing directly on a screen, storing graphics in memory, and manipulating objects interactively.</li>
+            <li><b>Key revolutionary point (slides):</b> changing something on the screen changed the computer’s memory.</li>
+          </ul>
+
+          <h3 id="ch4-6">4.6 Paradigm: Programming toolkits (Engelbart)</h3>
+          <ul>
+            <li><b>Engelbart’s belief:</b> computers should empower everyday humans (not only experts).</li>
+            <li><b>Augmenting human intellect (slides):</b> increase ability to solve complex problems, understand situations, develop solutions, combine intuition with powerful tools (Brain + Computer = enhanced intelligence).</li>
+            <li><b>Toolkit idea:</b> reusable components/frameworks/interaction patterns → faster development. Slide examples today: React, Flutter, Unity, AI APIs.</li>
+            <li><b>1968 oN-Line System (“Mother of All Demos”):</b> demonstrated mouse, hypertext links, real-time collaboration, video conferencing.</li>
+          </ul>
+
+          <h3 id="ch4-7">4.7 Paradigm: Personal computing (LOGO, Alan Kay, Xerox PARC)</h3>
+          <ul>
+            <li><b>Shift (1970s):</b> computing power for the masses; usable by non-experts.</li>
+            <li><b>LOGO:</b> made programming accessible to children (simple commands; turtle draws shapes; visual/playful).</li>
+            <li><b>Why LOGO matters (slides):</b> powerful systems become more powerful when easier to use. Modern descendants: Scratch, Minecraft Redstone, Roblox Studio.</li>
+            <li><b>Alan Kay:</b> computers should be personal, visual, intuitive. Xerox PARC developed Smalltalk; window-based interfaces; object-oriented programming.</li>
+            <li><b>Dynabook vision:</b> descendants include iPad/MacBook/Surface/Chromebooks/smartphones.</li>
+          </ul>
+
+          <h3 id="ch4-8">4.8 Paradigm: Window systems and WIMP</h3>
+          <p class="muted">Slides frame window systems as a response to the human multitasking problem (humans switch, interrupt, resume, and have overlapping goals).</p>
+          <ul>
+            <li><b>Window:</b> separate visual workspace representing a task; maintains its own state; supports context switching and remembering where you left off.</li>
+            <li><b>First commercial WIMP system (slides):</b> Xerox 8010 Star Information System (April 1981): windows, icons, mouse pointer, pull-down menus.</li>
+            <li><b>Why shift matters:</b> interaction became spatial and visual (click, drag, select, open) instead of only typing commands.</li>
+          </ul>
+
+          <h3 id="ch4-9">4.9 Metaphor in HCI (and where it fails)</h3>
+          <ul>
+            <li><b>Metaphor:</b> explains new concept using something users already understand → helps build mental model, reduces fear.</li>
+            <li><b>Examples:</b> trash icon = deleting; folder = organizing; heart = like.</li>
+            <li><b>Failure example (slides):</b> typewriter metaphor confused typists because in word processors “space is a character” (unlike typewriters).</li>
+            <li><b>Cultural issues:</b> metaphors differ across cultures; floppy disk “save” icon persists though many users never used one.</li>
+          </ul>
+
+          <h3 id="ch4-10">4.10 Direct manipulation (Shneiderman) and WYSIWYG</h3>
+          <ul>
+            <li><b>Direct manipulation introduced by:</b> Ben Shneiderman (1982).</li>
+            <li><b>Emergence reasons (slides):</b> graphics hardware cheaper (1980s); need usability for non-programmers; shift from hackers → general public.</li>
+          </ul>
+          <div class="callout"><b>Key features (slides):</b> visibility of objects; incremental actions with rapid feedback; reversible actions (Undo); syntactic correctness; replace command language with object manipulation.</div>
+          <p class="muted"><b>WYSIWYG:</b> “What You See Is What You Get” — screen representation ≈ final output (reduces guesswork). Slide examples: Canva, post previews, thumbnail editors.</p>
+
+          <h3 id="ch4-11">4.11 Is a word processor direct manipulation? (slide criteria)</h3>
+          <p class="muted">Slides evaluate a word processor against direct manipulation criteria:</p>
+          <ul>
+            <li><b>Visibility of objects:</b> page, formatting, margins, images visible (similar to WYSIWYG).</li>
+            <li><b>Incremental actions + rapid feedback:</b> typing shows instantly; formatting appears immediately; dragging images updates live; spellcheck underlines.</li>
+            <li><b>Reversibility:</b> Undo/Redo; version history (Google Docs); track changes → encourages exploration.</li>
+            <li><b>Syntactic correctness:</b> menus/buttons constrain input to legal operations; contrasts with markup systems like HTML/LaTeX where typed commands can be erroneous.</li>
+            <li><b>Replace complex command languages:</b> highlight text + drag to move/copy; more direct than typed commands.</li>
+          </ul>
+
+          <h3 id="ch4-12">4.12 Language vs Action paradigm</h3>
+          <table class="table">
+            <tr><th>Action paradigm</th><th>Language paradigm</th></tr>
+            <tr>
+              <td>Users interact through direct manipulation (click, drag, swipe, touch). The interface becomes “the world itself”.</td>
+              <td>Users give instructions using language; interface acts as mediator/agent/interpreter (e.g., command-line like <span class="k">rm *.pdf</span>).</td>
+            </tr>
+          </table>
+
+          <h3 id="ch4-13">4.13 Hypertext → Hypermedia</h3>
+          <ul>
+            <li><b>Memex (Vannevar Bush):</b> desk-like machine storing massive information and creating associative links to mimic how humans connect ideas.</li>
+            <li><b>Key shift:</b> from linear info (start → end) to non-linear linked exploration.</li>
+            <li><b>Hypertext:</b> text links only. <b>Hypermedia:</b> links across text, images, audio, video, animation.</li>
+            <li><b>Why it matches thinking (slides):</b> humans don’t think linearly; hypertext mirrors associative memory and curiosity-driven learning.</li>
+          </ul>
+
+          <h3 id="ch4-14">4.14 Multi-modality</h3>
+          <p class="muted"><b>Multi-modality:</b> using multiple human communication channels (modalities) for input/output; emphasizes simultaneous use of multiple channels (visual, haptic, audio, etc.).</p>
+          <ul>
+            <li><b>Traditional interaction:</b> keyboard/mouse input, screen output, basic sound.</li>
+            <li><b>Multi-modal interaction:</b> combines touch, voice, gesture, facial expression, eye tracking, sound feedback (slides also mention games: touch + voice chat + haptic vibration).</li>
+            <li><b>Slide discussion:</b> phones are multi-modal, but “true” multi-modality is when multiple inputs integrate simultaneously and intelligently.</li>
+          </ul>
+
+          <h3 id="ch4-15">4.15 CSCW (Computer-Supported Cooperative Work)</h3>
+          <p class="muted"><b>CSCW:</b> systems allowing people to collaborate through computers. Focus shifts from “one user” to “many users” (interaction through computer). Slide example: group assignment in Google Docs with simultaneous editing, comments, suggestions.</p>
+
+          <h3 id="ch4-16">4.16 The World Wide Web (WWW)</h3>
+          <p class="muted">Slides: WWW is built on top of the Internet and provides an easy-to-use graphical way to access information, hiding technical complexity (addresses/protocols/servers). It shifted interaction from command-line &amp; technical knowledge to point-and-click multimedia browsing where anyone can publish.</p>
+
+          <h3 id="ch4-17">4.17 Agent-based interfaces</h3>
+          <p class="muted"><b>Agent:</b> software acting on behalf of the user (perform tasks, monitor events, suggest, learn from behavior). Slide examples: email filters, recommendation systems, AI assistants.</p>
+          <ul>
+            <li><b>Rule-based agents:</b> simple IF–THEN rules (e.g., IF sender=Bank THEN mark email high priority). Slide examples: Gmail filters, spam detection, auto-sorting.</li>
+            <li><b>Debate (slides):</b> direct manipulation = user controls everything; agent-based = delegate control to the agent; hybrid models exist.</li>
+          </ul>
+
+          <h3 id="ch4-18">4.18 Ubiquitous computing + context-aware interaction (implicit vs explicit)</h3>
+          <ul>
+            <li><b>Ubiquitous computing (Mark Weiser):</b> computing everywhere; embedded; seamless; “the most profound technologies disappear.”</li>
+            <li><b>Sensor-based/context-aware interaction:</b> environments sense user context via sensors and infer needs; may act implicitly (home automation, recommendations, assistive tech).</li>
+            <li><b>Explicit interaction:</b> user gives clear instructions (typing a search query).</li>
+            <li><b>Implicit/context-aware:</b> system predicts and acts automatically (lights turn on when you enter a room).</li>
+          </ul>
+        `
+      });
+
+      // =========================
+      // Chapter 5 — Interaction Design Basics (from your slides)
+      // =========================
+      addSection({
+        id: "ch5",
+        chapter: 5,
+        open: false,
+        title: "Chapter 5 — Interaction Design Basics",
+        subtitle: "Design as goals within constraints, trade-offs, interaction design process, user focus (stakeholders/users/personas), scenarios, navigation structures, screen layout principles",
+        html: `
+          <h3 id="ch5-1">5.1 What is design? (goals within constraints)</h3>
+          <p class="muted"><b>Design (slides):</b> achieving goals within constraints. Good design begins with understanding <b>purpose</b> and <b>limitations</b>.</p>
+          <ul>
+            <li><b>Goal questions:</b> What is the purpose? Who is it for? Why do they want it?</li>
+            <li><b>Constraint questions:</b> materials/standards? cost limits? time available? health &amp; safety?</li>
+          </ul>
+          <div class="callout"><b>Slide example (personal movie player):</b> target users (young, affluent, mobile); goal (watch latest movies on the move); extra goal (share with friends); constraints (support standards, copyright protection).</div>
+
+          <h3 id="ch5-2">5.2 Trade-offs in design</h3>
+          <p class="muted">Slides emphasize that many “good goals” conflict—design requires trade-offs.</p>
+          <ul>
+            <li><b>Smartphone trade-off (slides):</b> slim phone vs battery size vs heat management vs cost.</li>
+            <li><b>Examples:</b> ultra-slim phones sacrifice battery; gaming phones sacrifice slimness for cooling.</li>
+          </ul>
+
+          <h3 id="ch5-3">5.3 The Golden Rule of Design (know your materials)</h3>
+          <p class="muted"><b>Golden rule (slides):</b> understand your materials before designing.</p>
+          <table class="table">
+            <tr><th>Material in HCI</th><th>What you must understand (slides)</th></tr>
+            <tr><td><b>The computer</b></td><td>processing power, memory, screen size, sensors, network speed, platform constraints, latency, crashes, input misinterpretation</td></tr>
+            <tr><td><b>The human</b></td><td>attention span, memory limits, emotions, social behavior, error patterns, cognitive load, distraction under stress</td></tr>
+          </table>
+          <div class="callout warn"><b>Exam-ready insight:</b> Many “bad usability” problems are mismatches between human limitations and computer constraints (e.g., latency → need loading indicators; distraction → need clear feedback and error recovery).</div>
+
+          <h3 id="ch5-4">5.4 To err is human (why “human error” is often design failure)</h3>
+          <ul>
+            <li><b>Slides:</b> people naturally make mistakes (forget, get distracted, act under stress, misread).</li>
+            <li><b>Misleading phrase:</b> accident reports say “human error” but often the interface was confusing, feedback unclear, controls poorly designed, system inconsistent.</li>
+          </ul>
+          <div class="callout"><b>Everyday digital examples (slides):</b> wrong-recipient message → “delete for everyone/undo send”; online payments → confirmation screen + OTP + “Are you sure?” because accidental clicks happen.</div>
+          <div class="callout good"><b>High-stakes example (slides):</b> aviation uses color-coding, separation of critical buttons, redundant warnings (visual + audio) because stress reduces reaction time and memory.</div>
+
+          <h3 id="ch5-5">5.5 The process of design (why process matters in HCI)</h3>
+          <p class="muted">Slides warn against treating usability as “testing at the end.” Good projects design usability from day one, involve users early, and iterate.</p>
+          <table class="table">
+            <tr><th>Phase (slides)</th><th>Goal</th><th>Typical techniques/examples</th></tr>
+            <tr><td><b>Requirements</b></td><td>What problem are we solving? What is wanted?</td><td>interviews, observation, studying existing systems</td></tr>
+            <tr><td><b>Analysis</b></td><td>Organize findings; make sense of data</td><td>task analysis, scenarios, user journey mapping</td></tr>
+            <tr><td><b>Design</b></td><td>Decide “how” (layout, navigation, interaction style)</td><td>principles/guidelines/heuristics; trade-offs (e.g., undo send timing)</td></tr>
+            <tr><td><b>Implementation &amp; deployment</b></td><td>Build and release</td><td>code/hardware/docs; slides mention AI tools speeding up development</td></tr>
+            <tr><td><b>Iteration &amp; prototyping</b></td><td>Build → test → improve → repeat (not linear)</td><td>checkout improvements: 5-step → 1-page → autofill</td></tr>
+          </table>
+          <div class="callout warn"><b>Slide message:</b> “Humans are complex—you will not get it right first time.” Iteration is normal and necessary.</div>
+
+          <h3 id="ch5-6">5.6 User focus: stakeholders, user types, and why “generic user” is dangerous</h3>
+          <ul>
+            <li><b>User focus (slides):</b> you can’t design good interaction without understanding the people using it.</li>
+            <li><b>Stakeholders:</b> anyone affected by the system (direct users + indirect users + decision-makers + support staff).</li>
+            <li><b>Danger:</b> “generic user” doesn’t exist; biggest mistake is designing for yourself (“It’s obvious” → obvious to whom?).</li>
+            <li><b>Exam example style (slides):</b> designing for 20-year-old urban tech user but actual users may be 50-year-old shop owner, rural user with slow internet, first-time smartphone user → assumption = design failure.</li>
+          </ul>
+
+          <h3 id="ch5-7">5.7 How to understand users (talk, watch, imagine carefully)</h3>
+          <ul>
+            <li><b>Talk to them (slides):</b> interviews, open discussions, surveys, participatory design.</li>
+            <li><b>Participatory design:</b> users involved in idea stage, prototype testing, feedback, decision-making (users feel ownership → system more likely used).</li>
+            <li><b>Watch them:</b> what people say ≠ what they do (self-reporting is unreliable).</li>
+            <li><b>Use personas when needed:</b> not “if I was the user,” but “what would THEY do?”</li>
+          </ul>
+          <div class="callout"><b>Persona example (slides):</b> Mahnoor (21, student) uses phone 6+ hrs/day, short attention span, anxious about deadlines, prefers visual cues, studies at night, shares notes on WhatsApp. Use persona to predict reactions.</div>
+
+          <h3 id="ch5-8">5.8 Scenarios (a core design tool)</h3>
+          <p class="muted"><b>Scenario (slides):</b> a story describing how users interact with a system in a realistic situation. Simple but powerful.</p>
+          <ul>
+            <li><b>Benefits:</b> communication across team/client; validation against task models/flows; shows system response.</li>
+            <li><b>Linear nature:</b> easy to understand but may hide alternatives/mistakes/unexpected actions (e.g., upload fails, accidental delete, network disconnect).</li>
+            <li><b>Used across process:</b> understanding needs, exploring ideas, checking feasibility, creating usability test cases.</li>
+          </ul>
+          <div class="callout"><b>Slide example scenario (movie player):</b> user downloads movie → transfers to player → navigates menus → connects Bluetooth → watches at lunch → shares with friend. Insight: reveals real actions + context.</div>
+
+          <h3 id="ch5-9">5.9 Navigation design and levels of interaction</h3>
+          <p class="muted">Slides: design includes entire socio-technical context, but eventually you must focus on interface and navigation.</p>
+          <table class="table">
+            <tr><th>Level (slides)</th><th>Meaning</th><th>Example style</th></tr>
+            <tr><td><b>Widgets</b></td><td>buttons/menus/icons enabling specific actions</td><td>Instagram “Like” button</td></tr>
+            <tr><td><b>Screens/windows</b></td><td>organization and grouping on one screen</td><td>TikTok home screen layout</td></tr>
+            <tr><td><b>Navigation within app</b></td><td>movement between sections; should show where user is</td><td>Instagram Home → Explore → Reels → Profile</td></tr>
+            <tr><td><b>Environment</b></td><td>interaction with other systems; switching apps/files/networks</td><td>Copy from Google Docs → paste in WhatsApp</td></tr>
+          </table>
+
+          <h3 id="ch5-10">5.10 Local vs Global navigation structure</h3>
+          <ul>
+            <li><b>Local structure:</b> navigation within a single screen/page (layout of elements).</li>
+            <li><b>Global structure:</b> overall navigation across the system (how screens connect).</li>
+          </ul>
+          <div class="callout"><b>Slides note:</b> users are goal-seeking but rarely take a perfect/shortest path; good UI ensures they feel they are getting closer to their goal.</div>
+
+          <h3 id="ch5-11">5.11 Four key questions a screen must answer (slides)</h3>
+          <table class="table">
+            <tr><th>Question</th><th>Meaning</th><th>Design techniques (slides)</th></tr>
+            <tr><td><b>1. Where am I?</b></td><td>user knows location in system</td><td>page titles, breadcrumbs, highlighted menu items</td></tr>
+            <tr><td><b>2. What can I do?</b></td><td>interactive elements are identifiable</td><td>buttons look clickable; links clearly marked; recognizable icons</td></tr>
+            <tr><td><b>3. Where will this action take me?</b></td><td>user predicts results of clicking</td><td>clear labels like “Confirm Ride”; avoid surprise navigation</td></tr>
+            <tr><td><b>4. Where have I been?</b></td><td>user tracks history; avoids “lost in hyperspace”</td><td>back button; history; recently visited pages</td></tr>
+          </table>
+          <div class="callout warn"><b>Icons need labels (slides):</b> icons alone can confuse; support with text labels, tooltips, or explanations (e.g., Slack tooltips).</div>
+
+          <h3 id="ch5-12">5.12 Screen layout principles (grouping, order, decoration, alignment, whitespace)</h3>
+          <p class="muted">Slides provide practical tools for how users read and interact with screens.</p>
+          <ul>
+            <li><b>Grouping &amp; structure:</b> elements that belong together should be physically grouped.</li>
+            <li><b>Order of information:</b> follow the natural order of tasks; form tab order should match visual order.</li>
+            <li><b>Decoration:</b> use boxes/lines/colors/fonts to organize—but not too many.</li>
+            <li><b>Alignment:</b> improves scanning (text left aligned; numbers right aligned; decimals aligned at decimal point).</li>
+            <li><b>White space:</b> creates separation, structure, and highlighting.</li>
+          </ul>
+          <div class="callout"><b>Input fields (slides):</b> keep labels readable; avoid jagged layouts; use right-aligned labels or labels above fields (mobile-friendly) to reduce misalignment problems.</div>
+
+          <h3 id="ch5-13">5.13 Appropriate appearance + aesthetics vs utility</h3>
+          <ul>
+            <li><b>Representation should match purpose (slides):</b> numbers → charts; hierarchies → tree diagrams; comparisons → tables; trends → line graphs.</li>
+            <li><b>Aesthetics vs utility:</b> beautiful UI is not always usable; balance appeal, functionality, clarity.</li>
+            <li><b>Readability rule (slides):</b> avoid busy backgrounds behind text; reduce eye strain.</li>
+            <li><b>Color problems (slides):</b> too many colors, poor contrast, distraction, accessibility issues; use color to support information, not carry all meaning.</li>
+            <li><b>3D effect problems:</b> can reduce clarity (perspective text hard; 3D pie charts distort); best for spatial/physical/simulation data.</li>
+          </ul>
+
+          <h3 id="ch5-14">5.14 Localization and internationalization</h3>
+          <ul>
+            <li><b>Localization:</b> adapting software for different languages/cultures.</li>
+            <li><b>Internationalization:</b> designing so software can easily support multiple regions.</li>
+            <li><b>Slide examples of changes:</b> language, date formats, icons, layout direction (LTR vs RTL).</li>
+            <li><b>Cultural meaning of icons:</b> tick vs cross meanings differ; icons are not universal.</li>
+          </ul>
+        `
+      });
+
+      // =========================
+      // Chapter 6 — HCI in the Software Process (from your slides)
+      // =========================
+      addSection({
+        id: "ch6",
+        chapter: 6,
+        open: false,
+        title: "Chapter 6 — HCI in the Software Process",
+        subtitle: "Software life cycle + HCI, requirements→architecture→design→coding→integration→maintenance, validation vs verification, usability engineering/specification, iterative design & prototyping, design rationale (IBIS/gIBIS, QOC)",
+        html: `
+          <h3 id="ch6-1">6.1 Why HCI matters in the software process</h3>
+          <ul>
+            <li><b>Slides:</b> designing usable systems requires understanding the entire design process (not just copying good interfaces).</li>
+            <li><b>HCI focus:</b> usable, efficient, user-friendly systems.</li>
+            <li><b>Key message:</b> HCI influences every stage of the software life cycle, not “one extra step”.</li>
+          </ul>
+
+          <h3 id="ch6-2">6.2 Software engineering and the software life cycle</h3>
+          <p class="muted">Slides: software engineering manages technical processes, project management, and development methods. The <b>software life cycle</b> is a structured process to design, build, and maintain software to improve quality and reduce errors.</p>
+
+          <h3 id="ch6-3">6.3 Waterfall model overview (slides)</h3>
+          <p class="muted">Slides describe development flowing step-by-step like a waterfall; feedback loops exist (especially from maintenance). They use an analogy: idea → plan → record → edit → upload → improve based on comments.</p>
+
+          <h3 id="ch6-4">6.4 Life cycle activities (with HCI framing)</h3>
+          <table class="table">
+            <tr><th>Stage</th><th>Core question</th><th>Slide notes/examples</th></tr>
+            <tr>
+              <td><b>Requirements specification</b></td>
+              <td>WHAT should the system do?</td>
+              <td>Capture what system expected to provide; gather info about users/tasks/environment; translate human language → technical requirements (e.g., food delivery app wants fast delivery, live tracking, easy payment).</td>
+            </tr>
+            <tr>
+              <td><b>Architectural design</b></td>
+              <td>HOW at high level?</td>
+              <td>Factor into major components; define structure + component interaction; satisfy functional + nonfunctional requirements (e.g., Instagram components: profiles, feed, messaging, notifications).</td>
+            </tr>
+            <tr>
+              <td><b>Non-functional requirements</b></td>
+              <td>How well must it work?</td>
+              <td>Speed, security, reliability, <b>usability</b>. Not features; “how well”.</td>
+            </tr>
+            <tr>
+              <td><b>Detailed design</b></td>
+              <td>What modules will be implemented?</td>
+              <td>Refine components into implementable parts; algorithms/data structures/logic; governed by nonfunctional requirements (e.g., chat: send logic, notifications, read receipts).</td>
+            </tr>
+            <tr>
+              <td><b>Coding &amp; unit testing</b></td>
+              <td>Build parts correctly</td>
+              <td>Convert design → code; test parts individually (e.g., login correct vs wrong password).</td>
+            </tr>
+            <tr>
+              <td><b>Integration &amp; testing</b></td>
+              <td>Does the whole system work together?</td>
+              <td>Combine components; system testing; includes user acceptance testing.</td>
+            </tr>
+            <tr>
+              <td><b>Operation &amp; maintenance</b></td>
+              <td>Keep it working &amp; improving</td>
+              <td>Release; bug fixes, updates, new features (slides: Snapchat constantly evolves).</td>
+            </tr>
+          </table>
+
+          <h3 id="ch6-5">6.5 Validation vs verification (very exam-likely)</h3>
+          <table class="table">
+            <tr><th>Term</th><th>Question</th><th>Meaning (slides)</th><th>Example style (slides)</th></tr>
+            <tr>
+              <td><b>Validation</b></td>
+              <td>Are we building the right product?</td>
+              <td>User satisfaction / meeting customer needs; subjective; for interactive systems, validation includes user evaluation.</td>
+              <td>Users want easy posting &amp; smooth scrolling; if they find it fun and useful → validation success.</td>
+            </tr>
+            <tr>
+              <td><b>Verification</b></td>
+              <td>Are we building the product right?</td>
+              <td>Technical correctness; internal consistency; correct logic; code matches design.</td>
+              <td>Uploads work without errors; correct like counts; app doesn’t crash → verification success.</td>
+            </tr>
+          </table>
+          <div class="callout warn"><b>Formality gap (slides):</b> validation relies partly on subjective proof. Example: user says “app feels slow” even if technically fast → mismatch in perception (experience matters).</div>
+
+          <h3 id="ch6-6">6.6 Technical vs managerial perspective; phases vs activities</h3>
+          <ul>
+            <li><b>Technical flow:</b> requirements → architecture → detailed design → implementation (but reality overlaps/out of order).</li>
+            <li><b>Management view (phases):</b> defined by inputs/outputs/deliverables; ends with sign-off; signed documents create contractual obligations.</li>
+          </ul>
+
+          <h3 id="ch6-7">6.7 Usability engineering (make usability measurable)</h3>
+          <ul>
+            <li><b>Slides:</b> usability should be engineered, not guessed. Decide how usability will be judged <b>before</b> building.</li>
+            <li><b>Example (slides):</b> not “easy to use,” but “users can submit assignment in ≤ 3 clicks.”</li>
+            <li><b>Why measurement:</b> ultimate test is measured user experience; usability measures should be explicit requirements.</li>
+            <li><b>Limitation (slides):</b> easy to measure clicks/time; hard to measure thinking effort/confusion/mental load.</li>
+          </ul>
+
+          <h3 id="ch6-8">6.8 Usability specification (6 elements)</h3>
+          <p class="muted">Slides: usability specification is part of requirements and defines how usability will be evaluated. Each usability attribute includes:</p>
+          <ul>
+            <li><b>Measuring concept</b></li>
+            <li><b>Measuring method</b></li>
+            <li><b>Now level</b></li>
+            <li><b>Worst case</b></li>
+            <li><b>Planned level</b></li>
+            <li><b>Best case</b></li>
+          </ul>
+          <div class="callout"><b>Example attribute (slides): Recoverability</b> = ability to fix mistakes (Undo/Redo/error correction). Examples: undo sending message; edit caption after posting.</div>
+
+          <h3 id="ch6-9">6.9 Usability specification case study: VCR problem (recoverability)</h3>
+          <p class="muted">Slides: old VCRs were hard to program and easy to mess up; no undo → users had to restart and remember settings (modern equivalent: losing all entered data after one error).</p>
+          <table class="table">
+            <tr><th>Element</th><th>Slide meaning</th><th>Applied to “undo wrong programming sequence”</th></tr>
+            <tr><td><b>Measuring concept</b></td><td>What are we trying to enable?</td><td>Undo a wrong sequence</td></tr>
+            <tr><td><b>Measuring method</b></td><td>How do we measure success?</td><td>Count steps/clicks to undo</td></tr>
+            <tr><td><b>Now level</b></td><td>Current situation</td><td>No product allows undo</td></tr>
+            <tr><td><b>Worst case</b></td><td>Minimum acceptable usability</td><td>Undo takes as many steps as doing whole task again</td></tr>
+            <tr><td><b>Planned level</b></td><td>Target goal</td><td>Undo max 2 actions</td></tr>
+            <tr><td><b>Best case</b></td><td>Ideal</td><td>Undo in 1 action</td></tr>
+          </table>
+
+          <h3 id="ch6-10">6.10 ISO usability standard 9241 (3 parts)</h3>
+          <p class="muted">Slides: ISO 9241 defines usability as:</p>
+          <ul>
+            <li><b>Effectiveness:</b> did it work? (accuracy + completion)</li>
+            <li><b>Efficiency:</b> was it easy/fast? (effort/time)</li>
+            <li><b>Satisfaction:</b> did you enjoy it? (comfort/frustration/emotion)</li>
+          </ul>
+
+          <h3 id="ch6-11">6.11 “Good metrics ≠ good experience” (slide Q/A block)</h3>
+          <p class="muted">Slides show a scenario where metrics look good but users still face problems.</p>
+          <ul>
+            <li><b>Problem examples (slides):</b> accidental posts; lack of confirmation/review step; system too fast → causes errors; stressful experience.</li>
+            <li><b>Designer assumptions (slides):</b> faster is always better; fewer steps always better; users prefer speed over control; errors can be fixed using undo.</li>
+            <li><b>Slide improvement ideas:</b> add preview/confirmation; allow editing before posting; slow down slightly; “hold to post” instead of single tap; balance speed + control; prevent mistakes not just fix them.</li>
+          </ul>
+
+          <h3 id="ch6-12">6.12 Iterative design and prototyping</h3>
+          <div class="callout"><b>Slides:</b> Requirements can’t be fully known at the start. Build → test → improve → repeat. “Design is guessing → Testing is truth.”</div>
+          <table class="table">
+            <tr><th>Prototyping type (slides)</th><th>Definition</th><th>When useful</th><th>Slide-style example</th></tr>
+            <tr><td><b>Throw-away prototyping</b></td><td>Build → test → learn → discard; final built from scratch using insights</td><td>Exploring ideas / unclear requirements</td><td>Fake landing page to test demand</td></tr>
+            <tr><td><b>Incremental prototyping</b></td><td>Build system in parts/modules; each release adds features</td><td>Large systems needing staged delivery</td><td>WhatsApp: messaging → voice → video → status</td></tr>
+            <tr><td><b>Evolutionary prototyping</b></td><td>Prototype continuously improved and becomes final system</td><td>Products that grow over time</td><td>ChatGPT: added voice/multimodal over time</td></tr>
+          </table>
+          <div class="callout warn"><b>Management challenges (slides):</b> prototyping takes time; throw-away can feel “wasted”; hard to estimate time/cost/effort; prototypes may ignore performance/security/reliability even though these are critical.</div>
+
+          <h3 id="ch6-13">6.13 Prototyping techniques (storyboards; limited functionality simulation)</h3>
+          <ul>
+            <li><b>Storyboards:</b> visual snapshots of UI; show user flow step-by-step; can include basic animations; limitation: no real interaction—tests appearance more than behavior.</li>
+            <li><b>Limited functionality simulation:</b> some interaction works; mimics behavior with predefined actions (e.g., Like icon toggles but doesn’t store data).</li>
+          </ul>
+
+          <h3 id="ch6-14">6.14 Design rationale (what and why)</h3>
+          <p class="muted"><b>Design rationale (slides):</b> explains why a system is designed the way it is (structure + behavior). Not just what you built—why.</p>
+          <ul>
+            <li><b>Benefits (slides):</b> communication throughout life cycle; knowledge reuse; enforces design discipline; presents arguments for trade-offs; organizes large design space; captures contextual information.</li>
+          </ul>
+
+          <h3 id="ch6-15">6.15 Types of design rationale</h3>
+          <table class="table">
+            <tr><th>Type (slides)</th><th>Focus</th><th>Key idea</th><th>Slide example style</th></tr>
+            <tr><td><b>Process-oriented</b></td><td>Decision history</td><td>Tracks what decisions were made + why + in what order</td><td>Switching from burger menu to bottom nav because users prefer visible options</td></tr>
+            <tr><td><b>Structure-oriented</b></td><td>All possible options</td><td>Compares options (not history)</td><td>Login options: email/password vs Google sign-in vs OTP vs Face ID + trade-offs</td></tr>
+            <tr><td><b>Psychological</b></td><td>User behavior/experience</td><td>Explains impact of design on users</td><td>Infinite scroll reduces effort and increases engagement</td></tr>
+          </table>
+
+          <h3 id="ch6-16">6.16 IBIS / gIBIS (Issue-based information system)</h3>
+          <p class="muted"><b>IBIS (slides):</b> structures design discussions as:</p>
+          <ul>
+            <li><b>Issue:</b> problem/question</li>
+            <li><b>Position:</b> possible solution</li>
+            <li><b>Argument:</b> supports or opposes position</li>
+          </ul>
+          <div class="callout"><b>gIBIS (slides):</b> graphical version: Issue in center → Positions branch out → Arguments support/oppose → Sub-issues refine (e.g., add dark mode? yes/no; then sub-issue default vs optional).</div>
+
+          <h3 id="ch6-17">6.17 Design space analysis and QOC notation</h3>
+          <p class="muted">Slides: design space analysis explores all possible options (often post hoc) and structures decisions clearly.</p>
+          <div class="callout"><b>QOC (slides):</b> <b>Q</b>uestions (design problems) → <b>O</b>ptions (solutions) → <b>C</b>riteria (evaluation factors). Solid line = positive; dashed = negative; highlighted option = best.</div>
+          <div class="callout warn"><b>Limitations (slides):</b> choosing the right questions/criteria is hard; bad criteria → bad decision; QOC doesn’t show criterion importance; sometimes no clear winner.</div>
+        `
+      });
+
+      // =========================
+      // Chapter 7 — Design Rules (Principles focus, from your slides)
+      // =========================
+      addSection({
+        id: "ch7",
+        chapter: 7,
+        open: false,
+        title: "Chapter 7 — Design Rules (Principles)",
+        subtitle: "Why design rules, dimensions (authority/generality), principles vs standards vs guidelines, usability principles (learnability/flexibility/robustness) + sub-principles, Shneiderman’s Golden Rules, Norman’s 7 principles",
+        html: `
+          <h3 id="ch7-1">7.1 Why design rules?</h3>
+          <p class="muted">Slides: core challenge is predicting usability impact of design decisions. <b>Design rules</b> help designers create user-friendly systems early (e.g., deciding button placement and navigation simplicity in a mobile app).</p>
+
+          <h3 id="ch7-2">7.2 What are design rules? (two key dimensions)</h3>
+          <ul>
+            <li><b>Design rules:</b> rules designers follow to improve usability; guidance to reduce confusing interfaces.</li>
+            <li><b>Two dimensions (slides):</b> <b>Authority</b> (must-follow vs optional) and <b>Generality</b> (broad vs specific).</li>
+          </ul>
+          <table class="table">
+            <tr><th>Type (slides)</th><th>Authority</th><th>Generality</th><th>Slide-style intuition</th></tr>
+            <tr><td><b>Principles</b></td><td>Low (flexible)</td><td>High (broad)</td><td>“life advice”</td></tr>
+            <tr><td><b>Guidelines</b></td><td>Medium</td><td>Medium</td><td>“study tips”</td></tr>
+            <tr><td><b>Standards</b></td><td>High (strict)</td><td>More specific</td><td>“exam rules”</td></tr>
+          </table>
+          <div class="callout warn"><b>Slides:</b> design rules can conflict; designers must make trade-offs (more features vs simple UI).</div>
+
+          <h3 id="ch7-3">7.3 When to use design rules?</h3>
+          <ul>
+            <li><b>Most useful early (slides):</b> requirements and architecture to reduce bad choices early.</li>
+            <li><b>Platform-specific risk:</b> applying rules blindly can be poor design (desktop UI doesn’t map well to mobile).</li>
+          </ul>
+
+          <h3 id="ch7-4">7.4 Principles to support usability (core triad)</h3>
+          <p class="muted">Slides present three key usability principles (most abstract rules):</p>
+          <ul>
+            <li><b>Learnability:</b> ease for new users to begin effective interaction and reach maximal performance.</li>
+            <li><b>Flexibility:</b> multiplicity of ways user and system exchange information.</li>
+            <li><b>Robustness:</b> support for successful achievement and assessment of goal-directed behavior.</li>
+          </ul>
+
+          <h3 id="ch7-5">7.5 Learnability sub-principles (with exam-ready wording)</h3>
+          <ul>
+            <li><b>Predictability:</b> determine effect of future actions based on past interaction history.</li>
+            <li><b>Synthesizability:</b> assess effect of past actions (immediate vs eventual honesty/feedback).</li>
+            <li><b>Familiarity:</b> how prior knowledge applies; includes guessability and affordances.</li>
+            <li><b>Generalizability:</b> extend specific interaction knowledge to new situations.</li>
+            <li><b>Consistency:</b> similar input/output behavior in similar situations/task objectives.</li>
+          </ul>
+          <div class="callout"><b>Slide examples:</b> Predictability includes operation visibility (play/pause/skip always visible). Synthesizability: posting shows immediate likes/comments; immediate feedback is better for learning. Familiarity: cart icon; affordances (button looks clickable; slider draggable). Generalizability: swipe gestures work across apps. Consistency: most important UX principle but “consistent with what?” matters (within app, across apps, real world); too much consistency can be bad (alphabetical keyboards replaced by QWERTY).</div>
+
+          <h3 id="ch7-6">7.6 Flexibility sub-principles</h3>
+          <ul>
+            <li><b>Dialogue initiative:</b> freedom from system-imposed constraints (system-driven vs user-driven).</li>
+            <li><b>Multithreading:</b> support interaction for more than one task (concurrent vs interleaving); includes multimodality.</li>
+            <li><b>Task migratability:</b> passing responsibility between user and system (human + AI collaboration).</li>
+            <li><b>Substitutivity:</b> equivalent values of input/output can be substituted (representation multiplicity; equal opportunity).</li>
+            <li><b>Customizability:</b> interface modifiable by user (adaptability) or system (adaptivity).</li>
+          </ul>
+          <div class="callout"><b>Slide examples:</b> Dialogue initiative: annoying blocking popups vs free browsing; sometimes system control needed for safety/collaboration. Multithreading: chat + watch + browse. Task migratability: Google Maps suggests routes; user decides. Substitutivity: enter value directly or via formula; show numbers as table or graph; drag-and-drop output becomes input. Customizability: user themes/wallpapers (adaptability) vs Netflix recommendations (adaptivity).</div>
+
+          <h3 id="ch7-7">7.7 Robustness sub-principles</h3>
+          <ul>
+            <li><b>Observability:</b> user evaluates internal state from perceivable representation (browsability, defaults, reachability, persistence, operation visibility).</li>
+            <li><b>Recoverability:</b> take corrective action after error (forward/backward recovery; commensurate effort).</li>
+            <li><b>Responsiveness:</b> perceived rate of communication; stability.</li>
+            <li><b>Task conformance:</b> degree system services support user tasks (task completeness, task adequacy).</li>
+          </ul>
+          <div class="callout"><b>Slide examples:</b> Observability: typing indicator; defaults: auto-fill; reachability: back button; persistence: unread badge. Recoverability: undo delete; “hard to undo → should be hard to do” (commensurate effort) like account deletion steps. Responsiveness: instant loading; slow apps lose users. Task conformance: Uber supports goal “get a ride quickly”.</div>
+
+          <h3 id="ch7-8">7.8 Applying principles to identify violations (slide activity pattern)</h3>
+          <p class="muted">Slides show how to choose and justify violated sub-principles:</p>
+          <ul>
+            <li><b>Confusing icons:</b> violates familiarity (not recognizable) and consistency (no standard patterns).</li>
+            <li><b>No confirmation after submission:</b> violates synthesizability (can’t see result) and predictability (unsure what happened).</li>
+            <li><b>Single upload option:</b> violates substitutivity (no alternative methods).</li>
+            <li><b>Blocking popups:</b> violates dialogue initiative (system controls interaction).</li>
+            <li><b>No undo:</b> violates recoverability.</li>
+            <li><b>Slow/no feedback:</b> violates responsiveness and observability.</li>
+          </ul>
+          <div class="callout good"><b>Slide redesign pattern:</b> “Add upload progress bar + confirmation message” improves synthesizability, observability, and responsiveness.</div>
+
+          <h3 id="ch7-9">7.9 Shneiderman’s Golden Rules (8 rules)</h3>
+          <table class="table">
+            <tr><th>#</th><th>Golden rule (slides)</th><th>Slide-style example</th></tr>
+            <tr><td><b>1</b></td><td>Strive for consistency</td><td>icons/navigation consistent</td></tr>
+            <tr><td><b>2</b></td><td>Enable frequent users to use shortcuts</td><td>keyboard shortcuts (Ctrl+C/Ctrl+V)</td></tr>
+            <tr><td><b>3</b></td><td>Offer informative feedback</td><td>typing indicator</td></tr>
+            <tr><td><b>4</b></td><td>Design dialogs to yield closure</td><td>“Order placed successfully”</td></tr>
+            <tr><td><b>5</b></td><td>Offer error prevention and simple error handling</td><td>password rules; prevent mistakes</td></tr>
+            <tr><td><b>6</b></td><td>Permit easy reversal of actions</td><td>Undo send</td></tr>
+            <tr><td><b>7</b></td><td>Support internal locus of control</td><td>user feels in control (seek/skip)</td></tr>
+            <tr><td><b>8</b></td><td>Reduce short-term memory load</td><td>auto-suggestions; visible cues</td></tr>
+          </table>
+
+          <h3 id="ch7-10">7.10 Norman’s 7 principles (slides)</h3>
+          <ol style="margin:8px 0 12px 18px; color: var(--text);">
+            <li><b>Use knowledge in the world + in the head:</b> don’t rely only on memory; provide visible cues plus learned skills (slides: maps show routes + user knows maps).</li>
+            <li><b>Break complex tasks into simple steps; reduce thinking effort:</b> slides: Uber flow (enter location → confirm ride).</li>
+            <li><b>Make things visible (bridge gulfs):</b> show possible actions; show system status clearly (play/pause always visible).</li>
+            <li><b>Get the mapping right:</b> controls match expected results (natural/intuitive behavior).</li>
+            <li><b>Use constraints:</b> prevent incorrect actions (send disabled if no recipient).</li>
+            <li><b>Design for error:</b> assume mistakes; provide recovery (deleted items go to trash).</li>
+            <li><b>Standardize:</b> use familiar patterns across systems (common play/pause icons).</li>
+          </ol>
+        `
+      });
+
+      // =========================
+      // Scenario-based Practice Questions (likely paper style, from your slides)
+      // =========================
+      addSection({
+        id: "practice",
+        chapter: "P",
+        open: false,
+        title: "Scenario-based Practice Questions (Mid Exam)",
+        subtitle: "Long-form, justification-based questions + exam-ready answer pointers (based strictly on Ch 3–7 slides)",
+        html: `
+          <h3 id="pq-1">How to answer scenario questions (use this structure)</h3>
+          <div class="callout">
+            <b>Template:</b> (1) Identify the problem (what user experiences). (2) Name the model/principle violated (gulfs, learnability/flexibility/robustness sub-principles, Shneiderman, Norman, etc.). (3) Justify with 2–4 slide-aligned points. (4) Propose a redesign with specific UI changes + explain which principle(s) improve.
+          </div>
+
+          <h3 id="pq-2">Practice set A — Gulfs, feedback, and errors (Chapter 3)</h3>
+          <div class="qset">
+            <div class="q">
+              <p class="qt">A1. Online exam portal shows “Submitted” but the file upload sometimes fails silently. Students only find out after grades are posted as zero. Identify the main usability gaps and redesign.</p>
+              <p class="qa"><b>Use:</b> Gulf of Evaluation + Observability + Responsiveness + Synthesizability. <b>Fix:</b> upload progress bar, checksum/confirmation screen, “view uploaded file” preview, clear error messages, retry, and persistent submission status history.</p>
+            </div>
+            <div class="q">
+              <p class="qt">A2. A light-control mobile app has 12 identical icons; users keep pressing the wrong light and don’t know which room changed. Diagnose using Norman’s gulfs and mapping.</p>
+              <p class="qa"><b>Use:</b> Gulf of Execution (which action?) + Gulf of Evaluation (did it work?) + mapping. <b>Fix:</b> labels/room names, grouping, live state indicators per room, confirmation toast (“Bedroom light ON”), and consistent iconography.</p>
+            </div>
+            <div class="q">
+              <p class="qt">A3. A banking app instantly transfers money on a single tap. Many users accidentally pay the wrong contact. “Undo” exists but is hidden in settings. What did the design optimize incorrectly, and how should it change?</p>
+              <p class="qa"><b>Use:</b> “Good metrics ≠ good experience” idea; error prevention vs recovery; Shneiderman (error prevention; informative feedback; closure); Norman (constraints; design for error). <b>Fix:</b> confirmation/review step, hold-to-send, clear recipient display, and visible cancellation window.</p>
+            </div>
+          </div>
+
+          <h3 id="pq-3">Practice set B — Interaction styles, direct vs indirect, paradigms (Ch 3–4)</h3>
+          <div class="qset">
+            <div class="q">
+              <p class="qt">B1. A university LMS provides a “command box” where students must type exact commands to access assignments (e.g., <span class="k">open course123 assignment4</span>). Suggest a better interaction style and justify.</p>
+              <p class="qa"><b>Use:</b> CLI disadvantages (memorization; no visual cues). <b>Fix:</b> menu-driven + form-fills + clear navigation (breadcrumbs), plus search with filters (query interface) for power users.</p>
+            </div>
+            <div class="q">
+              <p class="qt">B2. A power-grid operator uses a screen that shows breakers as “open/closed,” but sensor updates are delayed. Explain why this is indirect manipulation and what risks it creates.</p>
+              <p class="qa"><b>Use:</b> indirect manipulation definition; delayed feedback. <b>Risks:</b> gulf of evaluation, wrong interpretation. <b>Fix:</b> explicit “pending” states, timestamps, stability/responsiveness improvements, and clearer observability.</p>
+            </div>
+            <div class="q">
+              <p class="qt">B3. Explain time-sharing as a paradigm shift and compare it with batch processing using a modern analogy.</p>
+              <p class="qa"><b>Use:</b> batch = submit then wait; no immediate feedback. Time-sharing = many users interact simultaneously; real-time feedback. Use slides’ Google Docs / social app analogy.</p>
+            </div>
+          </div>
+
+          <h3 id="pq-4">Practice set C — Interaction design process + users (Chapter 5)</h3>
+          <div class="qset">
+            <div class="q">
+              <p class="qt">C1. You must redesign a campus ride-booking app. Students complain “I get lost in the app.” Apply the four key questions for local structure and propose UI changes.</p>
+              <p class="qa"><b>Use:</b> Where am I? What can I do? Where will this take me? Where have I been? <b>Fix:</b> page titles, breadcrumbs, highlighted nav, clear button labels, predictable confirmation screens, back/history, and consistent icon labels.</p>
+            </div>
+            <div class="q">
+              <p class="qt">C2. A team designed for “tech-savvy students,” but actual users include older staff with slow internet. Explain why this is risky and how to correct it in requirements/analysis.</p>
+              <p class="qa"><b>Use:</b> “generic user” myth; stakeholders; user types; talk + watch; personas. <b>Fix:</b> interviews/observation; personas; define constraints (network/latency) and accessibility needs; iterative prototyping.</p>
+            </div>
+            <div class="q">
+              <p class="qt">C3. A sign-up form has jagged alignment and inconsistent label placement; users abandon it. Diagnose using screen layout principles.</p>
+              <p class="qa"><b>Use:</b> alignment, grouping, order, whitespace, readable labels; form tab order should match visual order. <b>Fix:</b> consistent label strategy (above fields/right-aligned), spacing, and minimal decoration.</p>
+            </div>
+          </div>
+
+          <h3 id="pq-5">Practice set D — Software process, usability engineering, prototyping, rationale (Chapter 6)</h3>
+          <div class="qset">
+            <div class="q">
+              <p class="qt">D1. A team says, “We’ll add usability testing at the end.” Explain why this is weak and where HCI should be integrated in the life cycle.</p>
+              <p class="qa"><b>Use:</b> slides: HCI influences every stage; usability should be engineered; requirements should include measurable usability goals.</p>
+            </div>
+            <div class="q">
+              <p class="qt">D2. In a posting app, users complete tasks fast (efficient) but feel stressed and make accidental posts. Use ISO 9241 and the “good metrics ≠ good experience” slide idea to evaluate.</p>
+              <p class="qa"><b>Use:</b> effectiveness/efficiency/satisfaction; speed may be high but satisfaction low; add confirmation/preview/hold-to-post; balance speed + control.</p>
+            </div>
+            <div class="q">
+              <p class="qt">D3. Create a usability specification for “recoverability” for a delete action (use the 6 elements from slides).</p>
+              <p class="qa"><b>Include:</b> measuring concept (undo delete), method (steps/time), now level, worst case, planned level, best case. Make planned level realistic (e.g., undo in ≤2 actions).</p>
+            </div>
+            <div class="q">
+              <p class="qt">D4. Choose an appropriate prototyping approach (throw-away vs incremental vs evolutionary) for a new app and justify using slides.</p>
+              <p class="qa"><b>Use:</b> unclear requirements → throw-away; staged modules → incremental; product that will continuously improve → evolutionary.</p>
+            </div>
+            <div class="q">
+              <p class="qt">D5. Use IBIS (Issue → Positions → Arguments) for: “Should the app default to dark mode?” Provide at least two arguments on each side.</p>
+              <p class="qa"><b>Use:</b> IBIS structure from slides; include sub-issue (default vs optional).</p>
+            </div>
+          </div>
+
+          <h3 id="pq-6">Practice set E — Principles and rules application (Chapter 7)</h3>
+          <div class="qset">
+            <div class="q">
+              <p class="qt">E1. A form uses icons without labels, and after submission nothing happens (no message). Identify violated learnability sub-principles and propose fixes.</p>
+              <p class="qa"><b>Use:</b> familiarity + consistency (icons), synthesizability + predictability (no confirmation). <b>Fix:</b> labels/tooltips, confirmation message, progress indicator.</p>
+            </div>
+            <div class="q">
+              <p class="qt">E2. A site shows blocking popups while the user is filling a form; it also forces only one upload method. Identify violated flexibility sub-principles.</p>
+              <p class="qa"><b>Use:</b> dialogue initiative (blocking popups), substitutivity (single upload option). <b>Fix:</b> non-blocking banners, alternate upload methods, clear user control.</p>
+            </div>
+            <div class="q">
+              <p class="qt">E3. A slow app provides no loading indicator and no way to undo deletions. Identify violated robustness sub-principles and redesign.</p>
+              <p class="qa"><b>Use:</b> responsiveness + observability (no status), recoverability (no undo). <b>Fix:</b> progress/status, timestamps, undo/trash, commensurate effort for destructive actions.</p>
+            </div>
+            <div class="q">
+              <p class="qt">E4. Apply Shneiderman’s Golden Rules to improve a “checkout” flow. List at least 4 rules and one concrete UI change per rule.</p>
+              <p class="qa"><b>Use:</b> consistency, informative feedback, closure, error prevention, reversal, locus of control, memory load reduction, shortcuts for frequent users.</p>
+            </div>
+            <div class="q">
+              <p class="qt">E5. Use Norman’s 7 principles to redesign a confusing music player control scheme with reversed knobs (bad mapping).</p>
+              <p class="qa"><b>Use:</b> mapping, visibility, constraints, design for error, standardize; propose an intuitive mapping (turn right → next track), visible state, and undo.</p>
+            </div>
+          </div>
+        `
+      });
+
+      render();
+      buildTOC();
+      installControls();
+      setActiveTOC();
+    </script>
+  </body>
+</html>

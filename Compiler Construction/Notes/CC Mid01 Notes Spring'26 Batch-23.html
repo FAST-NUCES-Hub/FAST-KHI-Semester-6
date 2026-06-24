@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compiler Construction - Mid Exam Notes</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22252f;--surface3:#2a2d3a;--border:#2e3140;--text:#e4e4e7;--text2:#a1a1aa;--accent:#818cf8;--accent2:#6366f1;--accent-glow:rgba(99,102,241,0.15);--green:#4ade80;--orange:#fb923c;--red:#f87171;--cyan:#22d3ee;--yellow:#facc15;--pink:#f472b6;--sidebar-w:280px;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;display:flex;min-height:100vh;}
+::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--surface3);border-radius:3px;}
+.sidebar{width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;padding:20px 0;transition:transform .3s;}
+.sidebar-header{padding:16px 20px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+.sidebar-header h2{font-size:16px;font-weight:700;color:var(--accent);letter-spacing:0.5px;}
+.sidebar-header p{font-size:11px;color:var(--text2);margin-top:4px;}
+.nav-group{margin-bottom:6px;}
+.nav-group-title{padding:8px 20px;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;}
+.nav-group-title:hover{color:var(--text);}
+.nav-group-title .arrow{transition:transform .2s;font-size:10px;}
+.nav-group.collapsed .arrow{transform:rotate(-90deg);}
+.nav-group.collapsed .nav-items{display:none;}
+.nav-items{list-style:none;}
+.nav-items li a{display:block;padding:6px 20px 6px 32px;font-size:13px;color:var(--text2);text-decoration:none;border-left:2px solid transparent;transition:all .2s;}
+.nav-items li a:hover,.nav-items li a.active{color:var(--text);background:var(--accent-glow);border-left-color:var(--accent);}
+.main{margin-left:var(--sidebar-w);flex:1;padding:40px 60px 80px;max-width:960px;}
+.section{margin-bottom:60px;animation:fadeIn .5s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+h1{font-size:32px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.subtitle{color:var(--text2);font-size:14px;margin-bottom:40px;}
+h2{font-size:24px;font-weight:700;color:var(--accent);margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid var(--border);}
+h3{font-size:18px;font-weight:600;color:var(--cyan);margin:24px 0 12px;}
+h4{font-size:15px;font-weight:600;color:var(--orange);margin:16px 0 8px;}
+p{margin-bottom:12px;color:var(--text);font-size:14.5px;}
+ul,ol{margin:8px 0 16px 24px;font-size:14.5px;}
+li{margin-bottom:6px;color:var(--text);}
+li strong{color:var(--cyan);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;}
+.card-accent{border-left:3px solid var(--accent);}
+.card-green{border-left:3px solid var(--green);}
+.card-orange{border-left:3px solid var(--orange);}
+.card-cyan{border-left:3px solid var(--cyan);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-right:6px;}
+.badge-purple{background:rgba(129,140,248,0.15);color:var(--accent);}
+.badge-green{background:rgba(74,222,128,0.15);color:var(--green);}
+.badge-orange{background:rgba(251,146,60,0.15);color:var(--orange);}
+.badge-cyan{background:rgba(34,211,238,0.15);color:var(--cyan);}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;}
+th{background:var(--surface2);color:var(--accent);font-weight:600;padding:10px 14px;text-align:left;border:1px solid var(--border);}
+td{padding:10px 14px;border:1px solid var(--border);color:var(--text);}
+tr:nth-child(even){background:var(--surface);}
+code{font-family:'JetBrains Mono',monospace;background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:13px;color:var(--pink);}
+pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;overflow-x:auto;margin:12px 0;font-size:13px;line-height:1.6;}
+pre code{background:none;padding:0;color:var(--text);}
+.example-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin:16px 0;position:relative;}
+.example-box::before{content:'Example';position:absolute;top:-10px;left:16px;background:var(--accent);color:white;padding:2px 12px;border-radius:12px;font-size:11px;font-weight:600;}
+.dfa-container{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin:16px 0;overflow-x:auto;}
+.dfa-container svg{max-width:100%;height:auto;}
+.dfa-title{font-size:13px;font-weight:600;color:var(--accent);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.5px;}
+.key-point{background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(34,211,238,0.08));border:1px solid var(--accent);border-radius:10px;padding:16px 20px;margin:12px 0;font-size:14px;}
+.key-point::before{content:'💡 Key Point';display:block;font-weight:700;color:var(--accent);margin-bottom:6px;font-size:12px;}
+.warning-box{background:rgba(251,146,60,0.08);border:1px solid var(--orange);border-radius:10px;padding:16px 20px;margin:12px 0;}
+.warning-box::before{content:'⚠️ Important';display:block;font-weight:700;color:var(--orange);margin-bottom:6px;font-size:12px;}
+.formula{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 20px;margin:12px 0;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--cyan);text-align:center;}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;}
+@media(max-width:768px){.compare-grid{grid-template-columns:1fr;}}
+.paper-q{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin:20px 0;}
+.paper-q h4{color:var(--accent);margin-top:0;}
+.paper-q .marks{float:right;background:var(--accent);color:white;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;}
+.hamburger{display:none;position:fixed;top:16px;left:16px;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--text);}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);}.sidebar.open{transform:translateX(0);}.hamburger{display:block;}.main{margin-left:0;padding:40px 20px;}}
+.token-table td:first-child{font-family:'JetBrains Mono',monospace;color:var(--pink);}
+.phase-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0;}
+.phase-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 16px;font-size:13px;font-weight:500;color:var(--text);text-align:center;min-width:100px;}
+.phase-arrow{color:var(--accent);font-size:18px;font-weight:bold;}
+</style>
+</head>
+<body>
+<div class="hamburger" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Menu</div>
+<nav class="sidebar">
+<div class="sidebar-header">
+<h2>📖 CC Mid Notes</h2>
+<p>Compiler Construction · Dragon Book</p>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-title" onclick="this.parentElement.classList.toggle('collapsed')">Week 1 — Introduction <span class="arrow">▼</span></div>
+<ul class="nav-items">
+<li><a href="#lang-processors">Language Processors</a></li>
+<li><a href="#preprocessor">Pre-processor</a></li>
+<li><a href="#compiler-def">Compiler</a></li>
+<li><a href="#assembler">Assembler</a></li>
+<li><a href="#linker-loader">Linker / Loader</a></li>
+<li><a href="#comp-vs-interp">Compiler vs Interpreter</a></li>
+<li><a href="#hybrid">Hybrid Compilers</a></li>
+<li><a href="#cc-tools">Compiler Construction Tools</a></li>
+<li><a href="#structure">Structure of Compiler</a></li>
+<li><a href="#lexical-intro">Lexical Analysis (Intro)</a></li>
+<li><a href="#syntax-analysis">Syntax Analysis</a></li>
+<li><a href="#semantic-analysis">Semantic Analysis</a></li>
+<li><a href="#icg">Intermediate Code Generation</a></li>
+<li><a href="#code-gen">Machine Code Generation</a></li>
+<li><a href="#grouping">Grouping of Phases</a></li>
+</ul>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-title" onclick="this.parentElement.classList.toggle('collapsed')">Week 2 — Lexical Analysis <span class="arrow">▼</span></div>
+<ul class="nav-items">
+<li><a href="#role-la">Role of Lexical Analyser</a></li>
+<li><a href="#input-buffering">Input Buffering</a></li>
+<li><a href="#tokens-patterns">Tokens, Patterns & Lexemes</a></li>
+<li><a href="#kinds-tokens">Kinds of Tokens</a></li>
+<li><a href="#symbol-table">Symbol Table</a></li>
+<li><a href="#errors">Lexical Errors & Recovery</a></li>
+<li><a href="#regex">Regular Expressions</a></li>
+<li><a href="#fa">Finite Automata</a></li>
+<li><a href="#dfa">DFA</a></li>
+<li><a href="#nfa">NFA</a></li>
+<li><a href="#re-to-nfa">RE to NFA (Thompson)</a></li>
+<li><a href="#nfa-to-dfa">NFA to DFA (Subset)</a></li>
+<li><a href="#token-recognition">Token Recognition</a></li>
+</ul>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-title" onclick="this.parentElement.classList.toggle('collapsed')">Week 3 — Tools & Regex <span class="arrow">▼</span></div>
+<ul class="nav-items">
+<li><a href="#cc-tools2">CC Tools (JFLAP, Flex, etc.)</a></li>
+<li><a href="#jflap">JFLAP</a></li>
+<li><a href="#regex-cpp">Regex in C++</a></li>
+</ul>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-title" onclick="this.parentElement.classList.toggle('collapsed')">Max Munch & Two-Buffer <span class="arrow">▼</span></div>
+<ul class="nav-items">
+<li><a href="#max-munch">Maximum Munch Rule</a></li>
+<li><a href="#two-buffer">Two-Buffer Scheme</a></li>
+<li><a href="#integration">Integration</a></li>
+<li><a href="#limitations">Limitations & Edge Cases</a></li>
+</ul>
+</div>
+
+<div class="nav-group">
+<div class="nav-group-title" onclick="this.parentElement.classList.toggle('collapsed')">Practice & Paper <span class="arrow">▼</span></div>
+<ul class="nav-items">
+<li><a href="#practice-q">Practice Questions</a></li>
+<li><a href="#solved-paper">Solved Paper Format</a></li>
+</ul>
+</div>
+</nav>
+
+<div class="main">
+<h1>Compiler Construction — Mid Exam Notes</h1>
+<p class="subtitle">Ch#1 Introduction · Ch#3 Lexical Analysis · Dragon Book (Aho, Ullman) · Weeks 1–3</p>
+
+<!-- ============ WEEK 1 ============ -->
+<section class="section" id="lang-processors">
+<h2>1. Language Processors</h2>
+<div class="card card-accent">
+<p><strong>Language processing</strong> is concerned with preparing a program to be run on a computer. Most programs are written in a relatively high-level language.</p>
+<p>Language processors <strong>verify</strong> a program follows its language rules and <strong>convert</strong> it into machine-executable form. Some language processors perform more translation than others.</p>
+</div>
+<div class="key-point">A language processor is any tool that manipulates programs — compilers, interpreters, assemblers, linkers, and preprocessors are all language processors.</div>
+</section>
+
+<section class="section" id="preprocessor">
+<h2>2. Pre-processor</h2>
+<div class="card card-green">
+<p>A pre-processor produces input to compilers. It may perform:</p>
+<ul>
+<li><strong>Macro processing:</strong> Allow user to define macros — shorthand for longer constructs. E.g., <code>#define MAX 100</code></li>
+<li><strong>File inclusion:</strong> Include header files into program text. E.g., <code>#include &lt;stdio.h&gt;</code></li>
+</ul>
+</div>
+</section>
+
+<section class="section" id="compiler-def">
+<h2>3. Compiler</h2>
+<div class="card card-cyan">
+<p>A <strong>compiler</strong> is a translator program that translates a program written in <strong>High-Level Language (HLL)</strong> — the source program — and translates it into an equivalent program in <strong>Machine-Level Language (MLL)</strong> — the target program.</p>
+<p>An important part of a compiler is <strong>error reporting</strong> to the programmer.</p>
+</div>
+<div class="formula">Source Program (HLL) → [COMPILER] → Target Program (MLL) + Error Messages</div>
+</section>
+
+<section class="section" id="assembler">
+<h2>4. Assembler</h2>
+<div class="card card-orange">
+<p>Programmers found it difficult to write or read programs in machine language. They began to use <strong>mnemonics (symbols)</strong> for each machine instruction.</p>
+<p>Such a mnemonic machine language is now called an <strong>assembly language</strong>. Programs known as <strong>assemblers</strong> were written to automate the translation of assembly language into machine language.</p>
+<ul>
+<li><strong>Input</strong> to an assembler = <strong>Source program</strong> (assembly code)</li>
+<li><strong>Output</strong> = <strong>Object program</strong> (machine language translation)</li>
+</ul>
+</div>
+</section>
+
+<section class="section" id="linker-loader">
+<h2>5. Linker / Loader</h2>
+<div class="card card-accent">
+<p>After assembly, the object program must be <strong>loaded into memory</strong> for execution.</p>
+<ul>
+<li>Early assemblers could load programs directly but <strong>wasted memory</strong> by staying resident.</li>
+<li><strong>Loaders</strong> were introduced to: place programs in memory, adjust addresses (<strong>relocation</strong>), and prepare them for execution efficiently.</li>
+<li><strong>Linkers</strong> combine multiple object files and library routines into a single executable.</li>
+</ul>
+</div>
+</section>
+
+<section class="section" id="comp-vs-interp">
+<h2>6. Compiler vs Interpreter</h2>
+<div class="compare-grid">
+<div class="card card-cyan">
+<h4>⚡ Compiler</h4>
+<ul>
+<li>Takes <strong>entire program</strong> as input</li>
+<li>It is <strong>faster</strong> at execution</li>
+<li><strong>Intermediate object code</strong> is generated</li>
+<li>Requires <strong>more memory</strong> (due to object code)</li>
+<li>Program <strong>need not be compiled every time</strong></li>
+<li>Errors displayed <strong>after entire program</strong> is checked</li>
+<li>Debugging is <strong>comparatively hard</strong></li>
+<li>Examples: <code>C</code>, <code>C++</code></li>
+</ul>
+</div>
+<div class="card card-orange">
+<h4>🐢 Interpreter</h4>
+<ul>
+<li>Takes <strong>single instruction</strong> as input</li>
+<li>It is <strong>slower</strong></li>
+<li><strong>No intermediate code</strong> is generated</li>
+<li>Requires <strong>less memory</strong></li>
+<li>Higher level program converted <strong>every time</strong></li>
+<li>Errors displayed for <strong>every instruction</strong></li>
+<li>Debugging is <strong>easy</strong></li>
+<li>Examples: <code>Python</code>, <code>Ruby</code></li>
+</ul>
+</div>
+</div>
+</section>
+
+<section class="section" id="hybrid">
+<h2>7. Hybrid Compilers</h2>
+<div class="card card-green">
+<p>Compilation and interpretation may be <strong>combined</strong> to implement a programming language.</p>
+<p>The compiler may produce <strong>intermediate-level code</strong> which is then <strong>interpreted</strong> rather than compiled to machine code.</p>
+<p><strong>Example:</strong> Java — <code>.java</code> → compiled to <strong>bytecode</strong> (<code>.class</code>) → interpreted by <strong>JVM</strong>.</p>
+</div>
+<div class="formula">Source → [Compiler] → Intermediate Code → [Interpreter/VM] → Output</div>
+</section>
+
+<section class="section" id="cc-tools">
+<h2>8. Compiler Construction Tools</h2>
+<div class="card card-accent">
+<ul>
+<li><strong>Parser generators:</strong> Automatically produce syntax analysers from grammatical description of a programming language</li>
+<li><strong>Scanner generators:</strong> Produce lexical analysers from a regular-expression description of the tokens of a language</li>
+<li><strong>Syntax-directed translation engines:</strong> Produce collections of routines for walking a parse tree and generating intermediate code</li>
+<li><strong>Code-generator generators:</strong> Produce a code generator from rules for translating each operation of intermediate language into machine language</li>
+<li><strong>Data-flow analysis engines:</strong> Facilitate gathering information about how values are transmitted from one part of a program to another — key part of code optimization</li>
+<li><strong>Compiler-construction toolkits:</strong> Provide an integrated set of routines for constructing various phases of a compiler</li>
+</ul>
+</div>
+</section>
+
+<section class="section" id="structure">
+<h2>9. Structure of a Compiler</h2>
+<p>A compiler operates as a sequence of <strong>phases</strong>, each transforming the source program from one representation to another:</p>
+<div class="phase-flow">
+<div class="phase-box" style="border-color:var(--accent)">Source Code</div>
+<div class="phase-arrow">→</div>
+<div class="phase-box" style="border-color:var(--green)">Lexical<br>Analyzer</div>
+<div class="phase-arrow">→</div>
+<div class="phase-box" style="border-color:var(--cyan)">Syntax<br>Analyzer</div>
+<div class="phase-arrow">→</div>
+<div class="phase-box" style="border-color:var(--orange)">Semantic<br>Analyzer</div>
+<div class="phase-arrow">→</div>
+<div class="phase-box" style="border-color:var(--pink)">Intermediate<br>Code Gen</div>
+<div class="phase-arrow">→</div>
+<div class="phase-box" style="border-color:var(--yellow)">Code<br>Optimizer</div>
+<div class="phase-arrow">→</div>
+<div class="phase-box" style="border-color:var(--red)">Code<br>Generator</div>
+<div class="phase-arrow">→</div>
+<div class="phase-box" style="border-color:var(--accent)">Target Code</div>
+</div>
+<div class="key-point">The <strong>Symbol Table</strong> is accessed by ALL phases. It stores information about identifiers (name, type, scope, memory location).</div>
+</section>
+
+<section class="section" id="lexical-intro">
+<h2>10. Lexical Analysis (Introduction)</h2>
+<div class="card card-green">
+<p>The <strong>first phase</strong> of a compiler is called <strong>lexical analysis</strong> or <strong>scanning</strong>.</p>
+<ul>
+<li>Reads the stream of characters making up the source program</li>
+<li>Groups characters into meaningful sequences called <strong>lexemes</strong></li>
+<li>Produces <strong>tokens</strong> in the form <code>(token-name, attribute-value)</code></li>
+<li>Passes tokens to the next phase — <strong>syntax analysis</strong></li>
+</ul>
+</div>
+
+<h3>Lexical Units / Classes</h3>
+<table>
+<tr><th>Lexical Class</th><th>Description</th><th>Examples</th></tr>
+<tr><td>Identifiers</td><td>Variable/function names</td><td><code>position</code>, <code>rate</code></td></tr>
+<tr><td>Constants</td><td>Numeric/string literals</td><td><code>60</code>, <code>3.14</code></td></tr>
+<tr><td>Keywords</td><td>Reserved words</td><td><code>if</code>, <code>while</code>, <code>int</code></td></tr>
+<tr><td>Operators</td><td>Arithmetic/relational</td><td><code>+</code>, <code>*</code>, <code>&lt;=</code></td></tr>
+<tr><td>Punctuators</td><td>Delimiters</td><td><code>;</code>, <code>(</code>, <code>)</code>, <code>{</code></td></tr>
+</table>
+
+<div class="example-box">
+<h4>Tokenizing: <code>position = initial + rate * 60</code></h4>
+<table class="token-table">
+<tr><th>Lexeme</th><th>Token</th><th>Explanation</th></tr>
+<tr><td>position</td><td><code>(id, 1)</code></td><td>Identifier, symbol-table entry 1</td></tr>
+<tr><td>=</td><td><code>(=)</code></td><td>Assignment operator</td></tr>
+<tr><td>initial</td><td><code>(id, 2)</code></td><td>Identifier, symbol-table entry 2</td></tr>
+<tr><td>+</td><td><code>(+)</code></td><td>Addition operator</td></tr>
+<tr><td>rate</td><td><code>(id, 3)</code></td><td>Identifier, symbol-table entry 3</td></tr>
+<tr><td>*</td><td><code>(*)</code></td><td>Multiplication operator</td></tr>
+<tr><td>60</td><td><code>(60)</code></td><td>Numeric constant</td></tr>
+</table>
+<p><strong>Token stream:</strong> <code>(id,1) (=) (id,2) (+) (id,3) (*) (60)</code></p>
+<p>Blanks separating the lexemes are <strong>discarded</strong> by the lexical analyzer.</p>
+</div>
+</section>
+
+<section class="section" id="syntax-analysis">
+<h2>11. Syntax Analysis (Parsing)</h2>
+<div class="card card-cyan">
+<p>The <strong>second phase</strong> — the parser uses the token components to create a <strong>tree-like intermediate representation</strong> (syntax tree) depicting grammatical structure.</p>
+<ul>
+<li>Each <strong>interior node</strong> = an <strong>operation</strong></li>
+<li>Each <strong>child</strong> = an <strong>argument</strong> of that operation</li>
+</ul>
+</div>
+
+<div class="example-box">
+<h4>Syntax Tree for <code>position = initial + rate * 60</code></h4>
+<pre><code>           =
+          / \
+      id(1)   +
+             / \
+          id(2)   *
+                 / \
+              id(3)  60</code></pre>
+<ul>
+<li>The <code>*</code> node makes explicit that we must <strong>first multiply</strong> rate by 60</li>
+<li>The <code>+</code> node says add the multiplication result to initial</li>
+<li>The <code>=</code> root says store the final result in position</li>
+<li>This ordering is consistent with <strong>operator precedence</strong> (* before +)</li>
+</ul>
+</div>
+</section>
+
+<section class="section" id="semantic-analysis">
+<h2>12. Semantic Analysis</h2>
+<div class="card card-orange">
+<p>Uses the syntax tree + symbol table to check <strong>semantic consistency</strong> with language definition.</p>
+<ul>
+<li>Gathers <strong>type information</strong> and saves it in syntax tree or symbol table</li>
+<li><strong>Type checking:</strong> Compiler checks each operator has matching operands</li>
+<li>Example: Array index must be integer — using float generates an error</li>
+</ul>
+<h4>Type Coercions</h4>
+<p>Some type conversions are permitted (called <strong>coercions</strong>). For example, if operator <code>*</code> is applied to a float (<code>rate</code>) and an integer (<code>60</code>), the compiler may <strong>coerce</strong> the integer into a float.</p>
+<pre><code>           =
+          / \
+      id(1)   +
+             / \
+          id(2)   *
+                 / \
+              id(3) inttofloat
+                      |
+                     60</code></pre>
+</div>
+</section>
+
+<section class="section" id="icg">
+<h2>13. Intermediate Code Generation</h2>
+<div class="card card-accent">
+<p>After syntax and semantic analysis, many compilers generate an explicit <strong>low-level or machine-like intermediate representation</strong> for an abstract machine.</p>
+<p>Two important properties: (1) <strong>Easy to produce</strong> (2) <strong>Easy to translate</strong> into target machine code.</p>
+<h4>Three-Address Code Example</h4>
+<pre><code>t1 = inttofloat(60)
+t2 = id3 * t1
+t3 = id2 + t2
+id1 = t3</code></pre>
+<p>Each instruction has <strong>at most one operator</strong> on the right side — compiler must generate temporary names (t1, t2, t3).</p>
+</div>
+</section>
+
+<section class="section" id="code-gen">
+<h2>14. Machine Code Generation</h2>
+<div class="card card-green">
+<p>The code generator takes intermediate representation and maps it into the <strong>target language</strong>.</p>
+<ul>
+<li>Selects <strong>registers or memory locations</strong> for each variable</li>
+<li>Intermediate instructions translated into <strong>machine instruction sequences</strong></li>
+<li><strong>Register allocation</strong> is a crucial aspect</li>
+</ul>
+<pre><code>LDF  R2, id3        // Load rate into R2
+MULF R2, R2, #60.0  // R2 = rate * 60.0
+LDF  R1, id2        // Load initial into R1
+ADDF R1, R1, R2     // R1 = initial + (rate*60.0)
+STF  id1, R1        // Store result in position</code></pre>
+</div>
+</section>
+
+<section class="section" id="grouping">
+<h2>15. Grouping of Phases</h2>
+<div class="card card-cyan">
+<p>In implementation, several phases are grouped into <strong>passes</strong>:</p>
+<table>
+<tr><th>Pass</th><th>Phases Included</th><th>Also Called</th></tr>
+<tr><td><strong>Front-end</strong></td><td>Lexical Analysis, Syntax Analysis, Semantic Analysis, Intermediate Code Gen</td><td>Analysis</td></tr>
+<tr><td><strong>Optimization</strong></td><td>Code Optimization</td><td>Optional Pass</td></tr>
+<tr><td><strong>Back-end</strong></td><td>Code Generation</td><td>Synthesis</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ============ WEEK 2 ============ -->
+<section class="section" id="role-la">
+<h2>16. Role of Lexical Analyser</h2>
+<div class="card card-accent">
+<p>The lexical analyser is the <strong>first phase</strong> of the compiler. Its responsibilities:</p>
+<ul>
+<li><strong>Read</strong> input characters from source code</li>
+<li><strong>Group</strong> them into <strong>lexemes</strong></li>
+<li><strong>Produce</strong> a sequence of <strong>tokens</strong> as output</li>
+<li><strong>Send</strong> the token stream to the <strong>parser</strong> for syntax analysis</li>
+<li><strong>Interact</strong> with the <strong>symbol table</strong> — when an identifier is found, put its information in the symbol table</li>
+<li><strong>Strip out</strong> comments and whitespace (blank, newline, tab)</li>
+<li><strong>Generate errors</strong> related to lexical analysis</li>
+<li><strong>Track line numbers</strong> to associate errors with source lines</li>
+</ul>
+</div>
+<div class="formula">Source Code → [Lexical Analyzer] → Token Stream → [Parser]<br>↕ Symbol Table</div>
+</section>
+
+<section class="section" id="input-buffering">
+<h2>17. Input Buffering</h2>
+<div class="card card-green">
+<h3>Challenge in Lexeme Recognition</h3>
+<p>Reading source code efficiently is tricky because lexemes often require <strong>lookahead</strong> (checking extra characters) to confirm boundaries.</p>
+<h4>Why Lookahead is Needed:</h4>
+<ul>
+<li><strong>Identifiers:</strong> End only when a non-alphanumeric character (space, operator) is encountered</li>
+<li><strong>Multi-character Operators:</strong> Single chars like <code>-</code>, <code>=</code>, <code>&lt;</code> could be part of longer ops (<code>-></code>, <code>==</code>, <code>&lt;=</code>)</li>
+<li>Examples: <code>x</code>, <code>iffy</code>, <code>&amp;</code>, <code>&amp;&amp;</code></li>
+</ul>
+</div>
+
+<h3>Solution: Two-Buffer Scheme (Buffer Pair)</h3>
+<div class="card card-cyan">
+<ul>
+<li>Handles large lookaheads safely by dividing input into <strong>two buffers</strong>, allowing seamless scanning</li>
+<li>Two buffers (size = disk block, e.g., <strong>4096 bytes</strong>) alternate to minimize system calls</li>
+<li>Special <code>eof</code> marker indicates end of file</li>
+<li><strong><code>lexemeBegin</code></strong>: Points to the start of the current lexeme</li>
+<li><strong><code>forward</code></strong>: Scans ahead to identify lexeme boundaries</li>
+</ul>
+<pre><code>Buffer 0: [ ...source characters... | EOF sentinel ]
+Buffer 1: [ ...source characters... | EOF sentinel ]
+           ^                          ^
+      lexemeBegin              forward (scans ahead)</code></pre>
+</div>
+<div class="key-point">Two-Buffer Scheme minimises system calls (reads large chunks), enables efficient lookahead and backtracking, and the sentinel eliminates per-character EOF checks.</div>
+</section>
+
+<section class="section" id="tokens-patterns">
+<h2>18. Tokens, Patterns & Lexemes</h2>
+<div class="card card-orange">
+<table>
+<tr><th>Term</th><th>Definition</th><th>Example (<code>int x = 10;</code>)</th></tr>
+<tr><td><strong>Lexeme</strong></td><td>Actual substring in the source code</td><td><code>"int"</code>, <code>"x"</code>, <code>"10"</code></td></tr>
+<tr><td><strong>Pattern</strong></td><td>Rule defining valid lexemes</td><td><code>[a-z]+</code> (for identifiers)</td></tr>
+<tr><td><strong>Token</strong></td><td>Categorized lexeme — <code>(type, value)</code></td><td><code>(INT, 10)</code>, <code>(ID, "x")</code></td></tr>
+</table>
+</div>
+<div class="warning-box">
+<strong>Remember:</strong> A <strong>token</strong> is the category, a <strong>lexeme</strong> is the actual string, and a <strong>pattern</strong> is the rule that describes valid lexemes for a token.
+</div>
+</section>
+
+<section class="section" id="kinds-tokens">
+<h2>19. Kinds of Tokens</h2>
+<div class="card card-accent">
+<table>
+<tr><th>Category</th><th>Examples</th></tr>
+<tr><td><strong>Keywords</strong></td><td><code>if</code>, <code>else</code>, <code>do</code>, <code>while</code>, <code>int</code>, <code>float</code></td></tr>
+<tr><td><strong>Identifiers</strong></td><td><code>num</code>, <code>var</code>, <code>addFunction</code></td></tr>
+<tr><td><strong>Operators</strong></td><td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code></td></tr>
+<tr><td><strong>Numbers / Constants</strong></td><td><code>362</code>, <code>457</code>, <code>3.14</code></td></tr>
+<tr><td><strong>Strings / Literals</strong></td><td><code>"This is literal"</code></td></tr>
+<tr><td><strong>Punctuators</strong></td><td><code>,</code>, <code>" "</code>, <code>(</code>, <code>)</code>, <code>[</code>, <code>]</code>, <code>;</code></td></tr>
+<tr><td><strong>Special Characters</strong></td><td><code>&amp;</code>, <code>%</code>, <code>^</code>, <code>@</code></td></tr>
+</table>
+</div>
+
+<div class="example-box">
+<h4>Exercise: Count tokens in <code>printf("i=%d, &amp;i=%x", i, &amp;i);</code></h4>
+<table class="token-table">
+<tr><th>#</th><th>Lexeme</th><th>Token Type</th></tr>
+<tr><td>1</td><td><code>printf</code></td><td>Identifier</td></tr>
+<tr><td>2</td><td><code>(</code></td><td>Punctuator</td></tr>
+<tr><td>3</td><td><code>"i=%d, &amp;i=%x"</code></td><td>String Literal</td></tr>
+<tr><td>4</td><td><code>,</code></td><td>Punctuator</td></tr>
+<tr><td>5</td><td><code>i</code></td><td>Identifier</td></tr>
+<tr><td>6</td><td><code>,</code></td><td>Punctuator</td></tr>
+<tr><td>7</td><td><code>&amp;</code></td><td>Operator</td></tr>
+<tr><td>8</td><td><code>i</code></td><td>Identifier</td></tr>
+<tr><td>9</td><td><code>)</code></td><td>Punctuator</td></tr>
+<tr><td>10</td><td><code>;</code></td><td>Punctuator</td></tr>
+</table>
+<p><strong>Total Tokens = 10</strong></p>
+</div>
+</section>
+
+<section class="section" id="symbol-table">
+<h2>20. Symbol Table</h2>
+<div class="card card-green">
+<p><strong>Symbol tables</strong> are data structures used by compilers to hold information about source-program constructs.</p>
+<ul>
+<li>Allow the compiler to <strong>find the record for each name quickly</strong> and store/retrieve data</li>
+<li>Information is collected <strong>incrementally</strong> by analysis phases and <strong>used</strong> by synthesis phases for target code</li>
+</ul>
+</div>
+<h3>Symbol Table Usage by Each Phase</h3>
+<table>
+<tr><th>Phase</th><th>Symbol Table Usage</th></tr>
+<tr><td><strong>Lexical Analysis</strong></td><td>Creates entries for identifiers</td></tr>
+<tr><td><strong>Syntax Analysis</strong></td><td>Adds type, scope, dimension info</td></tr>
+<tr><td><strong>Semantic Analysis</strong></td><td>Type checking — ensures semantic correctness</td></tr>
+<tr><td><strong>Intermediate Code Gen</strong></td><td>Adds temporary variable information</td></tr>
+<tr><td><strong>Code Optimization</strong></td><td>Identifies redundant computations, optimizes memory access</td></tr>
+<tr><td><strong>Target Code Gen</strong></td><td>Provides memory addresses / register assignments for identifiers</td></tr>
+</table>
+</section>
+
+<section class="section" id="errors">
+<h2>21. Lexical Errors & Recovery</h2>
+<div class="card card-orange">
+<h3>Types of Errors</h3>
+<ul>
+<li><strong>Compile-Time Errors:</strong> Lexical Errors, Syntax Errors, Semantic Errors</li>
+<li><strong>Run-Time Errors:</strong> Occur during execution</li>
+</ul>
+<h3>Lexical Errors</h3>
+<p>Hard for lexical analyzer to tell errors without aid of other components.</p>
+<p>Example: <code>fi (a == f(x))</code> — Is <code>fi</code> a misspelling of <code>if</code> or an undeclared function? Since <code>fi</code> is a valid identifier lexeme, this error may be handled by the <strong>parser</strong>.</p>
+<h4>Common Lexical Errors:</h4>
+<ul>
+<li>Identifiers that are <strong>too long</strong>: <code>anidentifierrrrrrrr</code></li>
+<li>Exceeding length of <strong>numeric constants</strong>: <code>int i = 454654564654;</code></li>
+<li><strong>Ill-formed</strong> numeric constants: <code>45$36</code></li>
+<li><strong>Illegal characters</strong>: <code>char x[]="FAST NUCES";$</code></li>
+</ul>
+</div>
+
+<h3>Error Recovery Strategies</h3>
+<div class="card card-cyan">
+<table>
+<tr><th>Strategy</th><th>Description</th><th>Example</th></tr>
+<tr><td><strong>Panic Mode</strong></td><td>Skip characters until delimiter found</td><td><code>int 4FAST;</code> → skip until <code>;</code></td></tr>
+<tr><td><strong>Transpose</strong></td><td>Swap two adjacent characters</td><td><code>itn</code> → <code>int</code></td></tr>
+<tr><td><strong>Insert</strong></td><td>Insert a missing character</td><td><code>it num;</code> → add <code>n</code> → <code>int num;</code></td></tr>
+<tr><td><strong>Delete</strong></td><td>Delete an extra character</td><td><code>intt num;</code> → remove extra <code>t</code></td></tr>
+<tr><td><strong>Replace</strong></td><td>Replace wrong character</td><td><code>itt num</code> → <code>int num</code></td></tr>
+</table>
+</div>
+</section>
+
+<section class="section" id="regex">
+<h2>22. Regular Expressions</h2>
+<div class="card card-accent">
+<p>Regular expressions are a convenient way to <strong>specify various simple sets of strings</strong>. They can specify the structure of <strong>tokens</strong> used in a programming language.</p>
+<p>Regular expressions (REs) are a <strong>language for expressing patterns</strong>.</p>
+</div>
+
+<h3>RE Notation</h3>
+<table>
+<tr><th>Notation</th><th>Meaning</th><th>Example</th></tr>
+<tr><td><code>a</code></td><td>Single character a</td><td><code>a</code> matches "a"</td></tr>
+<tr><td><code>ε</code></td><td>Empty string</td><td>Matches ""</td></tr>
+<tr><td><code>R₁R₂</code></td><td>Concatenation</td><td><code>ab</code> matches "ab"</td></tr>
+<tr><td><code>R₁|R₂</code></td><td>Union (alternation)</td><td><code>a|b</code> matches "a" or "b"</td></tr>
+<tr><td><code>R*</code></td><td>Kleene closure (0 or more)</td><td><code>a*</code> matches "", "a", "aa", ...</td></tr>
+<tr><td><code>R+</code></td><td>Positive closure (1 or more)</td><td><code>a+</code> matches "a", "aa", ...</td></tr>
+<tr><td><code>R?</code></td><td>Zero or one</td><td><code>a?</code> matches "" or "a"</td></tr>
+<tr><td><code>[abc]</code></td><td>Character class</td><td>Matches "a", "b", or "c"</td></tr>
+<tr><td><code>[a-z]</code></td><td>Range</td><td>Any lowercase letter</td></tr>
+</table>
+
+<div class="example-box">
+<h4>RE Exercises from Slides</h4>
+<p><strong>1. Identifiers</strong> (start with small alphabet, followed by number/alphabet/_):</p>
+<div class="formula">[a-z] ([a-zA-Z0-9_])*</div>
+<p><strong>2. Decimal point numbers:</strong></p>
+<div class="formula">[0-9]+ "." [0-9]+</div>
+<p><strong>3. Keywords (if, for, while):</strong></p>
+<div class="formula">if | for | while</div>
+</div>
+</section>
+
+<section class="section" id="fa">
+<h2>23. Finite Automata (FA)</h2>
+<div class="card card-green">
+<p>A <strong>finite automaton (FA)</strong> is an abstract machine that can represent certain forms of computation.</p>
+<ul>
+<li>Consists of <strong>states</strong> (circles) and <strong>edges</strong> (labeled arrows) between states</li>
+<li>Each edge labeled with symbol(s) from alphabet <strong>Σ</strong></li>
+<li>Two types: <strong>DFA</strong> (Deterministic) and <strong>NFA</strong> (Non-Deterministic)</li>
+</ul>
+<p><strong>Formal Definition: FA = (Q, Σ, δ, q₀, F)</strong></p>
+<table>
+<tr><td><strong>Q</strong></td><td>Finite set of states</td></tr>
+<tr><td><strong>Σ</strong></td><td>Input alphabet (finite set of symbols)</td></tr>
+<tr><td><strong>δ</strong></td><td>Transition function</td></tr>
+<tr><td><strong>q₀</strong></td><td>Start state (q₀ ∈ Q)</td></tr>
+<tr><td><strong>F</strong></td><td>Set of accepting/final states (F ⊆ Q)</td></tr>
+</table>
+</div>
+</section>
+
+<section class="section" id="dfa">
+<h2>24. DFA — Deterministic Finite Automaton</h2>
+<div class="card card-cyan">
+<p>A DFA is a special case where every state has <strong>exactly one</strong> outgoing edge for each input symbol.</p>
+<ul>
+<li><strong>No ambiguity:</strong> For every (state, input symbol) pair, there is exactly one next state</li>
+<li><strong>No ε-transitions</strong> allowed</li>
+<li>Very <strong>easy to implement</strong> in software/hardware</li>
+</ul>
+</div>
+
+<div class="dfa-container">
+<div class="dfa-title">DFA Example: Accept strings ending in "ab" over Σ = {a, b}</div>
+<svg viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr1" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<!-- States -->
+<circle cx="80" cy="75" r="30" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="80" y="80" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">q0</text>
+<circle cx="240" cy="75" r="30" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="240" y="80" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">q1</text>
+<circle cx="400" cy="75" r="30" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="400" cy="75" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="400" y="80" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">q2</text>
+<!-- Start arrow -->
+<line x1="15" y1="75" x2="48" y2="75" stroke="#818cf8" stroke-width="2" marker-end="url(#arr1)"/>
+<!-- q0-a->q1 -->
+<line x1="110" y1="75" x2="208" y2="75" stroke="#818cf8" stroke-width="2" marker-end="url(#arr1)"/>
+<text x="160" y="65" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">a</text>
+<!-- q1-b->q2 -->
+<line x1="270" y1="75" x2="368" y2="75" stroke="#818cf8" stroke-width="2" marker-end="url(#arr1)"/>
+<text x="320" y="65" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">b</text>
+<!-- q0-b->q0 self loop -->
+<path d="M 65 48 C 50 10 110 10 95 48" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr1)"/>
+<text x="80" y="20" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">b</text>
+<!-- q1-a->q1 self loop -->
+<path d="M 225 48 C 210 10 270 10 255 48" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr1)"/>
+<text x="240" y="20" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">a</text>
+<!-- q2-b->q0 -->
+<path d="M 375 100 C 300 150 150 150 85 100" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr1)"/>
+<text x="230" y="148" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">b</text>
+<!-- q2-a->q1 -->
+<path d="M 374 56 C 340 30 280 30 265 53" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr1)"/>
+<text x="320" y="32" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">a</text>
+</svg>
+<p style="color:var(--text2);font-size:12px;margin-top:8px;">Double circle = accepting state. q0 = start state. Accepts: ab, aab, bab, ababab, etc.</p>
+</div>
+
+<div class="dfa-container">
+<div class="dfa-title">DFA Example: Accept binary strings divisible by 3</div>
+<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<!-- q0 (remainder 0) - accepting -->
+<circle cx="80" cy="100" r="30" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="80" cy="100" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="80" y="105" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">q0</text>
+<text x="80" y="148" text-anchor="middle" fill="#a1a1aa" font-size="11">rem=0</text>
+<!-- q1 (remainder 1) -->
+<circle cx="260" cy="50" r="30" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="260" y="55" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">q1</text>
+<text x="260" y="95" text-anchor="middle" fill="#a1a1aa" font-size="11">rem=1</text>
+<!-- q2 (remainder 2) -->
+<circle cx="260" cy="160" r="30" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="260" y="165" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">q2</text>
+<!-- Start arrow -->
+<line x1="15" y1="100" x2="48" y2="100" stroke="#818cf8" stroke-width="2" marker-end="url(#arr2)"/>
+<!-- q0-0->q0 self -->
+<path d="M 65 73 C 50 35 110 35 95 73" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr2)"/>
+<text x="80" y="42" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">0</text>
+<!-- q0-1->q1 -->
+<line x1="105" y1="82" x2="234" y2="62" stroke="#818cf8" stroke-width="2" marker-end="url(#arr2)"/>
+<text x="160" y="60" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">1</text>
+<!-- q1-0->q2 -->
+<line x1="260" y1="82" x2="260" y2="128" stroke="#818cf8" stroke-width="2" marker-end="url(#arr2)"/>
+<text x="275" y="110" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">0</text>
+<!-- q1-1->q0 -->
+<path d="M 233 36 C 180 10 120 40 100 73" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr2)"/>
+<text x="150" y="22" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">1</text>
+<!-- q2-0->q1 -->
+<path d="M 272 132 C 285 110 285 80 272 68" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr2)"/>
+<text x="296" y="100" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">0</text>
+<!-- q2-1->q2 self -->
+<path d="M 245 187 C 230 220 290 220 275 187" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr2)"/>
+<text x="260" y="195" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">1</text>
+</svg>
+<p style="color:var(--text2);font-size:12px;margin-top:8px;">States represent remainder when dividing by 3. q0 (rem=0) is accepting. Accepts: ε, 0, 11, 110, 1001, etc.</p>
+</div>
+</section>
+
+<section class="section" id="nfa">
+<h2>25. NFA — Non-Deterministic Finite Automaton</h2>
+<div class="card card-orange">
+<p>An NFA is a valid FA but has <strong>ambiguity</strong> — from one state, the same input symbol can lead to <strong>multiple states</strong>.</p>
+<ul>
+<li>May have <strong>ε-transitions</strong> (transitions without consuming input)</li>
+<li>For same (state, symbol), there can be <strong>0, 1, or more</strong> next states</li>
+<li>Accepts if <strong>any path</strong> through the NFA leads to an accepting state</li>
+</ul>
+</div>
+
+<div class="compare-grid">
+<div class="card card-cyan">
+<h4>DFA Properties</h4>
+<ul>
+<li>Exactly one transition per symbol per state</li>
+<li>No ε-transitions</li>
+<li>Deterministic execution</li>
+<li>Easy to implement</li>
+<li>May have more states than NFA</li>
+</ul>
+</div>
+<div class="card card-orange">
+<h4>NFA Properties</h4>
+<ul>
+<li>Multiple transitions per symbol possible</li>
+<li>ε-transitions allowed</li>
+<li>Non-deterministic (multiple paths)</li>
+<li>Harder to simulate</li>
+<li>Often fewer states than equivalent DFA</li>
+</ul>
+</div>
+</div>
+
+<div class="dfa-container">
+<div class="dfa-title">NFA Example: Accept strings ending in "ing" over Σ = {a-z}</div>
+<svg viewBox="0 0 550 150" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="arr3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<circle cx="80" cy="75" r="30" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="80" y="80" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">q0</text>
+<circle cx="200" cy="75" r="30" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="200" y="80" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">q1</text>
+<circle cx="320" cy="75" r="30" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="320" y="80" text-anchor="middle" fill="#e4e4e7" font-size="14" font-weight="bold">q2</text>
+<circle cx="440" cy="75" r="30" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="440" cy="75" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="440" y="80" text-anchor="middle" fill="#4ade80" font-size="14" font-weight="bold">q3</text>
+<line x1="15" y1="75" x2="48" y2="75" stroke="#818cf8" stroke-width="2" marker-end="url(#arr3)"/>
+<!-- q0 self loop a-z -->
+<path d="M 65 48 C 50 10 110 10 95 48" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#arr3)"/>
+<text x="80" y="18" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="600">a-z</text>
+<!-- q0-i->q1 -->
+<line x1="110" y1="75" x2="168" y2="75" stroke="#818cf8" stroke-width="2" marker-end="url(#arr3)"/>
+<text x="140" y="65" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">i</text>
+<!-- q1-n->q2 -->
+<line x1="230" y1="75" x2="288" y2="75" stroke="#818cf8" stroke-width="2" marker-end="url(#arr3)"/>
+<text x="260" y="65" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">n</text>
+<!-- q2-g->q3 -->
+<line x1="350" y1="75" x2="408" y2="75" stroke="#818cf8" stroke-width="2" marker-end="url(#arr3)"/>
+<text x="380" y="65" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">g</text>
+</svg>
+<p style="color:var(--text2);font-size:12px;margin-top:8px;">NFA for regex [a-z]*ing — q0 has two choices on 'i': stay or move to q1 (non-determinism).</p>
+</div>
+</section>
+
+<section class="section" id="re-to-nfa">
+<h2>26. RE to NFA — Thompson's Construction</h2>
+<div class="card card-accent">
+<p><strong>Thompson's Construction</strong> converts any regular expression into an equivalent NFA using these rules:</p>
+</div>
+
+<h3>Base Cases</h3>
+<div class="dfa-container">
+<div class="dfa-title">1. Single Character 'a'</div>
+<svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="at" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<circle cx="60" cy="40" r="25" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="60" y="45" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">i</text>
+<circle cx="220" cy="40" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="220" cy="40" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="220" y="45" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">f</text>
+<line x1="10" y1="40" x2="33" y2="40" stroke="#818cf8" stroke-width="2" marker-end="url(#at)"/>
+<line x1="85" y1="40" x2="193" y2="40" stroke="#818cf8" stroke-width="2" marker-end="url(#at)"/>
+<text x="140" y="32" text-anchor="middle" fill="#22d3ee" font-size="14" font-weight="600">a</text>
+</svg>
+</div>
+
+<div class="dfa-container">
+<div class="dfa-title">2. Epsilon (ε) — Empty string</div>
+<svg viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+<circle cx="60" cy="40" r="25" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="60" y="45" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">i</text>
+<circle cx="220" cy="40" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="220" cy="40" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="220" y="45" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">f</text>
+<line x1="10" y1="40" x2="33" y2="40" stroke="#818cf8" stroke-width="2" marker-end="url(#at)"/>
+<line x1="85" y1="40" x2="193" y2="40" stroke="#818cf8" stroke-width="2" marker-end="url(#at)"/>
+<text x="140" y="32" text-anchor="middle" fill="#22d3ee" font-size="14" font-weight="600">ε</text>
+</svg>
+</div>
+
+<h3>Inductive Rules</h3>
+<div class="card card-green">
+<h4>3. Union: R₁ | R₂</h4>
+<pre><code>           ε → [NFA for R₁] → ε
+          /                       \
+→  (i)                              (f)
+          \                       /
+           ε → [NFA for R₂] → ε</code></pre>
+<p>New start state (i) branches via ε to both sub-NFAs. Both sub-NFAs' final states connect via ε to new final state (f).</p>
+
+<h4>4. Concatenation: R₁R₂</h4>
+<pre><code>→ [NFA for R₁] → ε → [NFA for R₂] → (f)</code></pre>
+<p>The final state of NFA(R₁) merges with the start state of NFA(R₂).</p>
+
+<h4>5. Kleene Star: R*</h4>
+<pre><code>              ε (skip loop)
+         ┌─────────────────────┐
+         │                     ▼
+→  (i) ──ε──→ [NFA for R] ──ε──→ (f)
+                   ▲      │
+                   └──ε───┘
+                  (repeat loop)</code></pre>
+<p>ε from i to f (accepts empty), ε from R's end back to R's start (repeat), ε from i to R's start.</p>
+</div>
+
+<div class="example-box">
+<h4>Thompson's Construction: RE = <code>(a|b)*abb</code></h4>
+<p>Step 1: Build NFA for <code>a</code> and <code>b</code> (base cases)</p>
+<p>Step 2: Build NFA for <code>a|b</code> (union)</p>
+<p>Step 3: Build NFA for <code>(a|b)*</code> (Kleene star)</p>
+<p>Step 4: Concatenate with NFAs for <code>a</code>, <code>b</code>, <code>b</code></p>
+<p>The resulting NFA will have ε-transitions and is non-deterministic, but accepts exactly the strings matching <code>(a|b)*abb</code>.</p>
+</div>
+</section>
+
+<section class="section" id="nfa-to-dfa">
+<h2>27. NFA to DFA — Subset Construction</h2>
+<div class="card card-cyan">
+<p><strong>Subset Construction</strong> (also called Powerset Construction) converts an NFA to an equivalent DFA.</p>
+<h4>Key Operations:</h4>
+<table>
+<tr><th>Operation</th><th>Description</th></tr>
+<tr><td><strong>ε-closure(s)</strong></td><td>Set of all states reachable from state s via ε-transitions only</td></tr>
+<tr><td><strong>ε-closure(T)</strong></td><td>Union of ε-closure(s) for all states s in set T</td></tr>
+<tr><td><strong>move(T, a)</strong></td><td>Set of states reachable from any state in T on input symbol a</td></tr>
+</table>
+
+<h4>Algorithm:</h4>
+<ol>
+<li>Start with DFA start state = <strong>ε-closure(NFA start state)</strong></li>
+<li>For each unmarked DFA state T and each input symbol a:
+<ul><li>U = ε-closure(move(T, a))</li>
+<li>If U is not already a DFA state, add it</li>
+<li>Add transition T →(a)→ U</li></ul></li>
+<li>Mark T and repeat until all DFA states are marked</li>
+<li>A DFA state is <strong>accepting</strong> if it contains any NFA accepting state</li>
+</ol>
+</div>
+
+<div class="example-box">
+<h4>Example: NFA for (a|b)*abb → DFA</h4>
+<p>Suppose NFA states 0-10, start=0, accept=10:</p>
+<table>
+<tr><th>DFA State</th><th>NFA States (ε-closure)</th><th>On 'a'</th><th>On 'b'</th></tr>
+<tr><td>A</td><td>{0,1,2,4,7}</td><td>B</td><td>C</td></tr>
+<tr><td>B</td><td>{1,2,3,4,6,7,8}</td><td>B</td><td>D</td></tr>
+<tr><td>C</td><td>{1,2,4,5,6,7}</td><td>B</td><td>C</td></tr>
+<tr><td>D</td><td>{1,2,4,5,6,7,9}</td><td>B</td><td>E</td></tr>
+<tr><td><strong>E★</strong></td><td><strong>{1,2,4,5,6,7,10}</strong></td><td>B</td><td>C</td></tr>
+</table>
+<p>State E is accepting (contains NFA state 10).</p>
+</div>
+</section>
+
+<section class="section" id="token-recognition">
+<h2>28. Token Recognition using DFA</h2>
+<div class="card card-accent">
+<p>Each token type has a pattern described by a <strong>regular expression</strong>. We convert each RE to a DFA, then combine them into a single DFA that recognizes all token types.</p>
+</div>
+
+<div class="dfa-container">
+<div class="dfa-title">DFA for Relational Operators: &lt;, &lt;=, =, ==, !=, &gt;, &gt;=</div>
+<svg viewBox="0 0 550 280" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ar4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<!-- Start -->
+<circle cx="60" cy="140" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="60" y="145" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">0</text>
+<line x1="10" y1="140" x2="30" y2="140" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<!-- < branch -->
+<circle cx="200" cy="50" r="25" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="200" y="55" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">1</text>
+<line x1="80" y1="118" x2="180" y2="62" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="120" y="78" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">&lt;</text>
+<!-- <= -->
+<circle cx="360" cy="30" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="360" cy="30" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="360" y="35" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">&lt;=</text>
+<line x1="225" y1="40" x2="333" y2="32" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="280" y="28" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="600">=</text>
+<!-- < other -->
+<circle cx="360" cy="70" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="360" cy="70" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="360" y="75" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">&lt;</text>
+<line x1="225" y1="55" x2="333" y2="67" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="280" y="70" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="600">other*</text>
+<!-- = branch -->
+<circle cx="200" cy="140" r="25" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="200" y="145" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">2</text>
+<line x1="88" y1="140" x2="173" y2="140" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="130" y="133" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">=</text>
+<!-- == -->
+<circle cx="360" cy="120" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="360" cy="120" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="360" y="125" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">==</text>
+<line x1="225" y1="130" x2="333" y2="122" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="280" y="118" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="600">=</text>
+<!-- = assign -->
+<circle cx="360" cy="160" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="360" cy="160" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="360" y="165" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">=</text>
+<line x1="225" y1="150" x2="333" y2="158" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="280" y="163" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="600">other*</text>
+<!-- > branch -->
+<circle cx="200" cy="230" r="25" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="200" y="235" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">3</text>
+<line x1="80" y1="162" x2="180" y2="218" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="120" y="202" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">&gt;</text>
+<!-- >= -->
+<circle cx="360" cy="210" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="360" cy="210" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="360" y="215" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">&gt;=</text>
+<line x1="225" y1="220" x2="333" y2="212" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="280" y="210" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="600">=</text>
+<!-- > other -->
+<circle cx="360" cy="250" r="25" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="360" cy="250" r="20" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="360" y="255" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">&gt;</text>
+<line x1="225" y1="240" x2="333" y2="248" stroke="#818cf8" stroke-width="2" marker-end="url(#ar4)"/>
+<text x="280" y="253" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="600">other*</text>
+</svg>
+<p style="color:var(--text2);font-size:12px;margin-top:8px;">*other = any character not forming a longer operator. Retract forward pointer after reading.</p>
+</div>
+</section>
+
+<!-- ============ WEEK 3 ============ -->
+<section class="section" id="cc-tools2">
+<h2>29. Compiler Construction Tools</h2>
+<div class="card card-green">
+<table>
+<tr><th>Tool</th><th>Purpose</th><th>Language</th></tr>
+<tr><td><strong>JFLAP</strong></td><td>Experiment with FA, NFA, PDA, Turing Machines, Grammars, RE</td><td>Java</td></tr>
+<tr><td><strong>Flex (Lex)</strong></td><td>Generate lexical analyzers from RE descriptions</td><td>C/C++</td></tr>
+<tr><td><strong>Bison (Yacc)</strong></td><td>Generate parsers</td><td>C/C++</td></tr>
+<tr><td><strong>JFlex</strong></td><td>Lexical analyzer generator for Java</td><td>Java</td></tr>
+<tr><td><strong>ANTLR</strong></td><td>Parser generator — scanning, parsing, tree-walking</td><td>Java/Multi</td></tr>
+<tr><td><strong>LLVM</strong></td><td>Source & target-independent optimizer + code generation</td><td>Multi</td></tr>
+<tr><td><strong>JavaCC</strong></td><td>Popular parser generator, converts language to Java</td><td>Java</td></tr>
+<tr><td><strong>C++ &lt;regex&gt;</strong></td><td>Built-in regex library (C++11) for pattern matching</td><td>C++</td></tr>
+</table>
+</div>
+</section>
+
+<section class="section" id="jflap">
+<h2>30. JFLAP</h2>
+<div class="card card-cyan">
+<p>JFLAP makes it possible to <strong>create and simulate automata</strong>. Available from <strong>www.JFLAP.org</strong>.</p>
+<ul>
+<li>Requires Java (<code>.JAR</code> file) — run with <code>java -jar JFLAP.jar</code></li>
+<li>Supports creation of: <strong>DFA, NFA, Regular Expressions, PDA, Turing Machines, Grammars</strong></li>
+<li><strong>Toolbar:</strong> Attribute Editor | State Creator | Transition Creator | Deletion | Undo/Redo</li>
+<li>Testing: Input → Fast Run, Multiple Run, Step by Closure, Step by State</li>
+</ul>
+</div>
+</section>
+
+<section class="section" id="regex-cpp">
+<h2>31. Regex in C++ (C++11)</h2>
+<div class="card card-orange">
+<h4>Main Classes:</h4>
+<ul>
+<li><code>std::basic_regex</code> — regular expression object</li>
+<li><code>std::sub_match</code> — identifies sub-expression match</li>
+<li><code>std::match_results</code> — identifies all matches including sub-expressions</li>
+</ul>
+<h4>Main Functions:</h4>
+<table>
+<tr><th>Function</th><th>Purpose</th></tr>
+<tr><td><code>regex_match()</code></td><td>Match RE to <strong>entire</strong> character sequence</td></tr>
+<tr><td><code>regex_search()</code></td><td>Match RE to <strong>any part</strong> of character sequence</td></tr>
+<tr><td><code>regex_replace()</code></td><td>Replace occurrences matching RE</td></tr>
+</table>
+<h4>Iterators:</h4>
+<ul>
+<li><code>regex_iterator</code> — iterate through all regex matches</li>
+<li><code>regex_token_iterator</code> — iterate through sub-expressions within matches</li>
+</ul>
+</div>
+</section>
+
+<!-- ============ MAX MUNCH & TWO-BUFFER ============ -->
+<section class="section" id="max-munch">
+<h2>32. Maximum Munch (Longest Match) Rule</h2>
+<div class="card card-accent">
+<p>The lexical analyzer always selects the <strong>longest possible prefix</strong> of the remaining input that matches any valid token pattern.</p>
+<h4>Purpose:</h4>
+<ul>
+<li>Resolves ambiguities when multiple tokens share a common prefix</li>
+<li>Ensures <strong>deterministic, language-independent</strong> tokenization</li>
+</ul>
+</div>
+<h3>Examples</h3>
+<table>
+<tr><th>Input</th><th>Longest Match</th><th>Shorter Alternative</th></tr>
+<tr><td><code>-></code></td><td><code>-></code> (single operator)</td><td><code>-</code> + <code>></code></td></tr>
+<tr><td><code>==</code></td><td><code>==</code> (equality)</td><td><code>=</code> + <code>=</code></td></tr>
+<tr><td><code>>>=</code></td><td><code>>>=</code> (shift-assign)</td><td><code>>></code> + <code>=</code></td></tr>
+<tr><td><code>a-->b</code></td><td><code>a</code>, <code>--</code>, <code>></code>, <code>b</code></td><td><code>a</code>, <code>-</code>, <code>-></code>, <code>b</code></td></tr>
+</table>
+<div class="warning-box">Some languages (e.g., R, Scala) override maximal munch with <strong>priority rules</strong> (assignment before comparison). These are handled after the longest match is found, by comparing token types.</div>
+</section>
+
+<section class="section" id="two-buffer">
+<h2>33. Two-Input Buffer Scheme (Detail)</h2>
+<div class="card card-green">
+<h4>Problem:</h4>
+<ul>
+<li>Lexer reads input character by character</li>
+<li>Naïve <code>getchar()</code> per character causes <strong>heavy system call overhead</strong></li>
+<li>Lookahead may require peeking ahead many characters; backtracking is common with maximal munch</li>
+</ul>
+<h4>Solution:</h4>
+<ul>
+<li>Two fixed-size buffers (e.g., <strong>4096 bytes</strong> each) loaded from input file</li>
+<li>Each buffer ends with a <strong>sentinel character</strong> (usually EOF = -1)</li>
+<li>When <code>forward</code> hits sentinel: if EOF → done, else → load next buffer, reset forward</li>
+</ul>
+<pre><code>Buffer 0: [ ... data ... | sentinel ]
+Buffer 1: [ ... data ... | sentinel ]
+
+Pointers:
+  lexemeBegin → start of current token
+  forward     → scans ahead to find token end</code></pre>
+</div>
+
+<h3>Backtracking Support</h3>
+<div class="card card-cyan">
+<p>If no token matches the scanned prefix, the lexer <strong>backs up</strong> by resetting <code>forward</code> to <code>lexemeBegin + 1</code> (or to the last accepting state) and retries with a shorter match.</p>
+</div>
+</section>
+
+<section class="section" id="integration">
+<h2>34. Integrating Max Munch with Two-Buffer</h2>
+<div class="card card-accent">
+<h4>Step-by-Step Process:</h4>
+<ol>
+<li>Set <code>lexemeBegin = forward</code> (start of new token)</li>
+<li>Advance <code>forward</code> while current prefix matches some token pattern (DFA simulation)</li>
+<li>When no further transition exists, <strong>backtrack to last accepting state</strong></li>
+<li>Emit the corresponding token</li>
+<li>Set <code>lexemeBegin = forward</code> (after accepted token)</li>
+<li>Repeat</li>
+</ol>
+</div>
+
+<div class="example-box">
+<h4>Trace: Input <code>>>=</code></h4>
+<pre><code>Buffer: [ '>', '>', '=', ... ]
+
+1. lexemeBegin = 0, forward = 0
+2. forward → 1: ">"   ✓ accept as >
+3. forward → 2: ">>"  ✓ accept as >>
+4. forward → 3: ">>=" ✓ accept as >>=
+5. forward → 4: no transition → backtrack to last accept (>>=)
+6. Emit token: >>=
+7. lexemeBegin = forward = 3 (after '=')</code></pre>
+</div>
+</section>
+
+<section class="section" id="limitations">
+<h2>35. Limitations & Edge Cases</h2>
+<div class="card card-orange">
+<h3>Maximal Munch Pitfalls</h3>
+<ul>
+<li><strong>Fortran DO loop:</strong> <code>DO 5 I = 1,25</code> vs <code>DO 5 I = 1.25</code> — maximal munch reads <code>1.25</code> as a single number, missing the loop structure. Requires <strong>context-sensitive lexical disambiguation</strong>.</li>
+<li><strong>C++ templates:</strong> <code>vector&lt;vector&lt;int&gt;&gt;</code> — <code>&gt;&gt;</code> tokenized as shift operator. Since C++11, parser must reinterpret nested <code>&gt;&gt;</code> as two closing brackets.</li>
+</ul>
+<h3>Two-Buffer Limitations</h3>
+<ul>
+<li><strong>Unbounded lookahead:</strong> Some tokens (e.g., hex float with <code>p</code>) may need arbitrarily many characters — handled by continuing forward, refilling buffers as needed.</li>
+<li><strong>Sentinel choice:</strong> Must not conflict with legitimate input characters; <code>EOF (-1)</code> is safe.</li>
+</ul>
+</div>
+</section>
+
+<!-- ============ PRACTICE QUESTIONS ============ -->
+<section class="section" id="practice-q">
+<h2>📝 Practice Questions</h2>
+
+<div class="card card-accent">
+<h3>Conceptual / Short Answer</h3>
+<ol>
+<li><strong>What is the difference between a compiler and an interpreter?</strong>
+<p>A compiler translates the entire HLL program into MLL at once, producing object code. An interpreter translates and executes one instruction at a time with no intermediate object code. Compilers are faster at execution; interpreters are easier to debug.</p></li>
+
+<li><strong>What is a hybrid compiler? Give an example.</strong>
+<p>A hybrid compiler first compiles source to an intermediate code (bytecode), which is then interpreted by a virtual machine. Example: Java — .java compiled to .class bytecode → interpreted by JVM.</p></li>
+
+<li><strong>Explain the role of the lexical analyzer.</strong>
+<p>The lexical analyzer reads input characters, groups them into lexemes, produces tokens (token-name, attribute-value), strips comments/whitespace, interacts with the symbol table, generates lexical errors, and tracks line numbers.</p></li>
+
+<li><strong>What is the difference between a token, lexeme, and pattern?</strong>
+<p>Token = categorized unit (ID, NUM); Lexeme = actual substring ("count", "42"); Pattern = rule describing valid lexemes for a token ([a-z][a-z0-9]* for identifiers).</p></li>
+
+<li><strong>Why is input buffering needed? Explain the two-buffer scheme.</strong>
+<p>Buffering avoids per-character system calls. Two fixed-size buffers (4096 bytes each) alternate; lexemeBegin marks token start, forward scans ahead. Sentinels eliminate per-character EOF checks. When forward hits sentinel, next buffer is loaded.</p></li>
+
+<li><strong>What is Maximum Munch rule? Give an example where it creates problems.</strong>
+<p>Maximum munch = always select the longest matching prefix as a token. Problem: C++ templates vector&lt;vector&lt;int&gt;&gt; — >> is tokenized as shift operator instead of two closing brackets. Since C++11, parser reinterprets this.</p></li>
+
+<li><strong>Differentiate DFA and NFA.</strong>
+<p>DFA: exactly one transition per (state, symbol), no ε-transitions, deterministic. NFA: multiple transitions possible per (state, symbol), ε-transitions allowed, non-deterministic. Every NFA can be converted to an equivalent DFA (subset construction).</p></li>
+
+<li><strong>What are the error recovery strategies for lexical errors?</strong>
+<p>Panic Mode (skip to delimiter), Transpose (swap adjacent chars), Insert (add missing char), Delete (remove extra char), Replace (substitute wrong char).</p></li>
+</ol>
+</div>
+
+<div class="card card-green">
+<h3>Quiz-Style Questions (from slides)</h3>
+
+<h4>Q1: Ambiguous Operator Tokenization</h4>
+<p>Language has operators <code>-></code>, <code>--</code>, <code>-</code>, <code>></code>, and <code>>></code>. Given input <code>a-->b</code>, how should the lexer tokenize?</p>
+<div class="key-point"><strong>Answer:</strong> Using maximal munch: <code>a</code>(id) → <code>--</code>(decrement, longest match of --) → <code>></code>(greater-than) → <code>b</code>(id). The lexer always picks the longest valid token starting from the current position.</div>
+
+<h4>Q2: Context-Dependent Token Recognition</h4>
+<p>In Fortran: <code>DO 10 I = 1, 10</code> → DO is keyword. But <code>DO10I = 1</code> → DO10I is identifier. How can a lexer distinguish?</p>
+<div class="key-point"><strong>Answer:</strong> In Fortran, whitespace is insignificant. The lexer cannot distinguish without lookahead past the <code>=</code> sign to see if there's a comma (loop) or not (assignment). This requires context-sensitive disambiguation — scanning ahead to the comma.</div>
+
+<h4>Q3: Python Operator Maximal Munch</h4>
+<p>Operators: <code>*</code>, <code>**</code>, <code>*=</code>, <code>**=</code>. Tokenize <code>x**=y</code>:</p>
+<div class="key-point"><strong>Answer:</strong> Maximal munch picks longest valid operator: <code>x</code>(id) → <code>**=</code>(power-assign, longest match) → <code>y</code>(id). Result: [x] [**=] [y].</div>
+</div>
+
+<div class="card card-cyan">
+<h3>DFA/NFA Construction Practice</h3>
+
+<h4>P1: Build DFA for identifiers starting with letter, followed by letters/digits</h4>
+<div class="formula">RE: [a-zA-Z] [a-zA-Z0-9]*</div>
+<div class="dfa-container">
+<svg viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ap" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<circle cx="60" cy="60" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="60" y="65" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">q0</text>
+<circle cx="220" cy="60" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="220" cy="60" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="220" y="65" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">q1</text>
+<circle cx="350" cy="60" r="22" fill="none" stroke="#f87171" stroke-width="2"/>
+<text x="350" y="65" text-anchor="middle" fill="#f87171" font-size="11" font-weight="bold">dead</text>
+<line x1="10" y1="60" x2="30" y2="60" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<line x1="88" y1="60" x2="190" y2="60" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<text x="140" y="50" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="600">letter</text>
+<path d="M 205 35 C 190 5 250 5 235 35" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<text x="220" y="12" text-anchor="middle" fill="#22d3ee" font-size="11" font-weight="600">letter|digit</text>
+<line x1="88" y1="75" x2="326" y2="68" stroke="#f87171" stroke-width="1.5" marker-end="url(#ap)" stroke-dasharray="4"/>
+<text x="200" y="90" text-anchor="middle" fill="#f87171" font-size="11">digit (invalid start)</text>
+</svg>
+</div>
+
+<h4>P2: Build DFA for decimal numbers (e.g., 123.456)</h4>
+<div class="formula">RE: [0-9]+ "." [0-9]+</div>
+<div class="dfa-container">
+<svg viewBox="0 0 520 120" xmlns="http://www.w3.org/2000/svg">
+<circle cx="60" cy="60" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="60" y="65" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">q0</text>
+<circle cx="180" cy="60" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="180" y="65" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">q1</text>
+<circle cx="300" cy="60" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="300" y="65" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">q2</text>
+<circle cx="430" cy="60" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="430" cy="60" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="430" y="65" text-anchor="middle" fill="#4ade80" font-size="13" font-weight="bold">q3</text>
+<line x1="10" y1="60" x2="30" y2="60" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<line x1="88" y1="60" x2="150" y2="60" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<text x="119" y="50" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="600">digit</text>
+<path d="M 165 35 C 150 5 210 5 195 35" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<text x="180" y="12" text-anchor="middle" fill="#22d3ee" font-size="11" font-weight="600">digit</text>
+<line x1="208" y1="60" x2="270" y2="60" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<text x="239" y="50" text-anchor="middle" fill="#fb923c" font-size="12" font-weight="600">.</text>
+<line x1="328" y1="60" x2="400" y2="60" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<text x="364" y="50" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="600">digit</text>
+<path d="M 415 35 C 400 5 460 5 445 35" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#ap)"/>
+<text x="430" y="12" text-anchor="middle" fill="#22d3ee" font-size="11" font-weight="600">digit</text>
+</svg>
+</div>
+
+<h4>P3: Build DFA for the operators *, **, *=, **=</h4>
+<div class="dfa-container">
+<svg viewBox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="ap2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<circle cx="60" cy="100" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="60" y="105" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">q0</text>
+<!-- q1: seen * -->
+<circle cx="190" cy="100" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="190" cy="100" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="190" y="105" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">q1 *</text>
+<!-- q2: seen ** -->
+<circle cx="340" cy="60" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="340" cy="60" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="340" y="65" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">q2 **</text>
+<!-- q3: seen *= -->
+<circle cx="340" cy="150" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="340" cy="150" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="340" y="155" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">q3 *=</text>
+<!-- q4: seen **= -->
+<circle cx="480" cy="60" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="480" cy="60" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="480" y="65" text-anchor="middle" fill="#4ade80" font-size="11" font-weight="bold">q4 **=</text>
+<line x1="10" y1="100" x2="30" y2="100" stroke="#818cf8" stroke-width="2" marker-end="url(#ap2)"/>
+<line x1="88" y1="100" x2="160" y2="100" stroke="#818cf8" stroke-width="2" marker-end="url(#ap2)"/>
+<text x="124" y="92" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">*</text>
+<line x1="210" y1="80" x2="315" y2="66" stroke="#818cf8" stroke-width="2" marker-end="url(#ap2)"/>
+<text x="260" y="65" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="600">*</text>
+<line x1="210" y1="122" x2="315" y2="143" stroke="#818cf8" stroke-width="2" marker-end="url(#ap2)"/>
+<text x="260" y="145" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">=</text>
+<line x1="368" y1="60" x2="450" y2="60" stroke="#818cf8" stroke-width="2" marker-end="url(#ap2)"/>
+<text x="409" y="52" text-anchor="middle" fill="#fb923c" font-size="13" font-weight="600">=</text>
+</svg>
+<p style="color:var(--text2);font-size:12px;margin-top:8px;">All double-circled states are accepting. q1=*, q2=**, q3=*=, q4=**=. Using maximal munch on "**=": reaches q4.</p>
+</div>
+</div>
+</section>
+
+<!-- ============ SOLVED PAPER FORMAT ============ -->
+<section class="section" id="solved-paper">
+<h2>📋 Solved Paper Format (CC Mid)</h2>
+
+<div class="paper-q">
+<h4>Question 1 — Short Objective Questions <span class="marks">10 marks (5 × 2)</span></h4>
+<p><em>Answer in 2-3 lines each.</em></p>
+
+<h4>Q1(a): What is the purpose of a pre-processor?</h4>
+<p><strong>Ans:</strong> A pre-processor produces input to the compiler. It performs macro processing (shorthand for longer constructs like #define) and file inclusion (inserting header files like #include). It runs before the actual compilation begins.</p>
+
+<h4>Q1(b): What is the difference between lexeme and token?</h4>
+<p><strong>Ans:</strong> A lexeme is the actual character sequence (substring) in the source code, e.g., "count". A token is the categorized output produced by the lexical analyzer, e.g., (ID, "count"). One token type can have many different lexemes.</p>
+
+<h4>Q1(c): What are ε-transitions in NFA?</h4>
+<p><strong>Ans:</strong> ε-transitions are transitions that allow the NFA to move from one state to another without consuming any input symbol. They provide non-determinism and are used in Thompson's construction to combine sub-NFAs using union, concatenation, and Kleene star operations.</p>
+
+<h4>Q1(d): What is the symbol table used for?</h4>
+<p><strong>Ans:</strong> The symbol table is a data structure that stores information about source-program identifiers — including name, type, scope, and memory location. It is accessed by all compiler phases: lexical (creates entries), syntax (adds type info), semantic (type checking), and code generation (memory addresses).</p>
+
+<h4>Q1(e): Explain the Maximum Munch rule.</h4>
+<p><strong>Ans:</strong> The Maximum Munch (Longest Match) rule states that the lexical analyzer always selects the longest possible prefix of the remaining input that matches any valid token pattern. For example, given operators <code>></code> and <code>>=</code>, the input <code>>=</code> is tokenized as one <code>>=</code> operator, not <code>></code> followed by <code>=</code>.</p>
+</div>
+
+<div class="paper-q">
+<h4>Question 2 — Identify Lexemes / Tokenize <span class="marks">10 marks</span></h4>
+<p><strong>Statement:</strong> Tokenize the following C statement:</p>
+<pre><code>float result = (base + height) * 0.5;</code></pre>
+
+<table class="token-table">
+<tr><th>#</th><th>Lexeme</th><th>Token Type</th><th>Token</th></tr>
+<tr><td>1</td><td><code>float</code></td><td>Keyword</td><td>(KEYWORD, "float")</td></tr>
+<tr><td>2</td><td><code>result</code></td><td>Identifier</td><td>(ID, 1) → sym table entry 1</td></tr>
+<tr><td>3</td><td><code>=</code></td><td>Operator</td><td>(ASSIGN)</td></tr>
+<tr><td>4</td><td><code>(</code></td><td>Punctuator</td><td>(LPAREN)</td></tr>
+<tr><td>5</td><td><code>base</code></td><td>Identifier</td><td>(ID, 2) → sym table entry 2</td></tr>
+<tr><td>6</td><td><code>+</code></td><td>Operator</td><td>(PLUS)</td></tr>
+<tr><td>7</td><td><code>height</code></td><td>Identifier</td><td>(ID, 3) → sym table entry 3</td></tr>
+<tr><td>8</td><td><code>)</code></td><td>Punctuator</td><td>(RPAREN)</td></tr>
+<tr><td>9</td><td><code>*</code></td><td>Operator</td><td>(MULT)</td></tr>
+<tr><td>10</td><td><code>0.5</code></td><td>Constant</td><td>(NUM, 0.5)</td></tr>
+<tr><td>11</td><td><code>;</code></td><td>Punctuator</td><td>(SEMICOLON)</td></tr>
+</table>
+<p><strong>Total Tokens: 11</strong></p>
+<p><strong>Symbol Table:</strong></p>
+<table>
+<tr><th>Entry</th><th>Name</th><th>Type</th></tr>
+<tr><td>1</td><td>result</td><td>float</td></tr>
+<tr><td>2</td><td>base</td><td>float</td></tr>
+<tr><td>3</td><td>height</td><td>float</td></tr>
+</table>
+</div>
+
+<div class="paper-q">
+<h4>Question 3 — Token Recognizer / NFA / DFA <span class="marks">10 marks</span></h4>
+<p><strong>Task:</strong> Construct a DFA that recognizes valid integer and floating-point constants.</p>
+<div class="formula">Integer: [0-9]+<br>Float: [0-9]+ "." [0-9]+</div>
+
+<div class="dfa-container">
+<div class="dfa-title">Combined DFA for Integer and Float Constants</div>
+<svg viewBox="0 0 550 160" xmlns="http://www.w3.org/2000/svg">
+<defs><marker id="aq" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#818cf8"/></marker></defs>
+<circle cx="60" cy="80" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="60" y="85" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">q0</text>
+<text x="60" y="125" text-anchor="middle" fill="#a1a1aa" font-size="10">start</text>
+<circle cx="190" cy="80" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="190" cy="80" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="190" y="85" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">q1</text>
+<text x="190" y="125" text-anchor="middle" fill="#a1a1aa" font-size="10">INT</text>
+<circle cx="320" cy="80" r="28" fill="none" stroke="#818cf8" stroke-width="2"/>
+<text x="320" y="85" text-anchor="middle" fill="#e4e4e7" font-size="13" font-weight="bold">q2</text>
+<circle cx="460" cy="80" r="28" fill="none" stroke="#4ade80" stroke-width="2"/>
+<circle cx="460" cy="80" r="23" fill="none" stroke="#4ade80" stroke-width="2"/>
+<text x="460" y="85" text-anchor="middle" fill="#4ade80" font-size="12" font-weight="bold">q3</text>
+<text x="460" y="125" text-anchor="middle" fill="#a1a1aa" font-size="10">FLOAT</text>
+<line x1="10" y1="80" x2="30" y2="80" stroke="#818cf8" stroke-width="2" marker-end="url(#aq)"/>
+<line x1="88" y1="80" x2="160" y2="80" stroke="#818cf8" stroke-width="2" marker-end="url(#aq)"/>
+<text x="124" y="70" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="600">digit</text>
+<path d="M 175 55 C 160 20 220 20 205 55" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#aq)"/>
+<text x="190" y="25" text-anchor="middle" fill="#22d3ee" font-size="11" font-weight="600">digit</text>
+<line x1="218" y1="80" x2="290" y2="80" stroke="#818cf8" stroke-width="2" marker-end="url(#aq)"/>
+<text x="254" y="70" text-anchor="middle" fill="#fb923c" font-size="14" font-weight="600">.</text>
+<line x1="348" y1="80" x2="430" y2="80" stroke="#818cf8" stroke-width="2" marker-end="url(#aq)"/>
+<text x="389" y="70" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="600">digit</text>
+<path d="M 445 55 C 430 20 490 20 475 55" fill="none" stroke="#818cf8" stroke-width="2" marker-end="url(#aq)"/>
+<text x="460" y="25" text-anchor="middle" fill="#22d3ee" font-size="11" font-weight="600">digit</text>
+</svg>
+<p style="color:var(--text2);font-size:12px;margin-top:8px;">q1 accepts integers, q3 accepts floats. q2 is intermediate (seen dot but no digit after yet).</p>
+</div>
+
+<h4>Trace:</h4>
+<pre><code>Input: "123.45"
+q0 --1--> q1 (accept INT)
+q1 --2--> q1 (accept INT)
+q1 --3--> q1 (accept INT)
+q1 --.--> q2 (not accepting)
+q2 --4--> q3 (accept FLOAT)
+q3 --5--> q3 (accept FLOAT)
+Final: q3 → FLOAT constant "123.45" ✓
+
+Input: "42"
+q0 --4--> q1 (accept INT)
+q1 --2--> q1 (accept INT)
+Final: q1 → INT constant "42" ✓</code></pre>
+</div>
+
+</section>
+
+</div><!-- end .main -->
+
+<script>
+// Smooth scrolling for sidebar links
+document.querySelectorAll('.nav-items a').forEach(a => {
+    a.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if(target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Close mobile sidebar
+            document.querySelector('.sidebar').classList.remove('open');
+        }
+        // Active state
+        document.querySelectorAll('.nav-items a').forEach(x => x.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
+// Highlight active section on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if(entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            document.querySelectorAll('.nav-items a').forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+            });
+        }
+    });
+}, { rootMargin: '-20% 0px -80% 0px' });
+document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

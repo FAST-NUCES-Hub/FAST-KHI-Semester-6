@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Complete exam-ready study guide for Software Engineering covering Mid-I, Mid-II, and Final syllabus with diagrams, formulas, worked examples, and conceptual questions.">
+<title>Software Engineering — Complete Exam Study Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+--bg:#0a0b0f;--surface:#12141a;--surface2:#1a1d2e;--border:#1e2130;
+--cyan:#00d4ff;--violet:#7c3aed;--amber:#f59e0b;--red:#ef4444;--teal:#0d9488;
+--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+--head-font:'Space Grotesk',sans-serif;--body-font:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--cyan) var(--bg);}
+body{background:var(--bg);color:var(--text);font-family:var(--body-font);font-size:15px;line-height:1.7;overflow-x:hidden;}
+
+/* SCROLL PROGRESS */
+#scrollProgress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--violet));z-index:9999;transition:width .1s;}
+
+/* TOP BAR */
+#topbar{position:fixed;top:3px;left:270px;right:0;height:52px;background:rgba(10,11,15,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;z-index:100;gap:16px;}
+#topbar .section-name{font-family:var(--head-font);font-size:.95rem;color:var(--cyan);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+#topbar #searchBox{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:8px;font-size:.85rem;width:260px;outline:none;font-family:var(--body-font);}
+#topbar #searchBox:focus{border-color:var(--cyan);box-shadow:0 0 8px rgba(0,212,255,.2);}
+#hamburger{display:none;background:none;border:none;color:var(--cyan);font-size:1.4rem;cursor:pointer;}
+
+/* SIDEBAR */
+#sidebar{position:fixed;top:3px;left:0;width:270px;height:calc(100vh - 3px);background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;z-index:101;padding:16px 0;transition:transform .3s;}
+#sidebar .logo{font-family:var(--head-font);font-size:1.1rem;color:var(--text);padding:8px 20px 20px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+#sidebar .logo span{color:var(--cyan);}
+.sb-part{cursor:pointer;padding:10px 20px;font-family:var(--head-font);font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:8px;transition:background .2s;}
+.sb-part:hover{background:rgba(255,255,255,.03);}
+.sb-part .badge{font-size:.7rem;padding:2px 8px;border-radius:10px;font-weight:700;margin-left:auto;}
+.sb-part.pa .badge{background:rgba(245,158,11,.15);color:var(--amber);}
+.sb-part.pb .badge{background:rgba(124,58,237,.15);color:var(--violet);}
+.sb-part.pc .badge{background:rgba(0,212,255,.15);color:var(--cyan);}
+.sb-topics{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.sb-topics.open{max-height:2000px;}
+.sb-topic{display:block;padding:7px 20px 7px 40px;font-size:.8rem;color:var(--text2);cursor:pointer;text-decoration:none;transition:all .2s;border-left:2px solid transparent;}
+.sb-topic:hover,.sb-topic.active{color:var(--cyan);background:rgba(0,212,255,.04);border-left-color:var(--cyan);}
+.sb-fixed{margin-top:auto;border-top:1px solid var(--border);padding-top:8px;position:sticky;bottom:0;background:var(--surface);}
+.sb-fixed .sb-topic{padding-left:20px;font-weight:500;}
+
+/* MAIN */
+#main{margin-left:270px;padding:72px 40px 60px;max-width:960px;}
+
+/* EXAM WEIGHT BANNER */
+.weight-banner{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:32px;}
+.weight-banner h3{font-family:var(--head-font);font-size:.85rem;color:var(--text2);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;}
+.weight-bar{display:flex;height:32px;border-radius:8px;overflow:hidden;background:var(--bg);position:relative;}
+.weight-bar .seg{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.75rem;font-weight:700;transition:flex .3s;}
+.seg-a{flex:10;background:linear-gradient(135deg,rgba(245,158,11,.3),rgba(245,158,11,.15));color:var(--amber);border-right:1px solid var(--bg);}
+.seg-b{flex:20;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(124,58,237,.15));color:var(--violet);border-right:1px solid var(--bg);}
+.seg-c{flex:70;background:linear-gradient(135deg,rgba(0,212,255,.3),rgba(0,212,255,.15));color:var(--cyan);}
+.weight-labels{display:flex;margin-top:6px;font-size:.75rem;color:var(--text3);}
+.weight-labels span:first-child{flex:10;text-align:center;}
+.weight-labels span:nth-child(2){flex:20;text-align:center;}
+.weight-labels span:last-child{flex:70;text-align:center;}
+
+/* SECTION HEADINGS */
+.part-heading{font-family:var(--head-font);font-size:2rem;font-weight:700;letter-spacing:1px;margin:48px 0 24px;padding:16px 20px;border-radius:8px;display:flex;align-items:center;gap:12px;}
+.part-heading .pill{font-size:.8rem;padding:4px 12px;border-radius:8px;font-weight:700;}
+.ph-a{border-left:4px solid var(--amber);color:var(--amber);background:rgba(245,158,11,.05);}
+.ph-a .pill{background:rgba(245,158,11,.15);color:var(--amber);}
+.ph-b{border-left:4px solid var(--violet);color:var(--violet);background:rgba(124,58,237,.05);}
+.ph-b .pill{background:rgba(124,58,237,.15);color:var(--violet);}
+.ph-c{border-left:4px solid var(--cyan);color:var(--cyan);background:rgba(0,212,255,.05);}
+.ph-c .pill{background:rgba(0,212,255,.15);color:var(--cyan);}
+
+.sub-heading{font-family:var(--head-font);font-size:1.3rem;font-weight:600;color:var(--text);margin:32px 0 16px;padding-left:16px;border-left:3px solid var(--violet);}
+.sub2{font-family:var(--head-font);font-size:1.05rem;font-weight:600;color:var(--cyan);margin:20px 0 10px;}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin:16px 0;transition:transform .2s,box-shadow .2s;}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+
+/* TABLES */
+.tbl-wrap{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th{background:rgba(0,212,255,.12);color:var(--cyan);font-family:var(--head-font);font-weight:600;padding:10px 14px;text-align:left;border-bottom:2px solid var(--border);}
+td{padding:9px 14px;border-bottom:1px solid var(--border);}
+tr:nth-child(even) td{background:var(--surface2);}
+tr:hover td{background:rgba(0,212,255,.04);}
+
+/* FORMULA BLOCKS */
+.formula-block{background:#1a1040;border:1px solid rgba(124,58,237,.3);border-radius:10px;padding:18px 20px;margin:16px 0;text-align:center;position:relative;}
+.formula-block .formula{font-family:var(--mono);font-size:1.1rem;color:var(--violet);font-weight:700;margin-bottom:8px;}
+.formula-block .vars{font-size:.8rem;color:var(--text3);text-align:left;}
+.formula-block .copy-btn{position:absolute;top:10px;right:10px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);color:var(--violet);font-size:.7rem;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:var(--mono);transition:all .2s;}
+.formula-block .copy-btn:hover{background:var(--violet);color:#fff;}
+
+/* NUMERICAL BLOCKS */
+.numerical{background:var(--surface);border-left:4px solid var(--violet);border-radius:0 10px 10px 0;padding:20px;margin:16px 0;font-family:var(--mono);font-size:.85rem;}
+.numerical .step-label{color:var(--cyan);font-weight:700;display:inline-block;min-width:80px;}
+.numerical .answer-box{background:rgba(0,212,255,.08);border:2px solid var(--cyan);border-radius:8px;padding:10px 16px;margin-top:10px;font-weight:700;color:var(--cyan);text-align:center;box-shadow:0 0 12px rgba(0,212,255,.15);}
+.numerical .meaning{font-family:var(--body-font);font-style:italic;color:var(--text2);margin-top:10px;font-size:.85rem;}
+
+/* DIAGRAM */
+.diagram-container{background:#0d1117;border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:20px;margin:16px 0;cursor:pointer;transition:all .2s;text-align:center;}
+.diagram-container:hover{border-color:var(--cyan);box-shadow:0 0 16px rgba(0,212,255,.1);}
+.diagram-container svg{max-width:100%;height:auto;}
+.diagram-caption{font-size:.8rem;color:var(--text3);font-style:italic;margin-top:8px;text-align:center;}
+
+/* COMMON MISTAKES */
+.mistakes{background:var(--surface);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;padding:16px 20px;margin:16px 0;}
+.mistakes h4{color:var(--amber);font-family:var(--head-font);margin-bottom:8px;}
+.mistakes li{color:var(--text2);margin:4px 0 4px 16px;font-size:.9rem;}
+
+/* EXAM RECAP */
+.recap{background:rgba(13,43,43,.5);border:1px solid rgba(13,148,136,.3);border-radius:10px;padding:20px;margin:24px 0;}
+.recap h4{color:var(--teal);font-family:var(--head-font);font-size:1rem;margin-bottom:10px;}
+.recap li{color:var(--cyan);margin:4px 0 4px 16px;font-size:.9rem;}
+.recap li::marker{color:var(--cyan);}
+
+/* Q&A */
+.qa-item{margin:16px 0;}
+.qa-q{font-weight:600;color:var(--cyan);font-size:.95rem;cursor:pointer;display:flex;align-items:baseline;gap:8px;}
+.qa-q .part-badge{font-size:.65rem;padding:2px 8px;border-radius:6px;font-weight:700;white-space:nowrap;}
+.badge-a{background:rgba(245,158,11,.15);color:var(--amber);}
+.badge-b{background:rgba(124,58,237,.15);color:var(--violet);}
+.badge-c{background:rgba(0,212,255,.15);color:var(--cyan);}
+.qa-toggle{cursor:pointer;color:var(--violet);font-size:.85rem;margin-top:6px;display:flex;align-items:center;gap:6px;user-select:none;}
+.qa-toggle:hover{color:var(--cyan);}
+.qa-a{max-height:0;overflow:hidden;transition:max-height .5s ease,padding .3s;padding:0 0 0 16px;color:var(--text2);font-size:.9rem;line-height:1.8;border-left:2px solid var(--border);}
+.qa-a.open{max-height:2000px;padding:12px 0 12px 16px;}
+
+/* RAPID FIRE */
+.rf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+.rf-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;transition:transform .2s;}
+.rf-card:hover{transform:translateY(-2px);}
+.rf-card .rf-q{color:var(--text);font-size:.85rem;margin-bottom:6px;font-weight:500;}
+.rf-card .rf-divider{height:1px;background:var(--border);margin:8px 0;}
+.rf-card .rf-ans{color:var(--cyan);font-size:.85rem;}
+
+/* BTT */
+#btt{position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--cyan);color:var(--cyan);font-size:1.2rem;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:99;transition:all .2s;box-shadow:0 0 12px rgba(0,212,255,.2);}
+#btt:hover{background:var(--cyan);color:var(--bg);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;align-items:center;justify-content:center;cursor:pointer;}
+.modal-overlay.show{display:flex;}
+.modal-content{max-width:95vw;max-height:90vh;overflow:auto;cursor:default;}
+.modal-content svg{width:100%;height:auto;}
+
+/* HIGHLIGHT */
+mark{background:rgba(255,255,0,.3);color:var(--text);padding:1px 2px;border-radius:2px;}
+
+/* LISTS */
+ul,ol{padding-left:20px;margin:8px 0;}
+li{margin:4px 0;}
+strong{color:var(--text);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+#sidebar{transform:translateX(-100%);}
+#sidebar.open{transform:translateX(0);}
+#main{margin-left:0;padding:72px 16px 60px;}
+#topbar{left:0;}
+#hamburger{display:block;}
+.rf-grid{grid-template-columns:1fr;}
+.part-heading{font-size:1.4rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="scrollProgress"></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal"><div class="modal-content" id="modalContent"></div></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+<div class="logo">⚙️ <span>SE</span> Study Guide</div>
+
+<div class="sb-part pa" onclick="togglePart(this)">📘 PART A — Mid-I <span class="badge">10%</span></div>
+<div class="sb-topics" id="sbA">
+<a class="sb-topic" href="#a-intro" onclick="closeMobile()">Introduction to SE</a>
+<a class="sb-topic" href="#a-process" onclick="closeMobile()">Software Processes</a>
+<a class="sb-topic" href="#a-agile" onclick="closeMobile()">Agile Development</a>
+<a class="sb-topic" href="#a-re" onclick="closeMobile()">Requirements Engineering</a>
+<a class="sb-topic" href="#a-wbs" onclick="closeMobile()">Work Breakdown Structure</a>
+<a class="sb-topic" href="#a-estimation" onclick="closeMobile()">Estimation (Delphi)</a>
+</div>
+
+<div class="sb-part pb" onclick="togglePart(this)">📗 PART B — Mid-II <span class="badge">20%</span></div>
+<div class="sb-topics" id="sbB">
+<a class="sb-topic" href="#b-arch1" onclick="closeMobile()">Architectural Design</a>
+<a class="sb-topic" href="#b-patterns" onclick="closeMobile()">Architectural Patterns</a>
+<a class="sb-topic" href="#b-app-arch" onclick="closeMobile()">Application Architectures</a>
+<a class="sb-topic" href="#b-design" onclick="closeMobile()">Design Concepts</a>
+<a class="sb-topic" href="#b-testing1" onclick="closeMobile()">Software Testing</a>
+<a class="sb-topic" href="#b-bpt" onclick="closeMobile()">Basis Path Testing</a>
+<a class="sb-topic" href="#b-testing3" onclick="closeMobile()">Component / Release / User Testing</a>
+<a class="sb-topic" href="#b-ui" onclick="closeMobile()">UI Design</a>
+</div>
+
+<div class="sb-part pc" onclick="togglePart(this)">📙 PART C — Final <span class="badge">70%</span></div>
+<div class="sb-topics" id="sbC">
+<a class="sb-topic" href="#c-qm" onclick="closeMobile()">Quality Management</a>
+<a class="sb-topic" href="#c-est" onclick="closeMobile()">Estimation of Software</a>
+<a class="sb-topic" href="#c-risk" onclick="closeMobile()">Risk Management</a>
+<a class="sb-topic" href="#c-sched" onclick="closeMobile()">Project Scheduling</a>
+</div>
+
+<div class="sb-fixed">
+<a class="sb-topic" href="#conceptual" onclick="closeMobile()">🧠 Conceptual Questions</a>
+<a class="sb-topic" href="#rapidfire" onclick="closeMobile()">⚡ Rapid Fire</a>
+</div>
+</nav>
+
+<!-- TOP BAR -->
+<header id="topbar">
+<button id="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+<span class="section-name" id="sectionName">Software Engineering — Study Guide</span>
+<input type="text" id="searchBox" placeholder="🔍 Search topics..." oninput="doSearch(this.value)">
+</header>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+
+<!-- EXAM WEIGHT BANNER -->
+<div class="weight-banner">
+<h3>📊 Exam Weight Distribution</h3>
+<div class="weight-bar">
+<div class="seg seg-a">10%</div>
+<div class="seg seg-b">20%</div>
+<div class="seg seg-c">70%</div>
+</div>
+<div class="weight-labels">
+<span>PART A (Mid-I)</span>
+<span>PART B (Mid-II)</span>
+<span>PART C (Final) ← Focus Here</span>
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PART A — MID-I SYLLABUS (10%) -->
+<!-- ============================================================ -->
+<div class="part-heading ph-a" id="a-intro">📘 PART A — Mid-I Syllabus <span class="pill">10%</span></div>
+
+<h2 class="sub-heading">Chapter 1 — Introduction to Software Engineering</h2>
+
+<div class="card">
+<h3 class="sub2">What is Software Engineering?</h3>
+<p>Software engineering is an <strong>engineering discipline</strong> concerned with <strong>all aspects of software production</strong> from early stages of system specification through to maintaining the system after it has gone into use.</p>
+<ul>
+<li><strong>Software:</strong> Computer programs and associated documentation. Software products may be developed for a particular customer or may be developed for a general market.</li>
+<li><strong>Good software attributes:</strong> Deliver the required functionality, performance to the user, maintainable, robust, user friendly.</li>
+<li><strong>Fundamental activities:</strong> Software specification, software development, software validation and software evolution.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Why Software Projects Fail?</h3>
+<ul>
+<li><strong>Increasing system complexity</strong> & advancements in technology — systems have to be built and delivered more quickly; larger, more complex systems are required.</li>
+<li><strong>Failure to use software engineering methods</strong> — designing without a plan and evolving as per needs leads to software that is more expensive and less reliable.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Software Products: Generic vs Custom</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Characteristic</th><th>Generic Software</th><th>Custom Software</th></tr>
+<tr><td>Exclusiveness</td><td>Designed for open market</td><td>Targeted customers</td></tr>
+<tr><td>Updates</td><td>When market demands change</td><td>Frequently as customer's needs evolve</td></tr>
+<tr><td>Control</td><td>Users have no control over development</td><td>Users can have control over development</td></tr>
+<tr><td>Development cost</td><td>Affordable (well-defined requirements)</td><td>Might be costly</td></tr>
+<tr><td>Functions</td><td>User friendly with variety of functionalities</td><td>Limited functionality</td></tr>
+<tr><td>Architecture</td><td>Meant to be scalable</td><td>Covers current needs with slight flexibility</td></tr>
+<tr><td>Quality</td><td>Timely delivery matters more; can improve later</td><td>Quality is utmost priority; deadlines not hard</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Software Costs & Key FAQs</h3>
+<ul>
+<li>Software costs often dominate computer system costs. Software costs <strong>more to maintain</strong> than to develop.</li>
+<li>For systems with long life, <strong>maintenance costs may be several times development costs</strong>.</li>
+<li>Roughly <strong>60% development costs, 40% testing costs</strong>. For custom software, evolution costs often exceed development costs.</li>
+<li><strong>SE vs CS:</strong> Computer science focuses on theory and fundamentals; SE is concerned with practicalities of developing and delivering useful software.</li>
+<li><strong>SE vs System Engineering:</strong> System engineering is concerned with all aspects of computer-based systems including hardware, software and process engineering. SE is a part of it.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Case Studies from Slides</h3>
+<p><strong>1. Personal Insulin Pump:</strong> Safety-critical system — collects data from blood sugar sensor, calculates insulin required, sends signals to micro-pump. Low blood sugars → brain malfunctioning, coma, death; high blood sugar → eye and kidney damage.</p>
+<p><strong>2. Mentcare:</strong> Patient information system for mental health care. Key features: individual care management, patient monitoring, administrative reporting. Concerns: privacy, safety, requirement conflicts (privacy vs availability).</p>
+<p><strong>3. Wilderness Weather Station:</strong> Data collection system measuring temperature, pressure, sunshine, rainfall, wind speed and direction across remote areas.</p>
+<p><strong>4. iLearn:</strong> Digital learning environment — a service-oriented system with utility services, application services, and configuration services.</p>
+</div>
+
+<!-- ===== SOFTWARE PROCESSES ===== -->
+<h2 class="sub-heading" id="a-process">Chapter 2 — Software Processes</h2>
+
+<div class="card">
+<h3 class="sub2">Software Process Models</h3>
+<p>A <strong>software process</strong> is a structured set of activities required to develop a software system. Process models covered:</p>
+<ul>
+<li><strong>The Waterfall Model</strong></li>
+<li><strong>Incremental Development</strong></li>
+<li><strong>Integration and Configuration (Reuse-oriented)</strong></li>
+</ul>
+<p>Practically, most large systems use a process that incorporates elements from all these models.</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">The Waterfall Model</h3>
+<p>In principle, a <strong>phase must be complete before moving onto the next phase</strong>.</p>
+<p><strong>Phases:</strong></p>
+<ol>
+<li>Requirements analysis and definition</li>
+<li>System and software design</li>
+<li>Implementation and unit testing</li>
+<li>Integration and system testing</li>
+<li>Operation and maintenance</li>
+</ol>
+<p><strong>Drawback:</strong> Intolerance to change in requirements after the process is underway. Only appropriate when requirements are well-defined and changes will be fairly limited. Mostly used for large systems engineering projects where plan-driven nature makes coordination easy.</p>
+
+<!-- Waterfall Diagram -->
+<div class="diagram-container" onclick="openModal(this)">
+<svg viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+<defs><linearGradient id="wg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1040"/><stop offset="100%" stop-color="#0d1117"/></linearGradient></defs>
+<rect width="600" height="320" fill="url(#wg)" rx="8"/>
+<g font-family="Space Grotesk,sans-serif" font-size="11" font-weight="600">
+<!-- Steps -->
+<rect x="20" y="20" width="160" height="40" rx="6" fill="rgba(0,212,255,.15)" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="100" y="44" fill="#00d4ff" text-anchor="middle">Requirements</text>
+<rect x="110" y="70" width="160" height="40" rx="6" fill="rgba(0,212,255,.15)" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="190" y="94" fill="#00d4ff" text-anchor="middle">System Design</text>
+<rect x="200" y="120" width="160" height="40" rx="6" fill="rgba(0,212,255,.15)" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="280" y="144" fill="#00d4ff" text-anchor="middle">Implementation</text>
+<rect x="290" y="170" width="160" height="40" rx="6" fill="rgba(0,212,255,.15)" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="370" y="194" fill="#00d4ff" text-anchor="middle">Testing</text>
+<rect x="380" y="220" width="160" height="40" rx="6" fill="rgba(0,212,255,.15)" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="460" y="244" fill="#00d4ff" text-anchor="middle">Maintenance</text>
+<!-- Arrows -->
+<line x1="100" y1="60" x2="190" y2="70" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowV)"/>
+<line x1="190" y1="110" x2="280" y2="120" stroke="#7c3aed" stroke-width="2"/>
+<line x1="280" y1="160" x2="370" y2="170" stroke="#7c3aed" stroke-width="2"/>
+<line x1="370" y1="210" x2="460" y2="220" stroke="#7c3aed" stroke-width="2"/>
+<text x="300" y="295" fill="#64748b" text-anchor="middle" font-size="10" font-style="italic">The Waterfall Model — Sequential Phase Progression</text>
+</g>
+</svg>
+<div class="diagram-caption">Figure: The Waterfall Model (from Chapter 2 slides)</div>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Incremental Development</h3>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li><strong>Reduced changes' cost</strong> — cost of accommodating changing customer requirements is reduced</li>
+<li><strong>Customer feedback ease</strong> — easier to get feedback on development work</li>
+<li><strong>Rapid delivery & deployment</strong> of useful software to the customer</li>
+</ul>
+<p><strong>Problems:</strong></p>
+<ul>
+<li><strong>Process is not visible</strong> — managers need regular deliverables to measure progress; documentation often skipped</li>
+<li><strong>System structure degrades</strong> as new increments are added — refactoring needed after each increment</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Integration & Configuration (Reuse-Oriented)</h3>
+<p>Based on <strong>software reuse</strong>. Systems integrated from existing components or COTS (Commercial-off-the-shelf) systems.</p>
+<p><strong>Types of reusable software:</strong> Stand-alone applications (COTS), packages to be integrated with frameworks, web services.</p>
+<p><strong>Key process stages:</strong> Requirements specification → Software discovery & evaluation → Requirements refinement → Application system configuration → Component adaptation & integration.</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Advantages</th><th>Disadvantages</th></tr>
+<tr><td>Reduced costs & risks — less software from scratch</td><td>Requirements compromises — may not meet real needs</td></tr>
+<tr><td>Faster delivery & deployment</td><td>Loss of control over evolution of reused elements</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Process Activities</h3>
+<p>The four basic process activities: <strong>specification, development, validation, and evolution</strong>.</p>
+<ul>
+<li><strong>Software Specification:</strong> Establishing what services are required & constraints. Includes elicitation, specification, and validation.</li>
+<li><strong>Software Design & Implementation:</strong> Converting specification into executable system.</li>
+<li><strong>Design activities:</strong> Architectural design, database design, interface design, component selection & design.</li>
+<li><strong>Software Validation:</strong> V&V — verification (building the product right) and validation (building the right product). Includes development testing, system testing, acceptance testing.</li>
+<li><strong>Software Evolution:</strong> Software is inherently flexible and can change as requirements change.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Process Improvement & CMM</h3>
+<p><strong>Software Process Improvement</strong> means understanding existing processes and changing them to increase product quality and/or reduce costs and development time.</p>
+<p><strong>Two approaches:</strong></p>
+<ul>
+<li><strong>Process Maturity Approach:</strong> Focus on improving process and project management; defined maturity levels. For plan-driven approaches.</li>
+<li><strong>Agile Approach:</strong> Focus on iterative development and reduction of overheads; rapid delivery; responsiveness to changing requirements.</li>
+</ul>
+<p><strong>The Process Improvement Cycle:</strong> Measure → Analyze → Change → Re-measure</p>
+
+<h3 class="sub2">SEI Capability Maturity Model (CMM)</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Level</th><th>Name</th><th>Description</th></tr>
+<tr><td>1</td><td>Initial</td><td>Unmanaged work, no documentation, no cost estimation. Vast majority of organizations.</td></tr>
+<tr><td>2</td><td>Managed</td><td>Defined organizational policies, documented project plan, resource management done properly.</td></tr>
+<tr><td>3</td><td>Defined</td><td>Process management procedures and strategies defined, proper teamwork, collaborative learning.</td></tr>
+<tr><td>4</td><td>Quantitatively Managed</td><td>Assess organizational performance, better project management, risk analysis and proactive approaches.</td></tr>
+<tr><td>5</td><td>Optimising</td><td>Process improvement strategies defined, increased adaptation to newer trends.</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ===== AGILE ===== -->
+<h2 class="sub-heading" id="a-agile">Chapter 3 — Agile Software Development</h2>
+
+<div class="card">
+<h3 class="sub2">Agile Development Overview</h3>
+<ul>
+<li>Program specification, design and implementation are <strong>inter-leaved</strong>.</li>
+<li>System developed as a <strong>series of versions or increments</strong> with stakeholders involved in specification and evaluation.</li>
+<li><strong>Frequent delivery</strong> of new versions every 2–3 weeks.</li>
+<li><strong>Minimize documentation</strong> overhead.</li>
+</ul>
+<p><strong>Principles of Agile:</strong></p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Principle</th><th>Description</th></tr>
+<tr><td>Customer involvement</td><td>Customers closely involved; provide and prioritize requirements; evaluate iterations.</td></tr>
+<tr><td>Incremental delivery</td><td>Software developed in increments with customer specifying requirements for each.</td></tr>
+<tr><td>People not process</td><td>Skills of development team recognized; team develops own ways of working.</td></tr>
+<tr><td>Embrace change</td><td>Expect system requirements to change; design system to accommodate changes.</td></tr>
+<tr><td>Maintain simplicity</td><td>Focus on simplicity in software and development process; eliminate complexity.</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Extreme Programming (XP)</h3>
+<p>Takes an 'extreme' approach to iterative development. Requirements expressed as <strong>user stories</strong>.</p>
+<p><strong>Key Concepts:</strong></p>
+<ul>
+<li><strong>User Stories:</strong> Simple, informal statements of customer about functionalities needed. Written on task cards.</li>
+<li><strong>Metaphors:</strong> Show how system would work.</li>
+<li><strong>Spike:</strong> Very simple program to explore suitability of a proposed solution (similar to prototype).</li>
+</ul>
+<p><strong>XP Practices:</strong></p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Practice</th><th>Description</th></tr>
+<tr><td>Incremental planning</td><td>Requirements on story cards; broken into development 'Tasks'.</td></tr>
+<tr><td>Small releases</td><td>Minimal useful functionality first; frequent incremental releases.</td></tr>
+<tr><td>Simple design</td><td>Enough design to meet current requirements and no more.</td></tr>
+<tr><td>Test-first development</td><td>Automated unit tests written before functionality is implemented.</td></tr>
+<tr><td>Refactoring</td><td>Continuously improve code as soon as improvements are found.</td></tr>
+<tr><td>Pair programming</td><td>Developers work in pairs, checking each other's work.</td></tr>
+<tr><td>Collective ownership</td><td>All developers take responsibility for all the code. Anyone can change anything.</td></tr>
+<tr><td>Continuous integration</td><td>Completed work integrated immediately; all unit tests must pass.</td></tr>
+<tr><td>On-site customer</td><td>Customer representative available full time for the XP team.</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Scrum</h3>
+<p>Scrum is an agile method providing a <strong>project management framework</strong> with three phases:</p>
+<ol>
+<li><strong>Initial phase:</strong> Outline planning — establish general objectives and design software architecture.</li>
+<li><strong>Sprint cycles:</strong> Each cycle develops an increment of the system (2–4 weeks).</li>
+<li><strong>Project closure:</strong> Wrap up, documentation, lessons learned.</li>
+</ol>
+
+<div class="tbl-wrap">
+<table>
+<tr><th>Scrum Term</th><th>Definition</th></tr>
+<tr><td>Development team</td><td>Self-organizing group, no more than 7 people.</td></tr>
+<tr><td>Sprint</td><td>A development iteration, usually 2–4 weeks long.</td></tr>
+<tr><td>Product backlog</td><td>To-do list for Scrum Team (user stories, supplementary tasks).</td></tr>
+<tr><td>Product owner</td><td>Identifies requirements, prioritizes development, continuously reviews backlog.</td></tr>
+<tr><td>Scrum Master</td><td>Takes follow up; guides team; deals with organization; similar to project manager.</td></tr>
+<tr><td>Sprint Velocity</td><td>Estimate of how much backlog effort a team can cover in a single sprint.</td></tr>
+<tr><td>Scrum of Scrums</td><td>Daily meeting of representatives from each team for multi-team Scrum.</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ===== REQUIREMENTS ENGINEERING ===== -->
+<h2 class="sub-heading" id="a-re">Chapter 4 — Requirements Engineering</h2>
+
+<div class="card">
+<h3 class="sub2">Requirements & Types</h3>
+<p><strong>Requirements:</strong> The services a customer requires from a system & the constraints under which it operates.</p>
+<ul>
+<li><strong>User requirements:</strong> Written in natural language, non-technical terms; high-level view for stakeholders/managers.</li>
+<li><strong>System requirements:</strong> Structured document with detailed descriptions of functions, services, and constraints; defines what should be implemented; may be part of contract.</li>
+</ul>
+<p><strong>Functional Requirements:</strong> Specific functionalities the system must provide (e.g., sign up, login, search).</p>
+<p><strong>Non-Functional Requirements:</strong> Constraints on system's operation — arise from organizational policies, product requirements, or external sources.</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>NFR Type</th><th>Description</th><th>Example (Hospital System)</th></tr>
+<tr><td>Product</td><td>Constraints on runtime behavior</td><td>System available Mon-Fri, 08:30-17:30; downtime ≤ 5 sec/day</td></tr>
+<tr><td>Organizational</td><td>Derive from policies & procedures</td><td>Users authenticate using ID cards</td></tr>
+<tr><td>External</td><td>Requirements from regulatory bodies</td><td>Respect patient privacy per ethics code</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Requirements Engineering Process</h3>
+<p><strong>Generic activities:</strong> Feasibility → Elicitation & Analysis → Specification → Validation (iterative, interleaved).</p>
+<p><strong>Requirements Discovery Techniques:</strong></p>
+<ul>
+<li><strong>Interviewing:</strong> Closed interviews (pre-determined questions) and open interviews (explore requirements).</li>
+<li><strong>Ethnography:</strong> Observing how people actually work; good for understanding existing processes but cannot suggest innovation.</li>
+<li><strong>Scenarios:</strong> Structured form of user story — starting situation, normal flow, what can go wrong, concurrent activities, finished state.</li>
+</ul>
+<p><strong>Requirements Validation:</strong> Checking requirements define the system as per customer desires. Fixing requirements errors after delivery may cost <strong>up to 100 times</strong> the cost of fixing implementation errors.</p>
+<p><strong>Validation techniques:</strong> Requirements review, prototyping, test-case generation/TDD.</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">Requirements Change Management</h3>
+<p><strong>Reasons for change:</strong></p>
+<ol>
+<li>Business/technical environment changes after installation.</li>
+<li>System customers vs. users — different people with different needs and budgets.</li>
+<li>Diverse user community with conflicting requirements; final system is a compromise.</li>
+</ol>
+<p><strong>Requirements management planning includes:</strong> Requirements identification (unique IDs), change management process (assess impact & cost), traceability policies, tool support.</p>
+</div>
+
+<!-- ===== WBS ===== -->
+<h2 class="sub-heading" id="a-wbs">Work Breakdown Structure (WBS)</h2>
+
+<div class="card">
+<h3 class="sub2">What is WBS?</h3>
+<p>"A <strong>hierarchical decomposition</strong> of the total scope of work to be carried out by the project team to accomplish the project objectives and create the required deliverables."</p>
+<p><strong>Why is it needed?</strong></p>
+<ul>
+<li>For activities identification</li>
+<li>For correct estimation</li>
+<li>Identify related activities using PERT</li>
+<li>Creating schedules</li>
+<li>Project failure risk minimized</li>
+</ul>
+<p><strong>When?</strong> After finalizing project scope and before project estimation.</p>
+<p><strong>Levels:</strong> Level 0 = project title → Level 1 = control accounts (4–7 nodes) → Level 2 = work packages → Level 3 = tasks/activities.</p>
+
+<!-- WBS Diagram -->
+<div class="diagram-container" onclick="openModal(this)">
+<svg viewBox="0 0 650 260" xmlns="http://www.w3.org/2000/svg">
+<rect width="650" height="260" fill="#0d1117" rx="8"/>
+<g font-family="Space Grotesk,sans-serif" font-size="10" font-weight="600">
+<!-- Root -->
+<rect x="240" y="10" width="170" height="32" rx="6" fill="rgba(0,212,255,.2)" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="325" y="30" fill="#00d4ff" text-anchor="middle">LMS Project (Level 0)</text>
+<!-- Level 1 -->
+<rect x="10" y="70" width="100" height="28" rx="5" fill="rgba(124,58,237,.15)" stroke="#7c3aed"/>
+<text x="60" y="88" fill="#7c3aed" text-anchor="middle" font-size="8">1. Initiation</text>
+<rect x="120" y="70" width="100" height="28" rx="5" fill="rgba(124,58,237,.15)" stroke="#7c3aed"/>
+<text x="170" y="88" fill="#7c3aed" text-anchor="middle" font-size="8">2. Design</text>
+<rect x="230" y="70" width="100" height="28" rx="5" fill="rgba(124,58,237,.15)" stroke="#7c3aed"/>
+<text x="280" y="88" fill="#7c3aed" text-anchor="middle" font-size="8">3. Development</text>
+<rect x="340" y="70" width="100" height="28" rx="5" fill="rgba(124,58,237,.15)" stroke="#7c3aed"/>
+<text x="390" y="88" fill="#7c3aed" text-anchor="middle" font-size="8">4. Testing</text>
+<rect x="450" y="70" width="100" height="28" rx="5" fill="rgba(124,58,237,.15)" stroke="#7c3aed"/>
+<text x="500" y="88" fill="#7c3aed" text-anchor="middle" font-size="8">5. Deployment</text>
+<rect x="560" y="70" width="80" height="28" rx="5" fill="rgba(124,58,237,.15)" stroke="#7c3aed"/>
+<text x="600" y="88" fill="#7c3aed" text-anchor="middle" font-size="8">6. Maintenance</text>
+<!-- Lines from root -->
+<line x1="325" y1="42" x2="60" y2="70" stroke="#64748b" stroke-width="1"/>
+<line x1="325" y1="42" x2="170" y2="70" stroke="#64748b" stroke-width="1"/>
+<line x1="325" y1="42" x2="280" y2="70" stroke="#64748b" stroke-width="1"/>
+<line x1="325" y1="42" x2="390" y2="70" stroke="#64748b" stroke-width="1"/>
+<line x1="325" y1="42" x2="500" y2="70" stroke="#64748b" stroke-width="1"/>
+<line x1="325" y1="42" x2="600" y2="70" stroke="#64748b" stroke-width="1"/>
+<!-- Level 2 under Development -->
+<rect x="200" y="120" width="76" height="24" rx="4" fill="rgba(255,255,255,.05)" stroke="#94a3b8"/>
+<text x="238" y="136" fill="#e2e8f0" text-anchor="middle" font-size="7">3.1 Student Mod</text>
+<rect x="282" y="120" width="76" height="24" rx="4" fill="rgba(255,255,255,.05)" stroke="#94a3b8"/>
+<text x="320" y="136" fill="#e2e8f0" text-anchor="middle" font-size="7">3.2 Faculty Mod</text>
+<rect x="364" y="120" width="76" height="24" rx="4" fill="rgba(255,255,255,.05)" stroke="#94a3b8"/>
+<text x="402" y="136" fill="#e2e8f0" text-anchor="middle" font-size="7">3.3 Admin Mod</text>
+<line x1="280" y1="98" x2="238" y2="120" stroke="#64748b"/>
+<line x1="280" y1="98" x2="320" y2="120" stroke="#64748b"/>
+<line x1="280" y1="98" x2="402" y2="120" stroke="#64748b"/>
+<!-- Level 3 under Student -->
+<rect x="168" y="165" width="70" height="20" rx="3" fill="rgba(255,255,255,.03)" stroke="#64748b"/>
+<text x="203" y="178" fill="#94a3b8" text-anchor="middle" font-size="6">Registration</text>
+<rect x="244" y="165" width="70" height="20" rx="3" fill="rgba(255,255,255,.03)" stroke="#64748b"/>
+<text x="279" y="178" fill="#94a3b8" text-anchor="middle" font-size="6">Course Access</text>
+<rect x="320" y="165" width="70" height="20" rx="3" fill="rgba(255,255,255,.03)" stroke="#64748b"/>
+<text x="355" y="178" fill="#94a3b8" text-anchor="middle" font-size="6">Assignment Sub</text>
+<line x1="238" y1="144" x2="203" y2="165" stroke="#64748b" stroke-dasharray="3"/>
+<line x1="238" y1="144" x2="279" y2="165" stroke="#64748b" stroke-dasharray="3"/>
+<line x1="238" y1="144" x2="355" y2="165" stroke="#64748b" stroke-dasharray="3"/>
+<text x="325" y="220" fill="#64748b" font-size="9" text-anchor="middle" font-style="italic">WBS for Online LMS — 3 Levels (from WBS case study)</text>
+</g>
+</svg>
+<div class="diagram-caption">Figure: Work Breakdown Structure — Graphical Tree Format (from WBS slides)</div>
+</div>
+</div>
+
+<!-- ===== ESTIMATION (DELPHI) ===== -->
+<h2 class="sub-heading" id="a-estimation">Software Project Estimation — Wideband Delphi</h2>
+
+<div class="card">
+<h3 class="sub2">The Wideband Delphi Process</h3>
+<p>Wideband Delphi is a <strong>repeatable estimation process</strong> where a team generates estimates through consensus.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li><strong>Choose the team:</strong> 3–7 project team members + moderator (not project manager ideally).</li>
+<li><strong>Kickoff Meeting:</strong> Understand project, brainstorm assumptions, generate WBS, agree on unit of estimation.</li>
+<li><strong>Individual Preparation:</strong> Each member independently generates estimates for each task + additional assumptions.</li>
+<li><strong>Estimation Session:</strong> Team consensus through multiple rounds. Moderator plots estimates on a line. Individual estimates not discussed. Goal: achieve maximum convergence.</li>
+<li><strong>Assemble Tasks:</strong> Project manager compiles final task list, estimates and assumptions.</li>
+<li><strong>Review Results:</strong> Final review with estimation team.</li>
+</ol>
+</div>
+
+<div class="mistakes">
+<h4>⚠️ Common Mistakes — Part A</h4>
+<ul>
+<li>Confusing Waterfall with Incremental — Waterfall is sequential, Incremental interleaves activities.</li>
+<li>Mixing up user requirements (natural language, high-level) with system requirements (structured, detailed).</li>
+<li>Forgetting that functional requirements depend on non-functional ones (e.g., security → authentication).</li>
+<li>Confusing CMM levels — Level 1 is Initial (chaos), not "basic".</li>
+<li>WBS levels: Level 0 = project, Level 1 = control accounts, Level 2 = work packages.</li>
+</ul>
+</div>
+
+<div class="recap">
+<h4>✅ Quick Exam Recap — What the Examiner Expects (Part A)</h4>
+<ul>
+<li>Define SE, its importance, and distinguish from CS and system engineering.</li>
+<li>Compare Generic vs Custom software products.</li>
+<li>Explain and diagram the Waterfall, Incremental, and Reuse-oriented models with pros/cons.</li>
+<li>Agile principles, XP practices (test-first, pair programming, refactoring), Scrum terminology.</li>
+<li>Functional vs Non-functional requirements with examples.</li>
+<li>RE process: elicitation techniques (interview, ethnography, scenarios).</li>
+<li>WBS: definition, levels, purpose, and how to create one.</li>
+<li>Wideband Delphi: all 6 steps.</li>
+<li>CMM: all 5 levels with characteristics.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- PART B — MID-II SYLLABUS (20%) -->
+<!-- ============================================================ -->
+<div class="part-heading ph-b" id="b-arch1">📗 PART B — Mid-II Syllabus <span class="pill">20%</span></div>
+
+<h2 class="sub-heading">Architectural Design — Fundamentals</h2>
+
+<div class="card">
+<h3 class="sub2">What is Architectural Design?</h3>
+<p>The <strong>1st stage in software design process</strong>, concerned with understanding how a software system should be organized and designing the overall structure. It is the <strong>critical link between design and requirements engineering</strong>.</p>
+<p><strong>Architectural abstraction levels:</strong></p>
+<ul>
+<li><strong>Architecture in the small:</strong> Architecture of individual programs — how a program is decomposed into components.</li>
+<li><strong>Architecture in the large:</strong> Architecture of complex enterprise systems that include other systems, programs, distributed over different computers.</li>
+</ul>
+<p><strong>Advantages of explicit architecture:</strong> Stakeholder communication, system analysis over NFRs, large-scale reuse.</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">4+1 View Model (Krutchen, 1995)</h3>
+<ul>
+<li><strong>Logical view:</strong> Key abstractions as objects/classes — relate requirements to entities.</li>
+<li><strong>Process view:</strong> How system interacts with processes at run-time — useful for availability/performance.</li>
+<li><strong>Development view:</strong> Breakdown of software assigned to teams — useful for managers & developers.</li>
+<li><strong>Physical view:</strong> How hardware & software distributed across processors — useful for system engineers.</li>
+<li><strong>+1 Conceptual view (Hofmeister):</strong> Abstract view for product line architecture reuse.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Architecture & NFR Trade-offs</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>NFR</th><th>Architectural Strategy</th></tr>
+<tr><td>Performance</td><td>Localize critical operations in few components; don't use distributed; use large-grain components; use multiple processors.</td></tr>
+<tr><td>Security</td><td>Layered architecture with critical assets in inner layers (multi-tier).</td></tr>
+<tr><td>Safety</td><td>Localize safety-critical features in small number of subsystems; separate shutdown system.</td></tr>
+<tr><td>Availability</td><td>Include redundant components for replacement/update on fault occurrence.</td></tr>
+<tr><td>Maintainability</td><td>Fine-grained components that can be changed; avoid shared data structures.</td></tr>
+</table>
+</div>
+<p><strong>Conflict:</strong> Performance improves with fewer components; maintainability improves with more. Solution: compromise or use multiple architectural styles for separate parts.</p>
+</div>
+
+<!-- ===== ARCHITECTURAL PATTERNS ===== -->
+<h2 class="sub-heading" id="b-patterns">Architectural Patterns</h2>
+
+<div class="card">
+<h3 class="sub2">Model-View-Controller (MVC)</h3>
+<p>Separates presentation and interaction from system data into 3 parts:</p>
+<ul>
+<li><strong>Model:</strong> Manages system data and associated operations.</li>
+<li><strong>View:</strong> Defines and manages how data is presented.</li>
+<li><strong>Controller:</strong> Manages user interaction and passes to View and Model.</li>
+</ul>
+<p><strong>When used:</strong> Multiple ways to view/interact with data; future requirements unknown.</p>
+<p><strong>Advantage:</strong> Data changes independently of representation. <strong>Disadvantage:</strong> Additional code complexity.</p>
+
+<div class="diagram-container" onclick="openModal(this)">
+<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+<rect width="500" height="200" fill="#0d1117" rx="8"/>
+<g font-family="Space Grotesk,sans-serif" font-size="11" font-weight="600">
+<rect x="200" y="15" width="100" height="40" rx="6" fill="rgba(0,212,255,.2)" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="250" y="39" fill="#00d4ff" text-anchor="middle">Controller</text>
+<rect x="50" y="120" width="100" height="40" rx="6" fill="rgba(124,58,237,.2)" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="100" y="144" fill="#7c3aed" text-anchor="middle">Model</text>
+<rect x="350" y="120" width="100" height="40" rx="6" fill="rgba(245,158,11,.2)" stroke="#f59e0b" stroke-width="1.5"/>
+<text x="400" y="144" fill="#f59e0b" text-anchor="middle">View</text>
+<!-- Arrows -->
+<line x1="220" y1="55" x2="120" y2="120" stroke="#7c3aed" stroke-width="1.5"/>
+<line x1="280" y1="55" x2="380" y2="120" stroke="#f59e0b" stroke-width="1.5"/>
+<line x1="150" y1="140" x2="350" y2="140" stroke="#64748b" stroke-width="1" stroke-dasharray="4"/>
+<text x="250" y="148" fill="#64748b" text-anchor="middle" font-size="8">notify</text>
+<text x="170" y="85" fill="#94a3b8" font-size="8">update</text>
+<text x="330" y="85" fill="#94a3b8" font-size="8">render</text>
+</g>
+</svg>
+<div class="diagram-caption">Figure: MVC Pattern Organization (from Architecture Design 2 slides)</div>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Layered Architecture</h3>
+<p>Organizes system into <strong>layers with related functionality</strong>. Each layer provides services to the layer above. Typically: UI → Auth & Authorization → Business Logic → OS/DB.</p>
+<ul>
+<li><strong>Rules:</strong> Upper layer talks to layer below only; no jumping between layers; lower layers never call upper layers.</li>
+<li><strong>Advantages:</strong> Easy to embed NFRs (security); adjacent layer only affected on update; supports multi-platform.</li>
+<li><strong>Disadvantages:</strong> Performance issue (multiple layers); difficult to code (maintaining layer independence).</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Repository Architecture</h3>
+<p>All data managed in a <strong>central repository</strong> accessible to all system components. Components don't interact directly — only through the repository. Static structure (doesn't change at runtime).</p>
+<p><strong>Advantages:</strong> Components independent, changes propagated to all, consistent data management.</p>
+<p><strong>Disadvantages:</strong> Single point of failure, difficult to distribute across computers.</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">Client-Server Architecture</h3>
+<p>Runtime organization of <strong>distributed systems</strong>. Set of servers offering services + clients accessing them via network.</p>
+<p><strong>Advantages:</strong> Resource sharing, independent servers, no single point failure, transparent upgradation.</p>
+<p><strong>Disadvantages:</strong> Each service is single point of failure (DoS attacks), unpredictable performance (network dependent).</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">Pipe and Filter Architecture</h3>
+<p>Each processing component (filter) is discrete and carries out one type of data transformation. Data flows (as in pipe) from one component to another.</p>
+<p><strong>When used:</strong> Data processing applications, compilers (lexical analysis → parsing → semantic analysis → code generation).</p>
+<p><strong>Advantages:</strong> Easy to understand, supports transformation reuse, sequential or concurrent.</p>
+<p><strong>Disadvantages:</strong> Data format must be agreed between transformations; increases system overhead.</p>
+</div>
+
+<!-- ===== APPLICATION ARCHITECTURES ===== -->
+<h2 class="sub-heading" id="b-app-arch">Application Architectures</h2>
+
+<div class="card">
+<h3 class="sub2">Application Types</h3>
+<ul>
+<li><strong>Data processing applications:</strong> Process data in batches without user intervention.</li>
+<li><strong>Transaction processing:</strong> Process user requests and update information in database. Transaction = atomic sequence of operations.</li>
+<li><strong>Event processing systems:</strong> Actions depend on interpreting events from environment.</li>
+<li><strong>Language processing systems:</strong> Users' intentions specified in formal language, processed and interpreted by system (e.g., compilers).</li>
+</ul>
+</div>
+
+<!-- ===== DESIGN CONCEPTS ===== -->
+<h2 class="sub-heading" id="b-design">Design Concepts</h2>
+
+<div class="card">
+<h3 class="sub2">Fundamental Design Concepts</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Concept</th><th>Description</th></tr>
+<tr><td>Abstraction</td><td>Show only upper level details, hide implementation. Data, procedure, control abstraction.</td></tr>
+<tr><td>Refinement</td><td>Going into details; decompose until clearly elaborates the system. Complementary to abstraction.</td></tr>
+<tr><td>Separation of Concerns</td><td>Complex problem subdivided into pieces that can each be solved independently.</td></tr>
+<tr><td>Modularity</td><td>Software decomposed into separately named, addressable modules integrated to fulfil requirements.</td></tr>
+<tr><td>Information Hiding</td><td>Controlled interfaces; access constraints to local details; discourages global data.</td></tr>
+<tr><td>Functional Independence</td><td>Each module addresses a subset of requirements with a simple interface. Assessed via cohesion and coupling.</td></tr>
+<tr><td>Refactoring</td><td>Simplify design without changing behavior; eliminate redundant code.</td></tr>
+<tr><td>Aspects</td><td>Representation of cross-cutting concerns (e.g., security requirement affecting all functions).</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Cohesion and Coupling</h3>
+<ul>
+<li><strong>Cohesion:</strong> Relative functional strength of a module. A cohesive module performs a <strong>single task</strong> — ideally do just one thing. <em>High cohesion = good design.</em></li>
+<li><strong>Coupling:</strong> Relative interdependence among modules. Depends on interface complexity, entry/reference points, data passing. <em>Low coupling = good design.</em></li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Design Model Elements</h3>
+<ul>
+<li><strong>Data elements:</strong> Data model → data structures → database architecture.</li>
+<li><strong>Architectural elements:</strong> Application domain, patterns & styles.</li>
+<li><strong>Interface elements:</strong> UI design, external interfaces to other systems, internal interfaces between components.</li>
+<li><strong>Component elements:</strong> Internal details — data structures, algorithmic details, interface for access.</li>
+<li><strong>Deployment elements:</strong> Physical computing environment (distributed or standalone).</li>
+</ul>
+</div>
+
+<!-- ===== TESTING ===== -->
+<h2 class="sub-heading" id="b-testing1">Software Testing</h2>
+
+<div class="card">
+<h3 class="sub2">Testing Fundamentals</h3>
+<p><strong>Testing:</strong> Showing what a program is doing and detecting anomalies. Part of Software V&V (Verification & Validation).</p>
+<ul>
+<li><strong>Validation:</strong> "Are we building the right product?"</li>
+<li><strong>Verification:</strong> "Are we building the product right?"</li>
+<li><strong>Black-box testing:</strong> Testing without checking inner details.</li>
+<li><strong>White-box testing:</strong> Testing each component separately (internal structure).</li>
+</ul>
+<p><strong>Testing goals:</strong></p>
+<ul>
+<li><strong>Validation testing:</strong> Confirms system meets user requirements.</li>
+<li><strong>Defect testing:</strong> Find bugs — a successful defect test makes system perform incorrectly.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Stages of Development Testing</h3>
+<ol>
+<li><strong>Unit testing:</strong> Individual program units/object classes tested in isolation. Defect testing process. Test all operations, attributes, and state changes.</li>
+<li><strong>Component testing:</strong> Multiple units integrated; test components' compatibility and proper data transfer.</li>
+<li><strong>System testing:</strong> All components integrated; test component interactions, compatibility, correct data transfer.</li>
+</ol>
+<p><strong>Test case strategies:</strong></p>
+<ul>
+<li><strong>Partition testing (Equivalence partitioning):</strong> Identify groups of inputs with common characteristics; choose tests from each group + boundary values.</li>
+<li><strong>Guideline-based testing:</strong> Use guidelines reflecting previous experience of common errors.</li>
+</ul>
+</div>
+
+<!-- ===== BASIS PATH TESTING ===== -->
+<h2 class="sub-heading" id="b-bpt">Basis Path Testing & Cyclomatic Complexity</h2>
+
+<div class="card">
+<h3 class="sub2">Basis Path Testing</h3>
+<p>A <strong>white-box testing technique</strong> to design test cases ensuring all possible execution paths tested at least once.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li><strong>Label steps</strong> in the code.</li>
+<li><strong>Create control flow graph</strong> using control flow symbols.</li>
+<li><strong>Calculate Cyclomatic Complexity (CC)</strong> and <strong>select independent paths</strong>.</li>
+<li><strong>Create test cases</strong> for each path.</li>
+</ol>
+
+<div class="formula-block">
+<div class="formula">CC = E - N + 2P</div>
+<div class="vars">
+Where: <strong>E</strong> = number of edges, <strong>N</strong> = number of nodes, <strong>P</strong> = number of connected components (usually 1)<br>
+CC also = number of decision points + 1 (for single program)
+</div>
+<button class="copy-btn" onclick="copyFormula(this,'CC = E - N + 2P')">📋 Copy</button>
+</div>
+
+<div class="numerical">
+<p><strong>Example: Triangle Classifier (from slides)</strong></p>
+<p><span class="step-label">GIVEN →</span> Code with 4 decision paths: not a triangle, equilateral, isosceles, scalene</p>
+<p><span class="step-label">PATHS →</span></p>
+<p>Path 1: 1-2-3-10 (Not a triangle)</p>
+<p>Path 2: 1-2-4-5-10 (Equilateral)</p>
+<p>Path 3: 1-2-4-6-7-10 (Isosceles)</p>
+<p>Path 4: 1-2-4-6-8-9-10 (Scalene)</p>
+<p><span class="step-label">CC =</span> 4 independent paths</p>
+<div class="answer-box">CC = 4 (4 test cases needed)</div>
+<p class="meaning">💡 This means we need at minimum 4 test cases to cover all execution paths through this code.</p>
+</div>
+
+<div class="numerical">
+<p><strong>Example 2: Calculate shipping (from slides)</strong></p>
+<p><span class="step-label">GIVEN →</span> calculate(int amount) function with nextDay check + 6 amount ranges</p>
+<p><span class="step-label">PATHS →</span></p>
+<p>P-01: 1,2,3,5,7,9,11,13,14</p>
+<p>P-02: 1,3,4,14 (amount ≥ 1000)</p>
+<p>P-03: 1,3,5,6,14 (amount ≥ 200)</p>
+<p>P-04: 1,3,5,7,8,14 (amount ≥ 100)</p>
+<p>P-05: 1,3,5,7,9,10,14 (amount ≥ 50)</p>
+<p>P-06: 1,3,5,7,9,11,12,14 (amount ≥ 25)</p>
+<p>P-07: 1,3,5,7,9,11,13,14 (amount < 25)</p>
+<div class="answer-box">CC = 7 paths → 7 test cases needed</div>
+</div>
+</div>
+
+<!-- ===== COMPONENT / RELEASE / USER TESTING ===== -->
+<h2 class="sub-heading" id="b-testing3">Component, Release & User Testing</h2>
+
+<div class="card">
+<h3 class="sub2">Interface Testing</h3>
+<p>Testing components that enable interaction between different components. Interface errors can't be identified from unit testing.</p>
+<p><strong>Interface types:</strong> Parameter interfaces, Shared memory interfaces, Procedural interfaces, Message passing interfaces.</p>
+<p><strong>Types of interface errors:</strong> Interface misuse (wrong parameters), Interface misunderstanding (wrong assumptions), Timing errors (shared memory speed mismatch).</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">Test-Driven Development (TDD)</h3>
+<p>Tests written <strong>before code</strong>. Develop code incrementally with a test for each increment.</p>
+<p><strong>Benefits:</strong> Code coverage, regression testing, simplified debugging, system documentation (tests as documentation).</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">Release & User Testing</h3>
+<p><strong>Release testing:</strong> Testing for external use — validation testing (black-box). Includes requirements-based testing and performance/stress testing.</p>
+<p><strong>User testing types:</strong></p>
+<ul>
+<li><strong>Alpha testing:</strong> Users work with development team at developer's site.</li>
+<li><strong>Beta testing:</strong> Release made available to users (early adopters) to discover problems.</li>
+<li><strong>Acceptance testing:</strong> Customer tests to decide whether to accept and deploy.</li>
+</ul>
+</div>
+
+<!-- ===== UI DESIGN ===== -->
+<h2 class="sub-heading" id="b-ui">User Interface Design</h2>
+
+<div class="card">
+<h3 class="sub2">Golden Rules for UI Design (Theo Mandel)</h3>
+<p><strong>Principle 1: Allow users to maintain control</strong></p>
+<ul>
+<li>Define interactive modes allowing free user actions with easy switching.</li>
+<li>Allow flexible interaction (mouse, keyboard, voice, touch).</li>
+<li>Allow user interaction to be uninterruptable and undoable.</li>
+<li>Hide technical internals from casual users.</li>
+<li>Design for direct interaction with on-screen objects.</li>
+</ul>
+<p><strong>Principle 2: Reduce user's memory load</strong></p>
+<ul>
+<li>Use list boxes/checkboxes rather than text boxes.</li>
+<li>Establish meaningful defaults with reset option.</li>
+<li>Define intuitive shortcuts (Ctrl+P for print).</li>
+<li>Disclose information in progressive fashion.</li>
+</ul>
+<p><strong>Principle 3: Make consistent interface</strong></p>
+<ul>
+<li>Allow users to put tasks in meaningful context (labels, consistent color coding).</li>
+<li>Maintain consistency across family of applications.</li>
+<li>Don't redefine user's past experiences (e.g., Ctrl+S = save, not scale).</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">UI Design Issues</h3>
+<ul>
+<li><strong>System response time:</strong> Length (longer = user frustration) and variability (varying = user confusion).</li>
+<li><strong>Help facilities:</strong> Availability for all functionalities, how to access, how presented.</li>
+<li><strong>Error handling:</strong> Messages must be explanatory with remedies; describe problem, provide advice, list consequences.</li>
+<li><strong>Menu & command labeling:</strong> How commands assigned to menu items.</li>
+<li><strong>Accessibility:</strong> Cater needs of physically challenged (e.g., voice inputs).</li>
+<li><strong>Internationalization:</strong> Target global market, follow global design standards, multiple languages.</li>
+</ul>
+</div>
+
+<div class="mistakes">
+<h4>⚠️ Common Mistakes — Part B</h4>
+<ul>
+<li>Confusing Repository (static, central database) with Client-Server (runtime, distributed).</li>
+<li>MVC: Controller is the middleman, not the View. Model handles data logic.</li>
+<li>Cyclomatic Complexity CC = E - N + 2P — don't forget 2P (P usually = 1).</li>
+<li>Cohesion is about module internal strength (high = good); Coupling is about interdependence (low = good).</li>
+<li>Alpha testing = developer's site; Beta testing = user's site. Don't mix them up.</li>
+<li>TDD: Tests come BEFORE code, not after.</li>
+</ul>
+</div>
+
+<div class="recap">
+<h4>✅ Quick Exam Recap — What the Examiner Expects (Part B)</h4>
+<ul>
+<li>4+1 architectural view model with all views explained.</li>
+<li>All architectural patterns (MVC, Layered, Repository, Client-Server, Pipe & Filter) with pros/cons/when-to-use.</li>
+<li>Design concepts: abstraction, refinement, modularity, information hiding, cohesion, coupling.</li>
+<li>Testing levels: unit → component → system → release → user.</li>
+<li>Basis Path Testing steps and Cyclomatic Complexity formula with worked examples.</li>
+<li>TDD process and benefits.</li>
+<li>Mandel's 3 Golden Rules for UI design.</li>
+<li>Interface testing types and error categories.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- PART C — FINAL SYLLABUS (70%) -->
+<!-- ============================================================ -->
+<div class="part-heading ph-c" id="c-qm">📙 PART C — Final Syllabus <span class="pill">70%</span></div>
+
+<h2 class="sub-heading">Quality Management</h2>
+
+<div class="card">
+<h3 class="sub2">Parts of Quality Management</h3>
+<ul>
+<li><strong>Quality Planning:</strong> What could be improved to enhance overall software quality.</li>
+<li><strong>Quality Assurance:</strong> Using quality process & standard procedures to develop quality product. Involves V&V.</li>
+<li><strong>Quality Control:</strong> Testing products and identifying defects.</li>
+<li><strong>Quality Improvement:</strong> Improving quality with emerging requirements.</li>
+</ul>
+<p>QM team should be <strong>independent from development team</strong> — to report on quality without being influenced by development issues.</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">Software Quality Attributes</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Category 1</th><th>Category 2</th><th>Category 3</th></tr>
+<tr><td>Safety</td><td>Understandability</td><td>Portability</td></tr>
+<tr><td>Security</td><td>Testability</td><td>Usability</td></tr>
+<tr><td>Reliability</td><td>Adaptability</td><td>Reusability</td></tr>
+<tr><td>Resilience</td><td>Modularity</td><td>Efficiency</td></tr>
+<tr><td>Robustness</td><td>Complexity</td><td>Learnability</td></tr>
+</table>
+</div>
+<p><strong>Important:</strong> Impossible for a system to be optimized for all attributes — must list attributes over which quality should be assessed.</p>
+<p><strong>Process-based quality:</strong> Quality of product is influenced by quality of production process. Development team's experience matters; novelty or fast-paced schedule may reduce quality.</p>
+</div>
+
+<div class="card">
+<h3 class="sub2">Software Standards</h3>
+<p><strong>Types:</strong> External (international, national) and Internal (organizational, project-specific).</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Product Standards</th><th>Process Standards</th></tr>
+<tr><td>Design review form</td><td>Design review conduct</td></tr>
+<tr><td>Requirements document structure</td><td>Submission of new code for system building</td></tr>
+<tr><td>Method header format</td><td>Version release process</td></tr>
+<tr><td>Java programming style</td><td>Project plan approval process</td></tr>
+<tr><td>Project plan format</td><td>Change control process</td></tr>
+<tr><td>Change request form</td><td>Test recording process</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Reviews, Inspections & Metrics</h3>
+<p><strong>Reviews:</strong> A group examines process/system and documentation to find potential problems. Types: Quality reviews, Progress reviews.</p>
+<p><strong>Phases:</strong> Pre-review activities → Review meeting (max 2 hours) → Post-review activities (fix bugs, refactor).</p>
+<p><strong>Inspections:</strong> Team identifies anomalies and defects in code before execution. <strong>60% of defects</strong> can be removed through inspections.</p>
+
+<h3 class="sub2">Inspection Checklist</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Fault Class</th><th>Checks</th></tr>
+<tr><td>Data faults</td><td>Variables initialized? Constants named? Array bounds correct? Buffer overflow possible?</td></tr>
+<tr><td>Control faults</td><td>Condition correct? Loops terminate? Compound statements bracketed? All cases accounted for?</td></tr>
+<tr><td>I/O faults</td><td>All input variables used? Output variables assigned before display?</td></tr>
+<tr><td>Interface faults</td><td>Correct number of parameters? Types match? Right order?</td></tr>
+<tr><td>Storage faults</td><td>Links correctly reassigned? Space allocated/deallocated correctly?</td></tr>
+<tr><td>Exception faults</td><td>All possible error conditions accounted for?</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Static Software Product Metrics</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Metric</th><th>Description</th></tr>
+<tr><td>Fan-in/Fan-out</td><td>Fan-in = functions that call X (high = tightly coupled). Fan-out = functions called by X (high = high complexity).</td></tr>
+<tr><td>Length of code</td><td>Larger size → more complex and error-prone. Most reliable predictor of error-proneness.</td></tr>
+<tr><td>Cyclomatic complexity</td><td>Measure of control complexity; relates to program understandability.</td></tr>
+<tr><td>Length of identifiers</td><td>Longer → more meaningful → more understandable.</td></tr>
+<tr><td>Depth of conditional nesting</td><td>Deeply nested if-statements are hard to understand, error-prone.</td></tr>
+<tr><td>Fog index</td><td>Average length of words & sentences in documents. Higher → more difficult to understand.</td></tr>
+</table>
+</div>
+
+<h3 class="sub2">OO Metrics Suite</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Metric</th><th>Description</th></tr>
+<tr><td>WMC (Weighted Methods per Class)</td><td>Number of methods weighted by complexity. Higher → more complex, less cohesive.</td></tr>
+<tr><td>DIT (Depth of Inheritance Tree)</td><td>Number of levels in inheritance. Deeper → more complex design.</td></tr>
+<tr><td>NOC (Number of Children)</td><td>Number of immediate subclasses. High → greater reuse; more validation of base classes needed.</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ===== ESTIMATION OF SOFTWARE ===== -->
+<h2 class="sub-heading" id="c-est">Estimation of Software — LOC & FP</h2>
+
+<div class="card">
+<h3 class="sub2">Lines of Code (LOC) Estimation</h3>
+<p>Count every line of source code <strong>except blanks and comments</strong>.</p>
+<p><strong>Advantages:</strong> Easy to count. <strong>Disadvantages:</strong> Language dependent — not a good universal metric.</p>
+
+<div class="formula-block">
+<div class="formula">Expected LOC = (S_opt + 4 × S_likely + S_pess) / 6</div>
+<div class="vars">S_opt = optimistic LOC, S_likely = most likely LOC, S_pess = pessimistic LOC</div>
+<button class="copy-btn" onclick="copyFormula(this,'Expected LOC = (S_opt + 4 * S_likely + S_pess) / 6')">📋 Copy</button>
+</div>
+
+<div class="formula-block">
+<div class="formula">Effort = Total LOC / (LOC per person-month)</div>
+<div class="vars">Result in person-months</div>
+<button class="copy-btn" onclick="copyFormula(this,'Effort = Total LOC / LOC per person-month')">📋 Copy</button>
+</div>
+
+<div class="formula-block">
+<div class="formula">Cost = Total LOC × Cost per LOC</div>
+<div class="vars">Or: Cost = Effort × Cost per person-month</div>
+<button class="copy-btn" onclick="copyFormula(this,'Cost = Total LOC × Cost per LOC')">📋 Copy</button>
+</div>
+
+<div class="numerical">
+<p><strong>Worked Example 1: 3D Geometric Analysis (from slides)</strong></p>
+<p><span class="step-label">GIVEN →</span> Optimistic = 4,600 LOC, Most Likely = 6,900 LOC, Pessimistic = 8,600 LOC</p>
+<p><span class="step-label">FIND →</span> Expected LOC</p>
+<p><span class="step-label">FORMULA →</span> Expected LOC = (S_opt + 4 × S_likely + S_pess) / 6</p>
+<p><span class="step-label">STEP 1 →</span> = (4,600 + 4 × 6,900 + 8,600) / 6</p>
+<p><span class="step-label">STEP 2 →</span> = (4,600 + 27,600 + 8,600) / 6</p>
+<p><span class="step-label">STEP 3 →</span> = 40,800 / 6</p>
+<div class="answer-box">Expected LOC = 6,800</div>
+<p class="meaning">💡 Based on three estimates, the expected size is 6,800 lines of code for the 3D geometric analysis component.</p>
+</div>
+
+<div class="numerical">
+<p><strong>Worked Example 2: Travel Booking System (from slides)</strong></p>
+<p><span class="step-label">GIVEN →</span></p>
+<p>Login & registration: 1,000 LOC | Search & booking: 3,000 LOC | Payment: 2,000 LOC | User profile: 1,500 LOC | Feedback: 500 LOC</p>
+<p>Average LOC = 600 LOC/pm | Average cost = $8,000/month</p>
+<p><span class="step-label">FIND →</span> Effort and total cost</p>
+<p><span class="step-label">STEP 1 →</span> Total LOC = 1,000 + 3,000 + 2,000 + 1,500 + 500 = 8,000 LOC</p>
+<p><span class="step-label">STEP 2 →</span> Cost/LOC = $8,000 / 600 = $13.33</p>
+<p><span class="step-label">STEP 3 →</span> Effort = 8,000 / 600 = 13.33 person-months</p>
+<p><span class="step-label">STEP 4 →</span> Cost = 8,000 × $13.33 = $106,640</p>
+<div class="answer-box">Effort = 13.33 pm | Cost = $106,640</div>
+<p class="meaning">💡 The project requires approximately 13.3 person-months and costs about $106,640.</p>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Function Point (FP) Estimation</h3>
+<p>Not language dependent. Measures functionality <strong>from user's point of view</strong>.</p>
+<p><strong>FP Categories:</strong></p>
+<ul>
+<li><strong>External Inputs (EI):</strong> Data entering the system.</li>
+<li><strong>External Outputs (EO):</strong> Data exiting the system.</li>
+<li><strong>External Inquiries (EQ):</strong> Data retrieval without changing system.</li>
+<li><strong>Internal Logical Files (ILF):</strong> Logically related data within application boundary.</li>
+<li><strong>External Interface Files (EIF):</strong> Logical files from other applications used by our system.</li>
+</ul>
+
+<div class="formula-block">
+<div class="formula">FP = UFP × CAF</div>
+<div class="vars">UFP = Unadjusted Functional Points (sum of counts × weights)<br>
+CAF = Complexity Adjustment Factor = 0.65 + (0.01 × ΣFi)<br>
+Fi = value adjustment factor from 14 questions (rated 0–5)</div>
+<button class="copy-btn" onclick="copyFormula(this,'FP = UFP × CAF; CAF = 0.65 + (0.01 × ΣFi)')">📋 Copy</button>
+</div>
+
+<div class="tbl-wrap">
+<table>
+<tr><th>FP Type</th><th>Low</th><th>Average</th><th>High</th></tr>
+<tr><td>External Inputs</td><td>3</td><td>4</td><td>6</td></tr>
+<tr><td>External Outputs</td><td>4</td><td>5</td><td>7</td></tr>
+<tr><td>External Inquiries</td><td>3</td><td>4</td><td>6</td></tr>
+<tr><td>Internal Logical Files</td><td>7</td><td>10</td><td>15</td></tr>
+<tr><td>External Interface Files</td><td>5</td><td>7</td><td>10</td></tr>
+</table>
+</div>
+
+<div class="numerical">
+<p><strong>Worked Example 1: FP Calculation (from slides)</strong></p>
+<p><span class="step-label">GIVEN →</span> UFP = 50, Moderately complex product (all 14 questions answered = 2)</p>
+<p><span class="step-label">FIND →</span> FP</p>
+<p><span class="step-label">FORMULA →</span> FP = UFP × CAF; CAF = 0.65 + (0.01 × ΣFi)</p>
+<p><span class="step-label">STEP 1 →</span> ΣFi = 14 × 2 = 28</p>
+<p><span class="step-label">STEP 2 →</span> CAF = 0.65 + (0.01 × 28) = 0.65 + 0.28 = 0.93</p>
+<p><span class="step-label">STEP 3 →</span> FP = 50 × 0.93 = 46.5</p>
+<div class="answer-box">FP = 46.5</div>
+<p class="meaning">💡 After complexity adjustment, the system has 46.5 functional points.</p>
+</div>
+
+<div class="numerical">
+<p><strong>Worked Example 2: FP with Effort (from slides)</strong></p>
+<p><span class="step-label">GIVEN →</span> User inputs = 55, Outputs = 35, Inquiries = 40, ILF = 8, EIF = 5. Low complexity. All 14 Fi = 4.</p>
+<p><span class="step-label">FIND →</span> FP</p>
+<p><span class="step-label">STEP 1 →</span> UFP = (55×3) + (35×4) + (40×3) + (8×7) + (5×5)</p>
+<p><span class="step-label">STEP 2 →</span> = 165 + 140 + 120 + 56 + 25 = 506</p>
+<p><span class="step-label">STEP 3 →</span> ΣFi = 14 × 4 = 56</p>
+<p><span class="step-label">STEP 4 →</span> CAF = 0.65 + (0.01 × 56) = 0.65 + 0.56 = 1.21</p>
+<p><span class="step-label">STEP 5 →</span> FP = 506 × 1.21 = 612.26</p>
+<div class="answer-box">FP = 612.26</div>
+<p class="meaning">💡 The significantly complex system has 612.26 functional points after adjustment. If productivity = 60 FP/person-week, Effort = 612.26 / 60 ≈ 10.2 person-weeks.</p>
+</div>
+</div>
+
+<!-- ===== RISK MANAGEMENT ===== -->
+<h2 class="sub-heading" id="c-risk">Risk Management</h2>
+
+<div class="card">
+<h3 class="sub2">What is Risk?</h3>
+<p>Assess: <strong>What can go wrong?</strong> (Issue) → <strong>What is the likelihood?</strong> (Probability) → <strong>What will the damage be?</strong> (Impact) → <strong>What can we do about it?</strong> (Mitigation)</p>
+
+<h3 class="sub2">7 Principles to Avoid Project Failure</h3>
+<ol>
+<li>Maintain a global perspective</li>
+<li>Take a forward-looking view (plan B)</li>
+<li>Encourage open communication</li>
+<li>Integrate risk consideration into development</li>
+<li>Emphasize a continuous process</li>
+<li>Develop a shared product vision</li>
+<li>Encourage teamwork</li>
+</ol>
+</div>
+
+<div class="card">
+<h3 class="sub2">Risk Identification Categories</h3>
+<div class="tbl-wrap">
+<table>
+<tr><th>Category</th><th>Risk Attributes</th></tr>
+<tr><td>Product size</td><td>Overall size in LOC/FP, deviation from average, database size, number of users.</td></tr>
+<tr><td>Business impact</td><td>Effect on revenue, delivery deadlines, interoperability constraints, cost of late/defective delivery.</td></tr>
+<tr><td>Customer</td><td>Customer knows requirements? Willing to give time? Participating in reviews? Technically sound?</td></tr>
+<tr><td>Process maturity</td><td>Framework established? Teams following it? Management support? Proactive SQA?</td></tr>
+<tr><td>Technology</td><td>New to organization? New algorithms? New hardware? Performance constraints?</td></tr>
+<tr><td>Staff</td><td>Best people available? Right skillset? Enough people? Low turnover?</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Risk Components & Estimation</h3>
+<p><strong>Risk components:</strong></p>
+<ul>
+<li><strong>Performance risk:</strong> Uncertainty that product meets requirements.</li>
+<li><strong>Cost risk:</strong> Uncertainty that budget will be maintained.</li>
+<li><strong>Support risk:</strong> Uncertainty that software will be easy to correct/adapt/enhance.</li>
+<li><strong>Schedule risk:</strong> Uncertainty that schedule will be maintained.</li>
+</ul>
+
+<div class="formula-block">
+<div class="formula">RE = P × C</div>
+<div class="vars">RE = Risk Exposure, P = Probability of occurrence, C = Cost/Impact if risk occurs</div>
+<button class="copy-btn" onclick="copyFormula(this,'RE = P × C')">📋 Copy</button>
+</div>
+
+<div class="numerical">
+<p><strong>Worked Example: Risk Exposure (from slides)</strong></p>
+<p><span class="step-label">GIVEN →</span> Only 70% of 60 reusable components will be integrated. 18 components must be built from scratch. Average component = 100 LOC. Cost per LOC = $14.00. Probability = 80%.</p>
+<p><span class="step-label">FIND →</span> Risk Exposure (RE)</p>
+<p><span class="step-label">STEP 1 →</span> Impact (C) = 18 × 100 × $14 = $25,200</p>
+<p><span class="step-label">STEP 2 →</span> RE = P × C = 0.80 × $25,200</p>
+<div class="answer-box">RE ≈ $20,200</div>
+<p class="meaning">💡 The expected financial exposure from this risk is about $20,200 — this should be budgeted as a contingency.</p>
+</div>
+
+<div class="numerical">
+<p><strong>Variant Example: Risk Exposure Calculation</strong></p>
+<p><span class="step-label">GIVEN →</span> A team plans to use 40 open-source components. Probability that only 60% will work = 70%. Each component needing replacement requires 200 LOC at $12/LOC.</p>
+<p><span class="step-label">FIND →</span> Risk Exposure</p>
+<p><span class="step-label">STEP 1 →</span> Components to replace = 40 × 0.40 = 16</p>
+<p><span class="step-label">STEP 2 →</span> Impact (C) = 16 × 200 × $12 = $38,400</p>
+<p><span class="step-label">STEP 3 →</span> RE = 0.70 × $38,400 = $26,880</p>
+<div class="answer-box">RE = $26,880</div>
+<p class="meaning">💡 The risk exposure is $26,880 — this amount should be reserved as contingency budget.</p>
+</div>
+</div>
+
+<div class="card">
+<h3 class="sub2">Risk Mitigation, Monitoring & Management (RMMM)</h3>
+<ul>
+<li><strong>Mitigation:</strong> How can we avoid the risk?</li>
+<li><strong>Monitoring:</strong> What factors can we track to determine if risk is becoming more/less likely?</li>
+<li><strong>Management:</strong> What contingency plans if risk becomes reality?</li>
+</ul>
+</div>
+
+<!-- ===== PROJECT SCHEDULING ===== -->
+<h2 class="sub-heading" id="c-sched">Project Scheduling</h2>
+
+<div class="card">
+<h3 class="sub2">Project Scheduling Fundamentals</h3>
+<p>Project scheduling involves <strong>organizing tasks, defining dependencies</strong>, and determining the timeline for project completion.</p>
+<p><strong>Techniques:</strong></p>
+<ul>
+<li><strong>Bar charts (Gantt Charts):</strong> Horizontal bar chart showing tasks and their durations.</li>
+<li><strong>Activity Network Diagrams:</strong> Show task dependencies and parallel activities.</li>
+</ul>
+</div>
+
+<div class="card">
+<h3 class="sub2">Activity Network & Critical Path Method (CPM)</h3>
+<p><strong>Key Terms:</strong></p>
+<ul>
+<li><strong>ES (Early Start):</strong> Earliest time an activity can start.</li>
+<li><strong>EF (Early Finish):</strong> Earliest time an activity can finish. EF = ES + Duration.</li>
+<li><strong>LS (Late Start):</strong> Latest time an activity can start without delaying project.</li>
+<li><strong>LF (Late Finish):</strong> Latest time an activity can finish without delaying project.</li>
+<li><strong>Total Slack/Float:</strong> LS - ES (or LF - EF). Activities with 0 slack = critical path.</li>
+<li><strong>Free Slack/Float:</strong> Amount of time an activity can be delayed without delaying any successor.</li>
+</ul>
+
+<div class="formula-block">
+<div class="formula">EF = ES + Duration</div>
+<div class="vars">Forward pass: Calculate ES and EF from start to end</div>
+<button class="copy-btn" onclick="copyFormula(this,'EF = ES + Duration')">📋 Copy</button>
+</div>
+
+<div class="formula-block">
+<div class="formula">LS = LF - Duration</div>
+<div class="vars">Backward pass: Calculate LS and LF from end to start</div>
+<button class="copy-btn" onclick="copyFormula(this,'LS = LF - Duration')">📋 Copy</button>
+</div>
+
+<div class="formula-block">
+<div class="formula">Total Float = LS - ES = LF - EF</div>
+<div class="vars">Float = 0 → Activity is on the Critical Path</div>
+<button class="copy-btn" onclick="copyFormula(this,'Total Float = LS - ES = LF - EF')">📋 Copy</button>
+</div>
+
+<!-- CPM Network Diagram -->
+<div class="diagram-container" onclick="openModal(this)">
+<svg viewBox="0 0 620 250" xmlns="http://www.w3.org/2000/svg">
+<rect width="620" height="250" fill="#0d1117" rx="8"/>
+<g font-family="JetBrains Mono,monospace" font-size="9" font-weight="500">
+<!-- Node structure: circle with quadrants ES|EF / LS|LF -->
+<!-- Node 1 (Start) -->
+<circle cx="60" cy="120" r="30" fill="none" stroke="#00d4ff" stroke-width="2"/>
+<line x1="30" y1="120" x2="90" y2="120" stroke="#00d4ff" stroke-width="0.5"/>
+<line x1="60" y1="90" x2="60" y2="150" stroke="#00d4ff" stroke-width="0.5"/>
+<text x="45" y="112" fill="#00d4ff">0</text><text x="68" y="112" fill="#00d4ff">0</text>
+<text x="45" y="138" fill="#f59e0b">0</text><text x="68" y="138" fill="#f59e0b">0</text>
+<text x="60" y="78" fill="#e2e8f0" text-anchor="middle" font-weight="700">1</text>
+
+<!-- Node 2 -->
+<circle cx="200" cy="60" r="30" fill="none" stroke="#00d4ff" stroke-width="2"/>
+<line x1="170" y1="60" x2="230" y2="60" stroke="#00d4ff" stroke-width="0.5"/>
+<line x1="200" y1="30" x2="200" y2="90" stroke="#00d4ff" stroke-width="0.5"/>
+<text x="185" y="52" fill="#00d4ff">0</text><text x="208" y="52" fill="#00d4ff">3</text>
+<text x="185" y="78" fill="#f59e0b">0</text><text x="208" y="78" fill="#f59e0b">3</text>
+<text x="200" y="18" fill="#e2e8f0" text-anchor="middle" font-weight="700">2</text>
+
+<!-- Node 3 -->
+<circle cx="200" cy="180" r="30" fill="none" stroke="#00d4ff" stroke-width="2"/>
+<line x1="170" y1="180" x2="230" y2="180" stroke="#00d4ff" stroke-width="0.5"/>
+<line x1="200" y1="150" x2="200" y2="210" stroke="#00d4ff" stroke-width="0.5"/>
+<text x="185" y="172" fill="#00d4ff">0</text><text x="208" y="172" fill="#00d4ff">2</text>
+<text x="185" y="198" fill="#f59e0b">1</text><text x="208" y="198" fill="#f59e0b">3</text>
+<text x="200" y="138" fill="#e2e8f0" text-anchor="middle" font-weight="700">3</text>
+
+<!-- Node 4 -->
+<circle cx="370" cy="120" r="30" fill="none" stroke="#00d4ff" stroke-width="2"/>
+<line x1="340" y1="120" x2="400" y2="120" stroke="#00d4ff" stroke-width="0.5"/>
+<line x1="370" y1="90" x2="370" y2="150" stroke="#00d4ff" stroke-width="0.5"/>
+<text x="355" y="112" fill="#00d4ff">3</text><text x="378" y="112" fill="#00d4ff">7</text>
+<text x="355" y="138" fill="#f59e0b">3</text><text x="378" y="138" fill="#f59e0b">7</text>
+<text x="370" y="78" fill="#e2e8f0" text-anchor="middle" font-weight="700">4</text>
+
+<!-- Node 5 (End) -->
+<circle cx="520" cy="120" r="30" fill="none" stroke="#00d4ff" stroke-width="2"/>
+<line x1="490" y1="120" x2="550" y2="120" stroke="#00d4ff" stroke-width="0.5"/>
+<line x1="520" y1="90" x2="520" y2="150" stroke="#00d4ff" stroke-width="0.5"/>
+<text x="505" y="112" fill="#00d4ff">7</text><text x="528" y="112" fill="#00d4ff">9</text>
+<text x="505" y="138" fill="#f59e0b">7</text><text x="528" y="138" fill="#f59e0b">9</text>
+<text x="520" y="78" fill="#e2e8f0" text-anchor="middle" font-weight="700">5</text>
+
+<!-- Critical path edges (red) -->
+<line x1="90" y1="105" x2="170" y2="68" stroke="#ef4444" stroke-width="2.5"/>
+<text x="120" y="78" fill="#ef4444" font-size="8">A(3)</text>
+<line x1="230" y1="75" x2="340" y2="110" stroke="#ef4444" stroke-width="2.5"/>
+<text x="280" y="85" fill="#ef4444" font-size="8">C(4)</text>
+<line x1="400" y1="120" x2="490" y2="120" stroke="#ef4444" stroke-width="2.5"/>
+<text x="445" y="112" fill="#ef4444" font-size="8">E(2)</text>
+
+<!-- Non-critical edges (cyan) -->
+<line x1="90" y1="135" x2="170" y2="172" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="120" y="168" fill="#00d4ff" font-size="8">B(2)</text>
+<line x1="230" y1="165" x2="340" y2="132" stroke="#00d4ff" stroke-width="1.5"/>
+<text x="280" y="160" fill="#00d4ff" font-size="8">D(4)</text>
+
+<!-- Legend -->
+<text x="60" y="235" fill="#ef4444" font-size="8">■ Critical Path (Float = 0)</text>
+<text x="260" y="235" fill="#00d4ff" font-size="8">■ Non-Critical (Float > 0)</text>
+<text x="420" y="235" fill="#64748b" font-size="8">ES|EF (top) / LS|LF (bottom)</text>
+</g>
+</svg>
+<div class="diagram-caption">Figure: CPM Network Diagram with Critical Path Highlighted (from Project Scheduling slides)</div>
+</div>
+</div>
+
+<div class="mistakes">
+<h4>⚠️ Common Mistakes — Part C</h4>
+<ul>
+<li>FP: Don't forget CAF formula uses 0.65 + 0.01 × ΣFi, not just ΣFi.</li>
+<li>RE = P × C — probability is a decimal (0.80), not percentage (80%).</li>
+<li>CPM: Forward pass gives ES/EF; Backward pass gives LS/LF. Don't confuse direction.</li>
+<li>Critical Path = path with 0 float/slack, NOT the shortest path.</li>
+<li>LOC expected size formula uses 4 × most likely, not 3.</li>
+<li>UFP weights differ for Low/Average/High complexity — always check the weight table.</li>
+<li>Quality: QM team must be independent from development team.</li>
+<li>Inspections are static (no execution) vs. Testing is dynamic.</li>
+</ul>
+</div>
+
+<div class="recap">
+<h4>✅ Quick Exam Recap — What the Examiner Expects (Part C)</h4>
+<ul>
+<li>All 4 parts of QM: Planning, Assurance, Control, Improvement.</li>
+<li>Product standards vs Process standards table.</li>
+<li>Inspection checklist — all fault classes (data, control, I/O, interface, storage, exception).</li>
+<li>All static metrics: fan-in/fan-out, LOC, CC, identifier length, nesting depth, fog index.</li>
+<li>OO metrics: WMC, DIT, NOC.</li>
+<li>LOC estimation: Expected LOC formula + worked example.</li>
+<li>FP estimation: UFP calculation, CAF formula, FP = UFP × CAF + worked examples.</li>
+<li>Risk Management: 7 principles, risk categories, RE = P × C with worked example.</li>
+<li>RMMM: Mitigation, Monitoring, Management.</li>
+<li>CPM: Forward pass (ES/EF), backward pass (LS/LF), total float, critical path identification.</li>
+</ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- CONCEPTUAL QUESTIONS -->
+<!-- ============================================================ -->
+<div class="part-heading ph-c" id="conceptual" style="border-left-color:var(--text2);color:var(--text);">🧠 Conceptual Practice Questions — Exam Prep</div>
+
+<!-- PART A QUESTIONS -->
+<h2 class="sub-heading">Part A Questions (6–8 Questions)</h2>
+
+<div class="qa-item">
+<div class="qa-q">Q1: <span class="part-badge badge-a">Part A</span> Explain the difference between generic software and custom software with examples.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Generic software refers to stand-alone systems designed for the open market that serve a wide range of users, such as Microsoft Excel or Mozilla Firefox. These products are developed based on the developer's assessment of market needs, and the users have no control over the development process. Updates are released when market demands change, and the focus is on timely delivery with scalability built-in.
+
+Custom software, on the other hand, is commissioned by a specific customer to meet their particular needs, such as an air traffic control system or a hospital management system. The specification of what the software should do and decisions about changes are made by the customer. Custom software might be costly since requirements are specific, but quality is the utmost priority since users are limited and deadlines are more flexible. A key distinction is that generic software development is controlled by the developer organization, while custom software development is driven by the client's requirements.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q2: <span class="part-badge badge-a">Part A</span> Compare the Waterfall model with Incremental development. When would you use each?</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The Waterfall model is a plan-driven approach where phases (requirements, design, implementation, testing, maintenance) are completed sequentially — each phase must finish before the next begins. It is best suited for large systems engineering projects where requirements are well-defined and stable, and where coordination among distributed teams is essential. Its main drawback is intolerance to changing requirements.
+
+Incremental development, in contrast, interleaves specification, development, and validation activities. The system is developed in increments, with each increment adding new functionality. Key benefits include reduced cost of accommodating changes, easier customer feedback, and rapid delivery of useful software. However, problems include lack of visible process documentation and degradation of system structure as new increments are added.
+
+Use Waterfall when: requirements are stable, the project is large with multiple distributed teams, and regulatory compliance requires extensive documentation. Use Incremental when: requirements are expected to change, rapid delivery is important, and customer feedback during development is valuable.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q3: <span class="part-badge badge-a">Part A</span> What are the five levels of the SEI Capability Maturity Model? Explain each briefly.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The SEI CMM rates the maturity of an organization over a 5-point scale. Level 1 (Initial) is the starting point where work is unmanaged, with no proper documentation or project management plans. The vast majority of organizations are at this level. Level 2 (Managed) means goals are satisfied with defined organizational policies, documented project plans, and proper resource management. Level 3 (Defined) involves process management procedures and strategies being defined and used, with proper teamwork and collaborative learning. Level 4 (Quantitatively Managed) focuses on assessing organizational performance with better project management structures and risk analysis through proactive approaches. Level 5 (Optimizing) involves process improvement strategies being defined and used, with increased adaptation to newer trends and continuous innovation in solutions.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q4: <span class="part-badge badge-a">Part A</span> What is the difference between functional and non-functional requirements? Give examples from a hospital system.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Functional requirements define the specific services and functions the system must provide. For a hospital management system, functional requirements include: patients and doctors can register and sign in, each person is identified by an 8-digit ID, users can search doctor appointments across clinics, and doctors can view patient history and medications.
+
+Non-functional requirements are constraints on the system's operation that arise from organizational policies, product requirements, or external sources. For the same hospital system, product requirements include the system being available Mon-Fri 08:30-17:30 with downtime not exceeding 5 seconds per day. An organizational requirement is that users authenticate using ID cards. An external requirement is that the system must respect patient privacy per the ethics code.
+
+Requirements are not independent — one requirement can constrain another. For example, the non-functional requirement of security will create a functional requirement for user authentication. This interdependency must be carefully managed during requirements engineering.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q5: <span class="part-badge badge-a">Part A</span> Explain the Scrum framework: key terminology, sprint cycle, and benefits.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Scrum is an agile method providing a project management framework with three main phases: an initial outline planning phase to establish objectives and design architecture, a series of sprint cycles where each develops an increment, and a project closure phase that wraps up with documentation and lessons learned.
+
+Key terminology includes: the Development team (self-organizing group, max 7 people), Sprint (development iteration of 2-4 weeks), Product backlog (to-do list with user stories and tasks), Product owner (identifies and prioritizes requirements), Scrum Master (arranges meetings, tracks progress, protects team from external distractions), and Sprint Velocity (estimate of backlog effort coverable in one sprint).
+
+The sprint cycle begins with a selection phase where the team selects features from the product backlog. During the sprint, the team is isolated from customers with communications channeled through the Scrum Master. At the sprint's end, work is reviewed and presented to stakeholders.
+
+Benefits include: the product is broken into manageable chunks, the whole team has visibility of everything improving communication, customers see on-time delivery of increments, and trust between customers and developers is established creating a positive culture.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q6: <span class="part-badge badge-a">Part A</span> Describe the Wideband Delphi estimation process. Why is it effective?</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Wideband Delphi is a repeatable estimation process where a team generates estimates through consensus. It follows six steps: First, the project manager selects an estimation team of 3-7 members plus a moderator who should not have a stake in the outcome. Second, in a kickoff meeting, team members understand the project, brainstorm assumptions, review the WBS, and agree on an estimation unit. Third, each member independently prepares estimates for each task with supporting assumptions. Fourth, during the estimation session, the moderator collects forms, plots estimates on a line, the team resolves disagreements (usually about tasks, not individual estimates), and iterates until convergence. Fifth, the project manager assembles the final task list with estimates and assumptions. Sixth, the team reviews the final results together.
+
+It is effective because it leverages collective wisdom rather than individual bias, uses multiple rounds to achieve convergence, documents assumptions explicitly, and produces consensus-based estimates that the whole team believes are accurate.</div>
+</div>
+
+<!-- PART B QUESTIONS -->
+<h2 class="sub-heading">Part B Questions (10–12 Questions)</h2>
+
+<div class="qa-item">
+<div class="qa-q">Q7: <span class="part-badge badge-b">Part B</span> Compare the MVC, Layered, and Repository architectural patterns. When would you use each?</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The MVC (Model-View-Controller) pattern separates data (Model), presentation (View), and user interaction (Controller). Use it when there are multiple ways to view and interact with the same data, such as web applications where data might be shown in tables, charts, or forms. Its advantage is that data can change independently of its representation, but it adds code complexity.
+
+The Layered architecture organizes functionality into hierarchical layers (typically UI, Auth, Business Logic, Database) where each layer provides services only to the layer above. Use it when building on existing systems, when development is spread across teams responsible for different layers, or when multi-level security is required. Its advantage is that entire layers can be replaced if the interface is maintained, but performance can suffer from multiple levels of interpretation.
+
+The Repository architecture manages all data in a central repository accessible to all components, with no direct component interaction. Use it when large volumes of data must be stored long-term or in data-driven systems. Its advantage is component independence and consistent data management, but the repository becomes a single point of failure.
+
+In summary: MVC for multiple data representations, Layered for team-based development with security needs, and Repository for data-intensive systems with centralized storage.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q8: <span class="part-badge badge-b">Part B</span> What is Cyclomatic Complexity? Calculate CC for a program with 15 edges, 12 nodes, and 1 connected component.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Cyclomatic Complexity (CC) is a software metric that measures the control complexity of a program. It is based on graph theory and is used in Basis Path Testing to determine the minimum number of test cases needed to test all independent execution paths. The formula is CC = E - N + 2P, where E is the number of edges in the control flow graph, N is the number of nodes, and P is the number of connected components (usually 1 for a single program).
+
+For the given values: CC = 15 - 12 + 2(1) = 15 - 12 + 2 = 5. This means the program has 5 independent paths, and at least 5 test cases are needed to achieve complete path coverage. A CC value of 5 suggests moderate complexity — programs with CC above 10 are considered difficult to test and maintain.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q9: <span class="part-badge badge-b">Part B</span> Explain the difference between cohesion and coupling. Why is "high cohesion, low coupling" desirable?</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Cohesion is an indication of the relative functional strength of a module — how closely the tasks within a module are related. A highly cohesive module performs a single, well-defined task, requiring little interaction with other components. For example, a "CalculateTax" module that only handles tax computation is highly cohesive.
+
+Coupling is an indication of the relative interdependence among modules. It depends on the interface complexity between modules, the entry/reference points, and the data that passes across interfaces. Low coupling means modules interact through simple, well-defined interfaces.
+
+"High cohesion, low coupling" is desirable because: modules are easier to develop independently (each does one thing well), task scheduling and team assignment become simpler, error propagation is minimized (changes in one module don't cascade), modules become reusable since they are self-contained, and maintenance is easier because changes are localized. This principle is the foundation of functional independence in software design.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q10: <span class="part-badge badge-b">Part B</span> What are the three Golden Rules of UI design by Theo Mandel? Give examples for each.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Theo Mandel defined three golden rules for UI design. First, "Allow users to maintain control" means providing interactive modes with easy switching (like spell check vs editing in Word), supporting flexible interaction methods (mouse, keyboard, voice), allowing undo/redo operations, supporting customization (macros), hiding technical internals from casual users, and enabling direct manipulation of on-screen objects (drag-and-drop).
+
+Second, "Reduce user's memory load" means using list boxes and checkboxes instead of requiring users to remember options, providing meaningful defaults with reset capabilities, defining intuitive shortcuts (Ctrl+P for print), matching visual layouts to real-world processes (bill-paying steps mirror real life), and disclosing information progressively (e-commerce showing product images first, then details on click).
+
+Third, "Make consistent interface" means using meaningful context for tasks (window labels, consistent color coding), maintaining consistency across a family of applications (same look in all MS Office apps), and never redefining user expectations from past experience (Ctrl+S must always mean save, not scale). These rules ensure the interface is predictable, efficient, and satisfying for users.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q11: <span class="part-badge badge-b">Part B</span> Compare Unit Testing, Component Testing, and System Testing.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Unit testing tests individual program units or object classes in isolation. It is a defect testing process done during the development phase, focusing on testing the functionality of individual objects or methods. Complete coverage involves testing all operations, checking all attributes, and simulating all events causing state changes.
+
+Component testing tests multiple integrated units as composite components. It focuses on testing component compatibility and co-existence, particularly proper data transfer between dependent components. This is done during the testing phase and checks that component interfaces behave according to specifications.
+
+System testing integrates some or all components and tests the overall system. It focuses on testing component interactions — checking that components are compatible, interact correctly, and transfer the right data at the right time. This is black-box testing where reusable and off-the-shelf components may be integrated with newly developed ones. System testing is a collective process often involving separate testing teams.
+
+The key difference is scope: unit testing is isolated components, component testing is integrated units, and system testing is the complete or near-complete system working together.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q12: <span class="part-badge badge-b">Part B</span> What is Test-Driven Development? Explain its process and benefits.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Test-Driven Development (TDD) is an approach where testing and code development are interleaved — tests are written before code, and passing tests is the critical driver of development. The process works as follows: First, identify a small increment of functionality. Second, write an automated test for this functionality. Third, run the test (it will fail since functionality is not yet implemented). Fourth, implement the functionality and re-run the test. Fifth, once all tests pass, move to the next chunk.
+
+Benefits include: complete code coverage (every code segment has at least one test), regression testing capability (check if new code breaks previous functionality), simplified debugging (when a test fails, the newly written code is the obvious suspect), and system documentation (tests themselves describe what code should do). TDD can be used with both plan-driven and agile development approaches and significantly reduces the cost of regression testing through automation.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q13: <span class="part-badge badge-b">Part B</span> Explain the 4+1 View Model of software architecture.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The 4+1 View Model, proposed by Krutchen in 1995, presents four basic views of software architecture linked via use cases. The Logical view shows key abstractions as objects or classes, relating system requirements to entities — useful for understanding what the system does. The Process view shows how the system interacts with processes at run-time, useful for making judgments about non-functional requirements like availability and performance. The Development view shows breakdown of software assigned to development teams, useful for project managers and developers planning work. The Physical view shows how hardware and software components are distributed across processors, useful for system engineers.
+
+The "+1" refers to the Conceptual view added by Hofmeister et al. (2000), which provides an abstract view of high-level requirements to identify product line architecture for future reuse — deciding which components could be reused for other applications. Each view serves different stakeholders and addresses different concerns, making it impossible to capture all perspectives in a single diagram.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q14: <span class="part-badge badge-b">Part B</span> What is equivalence partitioning in testing? Explain with an example.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Equivalence partitioning is a test case selection strategy where input data and output results are divided into classes (partitions) where all members of a class are expected to be processed in the same way. Instead of testing every possible input, you choose representative test cases from each partition.
+
+For example, if a program accepts 4-10 inputs which are 5-digit integers greater than 10,000, the equivalence partitions would be: for the number of inputs — less than 4 (invalid), 4-10 (valid), more than 10 (invalid); for input values — less than or equal to 10,000 (invalid), 10,001-99,999 (valid 5-digit integers greater than 10,000), greater than 99,999 (invalid).
+
+Test cases should be chosen from each partition, with particular attention to boundary values (the edges of partitions) since they are typically where errors occur. For instance, testing with exactly 4 inputs and exactly 10 inputs, and with values 10,000 (boundary), 10,001 (just valid), 99,999 (boundary), and 100,000 (just invalid). This approach ensures thorough testing with a manageable number of test cases.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q15: <span class="part-badge badge-b">Part B</span> What is the Pipe and Filter architecture? Give a real-world example.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The Pipe and Filter architecture organizes data processing so that each processing component (filter) is discrete and carries out one type of data transformation. Data flows from one component to another through pipes, like in a UNIX shell. When transformations are sequential, it becomes a batch sequential model.
+
+A real-world example is a compiler, where consecutive filters perform: lexical analysis (breaking source code into tokens), parsing (building a syntax tree), semantic analysis (checking for type errors and meaning), and code generation (producing machine code). Each filter takes input, transforms it, and passes the output to the next filter.
+
+Advantages include being easy to understand, supporting transformation reuse, matching business process workflows, and being implementable as either sequential or concurrent systems. Disadvantages include the need for agreed data formats between transformations, increased system overhead from parsing/unparsing, and being unsuitable for interactive systems since input data streams (like mouse clicks) are difficult to process as sequential streams.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q16: <span class="part-badge badge-b">Part B</span> Describe Alpha, Beta, and Acceptance testing. How do they differ?</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Alpha testing involves users working closely with the development team at the developer's site to test the software. Users provide information to developers to help build effective interface designs and identify issues early. This is a controlled environment where developers can observe user behavior directly.
+
+Beta testing makes a release available to users at their own sites to experiment and discover problems. It is done by early adopters of the system who use it in their real working environment and report issues back to developers. The key difference from alpha is that testing occurs in the user's environment, not the developer's.
+
+Acceptance testing is when customers formally test a system to decide whether to accept it from developers and deploy it. It follows a structured process: define acceptance criteria, plan testing, derive tests, run tests, negotiate results, and accept/reject the system. It is rarely the case that all tests pass perfectly — usually developers and customers negotiate for acceptance or revision.
+
+The key differences are: alpha is developer-site with close collaboration, beta is user-site with independent exploration, and acceptance is formal customer evaluation for deployment decision. All three are forms of user testing that are essential even after comprehensive system and release testing.</div>
+</div>
+
+<!-- PART C QUESTIONS -->
+<h2 class="sub-heading">Part C Questions (20–25 Questions)</h2>
+
+<div class="qa-item">
+<div class="qa-q">Q17: <span class="part-badge badge-c">Part C</span> Calculate the Function Points for a system with: 10 External Inputs (Average), 8 External Outputs (High), 5 External Inquiries (Low), 3 ILFs (Average), 2 EIFs (Low). All 14 Fi questions answered as 3.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">GIVEN: EI=10 (Avg), EO=8 (High), EQ=5 (Low), ILF=3 (Avg), EIF=2 (Low). All Fi=3.
+
+STEP 1: Calculate UFP using the FP complexity weight table:
+- External Inputs: 10 × 4 (average weight) = 40
+- External Outputs: 8 × 7 (high weight) = 56
+- External Inquiries: 5 × 3 (low weight) = 15
+- Internal Logical Files: 3 × 10 (average weight) = 30
+- External Interface Files: 2 × 5 (low weight) = 10
+- UFP = 40 + 56 + 15 + 30 + 10 = 151
+
+STEP 2: Calculate CAF:
+- ΣFi = 14 × 3 = 42
+- CAF = 0.65 + (0.01 × 42) = 0.65 + 0.42 = 1.07
+
+STEP 3: Calculate FP:
+- FP = UFP × CAF = 151 × 1.07 = 161.57
+
+ANSWER: FP = 161.57
+
+If team productivity is 60 FP/person-week with team size 5:
+- Effort = 161.57 / 60 = 2.69 person-weeks
+- Duration = 2.69 / 5 = 0.54 weeks ≈ 2.7 days</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q18: <span class="part-badge badge-c">Part C</span> What is Risk Exposure? Calculate RE given: probability = 65%, 25 components needing replacement at 150 LOC each, $16/LOC.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Risk Exposure (RE) is the overall expected financial impact of a risk, calculated as RE = P × C, where P is the probability of occurrence and C is the cost (impact) if the risk occurs.
+
+GIVEN: Probability = 65% = 0.65, Components to replace = 25, LOC per component = 150, Cost per LOC = $16
+
+STEP 1: Calculate Impact (C):
+C = 25 × 150 × $16 = $60,000
+
+STEP 2: Calculate Risk Exposure:
+RE = P × C = 0.65 × $60,000 = $39,000
+
+ANSWER: RE = $39,000
+
+This means the organization should budget approximately $39,000 as contingency to cover this risk. If the RE is considered too high, the team should implement mitigation strategies such as validating component compatibility early, having backup components ready, or allocating additional development resources.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q19: <span class="part-badge badge-c">Part C</span> Explain the difference between Quality Assurance and Quality Control.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Quality Assurance (QA) is a proactive, process-oriented approach that focuses on using quality processes and standard procedures to develop a quality product. It involves verification and validation of the product delivered by the development team, ensuring that the development process itself follows established standards. QA is preventive — it aims to prevent defects by improving the process.
+
+Quality Control (QC), on the other hand, is reactive and product-oriented. It focuses on testing the actual products and identifying defects to improve product quality. QC happens after the product or component is developed, checking whether it meets specifications and finding bugs.
+
+The key distinction is that QA ensures the right process is followed (process quality leads to product quality), while QC checks the end product for defects. Both are essential parts of quality management — QA prevents defects through good processes, and QC catches any defects that slip through. The QM team should be independent from the development team to ensure unbiased reporting.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q20: <span class="part-badge badge-c">Part C</span> List and explain the 7 principles of risk management.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The seven principles to avoid project failure are: (1) Maintain a global perspective — identify all software risks within the scope of application, considering both technical and business risks. (2) Take a forward-looking view — establish contingency plans (plan B) in case of risk occurrence rather than waiting for risks to materialize. (3) Encourage open communication — if someone states a potential risk, do not discount it; create an environment where risks can be discussed freely. (4) Integrate — risk consideration should be integrated into the software development process rather than treated as a separate activity. (5) Emphasize a continuous process — the team continuously monitors for evolving risks and updates mitigation plans. (6) Develop a shared product vision — when all product owners share the same scope, risk assessment becomes more valuable and everyone stays on the same page. (7) Encourage teamwork — pool the talents, skills, and knowledge of all stakeholders to identify and address risks collectively. These principles ensure that risk management is proactive, comprehensive, and embedded in the development culture.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q21: <span class="part-badge badge-c">Part C</span> What are static software product metrics? List and explain at least five.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">Static software product metrics are measurements derived from the source code or documentation without executing the program. Five important metrics are:
+
+Fan-in/Fan-out: Fan-in measures how many functions call a given function X (high fan-in = X is tightly coupled, changes to X have extensive knock-on effects). Fan-out measures how many functions X calls (high fan-out = high complexity due to control logic needed).
+
+Length of code: Measures program size; larger components are generally more complex and error-prone. This is one of the most reliable metrics for predicting error-proneness.
+
+Cyclomatic complexity: Measures control complexity of a program (CC = E - N + 2P). Higher values indicate more complex control flow that is harder to understand and test.
+
+Depth of conditional nesting: Measures how deeply if-statements are nested. Deeply nested conditionals are hard to understand and potentially error-prone.
+
+Fog index: Measures the average length of words and sentences in documentation. Higher fog index means more difficult-to-understand documentation, which impacts maintainability.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q22: <span class="part-badge badge-c">Part C</span> What is the Critical Path in project scheduling? How do you identify it?</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The Critical Path is the longest path through an activity network diagram, representing the minimum time required to complete the project. Activities on the critical path have zero total float (slack), meaning any delay in these activities will directly delay the entire project.
+
+To identify the critical path: First, perform a forward pass starting from the beginning, calculating Early Start (ES) and Early Finish (EF = ES + Duration) for each activity. When an activity has multiple predecessors, its ES is the maximum EF of all predecessors. Second, perform a backward pass starting from the end, calculating Late Finish (LF) and Late Start (LS = LF - Duration). When an activity has multiple successors, its LF is the minimum LS of all successors. Third, calculate Total Float for each activity (Float = LS - ES = LF - EF). Activities with Float = 0 are on the critical path.
+
+The critical path is important for project management because: it determines the shortest possible project duration, any delay on critical path activities delays the entire project, resources should be prioritized for critical path activities, and float on non-critical activities indicates scheduling flexibility.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q23: <span class="part-badge badge-c">Part C</span> What is the LOC expected size formula? Solve: optimistic=2000, most likely=3500, pessimistic=5000 LOC. Productivity = 500 LOC/pm, cost = $7000/month.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The LOC expected size formula uses a weighted average: Expected LOC = (S_optimistic + 4 × S_most_likely + S_pessimistic) / 6.
+
+GIVEN: S_opt = 2,000 LOC, S_likely = 3,500 LOC, S_pess = 5,000 LOC, Productivity = 500 LOC/pm, Cost = $7,000/month
+
+STEP 1: Expected LOC = (2,000 + 4 × 3,500 + 5,000) / 6
+         = (2,000 + 14,000 + 5,000) / 6
+         = 21,000 / 6
+         = 3,500 LOC
+
+STEP 2: Cost per LOC = $7,000 / 500 = $14
+
+STEP 3: Effort = 3,500 / 500 = 7 person-months
+
+STEP 4: Total Cost = 3,500 × $14 = $49,000
+
+ANSWER: Expected LOC = 3,500 | Effort = 7 person-months | Cost = $49,000
+
+This means the project is expected to require 7 person-months of effort at a total cost of $49,000.</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q24: <span class="part-badge badge-c">Part C</span> Explain RMMM (Risk Mitigation, Monitoring, and Management) with an example.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">RMMM stands for Risk Mitigation, Monitoring, and Management — three strategies applied to each identified risk.
+
+Mitigation answers "How can we avoid the risk?" — these are proactive strategies to reduce the probability or impact. For example, if there is a risk of key team members leaving (staff turnover risk), mitigation would include cross-training team members, documenting all processes, implementing pair programming so knowledge is shared, and having competitive compensation packages.
+
+Monitoring answers "What factors can we track to determine if the risk is becoming more or less likely?" For the staff turnover example, monitoring indicators would include team morale surveys, market salary comparisons, employee satisfaction scores, and attendance patterns of key personnel.
+
+Management answers "What contingency plans do we have if the risk becomes reality?" For staff turnover, management plans would include having a recruitment pipeline ready, maintaining updated documentation so new hires can ramp up quickly, and having contract developers available on short notice.
+
+This three-pronged approach ensures risks are addressed proactively (mitigation), tracked continuously (monitoring), and handled effectively if they materialize (management).</div>
+</div>
+
+<div class="qa-item">
+<div class="qa-q">Q25: <span class="part-badge badge-c">Part C</span> What is the inspection checklist? List all fault classes with example checks.</div>
+<div class="qa-toggle" onclick="toggleAnswer(this)">▶ Show Answer</div>
+<div class="qa-a">The inspection checklist is a structured list of common errors used during code inspections to systematically identify defects. It is programming-language dependent since behaviors differ at compile time. Research shows that 60% of program defects can be removed through inspections.
+
+The fault classes are: Data faults — check if all variables are initialized, constants named, array bounds correct, delimiters assigned, and buffer overflow possible. Control faults — verify each conditional has correct termination, every loop terminates, compound statements are correctly bracketed, all switch cases are accounted for, and break statements are included. Input/Output faults — ensure all input variables are used, output variables assigned before display, and unexpected inputs cannot cause corruption. Interface faults — confirm correct number of parameters, matching parameter types, and correct parameter order. Storage management faults — verify linked structure modifications have correct link reassignment, dynamic storage is properly allocated, and space is deallocated when no longer needed. Exception management faults — check that all possible error conditions have been accounted for.</div>
+</div>
+
+<!-- RAPID FIRE -->
+<div class="part-heading ph-c" id="rapidfire" style="border-left-color:var(--text2);color:var(--text);">⚡ Rapid Fire — 25 Quick Q&A</div>
+
+<div class="rf-grid">
+<div class="rf-card"><div class="rf-q">What is software engineering?</div><div class="rf-divider"></div><div class="rf-ans">An engineering discipline concerned with all aspects of software production.</div></div>
+<div class="rf-card"><div class="rf-q">60% vs 40% in software costs?</div><div class="rf-divider"></div><div class="rf-ans">60% development costs, 40% testing costs.</div></div>
+<div class="rf-card"><div class="rf-q">What is V&V?</div><div class="rf-divider"></div><div class="rf-ans">Verification: "building the product right"; Validation: "building the right product".</div></div>
+<div class="rf-card"><div class="rf-q">Formula: FP = ?</div><div class="rf-divider"></div><div class="rf-ans">FP = UFP × CAF, where CAF = 0.65 + (0.01 × ΣFi).</div></div>
+<div class="rf-card"><div class="rf-q">Formula: RE = ?</div><div class="rf-divider"></div><div class="rf-ans">RE = P × C (Probability × Cost/Impact).</div></div>
+<div class="rf-card"><div class="rf-q">Formula: CC = ?</div><div class="rf-divider"></div><div class="rf-ans">CC = E - N + 2P (Edges - Nodes + 2×Connected Components).</div></div>
+<div class="rf-card"><div class="rf-q">What are the 5 CMM levels?</div><div class="rf-divider"></div><div class="rf-ans">Initial → Managed → Defined → Quantitatively Managed → Optimising.</div></div>
+<div class="rf-card"><div class="rf-q">Sprint duration in Scrum?</div><div class="rf-divider"></div><div class="rf-ans">2–4 weeks (fixed length).</div></div>
+<div class="rf-card"><div class="rf-q">WBS Level 0 is?</div><div class="rf-divider"></div><div class="rf-ans">Project title (root node).</div></div>
+<div class="rf-card"><div class="rf-q">Total Float formula?</div><div class="rf-divider"></div><div class="rf-ans">Float = LS - ES = LF - EF. Float = 0 → Critical Path.</div></div>
+<div class="rf-card"><div class="rf-q">Expected LOC formula?</div><div class="rf-divider"></div><div class="rf-ans">(S_opt + 4 × S_likely + S_pess) / 6.</div></div>
+<div class="rf-card"><div class="rf-q">Who protects the Scrum team?</div><div class="rf-divider"></div><div class="rf-ans">The Scrum Master — shields team from external distractions.</div></div>
+<div class="rf-card"><div class="rf-q">Cohesion vs Coupling?</div><div class="rf-divider"></div><div class="rf-ans">High cohesion (single purpose) + Low coupling (minimal interdependence) = good design.</div></div>
+<div class="rf-card"><div class="rf-q">What % of defects do inspections remove?</div><div class="rf-divider"></div><div class="rf-ans">60% of program defects can be removed through inspections.</div></div>
+<div class="rf-card"><div class="rf-q">Alpha vs Beta testing?</div><div class="rf-divider"></div><div class="rf-ans">Alpha = developer's site; Beta = user's site (early adopters).</div></div>
+<div class="rf-card"><div class="rf-q">What is a Spike in XP?</div><div class="rf-divider"></div><div class="rf-ans">A very simple program to explore suitability of a proposed solution (like a prototype).</div></div>
+<div class="rf-card"><div class="rf-q">Repository vs Client-Server?</div><div class="rf-divider"></div><div class="rf-ans">Repository = static, central DB; Client-Server = runtime, distributed services.</div></div>
+<div class="rf-card"><div class="rf-q">Cost of fixing req error after delivery?</div><div class="rf-divider"></div><div class="rf-ans">Up to 100 times the cost of fixing an implementation error.</div></div>
+<div class="rf-card"><div class="rf-q">Fog Index measures what?</div><div class="rf-divider"></div><div class="rf-ans">Average length of words & sentences in documents — higher = harder to understand.</div></div>
+<div class="rf-card"><div class="rf-q">3 types of NFR sources?</div><div class="rf-divider"></div><div class="rf-ans">Product requirements, Organizational requirements, External requirements.</div></div>
+<div class="rf-card"><div class="rf-q">What is DIT in OO metrics?</div><div class="rf-divider"></div><div class="rf-ans">Depth of Inheritance Tree — deeper = more complex design.</div></div>
+<div class="rf-card"><div class="rf-q">EF formula in CPM?</div><div class="rf-divider"></div><div class="rf-ans">EF = ES + Duration (forward pass).</div></div>
+<div class="rf-card"><div class="rf-q">LS formula in CPM?</div><div class="rf-divider"></div><div class="rf-ans">LS = LF - Duration (backward pass).</div></div>
+<div class="rf-card"><div class="rf-q">Parts of Quality Management?</div><div class="rf-divider"></div><div class="rf-ans">Planning, Assurance, Control, Improvement.</div></div>
+<div class="rf-card"><div class="rf-q">What does TDD stand for?</div><div class="rf-divider"></div><div class="rf-ans">Test-Driven Development — tests written BEFORE code.</div></div>
+</div>
+
+</main>
+
+<!-- BACK TO TOP -->
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// SIDEBAR TOGGLE
+function togglePart(el){
+  const topics=el.nextElementSibling;
+  topics.classList.toggle('open');
+}
+
+// MOBILE CLOSE
+function closeMobile(){
+  if(window.innerWidth<=768) document.getElementById('sidebar').classList.remove('open');
+}
+
+// SCROLL PROGRESS
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  const pct=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100;
+  document.getElementById('scrollProgress').style.width=pct+'%';
+  // BTT
+  document.getElementById('btt').style.display=h.scrollTop>400?'flex':'none';
+  // Section name
+  const sections=document.querySelectorAll('.part-heading,.sub-heading');
+  let current='Software Engineering — Study Guide';
+  sections.forEach(s=>{if(s.getBoundingClientRect().top<100)current=s.textContent.trim();});
+  document.getElementById('sectionName').textContent=current;
+});
+
+// SEARCH
+function doSearch(q){
+  // Remove old highlights
+  document.querySelectorAll('mark').forEach(m=>{
+    const parent=m.parentNode;
+    parent.replaceChild(document.createTextNode(m.textContent),m);
+    parent.normalize();
+  });
+  if(!q||q.length<2)return;
+  const regex=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+  const walk=document.createTreeWalker(document.getElementById('main'),NodeFilter.SHOW_TEXT,null);
+  const nodes=[];
+  while(walk.nextNode()){
+    if(walk.currentNode.parentNode.tagName==='SCRIPT'||walk.currentNode.parentNode.tagName==='STYLE')continue;
+    if(regex.test(walk.currentNode.textContent))nodes.push(walk.currentNode);
+    regex.lastIndex=0;
+  }
+  nodes.forEach(n=>{
+    const span=document.createElement('span');
+    span.innerHTML=n.textContent.replace(regex,'<mark>$1</mark>');
+    n.parentNode.replaceChild(span,n);
+  });
+  // Scroll to first
+  const first=document.querySelector('mark');
+  if(first)first.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// QA TOGGLE
+function toggleAnswer(el){
+  const ans=el.nextElementSibling;
+  ans.classList.toggle('open');
+  el.textContent=ans.classList.contains('open')?'▼ Hide Answer':'▶ Show Answer';
+}
+
+// FORMULA COPY
+function copyFormula(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='✓ Copied!';
+    setTimeout(()=>btn.textContent='📋 Copy',1500);
+  });
+}
+
+// DIAGRAM MODAL
+function openModal(el){
+  const modal=document.getElementById('modal');
+  const content=document.getElementById('modalContent');
+  content.innerHTML=el.innerHTML;
+  modal.classList.add('show');
+}
+document.getElementById('modal').addEventListener('click',function(e){
+  if(e.target===this)this.classList.remove('show');
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape')document.getElementById('modal').classList.remove('show');
+});
+
+// ACTIVE SIDEBAR
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.sb-topic').forEach(t=>t.classList.remove('active'));
+      const link=document.querySelector('.sb-topic[href="#'+e.target.id+'"]');
+      if(link)link.classList.add('active');
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('[id]').forEach(el=>{
+  if(el.id&&document.querySelector('.sb-topic[href="#'+el.id+'"]'))observer.observe(el);
+});
+
+// AUTO-EXPAND FIRST SIDEBAR
+document.querySelector('.sb-topics').classList.add('open');
+</script>
+</body>
+</html>
